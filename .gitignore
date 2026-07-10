@@ -1,0 +1,14 @@
+node_modules
+.next
+.env.local
+.env*.local
+npm-debug.log*
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+.vercel
+
+# Separate sub-projects (have their own repos)
+freshdrop/
+laundry-app/

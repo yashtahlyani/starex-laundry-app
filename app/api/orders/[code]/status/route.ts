@@ -1,0 +1,41 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { getAdminUser } from "@/lib/adminAuth";
+import { OrderService, VALID_STATUSES, type OrderStatus } from "@/lib/services/order.service";
+
+export const dynamic = "force-dynamic";
+
+export async function PATCH(req: NextRequest, { params }: { params: { code: string } }) {
+  const admin = await getAdminUser();
+  if (!admin) return NextResponse.json({ error: "Unauthorized — admin login required" }, { status: 401 });
+
+  let body: { status: string; note?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const newStatus = body.status as OrderStatus;
+  if (!VALID_STATUSES.includes(newStatus)) {
+    return NextResponse.json(
+      { error: `Invalid status. Must be one of: ${VALID_STATUSES.join(", ")}` },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const service = new OrderService(getSupabaseAdmin());
+    const result = await service.updateStatus(
+      params.code.trim().toUpperCase(),
+      newStatus,
+      body.note ?? null,
+      admin.email ?? "admin"
+    );
+    if (result.unchanged) return NextResponse.json({ message: "Status unchanged" });
+    return NextResponse.json({ success: true, ...result });
+  } catch (err: any) {
+    const status = err.statusCode ?? 500;
+    return NextResponse.json({ error: err.message }, { status });
+  }
+}
