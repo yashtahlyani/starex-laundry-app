@@ -1,219 +1,113 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import {
-  Shirt, Wind, Sparkles, Scissors, Home, Search,
-  CheckCircle, ArrowRight, Clock,
-} from "lucide-react";
-import { CATALOG, PLANS, PICKUP_DELIVERY, MEMBERSHIP } from "@/lib/pricing";
+import { motion } from "framer-motion";
+import { Shirt, Sparkles, Zap, Package, Star, Truck, CheckCircle, ArrowRight } from "lucide-react";
 
-const TAB_ICONS: Record<string, React.ElementType> = {
-  "wash-fold": Shirt,
-  household:   Home,
-  "dry-clean": Wind,
-  ironing:     Sparkles,
-  alteration:  Scissors,
-};
+const ease = [0.25, 0.4, 0.25, 1] as const;
+const pastelColors = ["#E4F4FB", "#D1F9E3", "#FDF1E1", "#EAEDf9", "#E4F4FB", "#D1F9E3"];
 
-const TAB_COLORS: Record<string, { bg: string; text: string }> = {
-  "wash-fold": { bg: "bg-[#D1F9E3]", text: "text-[#0a3547]" },
-  household:   { bg: "bg-[#E4F4FB]", text: "text-[#0a3547]" },
-  "dry-clean": { bg: "bg-[#EAEDf9]", text: "text-[#4c4abf]" },
-  ironing:     { bg: "bg-[#FDF1E1]", text: "text-[#c2730a]" },
-  alteration:  { bg: "bg-[#D1F9E3]", text: "text-[#0a3547]" },
-};
+function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
+  return (
+    <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.6, delay, ease }} style={style}>
+      {children}
+    </motion.div>
+  );
+}
+
+const services = [
+  { Icon: Shirt,    num: "01", title: "Wash & Fold",      tagline: "Everyday laundry, done right.",        price: "From $2.50/lb",   min: "Min. $15",  features: ["Sorted by colour and fabric", "Dried at optimal temperature", "Folded and returned neatly", "24-48hr turnaround", "Free pickup & delivery"], featured: true },
+  { Icon: Zap,      num: "02", title: "Express Same-Day", tagline: "Same-day. No excuses.",                price: "From $3.50/lb",   min: "Min. $20",  features: ["Book before noon", "Back by 6 PM same day", "Full wash, dry and fold", "SMS tracking updates", "Priority processing"], featured: false },
+  { Icon: Sparkles, num: "03", title: "Dry Cleaning",     tagline: "Delicates deserve better.",            price: "From $12.99/item",min: null,         features: ["Silks, wool, cashmere", "Formal and evening wear", "Spot treatment included", "48-72hr turnaround", "Individual garment tracking"], featured: false },
+  { Icon: Package,  num: "04", title: "Ironing & Press",  tagline: "Crisp. Sharp. Professional.",          price: "From $4.99/item", min: null,         features: ["Shirts, trousers, dresses", "Suits and blazers", "Steam-pressed to perfection", "Hung or folded to order", "24hr turnaround"], featured: false },
+  { Icon: Star,     num: "05", title: "Duvet & Bedding",  tagline: "Big loads, no problem.",               price: "$24.99/item",     min: null,         features: ["Duvets, comforters, pillows", "King and queen sizes", "Eco wash and dry", "Fluffed and bagged", "48hr turnaround"], featured: false },
+  { Icon: Truck,    num: "06", title: "Commercial Linen", tagline: "Scale your laundry operations.",       price: "Custom quote",    min: null,         features: ["Hotels and B&Bs", "Restaurants and cafes", "Gyms and spas", "Regular schedule available", "Volume discounts"], featured: false },
+];
 
 export default function ServicesPage() {
-  const [activeTab, setActiveTab] = useState(CATALOG[0].id);
-  const [query, setQuery] = useState("");
-
-  const activeService = CATALOG.find((t) => t.id === activeTab)!;
-  const colors = TAB_COLORS[activeTab] ?? TAB_COLORS["wash-fold"];
-  const Icon = TAB_ICONS[activeTab] ?? Shirt;
-
-  const filteredSections = useMemo(() => {
-    if (!query.trim()) return activeService.sections;
-    const q = query.toLowerCase();
-    return activeService.sections
-      .map((section) => ({
-        ...section,
-        items: section.items.filter((item) => item.name.toLowerCase().includes(q)),
-      }))
-      .filter((s) => s.items.length > 0);
-  }, [activeService, query]);
-
   return (
-    <div className="min-h-screen bg-[#111921] pt-16">
-      {/* Page hero */}
-      <div className="bg-[#0a3547] border-b border-white/8 py-14 px-4 relative overflow-hidden">
-        <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-mint/8 blur-[120px] pointer-events-none" />
-        <div className="mx-auto max-w-6xl relative">
-          <div className="flex items-center gap-2 text-white/35 text-sm mb-4 font-body">
-            <a href="/" className="hover:text-white transition-colors">Home</a>
-            <span>/</span>
-            <span className="text-white/70">Services &amp; Pricing</span>
-          </div>
-          <span className="eyebrow">Pricing</span>
-          <h1 className="text-4xl sm:text-5xl font-bold font-heading text-white mb-3">Services &amp; Pricing</h1>
-          <p className="text-white/50 text-lg max-w-xl font-body">
-            Transparent pricing on every item. No surprises at checkout.
-          </p>
+    <div style={{ background: "#F7F7F7" }}>
+
+      {/* Hero */}
+      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#111921", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
+          <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
+            What We Offer
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.08, ease }}
+            style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
+          >
+            Every fabric,{" "}
+            <em className="display-accent" style={{ display: "inline" }}>every need.</em>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
+            style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
+          >
+            From everyday wash-and-fold to delicate dry cleaning — we handle it all with professional care.
+          </motion.p>
         </div>
-      </div>
+      </section>
 
-      {/* Plans */}
-      <div id="pricing" className="mx-auto max-w-6xl px-4 sm:px-6 py-14">
-        <span className="eyebrow">Plans</span>
-        <h2 className="text-2xl font-bold text-white font-heading mb-8">Choose how you pay</h2>
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {/* Pay as you go */}
-          <div className="card rounded-2xl p-7">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#71717A] mb-3 font-body">Pay As You Go</p>
-            <p className="text-4xl font-bold text-[#09090B] font-heading mb-1">
-              $1.25<span className="text-base font-normal text-[#71717A]">/lb</span>
-            </p>
-            <p className="text-sm text-[#52525B] mb-5 font-body">Wash &amp; fold, no subscription needed.</p>
-            <ul className="space-y-2.5 mb-6">
-              {[
-                `Free pickup & delivery over ${PICKUP_DELIVERY.freeOverLb} lbs`,
-                `$${PICKUP_DELIVERY.feeUnderLb} fee under ${PICKUP_DELIVERY.freeOverLb} lbs`,
-                `${PICKUP_DELIVERY.minimumLb} lb minimum order`,
-                "Real-time email & WhatsApp updates",
-                "12–48 hr turnaround",
-              ].map((f) => (
-                <li key={f} className="flex items-center gap-2.5 text-sm text-[#52525B] font-body">
-                  <CheckCircle size={14} className="text-mint shrink-0" /> {f}
-                </li>
-              ))}
-            </ul>
-            <a href="/book" className="btn-ghost w-full text-center text-[#111921] border-[#111921]/20 hover:border-mint hover:text-mint">Book Now</a>
-          </div>
-
-          {/* Membership */}
-          <div className="card rounded-2xl border-2 border-mint p-7 relative overflow-hidden">
-            <div className="absolute top-5 right-5 step-pill text-xs">Best Value</div>
-            <p className="text-xs font-bold uppercase tracking-wider text-mint mb-3 font-body">Starex Club</p>
-            <p className="text-4xl font-bold text-[#09090B] font-heading mb-1">
-              $8.99<span className="text-base font-normal text-[#71717A]">/mo</span>
-            </p>
-            <p className="text-sm text-[#52525B] mb-5 font-body">All Pay As You Go perks, plus:</p>
-            <ul className="space-y-2.5 mb-6">
-              {MEMBERSHIP.perks.map((p) => (
-                <li key={p} className="flex items-center gap-2.5 text-sm text-[#52525B] font-body">
-                  <CheckCircle size={14} className="text-mint shrink-0" /> {p}
-                </li>
-              ))}
-            </ul>
-            <a href="/book" className="btn-primary w-full text-center">Join Starex Club</a>
-          </div>
-        </div>
-
-        {/* Full catalog */}
-        <div>
-          <span className="eyebrow">Full Price List</span>
-          <h2 className="text-2xl font-bold text-white font-heading mb-6">Every item, every price</h2>
-
-          {/* Tabs */}
-          <div className="border-b border-white/8 mb-6 overflow-x-auto">
-            <div className="flex gap-0 min-w-max">
-              {CATALOG.map((tab) => {
-                const TabIcon = TAB_ICONS[tab.id] ?? Shirt;
-                const active = tab.id === activeTab;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => { setActiveTab(tab.id); setQuery(""); }}
-                    className={`flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap font-body ${
-                      active
-                        ? "border-mint text-mint"
-                        : "border-transparent text-white/45 hover:text-white hover:border-white/20"
-                    }`}
-                  >
-                    <TabIcon size={14} />
-                    {tab.label.replace(" Preferences", "")}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Tab content */}
-          <div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-3">
-                <div className={`h-10 w-10 rounded-xl ${colors.bg} flex items-center justify-center`}>
-                  <Icon size={18} className={colors.text} />
+      {/* Services grid */}
+      <section style={{ padding: "80px 0" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }} className="services-grid">
+            {services.map((s, i) => (
+              <AnimatedContent key={s.title} delay={i * 0.07}>
+                <div style={{ background: pastelColors[i], borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
+                  {s.featured && (
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#78EDB2", color: "#0a1a0f", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
+                      POPULAR
+                    </span>
+                  )}
+                  <div style={{ fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "rgba(9,9,11,0.1)", letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 12 }}>{s.num}</div>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.2rem", color: "#09090B", marginBottom: 4, letterSpacing: "-0.01em" }}>{s.title}</h3>
+                  <p style={{ color: "#52525B", fontSize: "0.9rem", marginBottom: 16, fontStyle: "italic", fontFamily: "Kodchasan, sans-serif" }}>{s.tagline}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#111921", letterSpacing: "-0.02em", marginBottom: s.min ? 2 : 16 }}>{s.price}</p>
+                  {s.min && <p style={{ color: "#71717A", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
+                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24, flex: 1 }}>
+                    {s.features.map(f => (
+                      <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                        <CheckCircle size={14} color="#4ECDA0" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <span style={{ color: "#374151", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#0a3547", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                    Book this service <ArrowRight size={14} />
+                  </a>
                 </div>
-                <div>
-                  <p className="font-bold text-white font-heading">{activeService.label}</p>
-                  <p className="text-xs text-white/40 font-body">{activeService.blurb}</p>
-                </div>
-              </div>
-              <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
-                <input
-                  className="input-field pl-8 py-2 text-sm w-full sm:w-56"
-                  placeholder="Search items…"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {filteredSections.length === 0 && (
-              <div className="text-center py-16 text-white/30">
-                <Search size={32} className="mx-auto mb-3 opacity-30" />
-                <p className="font-medium font-body">No items match &ldquo;{query}&rdquo;</p>
-              </div>
-            )}
-
-            {filteredSections.map((section) => (
-              <div key={section.title} className="mb-8">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3 px-1 font-body">
-                  {section.title}
-                </h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                  {section.items.map((item) => (
-                    <div
-                      key={item.name}
-                      className="flex items-center justify-between rounded-xl border border-white/8 bg-[#1a2332] px-4 py-3 hover:border-mint/30 hover:bg-white/5 transition-all group"
-                    >
-                      <span className="text-sm text-white/55 group-hover:text-white/80 transition-colors font-body">
-                        {item.name}
-                      </span>
-                      <span className="text-sm font-bold text-mint ml-4 shrink-0 font-heading">
-                        ${item.price.toFixed(2)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              </AnimatedContent>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Turnaround info */}
-        <div className="mt-10 rounded-2xl bg-[#0a3547] border border-mint/15 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-mint/15 flex items-center justify-center shrink-0">
-              <Clock size={22} className="text-mint" />
-            </div>
-            <div>
-              <p className="font-bold text-lg text-white font-heading">Ready to book?</p>
-              <p className="text-white/45 text-sm font-body">
-                Wash &amp; fold in 12–48 hrs · Dry cleaning 2–3 days · Ironing 24 hrs
-              </p>
-            </div>
-          </div>
-          <a href="/book" className="btn-primary shrink-0">
-            Book a Pickup <ArrowRight size={15} />
-          </a>
+      {/* CTA strip */}
+      <section style={{ background: "#111921", padding: "64px 0", textAlign: "center" }}>
+        <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>
+              Not sure what you{" "}
+              <em className="display-accent" style={{ display: "inline" }}>need?</em>
+            </h2>
+            <p style={{ color: "rgba(255,255,255,0.5)", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>
+              Book a pickup and we&apos;ll assess your items at collection. No commitment required.
+            </p>
+            <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "14px 32px", textDecoration: "none" }}>
+              Book Free Pickup <ArrowRight size={16} />
+            </a>
+          </AnimatedContent>
         </div>
+      </section>
 
-        <p className="text-xs text-white/25 mt-6 text-center font-body">
-          * Prices shown exclude applicable taxes. Final price confirmed after weighing / item count.
-        </p>
-      </div>
+      <style>{`
+        @media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 560px) { .services-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 }

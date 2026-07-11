@@ -10,7 +10,7 @@ const ALWAYS_DARK = ["/book", "/dashboard", "/auth", "/order", "/admin"];
 
 const links = [
   { href: "/services",     label: "Services" },
-  { href: "/services#pricing", label: "Pricing" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about",        label: "About" },
   { href: "/faq",          label: "FAQ" },
