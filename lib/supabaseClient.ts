@@ -6,11 +6,13 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 // client-component effects/handlers.
 let _browser: SupabaseClient | null = null;
 
+const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
+
 export function getSupabaseBrowser(): SupabaseClient {
   if (_browser) return _browser;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
+  const supabaseAnonKey = stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "");
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(

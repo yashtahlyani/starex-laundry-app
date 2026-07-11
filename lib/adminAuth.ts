@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 import { redirect } from "next/navigation";
 
+const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
+
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
   .split(",")
   .map((e) => e.trim().toLowerCase())
@@ -10,8 +12,8 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
 export async function requireAdmin() {
   const cookieStore = cookies();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""),
+    stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
     { cookies: { get: (name: string) => cookieStore.get(name)?.value } }
   );
   const { data: { user } } = await supabase.auth.getUser();
@@ -29,8 +31,8 @@ export async function requireAdmin() {
 export async function getAdminUser() {
   const cookieStore = cookies();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""),
+    stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
     { cookies: { get: (name: string) => cookieStore.get(name)?.value } }
   );
   const { data: { user } } = await supabase.auth.getUser();

@@ -8,11 +8,13 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 // available. Call getSupabaseAdmin() inside your request handler / server code.
 let _admin: SupabaseClient | null = null;
 
+const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
+
 export function getSupabaseAdmin(): SupabaseClient {
   if (_admin) return _admin;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl = stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
+  const serviceRoleKey = stripBOM(process.env.SUPABASE_SERVICE_ROLE_KEY ?? "");
 
   if (!supabaseUrl || !serviceRoleKey) {
     throw new Error(
