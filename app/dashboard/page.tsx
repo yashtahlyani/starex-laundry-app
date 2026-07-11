@@ -1,43 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
-import {
-  Package, LogOut, Plus, Clock, CheckCircle,
-  Truck, Sparkles, ArrowRight, MapPin,
-} from "lucide-react";
+import { Package, LogOut, Plus, Clock, Star, Sparkles, ChevronRight, ArrowRight } from "lucide-react";
+import { StatusBadge, ProgressTrack, STATUS_META, fmtSlot } from "@/components/OrderBits";
+import AppOrderDrawer, { type DrawerOrder } from "@/components/AppOrderDrawer";
 
-type Order = {
-  id: string;
-  order_code: string;
-  service_type: string;
-  status: string;
-  pickup_address: string;
-  pickup_slot_start: string;
-  created_at: string;
-};
-
-const STATUS_META: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  scheduled:        { label: "Scheduled",       color: "text-mint",         bg: "bg-mint/10",       icon: Clock },
-  picked_up:        { label: "Picked Up",        color: "text-yellow-400",   bg: "bg-yellow-400/10", icon: Truck },
-  in_progress:      { label: "Being Cleaned",    color: "text-orange-400",   bg: "bg-orange-400/10", icon: Sparkles },
-  ready:            { label: "Ready",            color: "text-mint",         bg: "bg-mint/10",       icon: CheckCircle },
-  out_for_delivery: { label: "Out for Delivery", color: "text-mint",         bg: "bg-mint/15",       icon: Truck },
-  delivered:        { label: "Delivered",        color: "text-white/40",     bg: "bg-white/5",       icon: CheckCircle },
-  cancelled:        { label: "Cancelled",        color: "text-red-400",      bg: "bg-red-400/10",    icon: Package },
-};
+const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const SERVICE_LABELS: Record<string, string> = {
   "wash-fold": "Wash & Fold",
   "dry-clean": "Dry Cleaning",
-  ironing:     "Ironing",
-  alteration:  "Alteration",
+  ironing: "Ironing",
+  alteration: "Alteration",
 };
+
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+}
+const today = new Date().toLocaleDateString("en-CA", { weekday: "long", month: "long", day: "numeric" });
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<DrawerOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<DrawerOrder | null>(null);
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
@@ -55,154 +46,182 @@ export default function DashboardPage() {
     window.location.href = "/";
   }
 
-  const activeOrders = orders.filter((o) => !["delivered", "cancelled"].includes(o.status));
-  const pastOrders = orders.filter((o) => ["delivered", "cancelled"].includes(o.status));
+  const active = useMemo(() => orders.filter(o => !["delivered", "cancelled"].includes(o.status)), [orders]);
+  const activeOrder = active[0] ?? null;
+  const recent = orders.slice(0, 5);
+
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "there";
+  const initial = firstName.charAt(0).toUpperCase();
+
+  const statCards = [
+    { label: "Total orders", value: orders.length, icon: Package },
+    { label: "Active now", value: active.length, icon: Clock },
+    { label: "Services used", value: new Set(orders.map(o => o.service_type)).size, icon: Sparkles },
+    { label: "Member since", value: user ? new Date(user.created_at).toLocaleDateString("en-CA", { month: "short", year: "numeric" }) : "—", icon: Star },
+  ];
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#111921] pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="h-10 w-10 rounded-full border-4 border-mint/20 border-t-mint animate-spin mx-auto mb-3" />
-          <p className="text-white/40 text-sm font-body">Loading your orders…</p>
+      <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(120,237,178,0.2)", borderTopColor: "#78EDB2", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
+          <p style={{ color: "#A1A1AA", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Loading your orders…</p>
         </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#111921] pt-20">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-10">
+    <div style={{ background: "#F7F7F7", minHeight: "100vh", paddingTop: 96 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 96px" }}>
+
         {/* Header */}
-        <div className="flex items-start justify-between mb-10">
-          <div>
-            <p className="text-sm text-white/35 mb-1 font-body">Welcome back,</p>
-            <h1 className="text-2xl font-bold text-white font-heading">
-              {user?.user_metadata?.full_name ?? user?.email?.split("@")[0] ?? "Customer"}
-            </h1>
-            <p className="text-sm text-white/30 mt-0.5 font-body">{user?.email}</p>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 36 }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{
+              width: 48, height: 48, borderRadius: "50%",
+              background: "linear-gradient(135deg,#C9F8DE,#78EDB2)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#0a3547",
+            }}>
+              {initial}
+            </div>
+            <div>
+              <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#09090B", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+                {greeting()}, {firstName}.
+              </h1>
+              <p style={{ color: "#71717A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <a href="/book" className="btn-primary text-sm px-4 py-2">
-              <Plus size={14} /> New Booking
+          <div style={{ display: "flex", gap: 8 }}>
+            <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", textDecoration: "none" }}>
+              <Plus size={16} /> Schedule pickup
             </a>
-            <button onClick={handleSignOut} className="btn-ghost text-sm px-4 py-2">
-              <LogOut size={14} /> Sign Out
+            <button onClick={handleSignOut} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px" }}>
+              <LogOut size={15} /> Sign out
             </button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-          {[
-            { label: "Total Orders",  value: orders.length },
-            { label: "Active",        value: activeOrders.length },
-            { label: "Completed",     value: orders.filter((o) => o.status === "delivered").length },
-            { label: "Member Since",  value: new Date(user?.created_at).toLocaleDateString("en-CA", { month: "short", year: "numeric" }) },
-          ].map((s) => (
-            <div key={s.label} className="card-dark rounded-2xl p-4 text-center border border-white/8">
-              <p className="text-2xl font-bold text-mint font-heading">{s.value}</p>
-              <p className="text-xs text-white/35 mt-1 font-body">{s.label}</p>
-            </div>
+        {/* Stat cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 32 }} className="dash-stats">
+          {statCards.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease }}
+              style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, padding: "18px 20px" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                <s.icon size={15} color="#78EDB2" />
+                <span style={{ color: "#71717A", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{s.label}</span>
+              </div>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.6rem", color: "#09090B", letterSpacing: "-0.02em" }}>{s.value}</p>
+            </motion.div>
           ))}
         </div>
 
-        {/* Active orders */}
-        {activeOrders.length > 0 && (
-          <div className="mb-10">
-            <h2 className="text-lg font-bold text-white font-heading mb-4">Active Orders</h2>
-            <div className="space-y-3">
-              {activeOrders.map((o) => {
-                const meta = STATUS_META[o.status];
-                const Icon = meta?.icon ?? Package;
-                return (
-                  <div key={o.id} className="card-dark rounded-2xl border border-white/8 flex items-center gap-4 p-4">
-                    <div className={`h-11 w-11 rounded-xl ${meta?.bg ?? "bg-white/5"} flex items-center justify-center shrink-0`}>
-                      <Icon size={20} className={meta?.color ?? "text-white/40"} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <p className="font-mono font-bold text-mint text-sm">{o.order_code}</p>
-                        <span className={`badge ${meta?.bg ?? "bg-white/5"} ${meta?.color ?? "text-white/40"}`}>
-                          {meta?.label ?? o.status}
-                        </span>
-                      </div>
-                      <p className="text-sm text-white/60 font-body">{SERVICE_LABELS[o.service_type] ?? o.service_type}</p>
-                      <p className="text-xs text-white/35 flex items-center gap-1 mt-0.5 font-body">
-                        <MapPin size={10} /> {o.pickup_address}
-                      </p>
-                    </div>
-                    <a href={`/order?code=${o.order_code}`} className="btn-ghost text-xs px-3 py-2 shrink-0">
-                      Track <ArrowRight size={12} />
-                    </a>
+        {/* Active order — live tracking */}
+        {activeOrder ? (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }} style={{ marginBottom: 32 }}>
+            <p className="eyebrow" style={{ marginBottom: 12 }}>Active order</p>
+            <div style={{ background: "#fff", border: "1.5px solid #C9F8DE", borderRadius: 20, padding: "28px 30px", boxShadow: "0 4px 20px rgba(120,237,178,0.1)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#09090B" }}>{activeOrder.order_code}</span>
+                    <StatusBadge status={activeOrder.status} pulse />
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Empty state */}
-        {orders.length === 0 && (
-          <div className="card-dark rounded-2xl border border-white/8 text-center py-16 px-6">
-            <div className="h-16 w-16 rounded-2xl bg-mint/10 flex items-center justify-center mx-auto mb-4">
-              <Package size={28} className="text-mint" />
-            </div>
-            <h3 className="text-lg font-bold text-white font-heading mb-2">No orders yet</h3>
-            <p className="text-white/40 text-sm mb-6 max-w-xs mx-auto font-body">
-              Book your first pickup and your orders will appear here.
-            </p>
-            <a href="/book" className="btn-primary">
-              Book a Pickup <ArrowRight size={15} />
-            </a>
-          </div>
-        )}
-
-        {/* Past orders */}
-        {pastOrders.length > 0 && (
-          <div>
-            <h2 className="text-lg font-bold text-white/40 font-heading mb-4">Past Orders</h2>
-            <div className="card-dark rounded-2xl border border-white/8 overflow-hidden p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-white/5 border-b border-white/8">
-                    <tr>
-                      {["Order", "Service", "Date", "Status", ""].map((h) => (
-                        <th key={h} className="text-left px-5 py-3 font-medium text-white/30 text-xs uppercase tracking-wider font-body">
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {pastOrders.map((o) => {
-                      const meta = STATUS_META[o.status];
-                      return (
-                        <tr key={o.id} className="hover:bg-white/3 transition-colors">
-                          <td className="px-5 py-3.5 font-mono font-semibold text-white/40 text-xs">{o.order_code}</td>
-                          <td className="px-5 py-3.5 text-white/55 font-body">{SERVICE_LABELS[o.service_type] ?? o.service_type}</td>
-                          <td className="px-5 py-3.5 text-white/30 font-body hidden sm:table-cell">
-                            {new Date(o.created_at).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" })}
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <span className={`badge ${meta?.bg ?? "bg-white/5"} ${meta?.color ?? "text-white/40"}`}>
-                              {meta?.label ?? o.status}
-                            </span>
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <a href={`/order?code=${o.order_code}`} className="text-xs text-mint hover:underline font-body">
-                              View
-                            </a>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                  <p style={{ color: "#71717A", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", marginTop: 4 }}>
+                    {SERVICE_LABELS[activeOrder.service_type] ?? activeOrder.service_type} · {fmtSlot(activeOrder.pickup_slot_start)}
+                  </p>
+                </div>
+                <button onClick={() => setSelected(activeOrder)} className="btn-ghost" style={{ padding: "9px 18px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  View details <ChevronRight size={14} />
+                </button>
+              </div>
+              <ProgressTrack status={activeOrder.status} />
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
+                <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA" }}>{STATUS_META[activeOrder.status]?.label}</span>
+                <a href={`/order?code=${activeOrder.order_code}`} style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#4ECDA0", textDecoration: "none" }}>Track live →</a>
               </div>
             </div>
-          </div>
+          </motion.div>
+        ) : (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }}
+            style={{ background: "#111921", borderRadius: 20, padding: "40px", textAlign: "center", marginBottom: 32, position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 80% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+            <div style={{ position: "relative" }}>
+              <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#fff", marginBottom: 8 }}>
+                No active orders — <em className="display-accent" style={{ display: "inline" }}>enjoy your weekend.</em>
+              </h3>
+              <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Schedule a pickup and we&apos;ll handle the rest.</p>
+              <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+                Book a pickup <ArrowRight size={16} />
+              </a>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Recent orders */}
+        {recent.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.45, ease }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+              <p className="eyebrow" style={{ margin: 0 }}>Recent orders</p>
+              {orders.length > 5 && (
+                <a href="/order" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem", color: "#4ECDA0", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+                  View all <ChevronRight size={13} />
+                </a>
+              )}
+            </div>
+            <div style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, overflow: "hidden" }}>
+              {recent.map((o, i) => (
+                <button key={o.id} onClick={() => setSelected(o)} style={{
+                  width: "100%", display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, alignItems: "center",
+                  padding: "16px 22px",
+                  borderBottom: i < recent.length - 1 ? "1px solid #F4F4F5" : "none",
+                  borderLeft: "none", borderRight: "none", borderTop: "none",
+                  background: "none", cursor: "pointer", textAlign: "left",
+                }}>
+                  <div>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#09090B" }}>
+                      {SERVICE_LABELS[o.service_type] ?? o.service_type}
+                      <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {o.order_code}</span>
+                    </p>
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#A1A1AA" }}>{fmtSlot(o.pickup_slot_start)}</p>
+                  </div>
+                  <StatusBadge status={o.status} size="sm" pulse={!["delivered","cancelled"].includes(o.status)} />
+                  <ChevronRight size={15} color="#C0C0C0" />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {orders.length === 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+            style={{ background: "#fff", borderRadius: 20, padding: "64px 40px", textAlign: "center", border: "1px solid #EDEDED" }}>
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(120,237,178,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+              <Package size={24} color="#4ECDA0" />
+            </div>
+            <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#09090B", marginBottom: 8 }}>No orders yet</h3>
+            <p style={{ color: "#71717A", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Book your first pickup — it takes under 2 minutes.</p>
+            <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+              Book a pickup <ArrowRight size={16} />
+            </a>
+          </motion.div>
         )}
       </div>
+
+      <AppOrderDrawer order={selected} onClose={() => setSelected(null)} />
+
+      <style>{`
+        @media (max-width: 720px) { .dash-stats { grid-template-columns: repeat(2,1fr) !important; } }
+      `}</style>
     </div>
   );
 }
