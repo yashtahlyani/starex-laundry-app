@@ -1,14 +1,25 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
-import { ArrowRight, Star, CheckCircle } from "lucide-react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { ArrowRight, Star, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const marqueeItems = [
   "★ 4.9 Rating", "Free Pickup & Delivery", "24hr Turnaround", "10,000+ Customers",
   "Eco-Certified Detergents", "Fully Insured", "98% On-Time", "No Hidden Fees",
+];
+
+const cities = ["Toronto", "Mississauga", "Scarborough", "North York", "Etobicoke", "Brampton", "Markham", "Richmond Hill"];
+
+const comparisons = [
+  { feature: "Getting There",     them: "Drive yourself",              us: "Free contactless pickup" },
+  { feature: "Time Required",     them: "1–2 hours waiting",           us: "60-second booking" },
+  { feature: "Garment Sorting",   them: "You sort everything",         us: "We sort by colour & fabric" },
+  { feature: "Cleaning Products", them: "Generic detergents",          us: "Eco-certified, skin-safe" },
+  { feature: "Order Tracking",    them: "No updates — just wait",      us: "Real-time status updates" },
+  { feature: "Pricing",           them: "Coin-by-coin, adds up",       us: "Flat plans from $24/mo" },
 ];
 
 function Counter({ target, suffix = "", fixed = false }: { target: number; suffix?: string; fixed?: boolean }) {
@@ -77,13 +88,15 @@ const testimonials = [
 ];
 
 const trust = [
-  { title: "Fully Insured",  desc: "Every garment covered up to $500 against damage or loss." },
-  { title: "Eco-Friendly",   desc: "Biodegradable detergents. Low-water wash cycles." },
-  { title: "4.9★ Rated",     desc: "Consistently top-rated across Google and Yelp." },
-  { title: "Always On Time", desc: "98% of deliveries arrive within the promised window." },
+  { Icon: Shield, title: "Fully Insured",  desc: "Every garment covered up to $500 against damage or loss." },
+  { Icon: Leaf,   title: "Eco-Friendly",   desc: "Biodegradable detergents. Low-water wash cycles." },
+  { Icon: Star,   title: "4.9★ Rated",     desc: "Consistently top-rated across Google and Yelp." },
+  { Icon: Clock,  title: "Always On Time", desc: "98% of deliveries arrive within the promised window." },
 ];
 
 export default function Home() {
+  const [promoDismissed, setPromoDismissed] = useState(false);
+
   return (
     <div>
 
@@ -93,7 +106,53 @@ export default function Home() {
         position: "relative", overflow: "hidden", paddingTop: "80px",
         background: "radial-gradient(208% 160% at 50% 0px, #111921 0%, #131a25 19%, #0a3547 41%, #1b8fc0 58%, #f0fae5 72%)",
       }}>
-        <div style={{ maxWidth: "820px", margin: "0 auto", padding: "80px 24px", textAlign: "center" }}>
+
+        {/* Floating orbs */}
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+          <div style={{ position: "absolute", top: "10%", left: "-10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(120,237,178,0.10) 0%, transparent 70%)", filter: "blur(50px)", animation: "float 8s ease-in-out infinite" }} />
+          <div style={{ position: "absolute", bottom: "15%", right: "-8%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(27,143,192,0.12) 0%, transparent 70%)", filter: "blur(50px)", animation: "float 11s ease-in-out infinite 2s" }} />
+          <div style={{ position: "absolute", top: "55%", left: "60%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(120,237,178,0.07) 0%, transparent 70%)", filter: "blur(40px)", animation: "float 9s ease-in-out infinite 4s" }} />
+        </div>
+
+        {/* Promo banner */}
+        <AnimatePresence>
+          {!promoDismissed && (
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 1.2, duration: 0.4, ease }}
+              style={{
+                position: "absolute", top: 72, left: 0, right: 0, zIndex: 10,
+                background: "rgba(120,237,178,0.10)",
+                backdropFilter: "blur(8px)",
+                borderBottom: "1px solid rgba(120,237,178,0.18)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                padding: "10px 24px", gap: 16,
+              }}
+            >
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "rgba(255,255,255,0.85)", margin: 0 }}>
+                🍁 First pickup FREE — No minimums, no commitment.
+              </p>
+              <a href="/book" style={{
+                fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8125rem",
+                color: "#0a1a0f", background: "linear-gradient(180deg,#C9F8DE,#78EDB2)",
+                padding: "4px 14px", borderRadius: 999, textDecoration: "none", whiteSpace: "nowrap",
+              }}>
+                Book free →
+              </a>
+              <button
+                onClick={() => setPromoDismissed(true)}
+                aria-label="Dismiss"
+                style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.45)", display: "flex", padding: 4, marginLeft: 4 }}
+              >
+                <X size={14} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div style={{ maxWidth: "820px", margin: "0 auto", padding: "80px 24px", textAlign: "center", position: "relative", zIndex: 1 }}>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}
             style={{ display: "flex", justifyContent: "center", marginBottom: "36px" }}>
             <span className="hero-badge">
@@ -176,18 +235,53 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "16px" }} className="stats-grid">
             {stats.map((s, i) => (
               <AnimatedContent key={s.label} delay={i * 0.08}>
-                <div className="card-stat">
+                <motion.div
+                  className="card-stat"
+                  whileHover={{ y: -4, boxShadow: "0 12px 40px rgba(120,237,178,0.12)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                >
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2rem,3.5vw,2.8rem)", letterSpacing: "-0.02em", color: "#78EDB2", lineHeight: 1, marginBottom: "8px" }}>
                     <Counter target={s.value} suffix={s.suffix} fixed={s.fixed} />
                   </p>
                   <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", marginBottom: "4px" }}>{s.label}</p>
                   <p style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem" }}>{s.desc}</p>
-                </div>
+                </motion.div>
               </AnimatedContent>
             ))}
           </div>
         </div>
       </section>
+
+      {/* ══ CITY COVERAGE ══ */}
+      <div style={{ background: "#111921", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "24px 0" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
+            <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.7rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", whiteSpace: "nowrap", flexShrink: 0 }}>
+              Serving GTA
+            </span>
+            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.1)", flexShrink: 0 }} />
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {cities.map((city, i) => (
+                <motion.span
+                  key={city}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.04, ease }}
+                  style={{
+                    fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", fontWeight: 500,
+                    color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.09)", borderRadius: 999,
+                    padding: "4px 14px", whiteSpace: "nowrap",
+                  }}
+                >
+                  🍁 {city}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ══ HOW IT WORKS — light bg, vertical timeline ══ */}
       <section style={{ padding: "96px 0", background: "#F7F7F7" }}>
@@ -234,17 +328,23 @@ export default function Home() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "16px" }} className="services-grid">
             {services.map((s, i) => (
-              <AnimatedContent key={s.title} delay={i * 0.06}>
-                <div style={{ background: pasteColors[i % pasteColors.length], borderRadius: "20px", padding: "32px 28px", height: "100%", display: "flex", flexDirection: "column" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2rem", letterSpacing: "-0.03em", color: "rgba(17,25,33,0.18)", lineHeight: 1, marginBottom: "28px" }}>{s.num}</p>
-                  <div style={{ height: "1px", background: "rgba(17,25,33,0.1)", marginBottom: "20px" }} />
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", letterSpacing: "-0.01em", color: "#09090B", marginBottom: "10px" }}>{s.title}</h3>
-                  <p style={{ color: "rgba(17,25,33,0.65)", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", flexGrow: 1, marginBottom: "20px" }}>{s.desc}</p>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#0a3547" }}>{s.price}</p>
-                  </div>
+              <motion.div
+                key={s.title}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.6, delay: i * 0.06, ease }}
+                whileHover={{ y: -6, boxShadow: "0 20px 60px rgba(17,25,33,0.12)" }}
+                style={{ background: pasteColors[i % pasteColors.length], borderRadius: "20px", padding: "32px 28px", height: "100%", display: "flex", flexDirection: "column", cursor: "default" }}
+              >
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2rem", letterSpacing: "-0.03em", color: "rgba(17,25,33,0.18)", lineHeight: 1, marginBottom: "28px" }}>{s.num}</p>
+                <div style={{ height: "1px", background: "rgba(17,25,33,0.1)", marginBottom: "20px" }} />
+                <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", letterSpacing: "-0.01em", color: "#09090B", marginBottom: "10px" }}>{s.title}</h3>
+                <p style={{ color: "rgba(17,25,33,0.65)", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", flexGrow: 1, marginBottom: "20px" }}>{s.desc}</p>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#0a3547" }}>{s.price}</p>
                 </div>
-              </AnimatedContent>
+              </motion.div>
             ))}
           </div>
 
@@ -253,6 +353,55 @@ export default function Home() {
               View all services <ArrowRight size={14} />
             </a>
           </AnimatedContent>
+        </div>
+      </section>
+
+      {/* ══ WHY STAREX — comparison ══ */}
+      <section style={{ padding: "96px 0", background: "#F7F7F7" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "80px", alignItems: "center" }} className="comparison-layout">
+
+            {/* Left col */}
+            <AnimatedContent>
+              <span className="eyebrow" style={{ color: "#0a3547" }}>The Difference</span>
+              <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#09090B", marginBottom: "16px" }}>
+                Why StareX beats the{" "}
+                <span className="display-accent" style={{ fontWeight: 600 }}>laundromat.</span>
+              </h2>
+              <p style={{ color: "#52525B", fontSize: "1rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif", maxWidth: "38ch", marginBottom: "28px" }}>
+                Skip the trip. Skip the wait. We handle everything, every time.
+              </p>
+              <a href="/book" className="btn-primary" style={{ display: "inline-flex" }}>
+                Try it free <ArrowRight size={14} />
+              </a>
+            </AnimatedContent>
+
+            {/* Right col — comparison table */}
+            <AnimatedContent delay={0.15}>
+              <div style={{ background: "#ffffff", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(17,25,33,0.06)" }}>
+                {/* Header row */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(17,25,33,0.03)", borderBottom: "1px solid rgba(17,25,33,0.06)" }}>
+                  <span />
+                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(17,25,33,0.35)", textAlign: "center" }}>Traditional</span>
+                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#78EDB2", textAlign: "center" }}>StareX</span>
+                </div>
+                {comparisons.map((row, i) => (
+                  <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(17,25,33,0.06)" : "none", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "0.8125rem", color: "#09090B" }}>{row.feature}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
+                      <XCircle size={13} color="rgba(17,25,33,0.3)" strokeWidth={2} />
+                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "rgba(17,25,33,0.45)", textAlign: "center" }}>{row.them}</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
+                      <CheckCircle size={13} color="#78EDB2" strokeWidth={2.5} />
+                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#09090B", fontWeight: 600, textAlign: "center" }}>{row.us}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </AnimatedContent>
+
+          </div>
         </div>
       </section>
 
@@ -331,6 +480,29 @@ export default function Home() {
             </h2>
           </AnimatedContent>
 
+          {/* Featured testimonial */}
+          <AnimatedContent style={{ marginBottom: "24px" }}>
+            <div style={{ background: "#111921", borderRadius: 20, padding: "40px 48px", position: "relative", overflow: "hidden" }}>
+              <p aria-hidden="true" style={{ position: "absolute", top: -20, left: 20, fontSize: "12rem", lineHeight: 1, fontFamily: "Poppins, sans-serif", color: "rgba(120,237,178,0.05)", pointerEvents: "none", userSelect: "none" }}>&ldquo;</p>
+              <div style={{ display: "flex", gap: 3, marginBottom: 16, position: "relative" }}>
+                {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="#78EDB2" color="#78EDB2" />)}
+              </div>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "clamp(1.1rem,2vw,1.375rem)", color: "#ffffff", lineHeight: 1.6, fontStyle: "italic", maxWidth: "72ch", marginBottom: 24, position: "relative" }}>
+                &ldquo;Switched to StareX six months ago and it&apos;s become the one subscription I&apos;d never cancel. My clothes come back cleaner than they&apos;ve ever been — pressed, folded, and always on time.&rdquo;
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#C9F8DE,#78EDB2)", color: "#0a1a0f", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
+                  M
+                </div>
+                <div>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#ffffff" }}>Michael T.</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "rgba(255,255,255,0.4)" }}>North York, ON · Monthly subscriber</p>
+                </div>
+              </div>
+            </div>
+          </AnimatedContent>
+
+          {/* 2×2 grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "16px" }} className="testimonials-grid">
             {testimonials.map((t, i) => (
               <AnimatedContent key={t.name} delay={i * 0.06}>
@@ -358,7 +530,10 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "32px" }} className="trust-grid">
             {trust.map((t, i) => (
               <AnimatedContent key={t.title} delay={i * 0.07}>
-                <div style={{ textAlign: "center" }}>
+                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(120,237,178,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+                    <t.Icon size={20} color="#78EDB2" />
+                  </div>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#ffffff", marginBottom: "8px" }}>{t.title}</p>
                   <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>
                 </div>
@@ -398,6 +573,7 @@ export default function Home() {
           .pricing-preview-grid { grid-template-columns: 1fr !important; }
           .testimonials-grid    { grid-template-columns: 1fr !important; }
           .trust-grid           { grid-template-columns: repeat(2,1fr) !important; }
+          .comparison-layout    { grid-template-columns: 1fr !important; gap: 40px !important; }
         }
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
