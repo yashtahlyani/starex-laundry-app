@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --mint-light: #C9F8DE;
+    --mint-mid:   #78EDB2;
+    --dark-base:  #111921;
+    --dark-card:  #32373B;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #111921;
+    color: #09090B;
+  }
+
+  body {
+    font-family: 'Kodchasan', 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #52525B;
+    overflow-x: hidden;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  ::selection {
+    background-color: #78EDB2;
+    color: #111921;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #32373B; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #78EDB2; }
+
+  *:focus-visible {
+    outline: 2px solid #78EDB2;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', system-ui, sans-serif;
+    color: #09090B;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+
+  /* Gradient text — mint */
+  .gradient-text {
+    background: linear-gradient(41deg, #C9F8DE 0%, #78EDB2 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Italic display accent with mint gradient (Spentro-style) */
+  .display-accent {
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    background: linear-gradient(41deg, #C9F8DE 0%, #78EDB2 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Section container */
+  .section-container {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Light card — white */
+  .card {
+    background: #FFFFFF;
+    border: 1px solid rgba(6,38,81,0.08);
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+  }
+
+  /* Pastel colored cards */
+  .card-pastel-blue   { background: #E4F4FB; border-radius: 20px; border: none; }
+  .card-pastel-mint   { background: #D1F9E3; border-radius: 20px; border: none; }
+  .card-pastel-peach  { background: #FDF1E1; border-radius: 20px; border: none; }
+  .card-pastel-lavender { background: #EAEDf9; border-radius: 20px; border: none; }
+
+  /* Dark stat card */
+  .card-stat {
+    background: #32373B;
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+
+  /* Hero badge pill */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-family: 'Kodchasan', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Primary button — mint gradient pill */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(180deg, #C9F8DE 0%, #78EDB2 100%);
+    color: #0a1a0f;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 13px 28px;
+    border-radius: 120px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(120,237,178,0.3);
+  }
+
+  /* Accent CTA — same mint pill (alias) */
+  .btn-sky {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(180deg, #C9F8DE 0%, #78EDB2 100%);
+    color: #0a1a0f;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 13px 28px;
+    border-radius: 120px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-sky:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(120,237,178,0.3);
+  }
+
+  /* Ghost button — outline pill */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: #111921;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 12px 28px;
+    border-radius: 120px;
+    border: 1.5px solid rgba(17,25,33,0.18);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-ghost:hover {
+    border-color: #78EDB2;
+    background: rgba(120,237,178,0.07);
+  }
+
+  /* Ghost on dark backgrounds */
+  .btn-ghost-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    padding: 12px 28px;
+    border-radius: 120px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-ghost-dark:hover {
+    border-color: #78EDB2;
+    color: #78EDB2;
+  }
+
+  /* Eyebrow label */
+  .eyebrow {
+    font-family: 'Kodchasan', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #78EDB2;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  /* Timeline step pill label */
+  .step-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #78EDB2;
+    color: #0a1a0f;
+    font-family: 'Kodchasan', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.01em;
+  }
+
+  /* Outline pill tag */
+  .tag-outline {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.8);
+    font-family: 'Kodchasan', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+
+  .tag-outline-dark {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid rgba(17,25,33,0.2);
+    color: rgba(17,25,33,0.65);
+    font-family: 'Kodchasan', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+}
+
+@layer utilities {
+  .font-heading  { font-family: 'Poppins', sans-serif; }
+  .font-body     { font-family: 'Kodchasan', 'Inter', sans-serif; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar  { -ms-overflow-style: none; scrollbar-width: none; }
+  .text-balance  { text-wrap: balance; }
+  .on-dark-primary   { color: #FAFAFA; }
+  .on-dark-secondary { color: rgba(255,255,255,0.55); }
+}
+
+/* Dark section overrides */
+.dark-section {
+  background: #111921;
+  color: #FAFAFA;
+}
+.dark-section h1,
+.dark-section h2,
+.dark-section h3,
+.dark-section h4 {
+  color: #FAFAFA;
+}
+.dark-section p,
+.dark-section span:not(.eyebrow):not(.gradient-text):not(.display-accent):not(.step-pill) {
+  color: rgba(255,255,255,0.55);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0) }
+  to   { transform: translateX(-50%) }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px) }
+  to   { opacity: 1; transform: translateY(0) }
+}

@@ -1,0 +1,339 @@
+import { useState, useRef, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
+import { X, Menu, ArrowRight, ChevronLeft, LogIn, LayoutDashboard, LogOut, Package, Settings } from 'lucide-react'
+import { useAuth, useStats } from '../../hooks/useStore'
+import { logout } from '../../lib/store'
+
+const links = [
+  { href: '/services', label: 'Services' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/how-it-works', label: 'How It Works' },
+  { href: '/about', label: 'About' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/contact', label: 'Contact' },
+]
+
+const mobileSecondary = {
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+  fontFamily: 'Kodchasan, sans-serif', fontWeight: 500, fontSize: '0.9rem',
+  padding: '12px 20px', color: 'rgba(255,255,255,0.6)', background: 'none',
+  textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, cursor: 'pointer',
+}
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [acctOpen, setAcctOpen] = useState(false)
+  const acctRef = useRef(null)
+  const lastY = useRef(0)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { scrollY } = useScroll()
+  const isHome = location.pathname === '/'
+  const needsDarkNav = ['/book', '/dashboard', '/orders', '/account'].includes(location.pathname)
+  const { user, isOwner } = useAuth()
+  const stats = useStats()
+
+  const signOut = () => {
+    logout()
+    navigate('/')
+  }
+
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    setScrolled(y > 40)
+    if (y > lastY.current && y > 100) setHidden(true)
+    else setHidden(false)
+    lastY.current = y
+  })
+
+  useEffect(() => { setMenuOpen(false); setAcctOpen(false) }, [location.pathname])
+  useEffect(() => {
+    const onClick = (e) => { if (acctRef.current && !acctRef.current.contains(e.target)) setAcctOpen(false) }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [])
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
+  return (
+    <>
+      <motion.header
+        animate={{ y: hidden && !menuOpen ? -100 : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 500,
+          height: scrolled ? '64px' : '72px',
+          background: (scrolled || needsDarkNav) ? 'rgba(17,25,33,0.97)' : 'transparent',
+          backdropFilter: (scrolled || needsDarkNav) ? 'blur(14px)' : 'none',
+          borderBottom: (scrolled || needsDarkNav) ? '1px solid rgba(255,255,255,0.07)' : '1px solid transparent',
+          transition: 'height 0.3s ease, background 0.3s ease, border-color 0.3s ease',
+        }}
+      >
+        <div style={{
+          maxWidth: '1200px', margin: '0 auto', padding: '0 24px',
+          height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <AnimatePresence>
+              {!isHome && (
+                <motion.button
+                  initial={{ opacity: 0, x: -10, width: 0 }}
+                  animate={{ opacity: 1, x: 0, width: 32 }}
+                  exit={{ opacity: 0, x: -10, width: 0 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                  onClick={() => navigate(-1)}
+                  aria-label="Go back"
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    border: 'none', borderRadius: 8, cursor: 'pointer',
+                    width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'rgba(255,255,255,0.7)', flexShrink: 0, overflow: 'hidden',
+                  }}
+                >
+                  <ChevronLeft size={16} />
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 9 }}>
+              <motion.div
+                whileHover={{ scale: 1.06, rotate: 5 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 20 }}
+                style={{ width: 36, height: 36, flexShrink: 0 }}
+              >
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="lgo" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#C9F8DE"/>
+                      <stop offset="100%" stopColor="#4ECDA0"/>
+                    </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  {/* Dark rounded square base */}
+                  <rect width="36" height="36" rx="10" fill="#111921"/>
+                  {/* Bold X from two crossing capsule strokes */}
+                  <line x1="9" y1="9" x2="27" y2="27" stroke="url(#lgo)" strokeWidth="5" strokeLinecap="round" filter="url(#glow)"/>
+                  <line x1="27" y1="9" x2="9" y2="27" stroke="url(#lgo)" strokeWidth="5" strokeLinecap="round" filter="url(#glow)"/>
+                  {/* Center star dot */}
+                  <circle cx="18" cy="18" r="3" fill="#111921"/>
+                  <circle cx="18" cy="18" r="1.5" fill="#C9F8DE"/>
+                </svg>
+              </motion.div>
+              <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
+                Stare<span style={{ color: '#78EDB2' }}>X</span>
+              </span>
+            </Link>
+          </div>
+
+          {/* Desktop nav */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '4px' }} className="hidden md:flex">
+            {links.map((link) => {
+              const active = location.pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  style={{
+                    position: 'relative', textDecoration: 'none',
+                    fontFamily: 'Kodchasan, sans-serif', fontWeight: 500,
+                    fontSize: '0.9rem', padding: '6px 14px', borderRadius: 8,
+                    color: active ? '#78EDB2' : 'rgba(255,255,255,0.7)',
+                    background: active ? 'rgba(120,237,178,0.09)' : 'transparent',
+                    transition: 'color 0.2s, background 0.2s',
+                  }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)' } }}
+                  onMouseLeave={e => { if (!active) { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'transparent' } }}
+                >
+                  {link.label}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      style={{ position: 'absolute', bottom: 3, left: 14, right: 14, height: 2, background: '#78EDB2', borderRadius: 999 }}
+                    />
+                  )}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Desktop right CTAs */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }} className="hidden md:flex">
+            {isOwner ? (
+              <>
+                <Link to="/admin" style={{
+                  position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6,
+                  fontFamily: 'Kodchasan, sans-serif', fontWeight: 500,
+                  fontSize: '0.875rem', padding: '8px 16px', color: '#78EDB2',
+                  textDecoration: 'none', border: '1px solid rgba(120,237,178,0.35)',
+                  borderRadius: 8,
+                }}>
+                  <Settings size={13} /> Console
+                  {stats.newCount > 0 && (
+                    <motion.span animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1.3, repeat: Infinity }}
+                      style={{ position: 'absolute', top: -7, right: -7, minWidth: 18, height: 18, padding: '0 5px', background: '#78EDB2', color: '#0a1a0f', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '0.68rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {stats.newCount}
+                    </motion.span>
+                  )}
+                </Link>
+                <button onClick={signOut} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  fontFamily: 'Kodchasan, sans-serif', fontWeight: 500,
+                  fontSize: '0.875rem', padding: '8px 12px', color: 'rgba(255,255,255,0.5)',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                }}>
+                  <LogOut size={13} />
+                </button>
+              </>
+            ) : user ? (
+              <div ref={acctRef} style={{ position: 'relative' }}>
+                <button onClick={() => setAcctOpen(o => !o)} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  fontFamily: 'Kodchasan, sans-serif', fontWeight: 500, fontSize: '0.875rem',
+                  padding: '6px 8px 6px 6px', color: '#fff', background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.12)', borderRadius: 999, cursor: 'pointer',
+                }}>
+                  <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'linear-gradient(135deg,#C9F8DE,#78EDB2)', color: '#0a3547', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '0.75rem' }}>
+                    {(user.name || 'U').charAt(0).toUpperCase()}
+                  </span>
+                  {user.name?.split(' ')[0]}
+                </button>
+                <AnimatePresence>
+                  {acctOpen && (
+                    <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }} transition={{ duration: 0.15 }}
+                      style={{ position: 'absolute', top: 'calc(100% + 10px)', right: 0, width: 210, background: '#1a2530', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: 6, boxShadow: '0 12px 40px rgba(0,0,0,0.4)' }}>
+                      {[
+                        { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+                        { to: '/orders', icon: Package, label: 'My orders' },
+                        { to: '/account', icon: Settings, label: 'Account' },
+                      ].map(item => (
+                        <Link key={item.to} to={item.to} onClick={() => setAcctOpen(false)} style={{
+                          display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 9,
+                          color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontFamily: 'Kodchasan, sans-serif', fontSize: '0.875rem',
+                        }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                          <item.icon size={15} color="#78EDB2" /> {item.label}
+                        </Link>
+                      ))}
+                      <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 0' }} />
+                      <button onClick={() => { setAcctOpen(false); signOut() }} style={{
+                        width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 9,
+                        color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Kodchasan, sans-serif', fontSize: '0.875rem',
+                      }}><LogOut size={15} /> Sign out</button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link to="/login" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                fontFamily: 'Kodchasan, sans-serif', fontWeight: 500,
+                fontSize: '0.875rem', padding: '8px 16px', color: 'rgba(255,255,255,0.65)',
+                textDecoration: 'none', border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 8, transition: 'color 0.2s',
+              }}>
+                <LogIn size={13} /> Sign In
+              </Link>
+            )}
+            {!isOwner && (
+              <Link to="/book" className="btn-primary" style={{ gap: 6, fontSize: '0.875rem', padding: '10px 20px' }}>
+                Book Now <ArrowRight size={14} />
+              </Link>
+            )}
+          </div>
+
+          {/* Hamburger */}
+          <button
+            className="md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', padding: '8px' }}
+          >
+            <AnimatePresence mode="wait">
+              {menuOpen
+                ? <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}><X size={22} /></motion.div>
+                : <motion.div key="m" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}><Menu size={22} /></motion.div>
+              }
+            </AnimatePresence>
+          </button>
+        </div>
+      </motion.header>
+
+      {/* Mobile menu — full screen dark overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 490,
+              background: '#111921',
+              display: 'flex', flexDirection: 'column',
+              justifyContent: 'center', padding: '0 40px',
+            }}
+          >
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {links.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 15, opacity: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
+                >
+                  <Link to={link.href} style={{ textDecoration: 'none' }}>
+                    <span style={{
+                      display: 'block',
+                      fontSize: '2.5rem',
+                      fontFamily: 'Poppins, sans-serif',
+                      fontWeight: 600,
+                      color: location.pathname === link.href ? '#78EDB2' : 'rgba(255,255,255,0.85)',
+                      letterSpacing: '-0.025em',
+                      lineHeight: 1.2,
+                    }}>
+                      {link.label}
+                    </span>
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ delay: 0.35 }}
+              style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: 12 }}
+            >
+              {isOwner ? (
+                <>
+                  <Link to="/admin" className="btn-primary" style={{ justifyContent: 'center' }}>
+                    <Settings size={15} /> Owner console {stats.newCount > 0 && `(${stats.newCount} new)`}
+                  </Link>
+                  <button onClick={signOut} style={mobileSecondary}><LogOut size={14} /> Sign out</button>
+                </>
+              ) : user ? (
+                <>
+                  <Link to="/book" className="btn-primary" style={{ justifyContent: 'center' }}>Book Pickup <ArrowRight size={14} /></Link>
+                  <Link to="/dashboard" style={mobileSecondary}><LayoutDashboard size={14} /> Dashboard</Link>
+                  <Link to="/orders" style={mobileSecondary}><Package size={14} /> My orders</Link>
+                  <button onClick={signOut} style={mobileSecondary}><LogOut size={14} /> Sign out</button>
+                </>
+              ) : (
+                <>
+                  <Link to="/book" className="btn-primary" style={{ justifyContent: 'center' }}>Book Pickup <ArrowRight size={14} /></Link>
+                  <Link to="/login" style={mobileSecondary}><LogIn size={14} /> Sign In</Link>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}

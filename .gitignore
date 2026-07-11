@@ -10,5 +10,7 @@ next-env.d.ts
 .vercel
 
 # Separate sub-projects (have their own repos)
-freshdrop/
 laundry-app/
+
+.vercel
+.env*
