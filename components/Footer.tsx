@@ -1,134 +1,158 @@
-import { Sparkles, Mail, Phone, MapPin, Share2, Globe, MessageCircle } from "lucide-react";
-import { BUSINESS_NAME } from "@/lib/pricing";
+"use client";
 
-const services = [
-  { label: "Wash & Fold",     href: "/services#wash-fold" },
-  { label: "Dry Cleaning",    href: "/services#dry-clean" },
-  { label: "Ironing",         href: "/services#ironing" },
-  { label: "Alteration",      href: "/services#alteration" },
-  { label: "Household Items", href: "/services#household" },
-];
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, ArrowUp } from "lucide-react";
 
-const company = [
-  { label: "About Us",     href: "#" },
-  { label: "How It Works", href: "/#how-it-works" },
+const pages = [
+  { label: "Services",     href: "/services" },
   { label: "Pricing",      href: "/services#pricing" },
-  { label: "Service Areas",href: "#" },
-  { label: "Commercial",   href: "#" },
+  { label: "How It Works", href: "/how-it-works" },
+  { label: "About",        href: "/about" },
+  { label: "FAQ",          href: "/faq" },
+  { label: "Contact",      href: "/contact" },
 ];
 
-const support = [
-  { label: "Track Your Order", href: "/order" },
-  { label: "Book a Pickup",    href: "/book" },
-  { label: "FAQ",              href: "/#faq" },
-  { label: "Contact Us",       href: "mailto:hello@starexlaundry.ca" },
-  { label: "Privacy Policy",   href: "#" },
-];
+const serviceList = ["Wash & Fold", "Dry Cleaning", "Express 24hr", "Ironing & Press", "Commercial", "Pickup & Delivery"];
+
+const colHead: React.CSSProperties = {
+  fontFamily: "Kodchasan, sans-serif",
+  fontWeight: 600,
+  fontSize: "0.7rem",
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: "rgba(255,255,255,0.35)",
+  marginBottom: "20px",
+  display: "block",
+};
+
+const linkStyle: React.CSSProperties = {
+  color: "rgba(255,255,255,0.55)",
+  fontSize: "0.875rem",
+  textDecoration: "none",
+  display: "block",
+  marginBottom: "10px",
+  fontFamily: "Kodchasan, sans-serif",
+  transition: "color 0.15s ease",
+};
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
   return (
-    <footer className="bg-[#0a1118] text-white">
-      {/* CTA Banner */}
-      <div className="border-b border-white/8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <h3 className="text-2xl font-bold font-heading text-white">Ready for fresh laundry?</h3>
-            <p className="text-white/45 mt-1 text-sm font-body">Book in under 2 minutes. Pick up today.</p>
+    <footer style={{ background: "#111921" }}>
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "64px 24px 48px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "48px" }}>
+
+            {/* Brand + newsletter */}
+            <div>
+              <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
+                <div style={{ width: 32, height: 32, background: "linear-gradient(180deg,#C9F8DE,#78EDB2)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="16" height="16" viewBox="0 0 36 36" fill="none">
+                    <line x1="9" y1="9" x2="27" y2="27" stroke="#0a1a0f" strokeWidth="5" strokeLinecap="round"/>
+                    <line x1="27" y1="9" x2="9" y2="27" stroke="#0a1a0f" strokeWidth="5" strokeLinecap="round"/>
+                    <circle cx="18" cy="18" r="2" fill="#0a1a0f"/>
+                  </svg>
+                </div>
+                <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.05rem", color: "#ffffff" }}>StareX</span>
+              </a>
+              <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.875rem", lineHeight: 1.7, marginBottom: "28px", maxWidth: "220px", fontFamily: "Kodchasan, sans-serif" }}>
+                Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
+              </p>
+              {subscribed ? (
+                <p style={{ color: "#78EDB2", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+              ) : (
+                <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.12)", paddingBottom: "10px", gap: 8 }}>
+                  <input
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    style={{ background: "none", border: "none", outline: "none", color: "#ffffff", fontSize: "0.875rem", flex: 1, fontFamily: "Kodchasan, sans-serif" }}
+                  />
+                  <button
+                    onClick={() => { if (email) setSubscribed(true); }}
+                    style={{ background: "none", border: "none", color: "#78EDB2", cursor: "pointer", padding: "4px", display: "flex" }}
+                    aria-label="Subscribe"
+                  >
+                    <ArrowRight size={15} />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Pages */}
+            <div>
+              <span style={colHead}>Pages</span>
+              {pages.map(p => (
+                <a key={p.href} href={p.href} style={linkStyle}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#78EDB2"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)"}
+                >{p.label}</a>
+              ))}
+            </div>
+
+            {/* Services */}
+            <div>
+              <span style={colHead}>Services</span>
+              {serviceList.map(s => (
+                <p key={s} style={linkStyle}>{s}</p>
+              ))}
+            </div>
+
+            {/* Contact */}
+            <div>
+              <span style={colHead}>Contact</span>
+              <p style={linkStyle}>hello@starex.ca</p>
+              <p style={linkStyle}>(416) 555-1234</p>
+              <p style={{ ...linkStyle, lineHeight: 1.65 }}>Toronto, ON<br />Mississauga, ON</p>
+              <div style={{ display: "flex", gap: "16px", marginTop: "24px" }}>
+                {[
+                  <svg key="ig" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>,
+                  <svg key="tw" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>,
+                  <svg key="fb" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>,
+                ].map((icon, i) => (
+                  <motion.a
+                    key={i} href="#"
+                    style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none", display: "flex" }}
+                    whileHover={{ color: "#78EDB2", scale: 1.15 } as any}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  >
+                    {icon}
+                  </motion.a>
+                ))}
+              </div>
+            </div>
           </div>
-          <a href="/book" className="btn-primary shrink-0">
-            Book a Pickup →
-          </a>
         </div>
       </div>
 
-      {/* Main footer */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <a href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint text-[#0a1a0f]">
-                <Sparkles size={16} />
-              </div>
-              <span className="text-lg font-bold font-heading">{BUSINESS_NAME}</span>
-            </a>
-            <p className="text-white/45 text-sm leading-relaxed mb-5 font-body">
-              Professional laundry and dry cleaning with free pickup & delivery across Canada.
-            </p>
-            <div className="flex gap-3">
-              {[Share2, Globe, MessageCircle].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/8 hover:bg-mint hover:text-[#0a1a0f] transition-all duration-200"
-                >
-                  <Icon size={15} />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-4 font-body">Services</h4>
-            <ul className="space-y-2.5">
-              {services.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} className="text-sm text-white/45 hover:text-mint transition-colors font-body">
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-4 font-body">Company</h4>
-            <ul className="space-y-2.5">
-              {company.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} className="text-sm text-white/45 hover:text-mint transition-colors font-body">
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-4 font-body">Contact</h4>
-            <ul className="space-y-3 mb-5">
-              <li>
-                <a href="mailto:hello@starexlaundry.ca" className="flex items-center gap-2.5 text-sm text-white/45 hover:text-mint transition-colors font-body">
-                  <Mail size={14} /> hello@starexlaundry.ca
-                </a>
-              </li>
-              <li>
-                <a href="tel:+1-555-123-4567" className="flex items-center gap-2.5 text-sm text-white/45 hover:text-mint transition-colors font-body">
-                  <Phone size={14} /> +1 (555) 123-4567
-                </a>
-              </li>
-              <li>
-                <span className="flex items-start gap-2.5 text-sm text-white/45 font-body">
-                  <MapPin size={14} className="mt-0.5 shrink-0" /> Vancouver · Toronto · Calgary · Edmonton
-                </span>
-              </li>
-            </ul>
-            <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-3 font-body">Support</h4>
-            {support.map((s) => (
-              <a key={s.label} href={s.href} className="block text-sm text-white/45 hover:text-mint transition-colors mb-2 font-body">
-                {s.label}
-              </a>
-            ))}
-          </div>
+      {/* Bottom strip */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+        {/* Ghost watermark */}
+        <div style={{
+          position: "absolute", bottom: "-12px", left: "50%", transform: "translateX(-50%)",
+          fontFamily: "Poppins, sans-serif", fontWeight: 700,
+          fontSize: "clamp(3rem,10vw,6rem)", letterSpacing: "-0.04em",
+          color: "rgba(255,255,255,0.04)", whiteSpace: "nowrap", userSelect: "none", pointerEvents: "none",
+        }}>
+          STAREX
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/25 font-body">
-          <p>© {new Date().getFullYear()} {BUSINESS_NAME}. All rights reserved.</p>
-          <p>Built with care for Canadians 🍁</p>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", position: "relative" }}>
+          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
+            &copy; {new Date().getFullYear()} StareX Inc. Made in Canada 🍁
+          </p>
+          <motion.button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            whileHover={{ rotate: -45 } as any}
+            transition={{ type: "spring", stiffness: 300 }}
+            style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.12)", background: "none", cursor: "pointer", color: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", justifyContent: "center" }}
+            aria-label="Back to top"
+          >
+            <ArrowUp size={15} />
+          </motion.button>
         </div>
       </div>
     </footer>

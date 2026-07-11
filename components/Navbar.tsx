@@ -1,183 +1,263 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Menu, X, Sparkles, User, LogOut, LayoutDashboard } from "lucide-react";
-import { BUSINESS_NAME } from "@/lib/pricing";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { Menu, X, ArrowRight, ChevronLeft, LogIn, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 
 const links = [
-  { label: "Services", href: "/services" },
-  { label: "Pricing", href: "/services#pricing" },
-  { label: "Track Order", href: "/order" },
+  { href: "/services",     label: "Services" },
+  { href: "/services#pricing", label: "Pricing" },
+  { href: "/how-it-works", label: "How It Works" },
+  { href: "/about",        label: "About" },
+  { href: "/faq",          label: "FAQ" },
+  { href: "/contact",      label: "Contact" },
 ];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [scrolled, setScrolled]   = useState(false);
+  const [hidden, setHidden]       = useState(false);
+  const [menuOpen, setMenuOpen]   = useState(false);
+  const [acctOpen, setAcctOpen]   = useState(false);
+  const [user, setUser]           = useState<any>(null);
+  const [isOwner, setIsOwner]     = useState(false);
+  const acctRef                   = useRef<HTMLDivElement>(null);
+  const lastY                     = useRef(0);
+  const { scrollY }               = useScroll();
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handler, { passive: true });
-    handler();
-
     const supabase = getSupabaseBrowser();
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      setIsOwner(user?.email === "owner@starex.ca");
+    });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
+      setIsOwner(session?.user?.email === "owner@starex.ca");
     });
-    return () => { window.removeEventListener("scroll", handler); subscription.unsubscribe(); };
+    return () => subscription.unsubscribe();
   }, []);
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setScrolled(y > 40);
+    if (y > lastY.current && y > 100) setHidden(true);
+    else setHidden(false);
+    lastY.current = y;
+  });
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (acctRef.current && !acctRef.current.contains(e.target as Node)) setAcctOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   async function handleSignOut() {
     await getSupabaseBrowser().auth.signOut();
     setUser(null);
-    setUserMenuOpen(false);
+    setIsOwner(false);
     window.location.href = "/";
   }
 
+  const initials = user?.user_metadata?.full_name
+    ? user.user_metadata.full_name.charAt(0).toUpperCase()
+    : (user?.email ?? "U").charAt(0).toUpperCase();
+
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0];
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[#111921]/95 backdrop-blur-md border-b border-white/8 shadow-[0_1px_24px_rgba(0,0,0,0.4)]"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
+    <>
+      <motion.header
+        animate={{ y: hidden && !menuOpen ? -100 : 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
+          height: scrolled ? "64px" : "72px",
+          background: scrolled ? "rgba(17,25,33,0.97)" : "transparent",
+          backdropFilter: scrolled ? "blur(14px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
+          transition: "height 0.3s ease, background 0.3s ease, border-color 0.3s ease",
+        }}
+      >
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint text-[#0a1a0f] shadow-mint group-hover:scale-105 transition-transform">
-              <Sparkles size={15} />
-            </div>
-            <span className="text-lg font-bold text-white font-heading tracking-tight">
-              {BUSINESS_NAME}
-            </span>
-          </a>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 9 }}>
+              <motion.div whileHover={{ scale: 1.06, rotate: 5 }} transition={{ type: "spring", stiffness: 320, damping: 20 }} style={{ width: 36, height: 36, flexShrink: 0 }}>
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="lgo" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#C9F8DE"/>
+                      <stop offset="100%" stopColor="#4ECDA0"/>
+                    </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  <rect width="36" height="36" rx="10" fill="#111921"/>
+                  <line x1="9" y1="9" x2="27" y2="27" stroke="url(#lgo)" strokeWidth="5" strokeLinecap="round" filter="url(#glow)"/>
+                  <line x1="27" y1="9" x2="9" y2="27" stroke="url(#lgo)" strokeWidth="5" strokeLinecap="round" filter="url(#glow)"/>
+                  <circle cx="18" cy="18" r="3" fill="#111921"/>
+                  <circle cx="18" cy="18" r="1.5" fill="#C9F8DE"/>
+                </svg>
+              </motion.div>
+              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem", color: "#ffffff", letterSpacing: "-0.02em" }}>
+                Stare<span style={{ color: "#78EDB2" }}>X</span>
+              </span>
+            </a>
+          </div>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {links.map((l) => (
+          <nav className="hidden md:flex" style={{ alignItems: "center", gap: "4px" }}>
+            {links.map((link) => (
               <a
-                key={l.href}
-                href={l.href}
-                className="px-4 py-2 rounded-full text-sm font-medium text-white/70 hover:text-white hover:bg-white/8 transition-all duration-200 font-body"
+                key={link.href}
+                href={link.href}
+                style={{
+                  textDecoration: "none",
+                  fontFamily: "Kodchasan, sans-serif",
+                  fontWeight: 500,
+                  fontSize: "0.9rem",
+                  padding: "6px 14px",
+                  borderRadius: 8,
+                  color: "rgba(255,255,255,0.7)",
+                  transition: "color 0.2s, background 0.2s",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#ffffff"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.7)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
-                {l.label}
+                {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Auth + CTA */}
-          <div className="hidden md:flex items-center gap-3">
-            {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-white/75 hover:text-white hover:bg-white/8 transition-all"
-                >
-                  <div className="h-7 w-7 rounded-full bg-mint flex items-center justify-center text-[#0a1a0f] text-xs font-bold">
-                    {(user.user_metadata?.full_name ?? user.email ?? "U")[0].toUpperCase()}
-                  </div>
-                  <span className="hidden lg:block max-w-[120px] truncate">
-                    {user.user_metadata?.full_name?.split(" ")[0] ?? user.email?.split("@")[0]}
-                  </span>
-                </button>
-
-                {userMenuOpen && (
-                  <>
-                    <div className="fixed inset-0 z-10" onClick={() => setUserMenuOpen(false)} />
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-[#1a2332] rounded-2xl border border-white/8 shadow-[0_8px_32px_rgba(0,0,0,0.5)] py-2 z-20 overflow-hidden">
-                      <div className="px-4 py-2.5 border-b border-white/8">
-                        <p className="text-xs text-white/35">Signed in as</p>
-                        <p className="text-sm font-semibold text-white truncate">{user.email}</p>
-                      </div>
-                      <a href="/dashboard" onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white/65 hover:text-mint hover:bg-white/5 transition-colors">
-                        <LayoutDashboard size={14} /> My Orders
-                      </a>
-                      <a href="/book" onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white/65 hover:text-mint hover:bg-white/5 transition-colors">
-                        <Sparkles size={14} /> Book a Pickup
-                      </a>
-                      <div className="border-t border-white/8 mt-1">
-                        <button onClick={handleSignOut}
-                          className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-400 hover:bg-red-400/10 transition-colors">
-                          <LogOut size={14} /> Sign Out
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <a
-                href="/auth"
-                className="flex items-center gap-1.5 text-sm font-medium text-white/65 hover:text-white px-4 py-2 rounded-full hover:bg-white/8 transition-all font-body"
-              >
-                <User size={14} /> Sign In
-              </a>
-            )}
-            <a href="/book" className="btn-primary text-sm px-5 py-2.5">
-              Book a Pickup
-            </a>
-          </div>
-
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-full text-white/75 hover:text-white hover:bg-white/8 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div
-        className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
-          open ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="bg-[#111921]/98 backdrop-blur-md border-t border-white/8 px-4 py-4 shadow-lg space-y-1">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="block px-4 py-3 rounded-2xl text-sm font-medium text-white/65 hover:text-white hover:bg-white/8 transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
-          <div className="pt-3 border-t border-white/8 space-y-2">
-            {user ? (
+          {/* Desktop right CTAs */}
+          <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
+            {isOwner ? (
               <>
-                <a href="/dashboard" onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium text-white/65 hover:text-mint hover:bg-white/5 transition-colors">
-                  <LayoutDashboard size={15} /> My Orders
+                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#78EDB2", textDecoration: "none", border: "1px solid rgba(120,237,178,0.35)", borderRadius: 8 }}>
+                  <Settings size={13} /> Console
                 </a>
-                <button onClick={() => { handleSignOut(); setOpen(false); }}
-                  className="flex items-center gap-2 w-full px-4 py-3 rounded-2xl text-sm font-medium text-red-400 hover:bg-red-400/10 transition-colors">
-                  <LogOut size={15} /> Sign Out
+                <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "rgba(255,255,255,0.5)", background: "none", border: "none", cursor: "pointer" }}>
+                  <LogOut size={13} />
                 </button>
               </>
+            ) : user ? (
+              <div ref={acctRef} style={{ position: "relative" }}>
+                <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#fff", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 999, cursor: "pointer" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#C9F8DE,#78EDB2)", color: "#0a3547", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+                    {initials}
+                  </span>
+                  {firstName}
+                </button>
+                <AnimatePresence>
+                  {acctOpen && (
+                    <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }} transition={{ duration: 0.15 }}
+                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#1a2530", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
+                      {[
+                        { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+                      ].map(item => (
+                        <a key={item.href} href={item.href} onClick={() => setAcctOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "rgba(255,255,255,0.8)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"}
+                          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
+                        >
+                          <item.icon size={15} color="#78EDB2" /> {item.label}
+                        </a>
+                      ))}
+                      <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "4px 0" }} />
+                      <button onClick={() => { setAcctOpen(false); handleSignOut(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "rgba(255,255,255,0.6)", background: "none", border: "none", cursor: "pointer", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>
+                        <LogOut size={15} /> Sign out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : (
-              <a href="/auth" onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium text-white/65 hover:text-white hover:bg-white/8 transition-colors">
-                <User size={15} /> Sign In / Create Account
+              <a href="/auth" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "rgba(255,255,255,0.65)", textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, transition: "color 0.2s" }}>
+                <LogIn size={13} /> Sign In
               </a>
             )}
-            <a href="/book" onClick={() => setOpen(false)} className="btn-primary w-full text-center">
-              Book a Pickup
-            </a>
+            {!isOwner && (
+              <a href="/book" className="btn-primary" style={{ gap: 6, fontSize: "0.875rem", padding: "10px 20px" }}>
+                Book Now <ArrowRight size={14} />
+              </a>
+            )}
           </div>
+
+          {/* Hamburger */}
+          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu"
+            style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.85)", padding: "8px" }}>
+            <AnimatePresence mode="wait">
+              {menuOpen
+                ? <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}><X size={22} /></motion.div>
+                : <motion.div key="m" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}><Menu size={22} /></motion.div>
+              }
+            </AnimatePresence>
+          </button>
         </div>
-      </div>
-    </header>
+      </motion.header>
+
+      {/* Mobile full-screen menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            style={{ position: "fixed", inset: 0, zIndex: 490, background: "#111921", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
+          >
+            <nav style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              {links.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 15, opacity: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
+                >
+                  <a href={link.href} onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", display: "block", fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "rgba(255,255,255,0.85)", letterSpacing: "-0.025em", lineHeight: 1.2 }}>
+                    {link.label}
+                  </a>
+                </motion.div>
+              ))}
+            </nav>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ delay: 0.35 }}
+              style={{ marginTop: "40px", display: "flex", flexDirection: "column", gap: 12 }}>
+              {user ? (
+                <>
+                  <a href="/book" className="btn-primary" style={{ justifyContent: "center" }} onClick={() => setMenuOpen(false)}>
+                    Book Pickup <ArrowRight size={14} />
+                  </a>
+                  <a href="/dashboard" onClick={() => setMenuOpen(false)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "rgba(255,255,255,0.6)", background: "none", textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 12, cursor: "pointer" }}>
+                    <LayoutDashboard size={14} /> Dashboard
+                  </a>
+                  <button onClick={() => { setMenuOpen(false); handleSignOut(); }} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "rgba(255,255,255,0.6)", background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 12, cursor: "pointer" }}>
+                    <LogOut size={14} /> Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <a href="/book" className="btn-primary" style={{ justifyContent: "center" }} onClick={() => setMenuOpen(false)}>
+                    Book Pickup <ArrowRight size={14} />
+                  </a>
+                  <a href="/auth" onClick={() => setMenuOpen(false)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "rgba(255,255,255,0.6)", background: "none", textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 12 }}>
+                    <LogIn size={14} /> Sign In
+                  </a>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
