@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, ArrowRight, ChevronLeft, LogIn, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
+
+const ALWAYS_DARK = ["/book", "/dashboard", "/auth", "/order", "/admin"];
 
 const links = [
   { href: "/services",     label: "Services" },
@@ -15,6 +18,8 @@ const links = [
 ];
 
 export default function Navbar() {
+  const pathname                  = usePathname();
+  const needsDark                 = ALWAYS_DARK.some(p => pathname.startsWith(p));
   const [scrolled, setScrolled]   = useState(false);
   const [hidden, setHidden]       = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
@@ -79,9 +84,9 @@ export default function Navbar() {
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
           height: scrolled ? "64px" : "72px",
-          background: scrolled ? "rgba(17,25,33,0.97)" : "transparent",
-          backdropFilter: scrolled ? "blur(14px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
+          background: (scrolled || needsDark) ? "rgba(17,25,33,0.97)" : "transparent",
+          backdropFilter: (scrolled || needsDark) ? "blur(14px)" : "none",
+          borderBottom: (scrolled || needsDark) ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
           transition: "height 0.3s ease, background 0.3s ease, border-color 0.3s ease",
         }}
       >
