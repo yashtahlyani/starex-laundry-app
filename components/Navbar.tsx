@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings, ChevronLeft } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 
 const ALWAYS_DARK = ["/book", "/dashboard", "/auth", "/order", "/admin"];
@@ -19,6 +19,8 @@ const links = [
 
 export default function Navbar() {
   const pathname                  = usePathname();
+  const router                    = useRouter();
+  const isHome                    = pathname === "/";
   const needsDark                 = ALWAYS_DARK.some(p => pathname.startsWith(p));
   const [scrolled, setScrolled]   = useState(false);
   const [hidden, setHidden]       = useState(false);
@@ -94,6 +96,26 @@ export default function Navbar() {
 
           {/* Logo */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <AnimatePresence>
+              {!isHome && (
+                <motion.button
+                  initial={{ opacity: 0, x: -10, width: 0 }}
+                  animate={{ opacity: 1, x: 0, width: 32 }}
+                  exit={{ opacity: 0, x: -10, width: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                  onClick={() => router.back()}
+                  aria-label="Go back"
+                  style={{
+                    background: "rgba(255,255,255,0.08)", border: "none", borderRadius: 8,
+                    cursor: "pointer", width: 32, height: 32, display: "flex",
+                    alignItems: "center", justifyContent: "center",
+                    color: "rgba(255,255,255,0.7)", flexShrink: 0, overflow: "hidden",
+                  }}
+                >
+                  <ChevronLeft size={16} />
+                </motion.button>
+              )}
+            </AnimatePresence>
             <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 9 }}>
               <motion.div whileHover={{ scale: 1.06, rotate: 5 }} transition={{ type: "spring", stiffness: 320, damping: 20 }} style={{ width: 36, height: 36, flexShrink: 0 }}>
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
