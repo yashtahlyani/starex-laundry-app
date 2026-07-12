@@ -5,10 +5,31 @@ import PageLoader from "@/components/PageLoader";
 import ScrollProgress from "@/components/ScrollProgress";
 import LayoutShell from "@/components/LayoutShell";
 
+const PROD_URL = "https://starex-laundry-app-v2.vercel.app";
+
 export const metadata: Metadata = {
-  title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery Canada`,
-  description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across Vancouver, Toronto, Calgary and Edmonton. 24-hour turnaround.",
-  keywords: "laundry pickup delivery, dry cleaning, wash fold, Canada, Vancouver, Toronto, Calgary",
+  metadataBase: new URL(PROD_URL),
+  title: {
+    default: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
+    template: `%s | ${BUSINESS_NAME}`,
+  },
+  description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across the GTA. 24-hour turnaround.",
+  keywords: "laundry pickup delivery, dry cleaning, wash fold, Canada, Toronto, GTA, Mississauga",
+  openGraph: {
+    type: "website",
+    siteName: BUSINESS_NAME,
+    title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
+    description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across the GTA. 24-hour turnaround.",
+    url: PROD_URL,
+    locale: "en_CA",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
+    description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across the GTA.",
+  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: PROD_URL },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

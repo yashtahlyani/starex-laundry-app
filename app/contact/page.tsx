@@ -139,7 +139,7 @@ export default function Contact() {
                       <p style={{ color: "#dc2626", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>{error}</p>
                     )}
                     <button type="submit" disabled={loading} className="btn-primary" style={{ border: "none", cursor: loading ? "not-allowed" : "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", width: "100%", fontSize: "1rem", opacity: loading ? 0.7 : 1 }}>
-                      {loading ? "Sending…" : <></>}{!loading && <>Send Message <ArrowRight size={16} /></>}
+                      {loading ? "Sending…" : <>Send Message <ArrowRight size={16} /></>}
                     </button>
                   </form>
                 </>
