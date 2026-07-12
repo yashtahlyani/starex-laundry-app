@@ -2,65 +2,35 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { requireAdmin } from "@/lib/adminAuth";
 import StatusUpdater from "@/components/StatusUpdater";
 import AdminTabs from "@/components/AdminTabs";
-import IssueUpdater from "@/components/IssueUpdater";
 import ContactUpdater from "@/components/ContactUpdater";
 import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersClient";
-import { Bell, Clock, Package, DollarSign, Users, Star } from "lucide-react";
+import { Bell } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-const SERVICE_LABELS: Record<string, string> = {
-  "wash-fold": "Wash & Fold",
-  "dry-clean": "Dry Cleaning",
-  ironing: "Ironing",
-  alteration: "Alteration",
-};
-
 const STATUS_COLORS: Record<string, string> = {
-  scheduled:        "bg-mint/10 text-mint",
-  picked_up:        "bg-yellow-400/10 text-yellow-400",
-  in_progress:      "bg-orange-400/10 text-orange-400",
-  ready:            "bg-mint/10 text-mint",
-  out_for_delivery: "bg-mint/15 text-mint",
-  delivered:        "bg-white/5 text-white/35",
-  cancelled:        "bg-red-400/10 text-red-400",
+  placed:           "bg-blue-50 text-blue-700",
+  confirmed:        "bg-teal-50 text-teal-700",
+  picked_up:        "bg-yellow-100 text-yellow-800",
+  washing:          "bg-orange-50 text-orange-700",
+  folding:          "bg-purple-50 text-purple-700",
+  out_for_delivery: "bg-green-50 text-green-700",
+  delivered:        "bg-gray-100 text-gray-500",
+  cancelled:        "bg-red-50 text-red-700",
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  scheduled:        "Scheduled",
+  placed:           "Placed",
+  confirmed:        "Confirmed",
   picked_up:        "Picked Up",
-  in_progress:      "In Progress",
-  ready:            "Ready",
+  washing:          "Cleaning",
+  folding:          "Folding",
   out_for_delivery: "Out for Delivery",
   delivered:        "Delivered",
   cancelled:        "Cancelled",
 };
 
-const ISSUE_PRIORITY_COLORS: Record<string, string> = {
-  low:    "bg-white/5 text-white/45",
-  normal: "bg-mint/10 text-mint",
-  high:   "bg-orange-400/10 text-orange-400",
-  urgent: "bg-red-400/10 text-red-400",
-};
-
-const ISSUE_STATUS_COLORS: Record<string, string> = {
-  open:      "bg-red-400/10 text-red-400",
-  in_review: "bg-yellow-400/10 text-yellow-400",
-  resolved:  "bg-mint/10 text-mint",
-  closed:    "bg-white/5 text-white/35",
-};
-
-function formatSlot(start: string, end: string) {
-  const opts: Intl.DateTimeFormatOptions = {
-    timeZone: "America/Toronto", month: "short", day: "numeric",
-    hour: "numeric", minute: "2-digit", hour12: true,
-  };
-  return `${new Date(start).toLocaleString("en-CA", opts)} – ${new Date(end).toLocaleTimeString("en-CA", {
-    timeZone: "America/Toronto", hour: "numeric", minute: "2-digit", hour12: true,
-  })}`;
-}
-
-function formatDate(d: string) {
+function fmtDate(d: string) {
   return new Date(d).toLocaleString("en-CA", {
     timeZone: "America/Toronto", month: "short", day: "numeric",
     hour: "numeric", minute: "2-digit", hour12: true,
@@ -72,71 +42,71 @@ export default async function AdminDashboardPage({
 }: {
   searchParams: { tab?: string; q?: string };
 }) {
-  const user = await requireAdmin();
-  const supabaseAdmin = getSupabaseAdmin();
+  await requireAdmin();
+  const db  = getSupabaseAdmin();
   const tab = searchParams.tab ?? "orders";
-  const searchQuery = searchParams.q?.toLowerCase() ?? "";
+  const q   = searchParams.q?.toLowerCase() ?? "";
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery"];
+
   const [
-    { data: upcoming },
-    { data: past },
-    { data: allIssues },
+    { data: activeOrders },
+    { data: pastOrders },
     { data: contacts },
     { count: totalOrders },
-    { count: activeOrders },
-    { count: openIssues },
+    { count: activeCount },
     { count: newContacts },
     { count: totalCustomers },
     { count: todayOrders },
   ] = await Promise.all([
-    supabaseAdmin
-      .from("orders")
-      .select("id, order_code, service_type, status, pickup_address, postal_code, pickup_slot_start, pickup_slot_end, notes, customers(full_name, email, phone)")
-      .gte("pickup_slot_start", today.toISOString())
-      .order("pickup_slot_start", { ascending: true }),
-    supabaseAdmin
-      .from("orders")
-      .select("id, order_code, service_type, status, pickup_address, pickup_slot_start, pickup_slot_end, customers(full_name, email, phone)")
-      .lt("pickup_slot_start", today.toISOString())
-      .order("pickup_slot_start", { ascending: false })
-      .limit(30),
-    supabaseAdmin.from("issues").select("*").order("created_at", { ascending: false }).limit(100),
-    supabaseAdmin.from("contact_submissions").select("*").order("created_at", { ascending: false }).limit(100),
-    supabaseAdmin.from("orders").select("*", { count: "exact", head: true }),
-    supabaseAdmin.from("orders").select("*", { count: "exact", head: true }).in("status", ["scheduled", "picked_up", "in_progress", "ready", "out_for_delivery"]),
-    supabaseAdmin.from("issues").select("*", { count: "exact", head: true }).in("status", ["open", "in_review"]),
-    supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }).eq("status", "new"),
-    supabaseAdmin.from("customers").select("*", { count: "exact", head: true }),
-    supabaseAdmin.from("orders").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
+    db.from("orders")
+      .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, notes, weight, price, rating, status_history, created_at")
+      .in("status", ACTIVE_STATUSES)
+      .order("created_at", { ascending: false }),
+    db.from("orders")
+      .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, created_at")
+      .in("status", ["delivered", "cancelled"])
+      .order("created_at", { ascending: false })
+      .limit(40),
+    db.from("contact_submissions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(100),
+    db.from("orders").select("*", { count: "exact", head: true }),
+    db.from("orders").select("*", { count: "exact", head: true }).in("status", ACTIVE_STATUSES),
+    db.from("contact_submissions").select("*", { count: "exact", head: true }).eq("status", "new"),
+    db.from("profiles").select("*", { count: "exact", head: true }),
+    db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
   ]);
 
-  const incomingOrders = (upcoming ?? []).filter((o: any) => o.status === "scheduled");
+  const newOrders    = (activeOrders ?? []).filter((o: any) => o.status === "placed");
+  const inProgressOrders = (activeOrders ?? []).filter((o: any) => o.status !== "placed");
 
-  const filteredUpcoming = searchQuery
-    ? (upcoming ?? []).filter((o: any) =>
-        o.order_code.toLowerCase().includes(searchQuery) ||
-        o.customers?.full_name?.toLowerCase().includes(searchQuery) ||
-        o.customers?.email?.toLowerCase().includes(searchQuery) ||
-        o.pickup_address?.toLowerCase().includes(searchQuery)
+  const filteredActive = q
+    ? (activeOrders ?? []).filter((o: any) =>
+        o.code?.toLowerCase().includes(q) ||
+        o.customer_name?.toLowerCase().includes(q) ||
+        o.email?.toLowerCase().includes(q) ||
+        o.address?.toLowerCase().includes(q)
       )
-    : (upcoming ?? []);
+    : (activeOrders ?? []);
 
   const kpis = [
-    { label: "New orders", value: incomingOrders.length, accent: incomingOrders.length > 0 },
-    { label: "In progress", value: activeOrders ?? 0, accent: false },
+    { label: "New orders",   value: newOrders.length, accent: newOrders.length > 0 },
+    { label: "In progress",  value: inProgressOrders.length, accent: false },
     { label: "Orders today", value: todayOrders ?? 0, accent: false },
     { label: "Total orders", value: totalOrders ?? 0, accent: false },
-    { label: "Customers", value: totalCustomers ?? 0, accent: false },
-    { label: "Open issues", value: openIssues ?? 0, accent: false },
+    { label: "Customers",    value: totalCustomers ?? 0, accent: false },
+    { label: "Messages",     value: newContacts ?? 0, accent: false },
   ];
 
   return (
     <div style={{ background: "#F4F5F7", minHeight: "100vh" }}>
 
-      {/* Console header */}
+      {/* Admin header */}
       <header style={{ background: "#111921", position: "sticky", top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -150,21 +120,19 @@ export default async function AdminDashboardPage({
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#fff", lineHeight: 1 }}>StareX</p>
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#78EDB2", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
             </div>
-            {incomingOrders.length > 0 && (
+            {newOrders.length > 0 && (
               <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#78EDB2", color: "#0a1a0f", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
-                <Bell size={12} /> {incomingOrders.length} new
+                <Bell size={12} /> {newOrders.length} new
               </span>
             )}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.7)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
+            <a href="/" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
               View site
             </a>
-            <form action="/api/auth/signout" method="POST">
-              <a href="/auth" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
-                Sign out
-              </a>
-            </form>
+            <a href="/auth" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
+              Sign out
+            </a>
           </div>
         </div>
       </header>
@@ -173,71 +141,77 @@ export default async function AdminDashboardPage({
 
         {/* KPIs */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12, marginBottom: 28 }} className="admin-kpis">
-          {kpis.map((k, i) => (
+          {kpis.map(k => (
             <div key={k.label} style={{
               background: k.accent ? "linear-gradient(135deg,#C9F8DE,#78EDB2)" : "#fff",
               border: "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
             }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#09090B", letterSpacing: "-0.02em", marginTop: 2, marginBottom: 4 }}>{k.value}</p>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#09090B", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#0a3547" : "#71717A", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Incoming orders section */}
-        <AdminIncomingSection orders={incomingOrders as any} />
+        {/* Incoming new orders */}
+        <AdminIncomingSection orders={newOrders as any} />
 
         {/* Tabs */}
-        <AdminTabs activeTab={tab} openIssues={openIssues ?? 0} newContacts={newContacts ?? 0} />
+        <AdminTabs activeTab={tab} newContacts={newContacts ?? 0} />
 
         {/* ── Orders Tab ── */}
         {tab === "orders" && (
           <div>
             <form method="GET" className="mb-5 flex gap-2">
               <input type="hidden" name="tab" value="orders" />
-              <input name="q" defaultValue={searchParams.q ?? ""} placeholder="Search order code, customer name, address…" className="flex-1 input-field" />
+              <input name="q" defaultValue={searchParams.q ?? ""} placeholder="Search code, customer name, address…" className="flex-1 input-field" />
               <button type="submit" className="btn-primary px-5 py-2.5 text-sm">Search</button>
               {searchParams.q && <a href="/admin?tab=orders" className="btn-ghost px-5 py-2.5 text-sm">Clear</a>}
             </form>
 
             <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#71717A", marginBottom: 12 }}>
-              Upcoming &amp; Active {searchQuery ? `— ${filteredUpcoming.length} result(s)` : `(${upcoming?.length ?? 0})`}
+              Active Orders {q ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
             </p>
 
-            {filteredUpcoming.length === 0 ? (
+            {filteredActive.length === 0 ? (
               <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "48px", textAlign: "center", marginBottom: 32 }}>
                 <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#A1A1AA" }}>
-                  {searchQuery ? `No orders matching "${searchParams.q}"` : "No upcoming orders."}
+                  {q ? `No orders matching "${searchParams.q}"` : "No active orders right now."}
                 </p>
               </div>
             ) : (
               <div style={{ marginBottom: 32 }}>
-                <AdminOrderTable orders={filteredUpcoming as any} />
+                <AdminOrderTable orders={filteredActive as any} />
               </div>
             )}
 
-            {(past?.length ?? 0) > 0 && !searchQuery && (
+            {(pastOrders?.length ?? 0) > 0 && !q && (
               <>
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#A1A1AA", marginBottom: 12 }}>Recent Past Orders</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#A1A1AA", marginBottom: 12 }}>Past Orders</p>
                 <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, overflow: "hidden" }}>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
-                      <thead className="bg-white/5 border-b border-white/8" style={{ background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }}>
+                      <thead style={{ background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }}>
                         <tr>
-                          {["Order", "Customer", "Service", "Pickup", "Status", ""].map((h) => (
-                            <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-white/30 uppercase tracking-wider font-body" style={{ color: "#A1A1AA", fontFamily: "Poppins, sans-serif" }}>{h}</th>
+                          {["Order", "Customer", "Service", "Date", "Status", "Update"].map(h => (
+                            <th key={h} className="text-left px-4 py-3" style={{ color: "#A1A1AA", fontFamily: "Poppins, sans-serif", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {past!.map((o: any) => (
-                          <tr key={o.id} style={{ borderBottom: "1px solid #F4F4F5", opacity: 0.75 }}>
-                            <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>{o.order_code}</td>
-                            <td className="px-4 py-3 text-xs font-body" style={{ color: "#52525B" }}>{o.customers?.full_name ?? "—"}</td>
-                            <td className="px-4 py-3 text-xs font-body" style={{ color: "#71717A" }}>{SERVICE_LABELS[o.service_type] ?? o.service_type}</td>
-                            <td className="px-4 py-3 text-xs font-body" style={{ color: "#71717A" }}>{formatSlot(o.pickup_slot_start, o.pickup_slot_end)}</td>
-                            <td className="px-4 py-3"><span className={`badge text-xs ${STATUS_COLORS[o.status] ?? "bg-white/5 text-white/35"}`}>{STATUS_LABELS[o.status] ?? o.status}</span></td>
-                            <td className="px-4 py-3"><a href={`/admin/orders/${o.order_code}`} className="text-xs font-body" style={{ color: "#4ECDA0" }}>View</a></td>
+                        {pastOrders!.map((o: any) => (
+                          <tr key={o.id} style={{ borderBottom: "1px solid #F4F4F5", opacity: 0.8 }}>
+                            <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>{o.code}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#52525B" }}>{o.customer_name ?? "—"}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#71717A" }}>{o.service_title ?? o.service}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#71717A" }}>{o.date}</td>
+                            <td className="px-4 py-3">
+                              <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[o.status] ?? "bg-gray-100 text-gray-600"}`}>
+                                {STATUS_LABELS[o.status] ?? o.status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <StatusUpdater orderCode={o.code} currentStatus={o.status} />
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -249,73 +223,36 @@ export default async function AdminDashboardPage({
           </div>
         )}
 
-        {/* ── Issues Tab ── */}
-        {tab === "issues" && (
-          <div>
-            <p className="text-sm font-bold text-white/55 mb-4 font-body" style={{ color: "#71717A", fontFamily: "Poppins, sans-serif" }}>All Issues ({allIssues?.length ?? 0})</p>
-            {(allIssues?.length ?? 0) === 0 ? (
-              <div className="card-dark rounded-2xl border border-white/8 p-12 text-center text-white/30 font-body">No issues reported yet.</div>
-            ) : (
-              <div className="space-y-3">
-                {allIssues!.map((issue: any) => (
-                  <div key={issue.id} className="card-dark rounded-2xl border border-white/8 p-5">
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-2">
-                          {issue.order_code && <a href={`/admin/orders/${issue.order_code}`} className="font-mono font-bold text-mint text-xs hover:underline">{issue.order_code}</a>}
-                          <span className={`badge text-xs ${ISSUE_PRIORITY_COLORS[issue.priority]}`}>{issue.priority}</span>
-                          <span className={`badge text-xs ${ISSUE_STATUS_COLORS[issue.status]}`}>{issue.status.replace("_", " ")}</span>
-                          <span className="text-xs text-white/35 bg-white/5 px-2 py-1 rounded-lg font-body">{issue.issue_type.replace(/_/g, " ")}</span>
-                        </div>
-                        <p className="text-sm text-white font-semibold mb-1 font-heading">{issue.customer_name}</p>
-                        <p className="text-xs text-white/35 mb-2 font-body">{issue.customer_email}</p>
-                        <p className="text-sm text-white/55 leading-relaxed font-body">{issue.description}</p>
-                        {issue.resolution_note && (
-                          <div className="mt-3 bg-mint/8 border border-mint/20 rounded-xl px-4 py-3">
-                            <p className="text-xs font-semibold text-mint mb-1 font-body">Resolution Note</p>
-                            <p className="text-sm text-mint/80 font-body">{issue.resolution_note}</p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-end gap-2 shrink-0">
-                        <p className="text-xs text-white/30 font-body">{formatDate(issue.created_at)}</p>
-                        <IssueUpdater issueId={issue.id} currentStatus={issue.status} currentPriority={issue.priority} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
         {/* ── Contacts Tab ── */}
         {tab === "contacts" && (
           <div>
-            <p className="text-sm font-bold mb-4 font-body" style={{ color: "#71717A", fontFamily: "Poppins, sans-serif" }}>Contact Messages ({contacts?.length ?? 0})</p>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#71717A", marginBottom: 16 }}>
+              Contact Messages ({contacts?.length ?? 0})
+            </p>
             {(contacts?.length ?? 0) === 0 ? (
-              <div className="card-dark rounded-2xl border border-white/8 p-12 text-center text-white/30 font-body">No contact messages yet.</div>
+              <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "48px", textAlign: "center" }}>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#A1A1AA" }}>No contact messages yet.</p>
+              </div>
             ) : (
               <div className="space-y-3">
                 {contacts!.map((c: any) => (
-                  <div key={c.id} className={`card-dark rounded-2xl border p-5 ${c.status === "new" ? "border-mint/30" : "border-white/8"}`}>
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          {c.status === "new" && <span className="badge bg-mint text-[#0a1a0f] text-xs">New</span>}
-                          {c.status === "read" && <span className="badge bg-white/8 text-white/45 text-xs">Read</span>}
-                          {c.status === "replied" && <span className="badge bg-mint/10 text-mint text-xs">Replied</span>}
-                          <span className="text-xs font-semibold text-white/70 font-body">{c.subject}</span>
+                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#78EDB2" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+                          {c.status === "new" && <span style={{ background: "#78EDB2", color: "#0a1a0f", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
+                          {c.status === "replied" && <span style={{ background: "rgba(120,237,178,0.12)", color: "#0a3547", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
+                          {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#52525B" }}>{c.subject}</span>}
                         </div>
-                        <p className="text-sm font-semibold text-white mb-0.5 font-heading">{c.name}</p>
-                        <p className="text-xs text-white/35 mb-3 font-body">
-                          <a href={`mailto:${c.email}`} className="text-mint hover:underline">{c.email}</a>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#09090B", marginBottom: 2 }}>{c.name}</p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#71717A", marginBottom: 12 }}>
+                          <a href={`mailto:${c.email}`} style={{ color: "#4ECDA0" }}>{c.email}</a>
                           {c.phone && ` · ${c.phone}`}
                         </p>
-                        <p className="text-sm text-white/50 leading-relaxed font-body">{c.message}</p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#52525B", lineHeight: 1.7 }}>{c.message}</p>
                       </div>
-                      <div className="flex flex-col items-end gap-2 shrink-0">
-                        <p className="text-xs text-white/30 font-body">{formatDate(c.created_at)}</p>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#A1A1AA" }}>{fmtDate(c.created_at)}</p>
                         <ContactUpdater contactId={c.id} currentStatus={c.status} email={c.email} />
                       </div>
                     </div>
@@ -329,45 +266,44 @@ export default async function AdminDashboardPage({
         {/* ── Analytics Tab ── */}
         {tab === "analytics" && (
           <div>
-            <p className="text-sm font-bold mb-4 font-body" style={{ color: "#71717A", fontFamily: "Poppins, sans-serif" }}>Business Overview</p>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#71717A", marginBottom: 16 }}>Business Overview</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               {[
-                { label: "Total Orders (All Time)", value: totalOrders ?? 0, color: "text-mint" },
-                { label: "Active Orders", value: activeOrders ?? 0, color: "text-orange-400" },
-                { label: "Open Issues", value: openIssues ?? 0, color: "text-red-400" },
-                { label: "Unread Messages", value: newContacts ?? 0, color: "text-purple-400" },
-                { label: "Total Customers", value: totalCustomers ?? 0, color: "text-white/70" },
-                { label: "Upcoming Pickups", value: upcoming?.length ?? 0, color: "text-white/70" },
-              ].map((s) => (
-                <div key={s.label} className="card-dark rounded-2xl border border-white/8 p-6">
-                  <p className="text-xs text-white/30 mb-1 uppercase tracking-wider font-semibold font-body">{s.label}</p>
-                  <p className={`text-4xl font-bold font-heading ${s.color}`}>{s.value}</p>
+                { label: "Total Orders",     value: totalOrders ?? 0 },
+                { label: "Active Orders",    value: activeCount ?? 0 },
+                { label: "Orders Today",     value: todayOrders ?? 0 },
+                { label: "Unread Messages",  value: newContacts ?? 0 },
+                { label: "Total Customers",  value: totalCustomers ?? 0 },
+              ].map(s => (
+                <div key={s.label} style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>{s.label}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#09090B", letterSpacing: "-0.025em" }}>{s.value}</p>
                 </div>
               ))}
             </div>
-            <div className="card-dark rounded-2xl border border-white/8 p-6">
-              <p className="text-sm font-bold text-white/70 mb-4 font-heading">Upcoming Order Status Breakdown</p>
-              {upcoming && upcoming.length > 0 ? (
+            {(activeOrders?.length ?? 0) > 0 && (
+              <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#09090B", marginBottom: 16 }}>Status Breakdown (Active)</p>
                 <div className="space-y-2">
                   {Object.entries(
-                    (upcoming as any[]).reduce<Record<string, number>>((acc, o) => {
+                    (activeOrders as any[]).reduce<Record<string, number>>((acc, o) => {
                       acc[o.status] = (acc[o.status] ?? 0) + 1;
                       return acc;
                     }, {})
                   ).map(([status, count]) => (
-                    <div key={status} className="flex items-center gap-3">
-                      <span className={`badge text-xs ${STATUS_COLORS[status] ?? "bg-white/5 text-white/35"}`}>{STATUS_LABELS[status] ?? status}</span>
-                      <div className="flex-1 bg-white/8 rounded-full h-2 overflow-hidden">
-                        <div className="h-2 bg-mint rounded-full" style={{ width: `${Math.min(100, ((count as number) / (upcoming.length)) * 100)}%` }} />
+                    <div key={status} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold min-w-[110px] text-center ${STATUS_COLORS[status] ?? "bg-gray-100 text-gray-600"}`}>
+                        {STATUS_LABELS[status] ?? status}
+                      </span>
+                      <div style={{ flex: 1, background: "#F4F4F5", borderRadius: 999, height: 8, overflow: "hidden" }}>
+                        <div style={{ height: 8, background: "#78EDB2", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
                       </div>
-                      <span className="text-sm font-bold text-white/55 w-6 text-right font-heading">{count as number}</span>
+                      <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#09090B", minWidth: 24, textAlign: "right" }}>{count as number}</span>
                     </div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-white/30 text-sm font-body">No upcoming orders to analyze.</p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
       </div>

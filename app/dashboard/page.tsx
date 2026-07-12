@@ -9,11 +9,8 @@ import AppOrderDrawer, { type DrawerOrder } from "@/components/AppOrderDrawer";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
-const SERVICE_LABELS: Record<string, string> = {
-  "wash-fold": "Wash & Fold",
-  "dry-clean": "Dry Cleaning",
-  ironing: "Ironing",
-  alteration: "Alteration",
+const ACTIVE_PRIORITY: Record<string, number> = {
+  washing: 0, folding: 0, out_for_delivery: 0, picked_up: 1, confirmed: 2, placed: 3,
 };
 
 function greeting() {
@@ -35,7 +32,7 @@ export default function DashboardPage() {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { window.location.href = "/auth"; return; }
       setUser(user);
-      const res = await fetch(`/api/dashboard/orders?email=${encodeURIComponent(user.email ?? "")}`);
+      const res = await fetch("/api/dashboard/orders");
       if (res.ok) { const data = await res.json(); setOrders(data.orders ?? []); }
       setLoading(false);
     });
@@ -47,53 +44,43 @@ export default function DashboardPage() {
   }
 
   const active = useMemo(() => orders.filter(o => !["delivered", "cancelled"].includes(o.status)), [orders]);
-  const activeOrder = active[0] ?? null;
+  const activeOrder = useMemo(() =>
+    [...active].sort((a, b) => (ACTIVE_PRIORITY[a.status] ?? 4) - (ACTIVE_PRIORITY[b.status] ?? 4))[0] ?? null
+  , [active]);
   const recent = orders.slice(0, 5);
 
-  const firstName = user?.user_metadata?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "there";
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0]
+    ?? user?.user_metadata?.name?.split(" ")[0]
+    ?? user?.email?.split("@")[0] ?? "there";
   const initial = firstName.charAt(0).toUpperCase();
 
   const statCards = [
     { label: "Total orders", value: orders.length, icon: Package },
     { label: "Active now", value: active.length, icon: Clock },
-    { label: "Services used", value: new Set(orders.map(o => o.service_type)).size, icon: Sparkles },
+    { label: "Services used", value: new Set(orders.map(o => o.service)).size, icon: Sparkles },
     { label: "Member since", value: user ? new Date(user.created_at).toLocaleDateString("en-CA", { month: "short", year: "numeric" }) : "—", icon: Star },
   ];
 
-  if (loading) {
-    return (
-      <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(120,237,178,0.2)", borderTopColor: "#78EDB2", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
-          <p style={{ color: "#A1A1AA", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Loading your orders…</p>
-        </div>
-        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+  if (loading) return (
+    <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(120,237,178,0.2)", borderTopColor: "#78EDB2", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
+        <p style={{ color: "#A1A1AA", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Loading your orders…</p>
       </div>
-    );
-  }
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+    </div>
+  );
 
   return (
     <div style={{ background: "#F7F7F7", minHeight: "100vh", paddingTop: 96 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 96px" }}>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
-          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 36 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: "50%",
-              background: "linear-gradient(135deg,#C9F8DE,#78EDB2)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#0a3547",
-            }}>
-              {initial}
-            </div>
+            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#C9F8DE,#78EDB2)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#0a3547" }}>{initial}</div>
             <div>
-              <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#09090B", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-                {greeting()}, {firstName}.
-              </h1>
+              <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#09090B", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{greeting()}, {firstName}.</h1>
               <p style={{ color: "#71717A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
             </div>
           </div>
@@ -107,15 +94,10 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Stat cards */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 32 }} className="dash-stats">
           {statCards.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease }}
-              style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, padding: "18px 20px" }}
-            >
+            <motion.div key={s.label} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease }}
+              style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, padding: "18px 20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
                 <s.icon size={15} color="#78EDB2" />
                 <span style={{ color: "#71717A", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{s.label}</span>
@@ -125,7 +107,6 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Active order — live tracking */}
         {activeOrder ? (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }} style={{ marginBottom: 32 }}>
             <p className="eyebrow" style={{ marginBottom: 12 }}>Active order</p>
@@ -133,11 +114,11 @@ export default function DashboardPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#09090B" }}>{activeOrder.order_code}</span>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#09090B" }}>{activeOrder.code}</span>
                     <StatusBadge status={activeOrder.status} pulse />
                   </div>
                   <p style={{ color: "#71717A", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", marginTop: 4 }}>
-                    {SERVICE_LABELS[activeOrder.service_type] ?? activeOrder.service_type} · {fmtSlot(activeOrder.pickup_slot_start)}
+                    {activeOrder.service_title ?? activeOrder.service} · {activeOrder.date}
                   </p>
                 </div>
                 <button onClick={() => setSelected(activeOrder)} className="btn-ghost" style={{ padding: "9px 18px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 6 }}>
@@ -147,7 +128,6 @@ export default function DashboardPage() {
               <ProgressTrack status={activeOrder.status} />
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
                 <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA" }}>{STATUS_META[activeOrder.status]?.label}</span>
-                <a href={`/order?code=${activeOrder.order_code}`} style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#4ECDA0", textDecoration: "none" }}>Track live →</a>
               </div>
             </div>
           </motion.div>
@@ -167,7 +147,6 @@ export default function DashboardPage() {
           </motion.div>
         )}
 
-        {/* Recent orders */}
         {recent.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.45, ease }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
@@ -182,17 +161,16 @@ export default function DashboardPage() {
               {recent.map((o, i) => (
                 <button key={o.id} onClick={() => setSelected(o)} style={{
                   width: "100%", display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, alignItems: "center",
-                  padding: "16px 22px",
-                  borderBottom: i < recent.length - 1 ? "1px solid #F4F4F5" : "none",
+                  padding: "16px 22px", borderBottom: i < recent.length - 1 ? "1px solid #F4F4F5" : "none",
                   borderLeft: "none", borderRight: "none", borderTop: "none",
                   background: "none", cursor: "pointer", textAlign: "left",
                 }}>
                   <div>
                     <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#09090B" }}>
-                      {SERVICE_LABELS[o.service_type] ?? o.service_type}
-                      <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {o.order_code}</span>
+                      {o.service_title ?? o.service}
+                      <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {o.code}</span>
                     </p>
-                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#A1A1AA" }}>{fmtSlot(o.pickup_slot_start)}</p>
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#A1A1AA" }}>{o.date}</p>
                   </div>
                   <StatusBadge status={o.status} size="sm" pulse={!["delivered","cancelled"].includes(o.status)} />
                   <ChevronRight size={15} color="#C0C0C0" />
@@ -218,10 +196,7 @@ export default function DashboardPage() {
       </div>
 
       <AppOrderDrawer order={selected} onClose={() => setSelected(null)} />
-
-      <style>{`
-        @media (max-width: 720px) { .dash-stats { grid-template-columns: repeat(2,1fr) !important; } }
-      `}</style>
+      <style>{`@media (max-width: 720px) { .dash-stats { grid-template-columns: repeat(2,1fr) !important; } }`}</style>
     </div>
   );
 }

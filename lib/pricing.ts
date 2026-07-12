@@ -9,10 +9,11 @@ export const BUSINESS_NAME = "Starex";
 
 // The four bookable service types (Step 1 of the booking flow)
 export const PLANS = [
-  { id: "wash-fold", label: "Wash & Fold", unit: "per lb", price: 1.25, turnaround: "12–48 hrs" },
-  { id: "dry-clean", label: "Dry Cleaning", unit: "per item", price: null, turnaround: "2–3 days" },
-  { id: "ironing", label: "Ironing", unit: "per item", price: null, turnaround: "24 hrs" },
-  { id: "alteration", label: "Alteration", unit: "per item", price: null, turnaround: "3–5 days" },
+  { id: "wash-fold", label: "Wash & Fold",       unit: "per lb",   price: 1.25, turnaround: "12–48 hrs" },
+  { id: "express",   label: "Express Same-Day",  unit: "per lb",   price: 1.75, turnaround: "Same day" },
+  { id: "dry-clean", label: "Dry Cleaning",      unit: "per item", price: null, turnaround: "2–3 days" },
+  { id: "ironing",   label: "Ironing",           unit: "per item", price: null, turnaround: "24 hrs" },
+  { id: "alteration",label: "Alteration",        unit: "per item", price: null, turnaround: "3–5 days" },
 ] as const;
 
 // TODO(pricing): $0.99 "first pickup" promo can't sensibly drop by $1 (goes to ~$0) —

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BUSINESS_NAME } from "@/lib/pricing";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import PageLoader from "@/components/PageLoader";
-import FloatingCTA from "@/components/FloatingCTA";
 import ScrollProgress from "@/components/ScrollProgress";
+import LayoutShell from "@/components/LayoutShell";
 
 export const metadata: Metadata = {
   title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery Canada`,
@@ -19,10 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-[#111921] text-white antialiased font-body">
         <ScrollProgress />
         <PageLoader />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <FloatingCTA />
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

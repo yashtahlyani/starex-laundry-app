@@ -1,48 +1,43 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Package, Search, CheckCircle, Truck, Sparkles, Clock, MapPin } from "lucide-react";
+import { Package, Search, CheckCircle, Truck, Sparkles, Clock, MapPin, Layers } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import IssueReportForm from "@/components/IssueReportForm";
 
-type OrderStatusEvent = { status: string; note: string | null; created_at: string };
+type StatusEvent = { status: string; note: string | null; created_at: string };
 type Order = {
-  order_code: string;
-  service_type: string;
+  id: string;
+  code: string;
+  service: string;
+  service_title: string;
   status: string;
-  pickup_address: string;
-  pickup_slot_start: string;
-  pickup_slot_end: string;
+  address: string;
+  date: string;
+  time_slot: string;
   created_at: string;
+  status_history: StatusEvent[];
 };
 
-const STAGES = ["scheduled", "picked_up", "in_progress", "ready", "out_for_delivery", "delivered"];
+const STAGES = ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery", "delivered"];
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
-  scheduled:        { label: "Scheduled",          desc: "Pickup is booked and confirmed.",                icon: Clock,       color: "text-mint" },
-  picked_up:        { label: "Picked Up",           desc: "Our driver has collected your laundry.",        icon: Truck,       color: "text-yellow-400" },
-  in_progress:      { label: "Being Cleaned",       desc: "Your laundry is being washed and processed.",  icon: Sparkles,    color: "text-orange-400" },
-  ready:            { label: "Ready for Delivery",  desc: "Cleaned and packaged — driver is next!",       icon: Package,     color: "text-purple-400" },
-  out_for_delivery: { label: "Out for Delivery",    desc: "Your order is on its way back to you.",        icon: Truck,       color: "text-mint" },
-  delivered:        { label: "Delivered",           desc: "Your laundry has been delivered. Enjoy!",      icon: CheckCircle, color: "text-mint" },
-  cancelled:        { label: "Cancelled",           desc: "This order has been cancelled.",               icon: Package,     color: "text-red-400" },
-};
-
-const SERVICE_LABELS: Record<string, string> = {
-  "wash-fold": "Wash & Fold",
-  "dry-clean": "Dry Cleaning",
-  ironing:     "Ironing",
-  alteration:  "Alteration",
+  placed:           { label: "Order placed",    desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#78EDB2" },
+  confirmed:        { label: "Confirmed",        desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#78EDB2" },
+  picked_up:        { label: "Picked up",        desc: "Our driver has collected your laundry.",         icon: Truck,       color: "#FBBF24" },
+  washing:          { label: "Cleaning",         desc: "Your laundry is being washed and processed.",    icon: Sparkles,    color: "#FB923C" },
+  folding:          { label: "Folding",          desc: "Cleaned and carefully folded.",                  icon: Layers,      color: "#A78BFA" },
+  out_for_delivery: { label: "On the way",       desc: "Your order is out for delivery.",                icon: Truck,       color: "#78EDB2" },
+  delivered:        { label: "Delivered",        desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#78EDB2" },
+  cancelled:        { label: "Cancelled",        desc: "This order has been cancelled.",                 icon: Package,     color: "#F87171" },
 };
 
 function OrderTracker() {
   const searchParams = useSearchParams();
-  const [code, setCode] = useState(searchParams.get("code") ?? "");
+  const [code,    setCode]    = useState(searchParams.get("code") ?? "");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [order, setOrder] = useState<Order | null>(null);
-  const [events, setEvents] = useState<OrderStatusEvent[]>([]);
+  const [error,   setError]   = useState<string | null>(null);
+  const [order,   setOrder]   = useState<Order | null>(null);
 
   useEffect(() => {
     const c = searchParams.get("code");
@@ -52,15 +47,12 @@ function OrderTracker() {
 
   async function fetchOrder(trackCode: string) {
     if (!trackCode.trim()) return;
-    setLoading(true);
-    setError(null);
-    setOrder(null);
+    setLoading(true); setError(null); setOrder(null);
     try {
-      const res = await fetch(`/api/orders/${encodeURIComponent(trackCode.trim().toUpperCase())}`);
+      const res  = await fetch(`/api/orders/${encodeURIComponent(trackCode.trim().toUpperCase())}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Order not found");
       setOrder(data.order);
-      setEvents(data.events ?? []);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
@@ -70,6 +62,7 @@ function OrderTracker() {
 
   const currentStageIndex = order ? STAGES.indexOf(order.status) : -1;
   const meta = order ? STAGE_META[order.status] : null;
+  const events: StatusEvent[] = order?.status_history ?? [];
 
   return (
     <div className="min-h-screen bg-[#111921] pt-20">
@@ -79,34 +72,29 @@ function OrderTracker() {
             <Package size={26} className="text-mint" />
           </div>
           <h1 className="text-3xl font-bold text-white font-heading">Track Your Order</h1>
-          <p className="text-white/45 mt-2 text-sm font-body">Enter your order ID from your confirmation email or WhatsApp.</p>
+          <p className="text-white/45 mt-2 text-sm font-body">Enter your order code from your confirmation.</p>
         </div>
 
         {/* Search */}
         <div className="bg-[#1a2332] rounded-2xl border border-white/8 p-2 flex gap-2 mb-8">
           <input
             className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-white placeholder:text-white/30 font-body"
-            placeholder="Enter Order ID — e.g. STX-482913"
+            placeholder="Order code — e.g. STX-482913"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && fetchOrder(code)}
+            onChange={e => setCode(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && fetchOrder(code)}
           />
-          <button
-            className="btn-primary px-5 py-2.5 text-sm shrink-0 disabled:opacity-40"
-            onClick={() => fetchOrder(code)}
-            disabled={loading || !code.trim()}
-          >
-            {loading ? (
-              <span className="h-4 w-4 rounded-full border-2 border-[#0a1a0f]/30 border-t-[#0a1a0f] animate-spin" />
-            ) : (
-              <><Search size={15} /> Track</>
-            )}
+          <button className="btn-primary px-5 py-2.5 text-sm shrink-0 disabled:opacity-40"
+            onClick={() => fetchOrder(code)} disabled={loading || !code.trim()}>
+            {loading
+              ? <span className="h-4 w-4 rounded-full border-2 border-[#0a1a0f]/30 border-t-[#0a1a0f] animate-spin" />
+              : <><Search size={15} /> Track</>}
           </button>
         </div>
 
         {error && (
           <div className="rounded-2xl bg-red-900/30 border border-red-500/30 px-5 py-4 text-sm text-red-300 mb-6 font-body">
-            {error} — double-check your order ID and try again.
+            {error} — double-check your order code and try again.
           </div>
         )}
 
@@ -117,10 +105,11 @@ function OrderTracker() {
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
                   <p className="text-xs text-white/35 font-medium mb-1 font-body">Order</p>
-                  <p className="font-mono font-bold text-mint text-xl">{order.order_code}</p>
+                  <p className="font-mono font-bold text-mint text-xl">{order.code}</p>
                 </div>
                 {meta && (
-                  <div className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white/5 border border-white/10 text-xs font-semibold font-body ${meta.color}`}>
+                  <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white/5 border border-white/10 text-xs font-semibold font-body"
+                    style={{ color: meta.color }}>
                     <meta.icon size={13} />
                     {meta.label}
                   </div>
@@ -130,19 +119,15 @@ function OrderTracker() {
               <div className="grid grid-cols-2 gap-3 text-sm mb-6">
                 <div className="bg-white/5 rounded-xl p-3 border border-white/8">
                   <p className="text-xs text-white/35 mb-1 font-body">Service</p>
-                  <p className="font-semibold text-white font-heading">{SERVICE_LABELS[order.service_type] ?? order.service_type}</p>
+                  <p className="font-semibold text-white font-heading">{order.service_title || order.service}</p>
                 </div>
                 <div className="bg-white/5 rounded-xl p-3 border border-white/8">
-                  <p className="text-xs text-white/35 mb-1 font-body">Booked</p>
-                  <p className="font-semibold text-white font-heading">
-                    {new Date(order.created_at).toLocaleDateString("en-CA", { month: "short", day: "numeric" })}
-                  </p>
+                  <p className="text-xs text-white/35 mb-1 font-body">Pickup date</p>
+                  <p className="font-semibold text-white font-heading">{order.date}</p>
                 </div>
                 <div className="bg-white/5 rounded-xl p-3 border border-white/8 col-span-2">
-                  <p className="text-xs text-white/35 mb-1 flex items-center gap-1 font-body">
-                    <MapPin size={11} /> Address
-                  </p>
-                  <p className="font-semibold text-white text-sm font-heading">{order.pickup_address}</p>
+                  <p className="text-xs text-white/35 mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
+                  <p className="font-semibold text-white text-sm font-heading">{order.address}</p>
                 </div>
               </div>
 
@@ -150,22 +135,19 @@ function OrderTracker() {
               {order.status !== "cancelled" && (
                 <div className="space-y-1">
                   {STAGES.map((stage, i) => {
-                    const done = i <= currentStageIndex;
+                    const done   = i <= currentStageIndex;
                     const active = i === currentStageIndex;
-                    const stageMeta = STAGE_META[stage];
-                    const StageIcon = stageMeta?.icon ?? Package;
-
+                    const sm     = STAGE_META[stage];
+                    const Icon   = sm?.icon ?? Package;
                     return (
                       <div key={stage} className="flex gap-4">
                         <div className="flex flex-col items-center">
                           <div className={`h-8 w-8 rounded-full border-2 flex items-center justify-center transition-all ${
                             done
-                              ? active
-                                ? "bg-mint border-mint shadow-[0_0_12px_rgba(120,237,178,0.4)]"
-                                : "bg-mint/30 border-mint/40"
+                              ? active ? "bg-mint border-mint shadow-[0_0_12px_rgba(120,237,178,0.4)]" : "bg-mint/30 border-mint/40"
                               : "bg-white/5 border-white/15"
                           }`}>
-                            <StageIcon size={14} className={done ? "text-[#0a1a0f]" : "text-white/20"} />
+                            <Icon size={14} className={done ? "text-[#0a1a0f]" : "text-white/20"} />
                           </div>
                           {i < STAGES.length - 1 && (
                             <div className={`w-0.5 h-6 mt-1 ${i < currentStageIndex ? "bg-mint/40" : "bg-white/8"}`} />
@@ -173,11 +155,9 @@ function OrderTracker() {
                         </div>
                         <div className="pb-6 flex-1">
                           <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-mint" : "text-white/60") : "text-white/20"}`}>
-                            {stageMeta?.label ?? stage}
+                            {sm?.label ?? stage}
                           </p>
-                          {active && (
-                            <p className="text-xs text-white/40 mt-0.5 font-body">{stageMeta?.desc}</p>
-                          )}
+                          {active && <p className="text-xs text-white/40 mt-0.5 font-body">{sm?.desc}</p>}
                         </div>
                       </div>
                     );
@@ -186,7 +166,7 @@ function OrderTracker() {
               )}
             </div>
 
-            {/* Event history */}
+            {/* Event history from status_history jsonb */}
             {events.length > 0 && (
               <div className="card-dark rounded-2xl p-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-white/30 mb-4 font-body">Activity Log</p>
@@ -203,8 +183,7 @@ function OrderTracker() {
                         {ev.note && <p className="text-xs text-white/40 font-body">{ev.note}</p>}
                         <p className="text-xs text-white/30 mt-0.5 font-body">
                           {new Date(ev.created_at).toLocaleString("en-CA", {
-                            month: "short", day: "numeric",
-                            hour: "numeric", minute: "2-digit", hour12: true,
+                            month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true,
                           })}
                         </p>
                       </div>
@@ -214,15 +193,9 @@ function OrderTracker() {
               </div>
             )}
 
-            {order.status !== "cancelled" && (
-              <IssueReportForm orderCode={order.order_code} />
-            )}
-
             <p className="text-center text-xs text-white/25 font-body">
               Questions? Email us at{" "}
-              <a href="mailto:hello@starexlaundry.ca" className="text-mint underline">
-                hello@starexlaundry.ca
-              </a>
+              <a href="mailto:hello@starexlaundry.ca" className="text-mint underline">hello@starexlaundry.ca</a>
             </p>
           </div>
         )}

@@ -1,59 +1,60 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { createServerClient } from "@supabase/ssr";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
-import { PLANS } from "@/lib/pricing";
 import { BookingService } from "@/lib/services/booking.service";
-import { checkRateLimit } from "@/lib/redis/rateLimit";
+import { PLANS } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
+const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
+
 type BookingRequest = {
-  serviceId: string;
+  service: string;
   name: string;
   email: string;
   phone: string;
   address: string;
-  postalCode: string;
-  pickupSlotStart: string;
-  pickupSlotEnd: string;
+  date: string;
+  timeSlot: string;
   notes?: string;
 };
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "unknown";
-  const allowed = await checkRateLimit(`rl:booking:${ip}`, 5, 60);
-  if (!allowed) {
-    return NextResponse.json({ error: "Too many requests. Please wait a minute." }, { status: 429 });
-  }
+
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""),
+    stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
+    { cookies: { get: (name) => cookieStore.get(name)?.value } }
+  );
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "You must be signed in to book a pickup." }, { status: 401 });
 
   let body: BookingRequest;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-  }
+  try { body = await req.json(); }
+  catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
-  const { serviceId, name, email, phone, address, postalCode, pickupSlotStart, pickupSlotEnd, notes } = body;
-
-  if (!serviceId || !name || !email || !phone || !address || !postalCode || !pickupSlotStart || !pickupSlotEnd) {
+  const { service, name, email, phone, address, date, timeSlot, notes } = body;
+  if (!service || !name || !email || !phone || !address || !date || !timeSlot) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
-
-  if (!PLANS.some((p) => p.id === serviceId)) {
-    return NextResponse.json({ error: "Unknown serviceId" }, { status: 400 });
+  if (!PLANS.some((p) => p.id === service)) {
+    return NextResponse.json({ error: "Unknown service" }, { status: 400 });
   }
 
   try {
-    const service = new BookingService(getSupabaseAdmin());
-    const result = await service.createBooking({
-      serviceId,
-      name,
-      email,
-      phone,
-      address,
-      postalCode,
-      pickupSlotStart,
-      pickupSlotEnd,
-      notes,
+    const bookingService = new BookingService(getSupabaseAdmin());
+    const result = await bookingService.createBooking({
+      userId: user.id,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      address: address.trim(),
+      service,
+      date,
+      timeSlot,
+      notes: notes?.trim(),
     });
     return NextResponse.json(result, { status: 201 });
   } catch (err: any) {

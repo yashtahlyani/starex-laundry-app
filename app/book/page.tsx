@@ -88,26 +88,18 @@ export default function BookPage() {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      const pickupDate = new Date(form.date);
-      const [startH] = (form.time.split("–")[0] ?? "8:00 AM").trim().split(":");
-      const startHour = parseInt(startH) + ((form.time.includes("PM") && parseInt(startH) !== 12) ? 12 : 0);
-      const pickupStart = new Date(pickupDate);
-      pickupStart.setHours(startHour, 0, 0, 0);
-      const pickupEnd = new Date(pickupStart);
-      pickupEnd.setHours(startHour + 2, 0, 0, 0);
-
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          serviceId: form.service,
+          service: form.service,
           name: form.name,
           email: form.email,
           phone: form.phone,
           address: form.address,
-          postalCode: "",
-          pickupSlotStart: pickupStart.toISOString(),
-          pickupSlotEnd: pickupEnd.toISOString(),
+          date: form.date,
+          timeSlot: form.time,
+          notes: form.notes || undefined,
         }),
       });
       const data = await res.json();
