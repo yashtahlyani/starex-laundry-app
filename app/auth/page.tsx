@@ -251,8 +251,8 @@ export default function AuthPage() {
 
             <p className="mt-4 text-center text-xs text-[#A1A1AA] font-body">
               By continuing, you agree to our{" "}
-              <a href="#" className="text-mint hover:underline">Terms</a> and{" "}
-              <a href="#" className="text-mint hover:underline">Privacy Policy</a>.
+              <a href="/terms" className="text-mint hover:underline">Terms</a> and{" "}
+              <a href="/privacy" className="text-mint hover:underline">Privacy Policy</a>.
             </p>
           </div>
 

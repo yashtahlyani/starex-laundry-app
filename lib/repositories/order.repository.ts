@@ -36,9 +36,10 @@ export type NewOrder = Omit<Order, "id" | "created_at" | "updated_at">;
 
 const SERVICE_TITLES: Record<string, string> = {
   "wash-fold": "Wash & Fold",
+  "express":   "Express Same-Day",
   "dry-clean": "Dry Cleaning",
-  ironing: "Ironing & Pressing",
-  alteration: "Alteration",
+  ironing:     "Ironing & Pressing",
+  alteration:  "Alteration",
 };
 
 const STATUS_LABELS: Record<string, string> = {

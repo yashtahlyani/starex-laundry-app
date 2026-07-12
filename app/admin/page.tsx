@@ -130,9 +130,11 @@ export default async function AdminDashboardPage({
             <a href="/" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
               View site
             </a>
-            <a href="/auth" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
-              Sign out
-            </a>
+            <form action="/api/auth/signout" method="POST" style={{ display: "inline" }}>
+              <button type="submit" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", border: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8, cursor: "pointer" }}>
+                Sign out
+              </button>
+            </form>
           </div>
         </div>
       </header>
@@ -210,7 +212,10 @@ export default async function AdminDashboardPage({
                               </span>
                             </td>
                             <td className="px-4 py-3">
-                              <StatusUpdater orderCode={o.code} currentStatus={o.status} />
+                              {!["delivered","cancelled"].includes(o.status)
+                                ? <StatusUpdater orderCode={o.code} currentStatus={o.status} />
+                                : <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#A1A1AA" }}>Final</span>
+                              }
                             </td>
                           </tr>
                         ))}

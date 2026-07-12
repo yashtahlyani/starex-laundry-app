@@ -5,7 +5,7 @@ import { Package, Search, CheckCircle, Truck, Sparkles, Clock, MapPin, Layers } 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-type StatusEvent = { status: string; note: string | null; created_at: string };
+type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
 type Order = {
   id: string;
   code: string;
@@ -181,11 +181,13 @@ function OrderTracker() {
                           {STAGE_META[ev.status]?.label ?? ev.status}
                         </p>
                         {ev.note && <p className="text-xs text-white/40 font-body">{ev.note}</p>}
-                        <p className="text-xs text-white/30 mt-0.5 font-body">
-                          {new Date(ev.created_at).toLocaleString("en-CA", {
-                            month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true,
-                          })}
-                        </p>
+                        {(ev.time || ev.created_at) && (
+                          <p className="text-xs text-white/30 mt-0.5 font-body">
+                            {new Date(ev.time || ev.created_at!).toLocaleString("en-CA", {
+                              month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true,
+                            })}
+                          </p>
+                        )}
                       </div>
                     </li>
                   ))}

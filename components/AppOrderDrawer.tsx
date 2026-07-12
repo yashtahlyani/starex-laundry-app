@@ -9,9 +9,10 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const SERVICE_LABELS: Record<string, string> = {
   "wash-fold": "Wash & Fold",
+  "express":   "Express Same-Day",
   "dry-clean": "Dry Cleaning",
-  ironing: "Ironing",
-  alteration: "Alteration",
+  ironing:     "Ironing",
+  alteration:  "Alteration",
 };
 
 // Matches the freshdrop orders schema

@@ -5,15 +5,18 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import FloatingCTA from "./FloatingCTA";
 
+const APP_PATHS = ["/dashboard", "/account", "/order", "/book"];
+
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
-  const hideChrome = path === "/auth" || path.startsWith("/admin");
+  const isAuthOrAdmin = path === "/auth" || path.startsWith("/admin");
+  const isAppPage     = APP_PATHS.some(p => path.startsWith(p));
   return (
     <>
-      {!hideChrome && <Navbar />}
+      {!isAuthOrAdmin && <Navbar />}
       <main>{children}</main>
-      {!hideChrome && <Footer />}
-      {!hideChrome && <FloatingCTA />}
+      {!isAuthOrAdmin && <Footer />}
+      {!isAuthOrAdmin && !isAppPage && <FloatingCTA />}
     </>
   );
 }
