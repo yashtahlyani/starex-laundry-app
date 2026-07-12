@@ -144,6 +144,10 @@ export default function Footer() {
           <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
             &copy; {new Date().getFullYear()} StareX Inc. Made in Canada 🍁
           </p>
+          <div style={{ display: "flex", gap: "20px" }}>
+            <a href="/terms" style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Terms</a>
+            <a href="/privacy" style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Privacy</a>
+          </div>
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             whileHover={{ rotate: -45 } as any}

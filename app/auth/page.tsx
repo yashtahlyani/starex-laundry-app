@@ -1,20 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import { Sparkles, Mail, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { BUSINESS_NAME } from "@/lib/pricing";
 
-type Mode = "signin" | "signup" | "reset" | "check-email";
+type Mode = "signin" | "signup" | "reset" | "check-email" | "new-password";
 
 export default function AuthPage() {
   const [mode, setMode] = useState<Mode>("signin");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const m = params.get("mode");
+    if (m === "new-password") setMode("new-password");
+    const err = params.get("error");
+    if (err) setError("Authentication failed. Please try signing in again.");
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,12 +50,81 @@ export default function AuthPage() {
         });
         if (error) throw error;
         setMode("check-email");
+      } else if (mode === "new-password") {
+        if (password !== confirmPassword) throw new Error("Passwords do not match.");
+        if (password.length < 8) throw new Error("Password must be at least 8 characters.");
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) throw error;
+        window.location.href = "/dashboard";
+        return;
       }
     } catch (err: any) {
       setError(err.message ?? "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (mode === "new-password") {
+    return (
+      <div className="min-h-screen bg-[#111921] flex items-center justify-center px-4 pt-16">
+        <div className="max-w-md w-full">
+          <div className="card rounded-3xl p-10">
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-[#09090B] font-heading">Set new password</h1>
+              <p className="text-[#52525B] text-sm mt-1 font-body">Choose a strong password for your account.</p>
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-[#3F3F46] mb-1.5 font-body">New password</label>
+                <div className="relative">
+                  <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
+                  <input
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    type={showPw ? "text" : "password"}
+                    placeholder="Min. 8 characters"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    minLength={8}
+                  />
+                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#52525B]">
+                    {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#3F3F46] mb-1.5 font-body">Confirm password</label>
+                <div className="relative">
+                  <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
+                  <input
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    type={showPw ? "text" : "password"}
+                    placeholder="Re-enter password"
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              {error && (
+                <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-700 font-body">{error}</div>
+              )}
+              <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 rounded-full border-2 border-[#0a1a0f]/30 border-t-[#0a1a0f] animate-spin" />
+                    Updating…
+                  </span>
+                ) : (
+                  <>Update Password <ArrowRight size={15} /></>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (mode === "check-email") {

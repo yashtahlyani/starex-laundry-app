@@ -169,6 +169,7 @@ export default function Navbar() {
                       style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#1a2530", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
                       {[
                         { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+                        { href: "/account", icon: Settings, label: "Account settings" },
                       ].map(item => (
                         <a key={item.href} href={item.href} onClick={() => setAcctOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "rgba(255,255,255,0.8)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}
                           onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"}

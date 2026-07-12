@@ -24,10 +24,29 @@ const info = [
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error ?? "Failed to send message");
+      }
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message ?? "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const inputStyle: React.CSSProperties = {
@@ -82,7 +101,7 @@ export default function Contact() {
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", color: "#09090B", marginBottom: 10 }}>Message sent!</h3>
                   <p style={{ color: "#52525B", fontFamily: "Kodchasan, sans-serif", marginBottom: 28 }}>We&apos;ll get back to you within 1 business hour.</p>
                   <button
-                    onClick={() => { setForm({ name: "", email: "", subject: "", message: "" }); setSubmitted(false); }}
+                    onClick={() => { setForm({ name: "", email: "", subject: "", message: "" }); setSubmitted(false); setError(null); }}
                     className="btn-primary"
                     style={{ border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, padding: "12px 24px" }}
                   >
@@ -116,8 +135,11 @@ export default function Contact() {
                         required
                       />
                     </div>
-                    <button type="submit" className="btn-primary" style={{ border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", width: "100%", fontSize: "1rem" }}>
-                      Send Message <ArrowRight size={16} />
+                    {error && (
+                      <p style={{ color: "#dc2626", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>{error}</p>
+                    )}
+                    <button type="submit" disabled={loading} className="btn-primary" style={{ border: "none", cursor: loading ? "not-allowed" : "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", width: "100%", fontSize: "1rem", opacity: loading ? 0.7 : 1 }}>
+                      {loading ? "Sending…" : <></>}{!loading && <>Send Message <ArrowRight size={16} /></>}
                     </button>
                   </form>
                 </>
