@@ -64,7 +64,7 @@ export default function DashboardPage() {
   if (loading) return (
     <div style={{ minHeight: "100vh", background: "#FDFBFA", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(164,36,59,0.2)", borderTopColor: "#A4243B", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
+        <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(206,66,87,0.2)", borderTopColor: "#CE4257", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
         <p style={{ color: "#A1A1AA", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Loading your orders…</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
@@ -78,7 +78,7 @@ export default function DashboardPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#BE4459,#A4243B)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#4A1522" }}>{initial}</div>
+            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#DE6E7A,#CE4257)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#3F252C" }}>{initial}</div>
             <div>
               <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#1F1B1B", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{greeting()}, {firstName}.</h1>
               <p style={{ color: "#857C78", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
             <motion.div key={s.label} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease }}
               style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, padding: "18px 20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <s.icon size={15} color="#A4243B" />
+                <s.icon size={15} color="#CE4257" />
                 <span style={{ color: "#857C78", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{s.label}</span>
               </div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.6rem", color: "#1F1B1B", letterSpacing: "-0.02em" }}>{s.value}</p>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
         {activeOrder ? (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }} style={{ marginBottom: 32 }}>
             <p className="eyebrow" style={{ marginBottom: 12 }}>Active order</p>
-            <div style={{ background: "#fff", border: "1.5px solid #BE4459", borderRadius: 20, padding: "28px 30px", boxShadow: "0 4px 20px rgba(164,36,59,0.1)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid #DE6E7A", borderRadius: 20, padding: "28px 30px", boxShadow: "0 4px 20px rgba(206,66,87,0.1)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -134,7 +134,7 @@ export default function DashboardPage() {
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }}
             style={{ background: "#1F1B1B", borderRadius: 20, padding: "40px", textAlign: "center", marginBottom: 32, position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 80% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 80% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
             <div style={{ position: "relative" }}>
               <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#fff", marginBottom: 8 }}>
                 No active orders — <em className="display-accent" style={{ display: "inline" }}>enjoy your weekend.</em>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
               <p className="eyebrow" style={{ margin: 0 }}>Recent orders</p>
               {orders.length > 5 && (
-                <a href="/order" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem", color: "#7A1B2E", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+                <a href="/order" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem", color: "#A63446", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
                   View all <ChevronRight size={13} />
                 </a>
               )}
@@ -183,8 +183,8 @@ export default function DashboardPage() {
         {orders.length === 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
             style={{ background: "#fff", borderRadius: 20, padding: "64px 40px", textAlign: "center", border: "1px solid #EDEDED" }}>
-            <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(164,36,59,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-              <Package size={24} color="#7A1B2E" />
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(206,66,87,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+              <Package size={24} color="#A63446" />
             </div>
             <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#1F1B1B", marginBottom: 8 }}>No orders yet</h3>
             <p style={{ color: "#857C78", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Book your first pickup — it takes under 2 minutes.</p>

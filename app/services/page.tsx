@@ -29,7 +29,7 @@ export default function ServicesPage() {
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             What We Offer
@@ -59,7 +59,7 @@ export default function ServicesPage() {
               <AnimatedContent key={s.title} delay={i * 0.07}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
                   {s.featured && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#A4243B", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CE4257", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
@@ -71,12 +71,12 @@ export default function ServicesPage() {
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24, flex: 1 }}>
                     {s.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        <CheckCircle size={14} color="#7A1B2E" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <CheckCircle size={14} color="#A63446" style={{ flexShrink: 0, marginTop: 3 }} />
                         <span style={{ color: "#4A4340", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#4A1522", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#3F252C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>

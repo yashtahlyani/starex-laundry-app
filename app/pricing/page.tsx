@@ -56,7 +56,7 @@ export default function PricingPage() {
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             Simple Pricing
@@ -84,7 +84,7 @@ export default function PricingPage() {
       <section style={{ padding: "80px 0", background: "#FDFBFA" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#7A1B2E" }}>Our Services</span>
+            <span className="eyebrow" style={{ color: "#A63446" }}>Our Services</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#1F1B1B", marginBottom: 8 }}>
               Just need a <em className="display-accent" style={{ display: "inline" }}>pickup?</em>
             </h2>
@@ -98,7 +98,7 @@ export default function PricingPage() {
               <AnimatedContent key={s.title} delay={i * 0.06}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "28px", position: "relative", height: "100%" }}>
                   {s.badge && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#A4243B", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CE4257", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
@@ -150,7 +150,7 @@ export default function PricingPage() {
                 <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
                   {planPPP.features.map((f) => (
                     <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={15} color="#D9909B" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <CheckCircle size={15} color="#ECA9B1" style={{ flexShrink: 0, marginTop: 2 }} />
                       <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                     </li>
                   ))}
@@ -164,7 +164,7 @@ export default function PricingPage() {
             {/* Monthly Plan */}
             <AnimatedContent delay={0.08}>
               <div style={{ background: "#ffffff", borderRadius: 20, padding: "36px", position: "relative", overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.4)", height: "100%", display: "flex", flexDirection: "column" }}>
-                <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(180deg,#BE4459,#A4243B)", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "6px 16px", borderRadius: "0 0 10px 10px", letterSpacing: "0.08em", whiteSpace: "nowrap", fontFamily: "Kodchasan, sans-serif" }}>
+                <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(180deg,#DE6E7A,#CE4257)", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "6px 16px", borderRadius: "0 0 10px 10px", letterSpacing: "0.08em", whiteSpace: "nowrap", fontFamily: "Kodchasan, sans-serif" }}>
                   BEST VALUE
                 </div>
                 <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#857C78", marginBottom: 4, marginTop: 12 }}>{planMonthly.name}</p>
@@ -176,12 +176,12 @@ export default function PricingPage() {
                 <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
                   {planMonthly.features.map((f) => (
                     <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={15} color="#A4243B" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <CheckCircle size={15} color="#CE4257" style={{ flexShrink: 0, marginTop: 2 }} />
                       <span style={{ color: "#4A4340", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                     </li>
                   ))}
                 </ul>
-                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "linear-gradient(180deg,#BE4459,#A4243B)", color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "linear-gradient(180deg,#DE6E7A,#CE4257)", color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                   Get started
                 </a>
               </div>
@@ -194,12 +194,12 @@ export default function PricingPage() {
       <section style={{ padding: "80px 0", background: "#FDFBFA" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="eyebrow" style={{ color: "#7A1B2E" }}>Item Pricing</span>
+            <span className="eyebrow" style={{ color: "#A63446" }}>Item Pricing</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#1F1B1B", marginBottom: 8 }}>
               The full <em className="display-accent" style={{ display: "inline" }}>price list.</em>
             </h2>
             <p style={{ color: "#6B6360", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
-              Prices marked with a <strong style={{ color: "#7A1B2E" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
+              Prices marked with a <strong style={{ color: "#A63446" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
             </p>
           </AnimatedContent>
 
@@ -212,8 +212,8 @@ export default function PricingPage() {
                   onClick={() => setActiveTab(t.id)}
                   style={{
                     padding: "9px 20px", borderRadius: 999, cursor: "pointer",
-                    border: activeTab === t.id ? "1.5px solid #A4243B" : "1.5px solid rgba(31,27,27,0.12)",
-                    background: activeTab === t.id ? "#A4243B" : "#ffffff",
+                    border: activeTab === t.id ? "1.5px solid #CE4257" : "1.5px solid rgba(31,27,27,0.12)",
+                    background: activeTab === t.id ? "#CE4257" : "#ffffff",
                     color: activeTab === t.id ? "#ffffff" : "#4A4340",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.85rem",
                     transition: "all 0.2s ease",
@@ -237,7 +237,7 @@ export default function PricingPage() {
               <div style={{ display: "grid", gridTemplateColumns: tab.sections.length > 1 ? "repeat(2,1fr)" : "minmax(0,560px)", gap: 20, justifyContent: "center" }} className="catalog-grid">
                 {tab.sections.map((section) => (
                   <div key={section.title} style={{ background: "#ffffff", borderRadius: 20, padding: "26px 28px", border: "1px solid rgba(31,27,27,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)" }}>
-                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#7A1B2E", marginBottom: 16 }}>
+                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#A63446", marginBottom: 16 }}>
                       {section.title}
                     </h3>
                     <ul style={{ listStyle: "none", display: "flex", flexDirection: "column" }}>
@@ -245,7 +245,7 @@ export default function PricingPage() {
                         <li key={item.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, padding: "10px 0", borderBottom: i < section.items.length - 1 ? "1px solid rgba(31,27,27,0.06)" : "none" }}>
                           <span style={{ color: "#4A4340", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{item.name}</span>
                           <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#1F1B1B", whiteSpace: "nowrap" }}>
-                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#7A1B2E" }}> +</span>}
+                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#A63446" }}> +</span>}
                           </span>
                         </li>
                       ))}
@@ -263,7 +263,7 @@ export default function PricingPage() {
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
             <div style={{ background: "#1F1B1B", borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 85% 20%, rgba(164,36,59,0.18) 0%, transparent 65%)", pointerEvents: "none" }} />
+              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 85% 20%, rgba(206,66,87,0.18) 0%, transparent 65%)", pointerEvents: "none" }} />
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 32, alignItems: "center" }} className="detailing-grid">
                 <div>
                   <span className="eyebrow">New Service</span>
@@ -280,8 +280,8 @@ export default function PricingPage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(164,36,59,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Car size={20} color="#D9909B" />
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(206,66,87,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Car size={20} color="#ECA9B1" />
                     </div>
                     <div>
                       <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Car detailing / shampoo</p>
@@ -289,8 +289,8 @@ export default function PricingPage() {
                     </div>
                   </div>
                   <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(164,36,59,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Sofa size={20} color="#D9909B" />
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(206,66,87,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Sofa size={20} color="#ECA9B1" />
                     </div>
                     <div>
                       <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Sofa deep clean / shampoo</p>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUp } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const pages = [
   { label: "Services",     href: "/services" },
@@ -48,19 +49,14 @@ export default function Footer() {
 
             {/* Brand + newsletter */}
             <div>
-              <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
-                <div style={{ width: 32, height: 32, background: "linear-gradient(180deg,#BE4459,#A4243B)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2l2.47 6.9 7.32.1-5.87 4.38 2.16 7L12 16.2l-6.08 4.18 2.16-7L2.21 9l7.32-.1L12 2z" fill="#FFFFFF"/>
-                  </svg>
-                </div>
-                <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.05rem", color: "#ffffff" }}>StareX</span>
+              <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", marginBottom: 16 }}>
+                <Logo color="#FFFFFF" fontSize="1.25rem" />
               </a>
               <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.875rem", lineHeight: 1.7, marginBottom: "28px", maxWidth: "220px", fontFamily: "Kodchasan, sans-serif" }}>
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
-                <p style={{ color: "#D9909B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+                <p style={{ color: "#ECA9B1", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.12)", paddingBottom: "10px", gap: 8 }}>
                   <input
@@ -71,7 +67,7 @@ export default function Footer() {
                   />
                   <button
                     onClick={() => { if (email) setSubscribed(true); }}
-                    style={{ background: "none", border: "none", color: "#D9909B", cursor: "pointer", padding: "4px", display: "flex" }}
+                    style={{ background: "none", border: "none", color: "#ECA9B1", cursor: "pointer", padding: "4px", display: "flex" }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -85,7 +81,7 @@ export default function Footer() {
               <span style={colHead}>Pages</span>
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#D9909B"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#ECA9B1"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)"}
                 >{p.label}</a>
               ))}
@@ -115,7 +111,7 @@ export default function Footer() {
                   <motion.a
                     key={i} href="#"
                     style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none", display: "flex" }}
-                    whileHover={{ color: "#D9909B", scale: 1.15 } as any}
+                    whileHover={{ color: "#ECA9B1", scale: 1.15 } as any}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     {icon}

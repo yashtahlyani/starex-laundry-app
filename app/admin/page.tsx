@@ -112,16 +112,16 @@ export default async function AdminDashboardPage({
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
               <rect width="36" height="36" rx="9" fill="#1a2530" />
-              <line x1="9" y1="9" x2="27" y2="27" stroke="#A4243B" strokeWidth="5" strokeLinecap="round" />
-              <line x1="27" y1="9" x2="9" y2="27" stroke="#A4243B" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="3" fill="#1a2530" /><circle cx="18" cy="18" r="1.5" fill="#BE4459" />
+              <line x1="9" y1="9" x2="27" y2="27" stroke="#CE4257" strokeWidth="5" strokeLinecap="round" />
+              <line x1="27" y1="9" x2="9" y2="27" stroke="#CE4257" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="18" cy="18" r="3" fill="#1a2530" /><circle cx="18" cy="18" r="1.5" fill="#DE6E7A" />
             </svg>
             <div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#fff", lineHeight: 1 }}>StareX</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#A4243B", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#CE4257", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
             </div>
             {newOrders.length > 0 && (
-              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#A4243B", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#CE4257", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                 <Bell size={12} /> {newOrders.length} new
               </span>
             )}
@@ -145,11 +145,11 @@ export default async function AdminDashboardPage({
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12, marginBottom: 28 }} className="admin-kpis">
           {kpis.map(k => (
             <div key={k.label} style={{
-              background: k.accent ? "linear-gradient(135deg,#BE4459,#A4243B)" : "#fff",
+              background: k.accent ? "linear-gradient(135deg,#DE6E7A,#CE4257)" : "#fff",
               border: "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
             }}>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#1F1B1B", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#4A1522" : "#857C78", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#3F252C" : "#857C78", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
             </div>
           ))}
         </div>
@@ -241,17 +241,17 @@ export default async function AdminDashboardPage({
             ) : (
               <div className="space-y-3">
                 {contacts!.map((c: any) => (
-                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#A4243B" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
+                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#CE4257" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-                          {c.status === "new" && <span style={{ background: "#A4243B", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
-                          {c.status === "replied" && <span style={{ background: "rgba(164,36,59,0.12)", color: "#4A1522", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
+                          {c.status === "new" && <span style={{ background: "#CE4257", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
+                          {c.status === "replied" && <span style={{ background: "rgba(206,66,87,0.12)", color: "#3F252C", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
                           {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#6B6360" }}>{c.subject}</span>}
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#1F1B1B", marginBottom: 2 }}>{c.name}</p>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#857C78", marginBottom: 12 }}>
-                          <a href={`mailto:${c.email}`} style={{ color: "#7A1B2E" }}>{c.email}</a>
+                          <a href={`mailto:${c.email}`} style={{ color: "#A63446" }}>{c.email}</a>
                           {c.phone && ` · ${c.phone}`}
                         </p>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6B6360", lineHeight: 1.7 }}>{c.message}</p>
@@ -301,7 +301,7 @@ export default async function AdminDashboardPage({
                         {STATUS_LABELS[status] ?? status}
                       </span>
                       <div style={{ flex: 1, background: "#F4F4F5", borderRadius: 999, height: 8, overflow: "hidden" }}>
-                        <div style={{ height: 8, background: "#A4243B", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
+                        <div style={{ height: 8, background: "#CE4257", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
                       </div>
                       <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#1F1B1B", minWidth: 24, textAlign: "right" }}>{count as number}</span>
                     </div>

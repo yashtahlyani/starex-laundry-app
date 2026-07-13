@@ -101,7 +101,7 @@ export default function FAQ() {
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>FAQ</motion.span>
           <motion.h1
@@ -149,9 +149,9 @@ export default function FAQ() {
                   onClick={() => setActiveCategory(c.name)}
                   style={{
                     display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: 10,
-                    background: activeCategory === c.name ? "rgba(164,36,59,0.1)" : "none",
+                    background: activeCategory === c.name ? "rgba(206,66,87,0.1)" : "none",
                     border: "none", cursor: "pointer", marginBottom: 4,
-                    color: activeCategory === c.name ? "#4A1522" : "#6B6360",
+                    color: activeCategory === c.name ? "#3F252C" : "#6B6360",
                     fontFamily: "Poppins, sans-serif", fontWeight: activeCategory === c.name ? 600 : 400,
                     fontSize: "0.9rem",
                   }}
@@ -175,7 +175,7 @@ export default function FAQ() {
               {filtered.length === 0 ? (
                 <div style={{ padding: "48px 0", textAlign: "center" }}>
                   <p style={{ color: "#6B6360", fontFamily: "Kodchasan, sans-serif" }}>No results found. Try a different search term.</p>
-                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#4A1522", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#3F252C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                     Contact us <ArrowRight size={14} />
                   </a>
                 </div>

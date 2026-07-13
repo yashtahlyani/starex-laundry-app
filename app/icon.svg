@@ -2,8 +2,8 @@
   <rect width="36" height="36" rx="9" fill="#FFFFFF"/>
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#A4243B"/>
-      <stop offset="100%" stop-color="#7A1B2E"/>
+      <stop offset="0%" stop-color="#CE4257"/>
+      <stop offset="100%" stop-color="#A63446"/>
     </linearGradient>
   </defs>
   <polygon points="18,4 22.3,14.5 33.6,15 24.7,22.1 28,33 18,26.6 8,33 11.3,22.1 2.4,15 13.7,14.5" fill="url(#g)"/>

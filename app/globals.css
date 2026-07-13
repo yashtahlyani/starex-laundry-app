@@ -7,10 +7,10 @@
 @layer base {
   :root {
     /* ── StareX design tokens — premium garnet & warm white ── */
-    --brand:        #A4243B;  /* primary — CTAs, accents, sparingly */
-    --brand-dark:   #7A1B2E;  /* hover / pressed / accents on light */
-    --brand-soft:   #BE4459;  /* gradient light end */
-    --brand-rose:   #D9909B;  /* accent text/icons on dark surfaces */
+    --brand:        #CE4257;  /* primary — CTAs, accents, sparingly */
+    --brand-dark:   #A63446;  /* hover / pressed / accents on light */
+    --brand-soft:   #DE6E7A;  /* gradient light end */
+    --brand-rose:   #ECA9B1;  /* accent text/icons on dark surfaces */
     --bg:           #FFFFFF;
     --bg-warm:      #FDFBFA;  /* soft warm white page bg */
     --surface:      #F5F1EE;  /* warm ivory */
@@ -89,7 +89,7 @@
   /* ── White card (light) ── */
   .card {
     background: #FFFFFF;
-    border: 1px solid rgba(74,21,34,0.08);
+    border: 1px solid rgba(63,37,44,0.08);
     border-radius: 20px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
@@ -144,7 +144,7 @@
   .btn-primary:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(164,36,59,0.35);
+    box-shadow: 0 6px 24px rgba(206,66,87,0.35);
   }
 
   /* ── Ghost button on dark ── */
@@ -193,7 +193,7 @@
   .btn-white:hover {
     opacity: 0.88;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(164,36,59,0.35);
+    box-shadow: 0 6px 24px rgba(206,66,87,0.35);
   }
 
   /* ── Eyebrow label ── */
@@ -253,7 +253,7 @@
   .input-field:focus {
     outline: none;
     border-color: var(--brand-soft);
-    box-shadow: 0 0 0 3px rgba(190,68,89,0.18);
+    box-shadow: 0 0 0 3px rgba(222,110,122,0.18);
   }
 
   /* ── Badge ── */
@@ -290,7 +290,7 @@
   .btn-sky:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(164,36,59,0.35);
+    box-shadow: 0 6px 24px rgba(206,66,87,0.35);
   }
 
   /* ── btn-ghost-dark ── */

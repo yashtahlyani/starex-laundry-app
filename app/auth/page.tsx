@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
-import { Sparkles, Mail, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { BUSINESS_NAME } from "@/lib/pricing";
+import Logo from "@/components/Logo";
 
 type Mode = "signin" | "signup" | "reset" | "check-email" | "new-password";
 
@@ -151,17 +152,14 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex pt-16 bg-[#1F1B1B]">
       {/* Left brand panel */}
-      <div className="hidden lg:flex lg:w-5/12 bg-[#4A1522] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
+      <div className="hidden lg:flex lg:w-5/12 bg-[#3F252C] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-mint/10 blur-3xl" />
           <div className="absolute bottom-20 -left-10 h-60 w-60 rounded-full bg-mint/5 blur-3xl" />
         </div>
 
-        <a href="/" className="relative flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl bg-mint flex items-center justify-center">
-            <Sparkles size={16} className="text-[#FFFFFF]" />
-          </div>
-          <span className="text-white text-xl font-bold font-heading">{BUSINESS_NAME}</span>
+        <a href="/" className="relative flex items-center">
+          <Logo color="#FFFFFF" fontSize="1.35rem" />
         </a>
 
         <div className="relative space-y-8">
@@ -199,11 +197,8 @@ export default function AuthPage() {
         <div className="w-full max-w-md">
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">
-              <a href="/" className="lg:hidden flex items-center gap-2 mb-6">
-                <div className="h-8 w-8 rounded-lg bg-mint flex items-center justify-center">
-                  <Sparkles size={14} className="text-[#FFFFFF]" />
-                </div>
-                <span className="font-bold text-mint font-heading">{BUSINESS_NAME}</span>
+              <a href="/" className="lg:hidden flex items-center mb-6">
+                <Logo color="#CE4257" fontSize="1.2rem" />
               </a>
               <h1 className="text-2xl font-bold text-[#1F1B1B] font-heading">
                 {mode === "signin" && "Welcome back"}

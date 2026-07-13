@@ -37,7 +37,7 @@ export default function About() {
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }} className="about-hero">
           <div>
             <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
@@ -62,8 +62,8 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2, ease }}
             style={{ background: "#332C2C", borderRadius: 20, padding: "48px", position: "relative", overflow: "hidden" }}
           >
-            <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, background: "rgba(164,36,59,0.08)", borderRadius: "50%", filter: "blur(40px)", pointerEvents: "none" }} />
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#A4243B", marginBottom: 8 }}>10,000+</p>
+            <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, background: "rgba(206,66,87,0.08)", borderRadius: "50%", filter: "blur(40px)", pointerEvents: "none" }} />
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#CE4257", marginBottom: 8 }}>10,000+</p>
             <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "1rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}>customers who stopped doing laundry</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               {[["4.9★", "avg rating"], ["98%", "on-time"], ["24hr", "turnaround"], ["2019", "founded"]].map(([n, l]) => (
@@ -81,7 +81,7 @@ export default function About() {
       <section style={{ padding: "96px 0", background: "#FDFBFA" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
-            <span className="eyebrow" style={{ color: "#4A1522" }}>Our Values</span>
+            <span className="eyebrow" style={{ color: "#3F252C" }}>Our Values</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#1F1B1B" }}>
               What we stand <em className="display-accent" style={{ display: "inline" }}>for.</em>
             </h2>
@@ -116,7 +116,7 @@ export default function About() {
           <div ref={timelineRef} style={{ position: "relative", paddingLeft: 40 }}>
             <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#332C2C" }}>
               <motion.div
-                style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #BE4459, #A4243B)" }}
+                style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #DE6E7A, #CE4257)" }}
                 animate={{ height: inView ? "100%" : "0%" }}
                 transition={{ duration: 1.5, ease }}
               />
@@ -124,8 +124,8 @@ export default function About() {
             {milestones.map((m, i) => (
               <AnimatedContent key={m.year} delay={i * 0.12} style={{ marginBottom: i < milestones.length - 1 ? 40 : 0 }}>
                 <div style={{ position: "relative", paddingLeft: 24 }}>
-                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#A4243B", border: "2px solid #1F1B1B" }} />
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#A4243B", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
+                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#CE4257", border: "2px solid #1F1B1B" }} />
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#CE4257", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#ffffff", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
                   <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
                 </div>

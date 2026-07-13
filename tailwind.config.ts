@@ -17,13 +17,13 @@ const config: Config = {
           border:  "rgba(255,255,255,0.08)",
         },
         mint: {
-          light:   "#BE4459",
-          DEFAULT: "#A4243B",
-          dark:    "#7A1B2E",
-          rose:    "#D9909B", // accent on dark surfaces
+          light:   "#DE6E7A",
+          DEFAULT: "#CE4257",
+          dark:    "#A63446",
+          rose:    "#ECA9B1", // accent on dark surfaces
         },
         teal: {
-          deep:  "#4A1522",
+          deep:  "#3F252C",
           mid:   "#C08691",
         },
         ink: {
@@ -33,17 +33,17 @@ const config: Config = {
         },
         // keep "brand" alias pointing to mint so existing code doesn't break
         brand: {
-          DEFAULT: "#A4243B",
-          light:   "#BE4459",
-          dark:    "#7A1B2E",
+          DEFAULT: "#CE4257",
+          light:   "#DE6E7A",
+          dark:    "#A63446",
           50:      "#FBF3F2",
           100:     "#F7E9E8",
           900:     "#1F1B1B",
         },
       },
       backgroundImage: {
-        "hero-gradient": "linear-gradient(135deg, #3A1520 0%, #4A1522 50%, #1F1B1B 100%)",
-        "mint-gradient": "linear-gradient(180deg, #BE4459 0%, #A4243B 100%)",
+        "hero-gradient": "linear-gradient(135deg, #37222A 0%, #3F252C 50%, #1F1B1B 100%)",
+        "mint-gradient": "linear-gradient(180deg, #DE6E7A 0%, #CE4257 100%)",
         "dark-card":     "linear-gradient(145deg, #2A2424 0%, #1F1B1B 100%)",
       },
       borderRadius: {
@@ -54,8 +54,8 @@ const config: Config = {
       boxShadow: {
         card:        "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)",
         "card-hover":"0 8px 32px rgba(0,0,0,0.08)",
-        mint:        "0 6px 24px rgba(164,36,59,0.30)",
-        glow:        "0 0 40px rgba(164,36,59,0.20)",
+        mint:        "0 6px 24px rgba(206,66,87,0.30)",
+        glow:        "0 0 40px rgba(206,66,87,0.20)",
       },
       keyframes: {
         "fade-up": {

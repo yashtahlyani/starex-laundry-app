@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings, ChevronLeft } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
+import Logo from "@/components/Logo";
 
 const ALWAYS_DARK = ["/book", "/dashboard", "/auth", "/order", "/admin"];
 
@@ -116,26 +117,10 @@ export default function Navbar() {
                 </motion.button>
               )}
             </AnimatePresence>
-            <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 9 }}>
-              <motion.div whileHover={{ scale: 1.06, rotate: 5 }} transition={{ type: "spring", stiffness: 320, damping: 20 }} style={{ width: 36, height: 36, flexShrink: 0 }}>
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="lgo" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#BE4459"/>
-                      <stop offset="100%" stopColor="#7A1B2E"/>
-                    </linearGradient>
-                    <filter id="glow">
-                      <feGaussianBlur stdDeviation="1.2" result="blur"/>
-                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                  </defs>
-                  <rect width="36" height="36" rx="10" fill="#1F1B1B"/>
-                  <polygon points="18,5 21.9,14.6 32.3,15 24.2,21.5 27.2,31.4 18,25.6 8.8,31.4 11.8,21.5 3.7,15 14.1,14.6" fill="url(#lgo)" filter="url(#glow)"/>
-                </svg>
+            <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+              <motion.div whileHover={{ scale: 1.04 }} transition={{ type: "spring", stiffness: 320, damping: 20 }} style={{ display: "flex", alignItems: "center" }}>
+                <Logo color="#FFFFFF" fontSize="1.3rem" />
               </motion.div>
-              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem", color: "#ffffff", letterSpacing: "-0.02em" }}>
-                Stare<span style={{ color: "#D9909B" }}>X</span>
-              </span>
             </a>
           </div>
 
@@ -167,7 +152,7 @@ export default function Navbar() {
           <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
             {isOwner ? (
               <>
-                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#D9909B", textDecoration: "none", border: "1px solid rgba(217,144,155,0.35)", borderRadius: 8 }}>
+                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#ECA9B1", textDecoration: "none", border: "1px solid rgba(236,169,177,0.35)", borderRadius: 8 }}>
                   <Settings size={13} /> Console
                 </a>
                 <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "rgba(255,255,255,0.5)", background: "none", border: "none", cursor: "pointer" }}>
@@ -177,7 +162,7 @@ export default function Navbar() {
             ) : user ? (
               <div ref={acctRef} style={{ position: "relative" }}>
                 <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#fff", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 999, cursor: "pointer" }}>
-                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#BE4459,#A4243B)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#DE6E7A,#CE4257)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                     {initials}
                   </span>
                   {firstName}
@@ -194,7 +179,7 @@ export default function Navbar() {
                           onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"}
                           onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
                         >
-                          <item.icon size={15} color="#D9909B" /> {item.label}
+                          <item.icon size={15} color="#ECA9B1" /> {item.label}
                         </a>
                       ))}
                       <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "4px 0" }} />

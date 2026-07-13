@@ -135,11 +135,11 @@ export default function BookPage() {
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
             style={{ width: 80, height: 80, background: "#F5F1EE", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
-            <CheckCircle size={40} color="#7A1B2E" />
+            <CheckCircle size={40} color="#A63446" />
           </motion.div>
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#1F1B1B", marginBottom: 12, letterSpacing: "-0.025em" }}>Pickup confirmed!</h2>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F5F1EE", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
-            <span style={{ color: "#4A1522", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
+            <span style={{ color: "#3F252C", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
           </div>
           <p style={{ color: "#6B6360", fontSize: "1.0625rem", maxWidth: "44ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
             We&apos;ll send a confirmation to <strong style={{ color: "#1F1B1B" }}>{form.email}</strong>. See you on {form.date}!
@@ -164,12 +164,12 @@ export default function BookPage() {
         <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 24px 0" }}>
           <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
             {stepLabels.map((s, i) => (
-              <div key={s} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= step ? "#A4243B" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+              <div key={s} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= step ? "#CE4257" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
             ))}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: 20 }}>
             {stepLabels.map((s, i) => (
-              <p key={s} style={{ fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif", fontWeight: i === step ? 700 : 400, color: i <= step ? "#A4243B" : "rgba(255,255,255,0.3)" }}>{s}</p>
+              <p key={s} style={{ fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif", fontWeight: i === step ? 700 : 400, color: i <= step ? "#CE4257" : "rgba(255,255,255,0.3)" }}>{s}</p>
             ))}
           </div>
         </div>
@@ -193,13 +193,13 @@ export default function BookPage() {
                     const selected = form.service === s.id;
                     return (
                       <button key={s.id} onClick={() => setForm(p => ({ ...p, service: s.id }))} style={{
-                        padding: 20, border: `2px solid ${selected ? "#A4243B" : "transparent"}`,
+                        padding: 20, border: `2px solid ${selected ? "#CE4257" : "transparent"}`,
                         borderRadius: 16, background: selected ? s.color : "#ffffff",
                         cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
                         boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
                       }}>
                         <div style={{ width: 36, height: 36, background: selected ? "rgba(0,0,0,0.1)" : "#F4F4F5", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                          <Icon size={17} color={selected ? "#4A1522" : "#6B6360"} />
+                          <Icon size={17} color={selected ? "#3F252C" : "#6B6360"} />
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#1F1B1B", marginBottom: 2 }}>{s.title}</p>
                         <p style={{ color: "#857C78", fontSize: "0.8125rem", marginBottom: 6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
@@ -230,7 +230,7 @@ export default function BookPage() {
                   <input type="date" value={form.date} min={new Date().toISOString().split("T")[0]}
                     onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
                     style={inputStyle}
-                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#A4243B"}
+                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#CE4257"}
                     onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"}
                   />
                 </div>
@@ -240,9 +240,9 @@ export default function BookPage() {
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
                     {timeSlots.map(t => (
                       <button key={t} onClick={() => setForm(p => ({ ...p, time: t }))} style={{
-                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#A4243B" : "#E4E4E7"}`,
+                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#CE4257" : "#E4E4E7"}`,
                         borderRadius: 10, background: form.time === t ? "#F5F1EE" : "#ffffff",
-                        color: form.time === t ? "#4A1522" : "#6B6360",
+                        color: form.time === t ? "#3F252C" : "#6B6360",
                         fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === t ? 700 : 500, fontSize: "0.8125rem",
                         cursor: "pointer", transition: "all 0.15s",
                       }}>{t}</button>
@@ -280,7 +280,7 @@ export default function BookPage() {
                       <input type={type} value={form[key]} onChange={e => { setForm(p => ({ ...p, [key]: e.target.value })); setErrors(p => ({ ...p, [key]: "" })); }}
                         placeholder={placeholder}
                         style={{ ...inputStyle, borderColor: errors[key] ? "#F87171" : "#E4E4E7", boxShadow: errors[key] ? "0 0 0 3px rgba(248,113,113,0.12)" : "none" }}
-                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#A4243B"; }}
+                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#CE4257"; }}
                         onBlur={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"; }}
                       />
                       {errors[key] && <p style={{ color: "#EF4444", fontSize: "0.8rem", marginTop: 5, fontFamily: "Kodchasan, sans-serif" }}>{errors[key]}</p>}
@@ -291,7 +291,7 @@ export default function BookPage() {
                     <textarea rows={3} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
                       placeholder="Buzzer code, fragile items, special requests…"
                       style={{ ...inputStyle, resize: "vertical" }}
-                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#A4243B"}
+                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#CE4257"}
                       onBlur={e => (e.target as HTMLTextAreaElement).style.borderColor = "#E4E4E7"}
                     />
                   </div>
@@ -375,13 +375,13 @@ export default function BookPage() {
                 <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
-                    <span style={{ color: "#A4243B", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
+                    <span style={{ color: "#CE4257", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
                   </div>
                   <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in</p>
                 </div>
               </div>
               <div style={{ marginTop: 20, background: "#F5F1EE", borderRadius: 10, padding: "11px 14px" }}>
-                <p style={{ color: "#4A1522", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
+                <p style={{ color: "#3F252C", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
               </div>
             </div>
           </div>

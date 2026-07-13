@@ -69,7 +69,7 @@ export default function HowItWorks() {
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>How It Works</motion.span>
           <motion.h1
@@ -93,7 +93,7 @@ export default function HowItWorks() {
           <div ref={timelineRef} style={{ position: "relative" }}>
             {/* vertical line */}
             <div style={{ position: "absolute", left: 32, top: 0, bottom: 0, width: 2, background: "#E5E7EB" }} className="timeline-line">
-              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #BE4459, #A4243B)", height: lineHeight }} />
+              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #DE6E7A, #CE4257)", height: lineHeight }} />
             </div>
 
             {steps.map((step, i) => (

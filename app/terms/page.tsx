@@ -61,9 +61,9 @@ export default function TermsPage() {
     <div style={{ background: "#FDFBFA", minHeight: "100vh" }}>
       {/* Hero */}
       <div style={{ background: "#1F1B1B", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
-          <span style={{ display: "inline-block", background: "rgba(164,36,59,0.12)", border: "1px solid rgba(164,36,59,0.25)", color: "#A4243B", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
+          <span style={{ display: "inline-block", background: "rgba(206,66,87,0.12)", border: "1px solid rgba(206,66,87,0.25)", color: "#CE4257", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
             Legal
           </span>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.8rem)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16 }}>
@@ -95,9 +95,9 @@ export default function TermsPage() {
         <div style={{ borderTop: "1px solid #E4E4E7", paddingTop: 32, marginTop: 16 }}>
           <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#857C78", fontSize: "0.875rem" }}>
             See also our{" "}
-            <a href="/privacy" style={{ color: "#7A1B2E", textDecoration: "underline" }}>Privacy Policy</a>.
+            <a href="/privacy" style={{ color: "#A63446", textDecoration: "underline" }}>Privacy Policy</a>.
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#7A1B2E", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#A63446", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
           </p>
         </div>
       </div>
