@@ -165,7 +165,7 @@ export default function AuthPage() {
         <div className="relative space-y-8">
           <div>
             <h2 className="text-4xl font-bold text-white leading-tight mb-4 font-heading">
-              Your laundry,<br /><span className="display-accent">handled.</span>
+              Your laundry,<br /><span className="display-accent" style={{ color: "var(--brand-rose)" }}>handled.</span>
             </h2>
             <p className="text-white/50 leading-relaxed font-body">
               Sign in to track your orders, view history, and manage your account — all in one place.

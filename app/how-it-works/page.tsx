@@ -76,7 +76,7 @@ export default function HowItWorks() {
             initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08, ease }}
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
           >
-            Laundry made <em className="display-accent" style={{ display: "inline" }}>effortless.</em>
+            Laundry made <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>effortless.</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}

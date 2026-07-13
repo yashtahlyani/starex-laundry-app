@@ -100,19 +100,12 @@ export default function Home() {
   return (
     <div>
 
-      {/* ══ HERO ══ */}
+      {/* ══ HERO — flat white/cream editorial, red used as bold accent only ══ */}
       <section style={{
-        minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+        minHeight: "100vh", display: "flex", alignItems: "center",
         position: "relative", overflow: "hidden", paddingTop: "80px",
-        background: "radial-gradient(208% 160% at 50% 0px, #241619 0%, #2E161E 19%, #431E2C 41%, #C97F92 58%, #FBF8F1 72%)",
+        background: "#FFFFFF",
       }}>
-
-        {/* Floating orbs */}
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-          <div style={{ position: "absolute", top: "10%", left: "-10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(203,62,94,0.10) 0%, transparent 60%)", willChange: "transform", animation: "float 8s ease-in-out infinite" }} />
-          <div style={{ position: "absolute", bottom: "15%", right: "-8%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(218,97,120,0.12) 0%, transparent 60%)", willChange: "transform", animation: "float 11s ease-in-out infinite 2s" }} />
-          <div style={{ position: "absolute", top: "55%", left: "60%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(203,62,94,0.07) 0%, transparent 60%)", willChange: "transform", animation: "float 9s ease-in-out infinite 4s" }} />
-        </div>
 
         {/* Promo banner */}
         <AnimatePresence>
@@ -124,19 +117,17 @@ export default function Home() {
               transition={{ delay: 1.2, duration: 0.4, ease }}
               style={{
                 position: "absolute", top: 72, left: 0, right: 0, zIndex: 10,
-                background: "rgba(203,62,94,0.10)",
-                backdropFilter: "blur(8px)",
-                borderBottom: "1px solid rgba(203,62,94,0.18)",
+                background: "var(--brand)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 padding: "10px 24px", gap: 16,
               }}
             >
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "rgba(255,255,255,0.85)", margin: 0 }}>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "#FFFFFF", margin: 0 }}>
                 🍁 Book your first pickup today — free pickup &amp; delivery on 15 lbs+.
               </p>
               <a href="/book" style={{
-                fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8125rem",
-                color: "#FFFFFF", background: "linear-gradient(180deg,#DA6178,#CB3E5E)",
+                fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8125rem",
+                color: "var(--brand)", background: "#FFFFFF",
                 padding: "4px 14px", borderRadius: 999, textDecoration: "none", whiteSpace: "nowrap",
               }}>
                 Book free →
@@ -144,7 +135,7 @@ export default function Home() {
               <button
                 onClick={() => setPromoDismissed(true)}
                 aria-label="Dismiss"
-                style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.45)", display: "flex", padding: 4, marginLeft: 4 }}
+                style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", display: "flex", padding: 4, marginLeft: 4 }}
               >
                 <X size={14} />
               </button>
@@ -152,66 +143,97 @@ export default function Home() {
           )}
         </AnimatePresence>
 
-        <div style={{ maxWidth: "820px", margin: "0 auto", padding: "80px 24px", textAlign: "center", position: "relative", zIndex: 1 }}>
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}
-            style={{ display: "flex", justifyContent: "center", marginBottom: "36px" }}>
-            <span className="hero-badge">
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#EBA3B4", flexShrink: 0 }} />
-              Canada&apos;s Premium Laundry Service
-            </span>
-          </motion.div>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "90px 24px 60px", position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }} className="hero-grid">
 
-          <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "clamp(2.6rem,5.5vw,4.5rem)", letterSpacing: "-0.02em", lineHeight: 1.15, color: "#ffffff", marginBottom: "28px" }}>
-            {["Fresh laundry,", "delivered to"].map((line, i) => (
-              <motion.span key={i} initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 + i * 0.1, ease }} style={{ display: "block" }}>
-                {line}
-              </motion.span>
-            ))}
-            <motion.span initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.3, ease }}
-              className="display-accent" style={{ display: "block", fontWeight: 600, fontSize: "1.08em" }}>
-              your door.
-            </motion.span>
-          </h1>
+          {/* Left — bold editorial copy */}
+          <div>
+            <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease }}
+              style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
+              <div className="rule-mark" aria-hidden="true"><span /><span /><span /></div>
+              <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#241619" }}>
+                Canada&apos;s Premium Laundry Service
+              </span>
+            </motion.div>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }}
-            style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.0625rem", lineHeight: 1.75, maxWidth: "46ch", margin: "0 auto 40px", fontFamily: "Kodchasan, sans-serif" }}>
-            Schedule a pickup in 60 seconds. We wash, fold, and deliver — you relax.
-            Just $2.29/lb with free pickup &amp; delivery over 15 lbs.
-          </motion.p>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55, ease }}
-            style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="/book" className="btn-sky" style={{ fontSize: "1rem", padding: "14px 34px" }}>
-              Schedule Free Pickup <ArrowRight size={16} />
-            </a>
-            <a href="/how-it-works" className="btn-ghost-dark">
-              See How It Works
-            </a>
-          </motion.div>
-
-          {/* Social proof */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.75, ease }}
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "14px", marginTop: "48px" }}>
-            <div style={{ display: "flex" }}>
-              {[...Array(5)].map((_, i) => (
-                <div key={i} style={{
-                  width: 30, height: 30, borderRadius: "50%", marginLeft: i === 0 ? 0 : -8,
-                  background: ["#D9A9B0","#DDB58C","#E4C4C8","#C793A2","#E3CFA3"][i],
-                  border: "2px solid rgba(36,22,26,0.6)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.65rem", fontWeight: 700, color: "#241619",
-                  fontFamily: "Kodchasan, sans-serif",
-                }}>
-                  {["SM","JK","PR","DL","AK"][i]}
-                </div>
+            <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2.75rem,5.5vw,4.75rem)", letterSpacing: "-0.03em", lineHeight: 1.02, color: "#241619", marginBottom: "28px" }}>
+              {["Fresh laundry,", "delivered to"].map((line, i) => (
+                <motion.span key={i} initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 + i * 0.1, ease }} style={{ display: "block" }}>
+                  {line}
+                </motion.span>
               ))}
-            </div>
-            <div style={{ textAlign: "left" }}>
-              <div style={{ display: "flex", gap: 2 }}>
-                {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#CB3E5E" color="#CB3E5E" />)}
+              <motion.span initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.3, ease }}
+                style={{ display: "block", color: "var(--brand)" }}>
+                your door.
+              </motion.span>
+            </h1>
+
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }}
+              style={{ color: "#6E5F5C", fontSize: "1.0625rem", lineHeight: 1.75, maxWidth: "42ch", marginBottom: 40, fontFamily: "Kodchasan, sans-serif" }}>
+              Schedule a pickup in 60 seconds. We wash, fold, and deliver — you relax.
+              Just $2.29/lb with free pickup &amp; delivery over 15 lbs.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55, ease }}
+              style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
+              <a href="/book" className="btn-primary" style={{ fontSize: "1rem", padding: "14px 34px" }}>
+                Schedule Free Pickup <ArrowRight size={16} />
+              </a>
+              <a href="/how-it-works" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem",
+                color: "#241619", padding: "13px 28px", borderRadius: 120,
+                border: "1.5px solid rgba(36,22,26,0.16)", textDecoration: "none",
+              }}>
+                See How It Works
+              </a>
+            </motion.div>
+
+            {/* Social proof */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.75, ease }}
+              style={{ display: "flex", alignItems: "center", gap: "14px", marginTop: "48px" }}>
+              <div style={{ display: "flex" }}>
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} style={{
+                    width: 30, height: 30, borderRadius: "50%", marginLeft: i === 0 ? 0 : -8,
+                    background: ["#D9A9B0","#DDB58C","#E4C4C8","#C793A2","#E3CFA3"][i],
+                    border: "2px solid #FFFFFF",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "0.65rem", fontWeight: 700, color: "#241619",
+                    fontFamily: "Kodchasan, sans-serif",
+                  }}>
+                    {["SM","JK","PR","DL","AK"][i]}
+                  </div>
+                ))}
               </div>
-              <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.8rem", marginTop: 2, fontFamily: "Kodchasan, sans-serif" }}>
-                Loved by <strong style={{ color: "#FFFFFF" }}>10,000+</strong> Canadians
+              <div style={{ textAlign: "left" }}>
+                <div style={{ display: "flex", gap: 2 }}>
+                  {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="var(--brand)" color="var(--brand)" />)}
+                </div>
+                <p style={{ color: "#6E5F5C", fontSize: "0.8rem", marginTop: 2, fontFamily: "Kodchasan, sans-serif" }}>
+                  Loved by <strong style={{ color: "#241619" }}>10,000+</strong> Canadians
+                </p>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right — bold flat-red graphic panel, echoes the reference's solid color block */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
+            className="hero-panel"
+            style={{
+              position: "relative", borderRadius: 28, overflow: "hidden", minHeight: 460,
+              background: "var(--brand)", display: "flex", alignItems: "flex-end", padding: 40,
+            }}
+          >
+            <div aria-hidden="true" style={{ position: "absolute", top: -40, right: -40, width: 240, height: 240, opacity: 0.14 }}>
+              <svg viewBox="0 0 24 24" width="100%" height="100%"><polygon points="12,1 14.6,8.6 22.8,8.9 16.3,13.8 18.5,21.6 12,17 5.5,21.6 7.7,13.8 1.2,8.9 9.4,8.6" fill="#FFFFFF" /></svg>
+            </div>
+            <div style={{ position: "relative" }}>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 10 }}>
+                24–48h Turnaround
+              </p>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", letterSpacing: "-0.02em", color: "#FFFFFF", lineHeight: 1.1, maxWidth: "16ch" }}>
+                Wash, fold &amp; deliver — done right.
               </p>
             </div>
           </motion.div>
@@ -413,7 +435,7 @@ export default function Home() {
             <span className="eyebrow">Simple Pricing</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#FAFAFA", marginBottom: "12px" }}>
               Pricing that{" "}
-              <span className="display-accent" style={{ fontWeight: 600 }}>works for you.</span>
+              <span className="display-accent" style={{ fontWeight: 600, color: "var(--brand-rose)" }}>works for you.</span>
             </h2>
             <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "1.0625rem", maxWidth: "50ch", margin: "0 auto", fontFamily: "Kodchasan, sans-serif" }}>
               Pay per pound, or save with the monthly plan. No hidden fees, ever.
@@ -543,30 +565,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ CTA — dark radial ══ */}
+      {/* ══ CTA — solid flat brand-red block, bold & graphic ══ */}
       <section style={{
         padding: "120px 0", position: "relative", overflow: "hidden",
-        background: "radial-gradient(150% 160% at 50% 100%, #241619 0%, #431E2C 55%, #C97F92 85%, #FBF8F1 100%)",
+        background: "var(--brand)",
       }}>
-        <div style={{ position: "absolute", bottom: "-30px", left: "50%", transform: "translateX(-50%)", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "160px", color: "rgba(253,251,250,0.06)", letterSpacing: "-8px", whiteSpace: "nowrap", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>
+        <div aria-hidden="true" style={{ position: "absolute", bottom: "-30px", left: "50%", transform: "translateX(-50%)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "160px", color: "rgba(255,255,255,0.08)", letterSpacing: "-8px", whiteSpace: "nowrap", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>
           StareX
         </div>
         <AnimatedContent style={{ maxWidth: 580, margin: "0 auto", textAlign: "center", padding: "0 24px", position: "relative" }}>
-          <span className="eyebrow">Get Started Today</span>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: "16px" }}>
-            Ready for{" "}
-            <span className="display-accent" style={{ fontWeight: 600 }}>fresh clothes?</span>
+          <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", display: "block", marginBottom: 14 }}>
+            Get Started Today
+          </span>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: "16px" }}>
+            Ready for fresh clothes?
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "1.0625rem", marginBottom: "40px", fontFamily: "Kodchasan, sans-serif" }}>
+          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.0625rem", marginBottom: "40px", fontFamily: "Kodchasan, sans-serif" }}>
             Book your first pickup today. Free pickup &amp; delivery on 15 lbs or more.
           </p>
-          <a href="/book" className="btn-sky" style={{ fontSize: "1rem", padding: "15px 36px" }}>
+          <a href="/book" style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem",
+            color: "var(--brand)", background: "#FFFFFF", padding: "15px 36px",
+            borderRadius: 120, textDecoration: "none",
+          }}>
             Schedule Free Pickup <ArrowRight size={16} />
           </a>
         </AnimatedContent>
       </section>
 
       <style>{`
+        @media (max-width: 900px) {
+          .hero-grid   { grid-template-columns: 1fr !important; }
+          .hero-panel  { display: none !important; }
+        }
         @media (max-width: 768px) {
           .stats-grid           { grid-template-columns: repeat(2,1fr) !important; }
           .services-grid        { grid-template-columns: 1fr !important; }

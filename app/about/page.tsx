@@ -47,7 +47,7 @@ export default function About() {
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
             >
               Built on{" "}
-              <em className="display-accent" style={{ display: "inline" }}>trust.</em>
+              <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>trust.</em>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
@@ -109,7 +109,7 @@ export default function About() {
           <AnimatedContent style={{ marginBottom: 56 }}>
             <span className="eyebrow">Our Story</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#ffffff" }}>
-              Five years of <em className="display-accent" style={{ display: "inline" }}>growth.</em>
+              Five years of <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>growth.</em>
             </h2>
           </AnimatedContent>
 

@@ -67,7 +67,7 @@ export default function PricingPage() {
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
           >
             Pay for what you{" "}
-            <em className="display-accent" style={{ display: "inline" }}>need.</em>
+            <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>need.</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
@@ -130,7 +130,7 @@ export default function PricingPage() {
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
             <span className="eyebrow">Choose Your Plan</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 16 }}>
-              Two ways to <em className="display-accent" style={{ display: "inline" }}>StareX.</em>
+              Two ways to <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>StareX.</em>
             </h2>
             <p style={{ color: "rgba(255,255,255,0.45)", fontFamily: "Kodchasan, sans-serif" }}>
               Pay by the pound whenever you need us, or lock in the monthly plan and never think about laundry again.
@@ -268,7 +268,7 @@ export default function PricingPage() {
                 <div>
                   <span className="eyebrow">New Service</span>
                   <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 12 }}>
-                    Car & sofa <em className="display-accent" style={{ display: "inline" }}>detailing.</em>
+                    Car & sofa <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>detailing.</em>
                   </h2>
                   <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>
                     Interior detailing, dry cleaning and shampoo for your vehicle and upholstery —

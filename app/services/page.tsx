@@ -40,7 +40,7 @@ export default function ServicesPage() {
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
           >
             Every fabric,{" "}
-            <em className="display-accent" style={{ display: "inline" }}>every need.</em>
+            <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>every need.</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
@@ -92,7 +92,7 @@ export default function ServicesPage() {
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>
               Not sure what you{" "}
-              <em className="display-accent" style={{ display: "inline" }}>need?</em>
+              <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>need?</em>
             </h2>
             <p style={{ color: "rgba(255,255,255,0.5)", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>
               Book a pickup and we&apos;ll assess your items at collection. No commitment required.

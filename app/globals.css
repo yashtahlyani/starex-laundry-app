@@ -67,24 +67,37 @@
 
 @layer components {
 
-  /* ── Gradient text — garnet ── */
+  /* ── Flat brand-red text — bold, graphic, no soft gradient wash.
+     Default is the punchy flat brand red for light backgrounds (most
+     section headings); usages inside dark cocoa hero/CTA bands set
+     color: var(--brand-rose) inline for legibility instead. ── */
   .gradient-text, .text-gradient {
-    background: linear-gradient(41deg, var(--brand-rose) 0%, var(--brand-soft) 85%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--brand);
   }
 
-  /* ── Italic display accent (Spentro signature) ── */
+  /* ── Italic display accent ── */
   .display-accent {
     font-family: 'Poppins', sans-serif;
     font-style: italic;
-    font-weight: 600;
-    background: linear-gradient(41deg, var(--brand-rose) 0%, var(--brand-soft) 85%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-weight: 700;
+    color: var(--brand);
   }
+
+  /* ── Editorial rule mark — three stacked bars, echoes the STAREX star silhouette ── */
+  .rule-mark {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 34px;
+  }
+  .rule-mark span {
+    display: block;
+    height: 3px;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+  .rule-mark span:nth-child(2) { width: 70%; }
+  .rule-mark span:nth-child(3) { width: 40%; }
 
   /* ── White card (light) ── */
   .card {
@@ -122,13 +135,13 @@
     border: 1px solid rgba(255,255,255,0.10);
   }
 
-  /* ── Primary button — garnet gradient pill ── */
+  /* ── Primary button — flat brand red, bold & graphic ── */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
+    background: var(--brand);
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -137,12 +150,12 @@
     border-radius: 120px;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
   }
   .btn-primary:hover {
-    opacity: 0.9;
+    background: var(--brand-dark);
     transform: translateY(-1px);
     box-shadow: 0 6px 24px rgba(203,62,94,0.35);
   }
@@ -177,7 +190,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
+    background: var(--brand);
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -186,12 +199,12 @@
     border-radius: 120px;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
   }
   .btn-white:hover {
-    opacity: 0.88;
+    background: var(--brand-dark);
     transform: translateY(-1px);
     box-shadow: 0 6px 24px rgba(203,62,94,0.35);
   }
@@ -274,7 +287,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
+    background: var(--brand);
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -283,12 +296,12 @@
     border-radius: 120px;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
   }
   .btn-sky:hover {
-    opacity: 0.9;
+    background: var(--brand-dark);
     transform: translateY(-1px);
     box-shadow: 0 6px 24px rgba(203,62,94,0.35);
   }

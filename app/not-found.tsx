@@ -26,7 +26,7 @@ export default function NotFound() {
 
         <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2rem,5vw,3.5rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}>
           This page got{" "}
-          <em className="display-accent" style={{ display: "inline" }}>lost</em>{" "}
+          <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>lost</em>{" "}
           in the wash.
         </h1>
 
