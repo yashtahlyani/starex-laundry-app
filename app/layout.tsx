@@ -22,11 +22,13 @@ export const metadata: Metadata = {
     description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Serving Brampton & Mississauga with 24–48h turnaround.",
     url: PROD_URL,
     locale: "en_CA",
+    images: [{ url: "/images/starex-hero-banner.png", width: 1717, height: 916, alt: BUSINESS_NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
     description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Serving Brampton & Mississauga.",
+    images: ["/images/starex-hero-banner.png"],
   },
   robots: { index: true, follow: true },
   alternates: { canonical: PROD_URL },

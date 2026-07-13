@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, CheckCircle, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, CheckCircle, ArrowRight, MessageCircle } from "lucide-react";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -154,6 +154,25 @@ export default function Contact() {
 
           {/* Info cards */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <AnimatedContent>
+              <a
+                href="https://wa.me/14376077251"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex", alignItems: "center", gap: 12, background: "#161616", borderRadius: 16,
+                  padding: "20px 24px", textDecoration: "none",
+                }}
+              >
+                <div style={{ width: 40, height: 40, background: "#25D366", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <MessageCircle size={19} color="#161616" />
+                </div>
+                <div>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#ffffff" }}>Chat on WhatsApp</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "rgba(255,255,255,0.6)" }}>Fastest way to reach us</p>
+                </div>
+              </a>
+            </AnimatedContent>
             {info.map((item, i) => (
               <AnimatedContent key={item.title} delay={i * 0.07}>
                 <div style={{ background: item.color, borderRadius: 16, padding: "24px" }}>
@@ -167,6 +186,34 @@ export default function Contact() {
               </AnimatedContent>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Service area */}
+      <section style={{ padding: "0 0 96px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent>
+            <p className="eyebrow" style={{ color: "#8F2740", marginBottom: 12, textAlign: "center" }}>Where We Operate</p>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2rem)", color: "#161616", marginBottom: 28, letterSpacing: "-0.022em", textAlign: "center" }}>
+              Serving Brampton &amp; Mississauga
+            </h2>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Brampton%2C+Mississauga%2C+Ontario%2C+Canada"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                borderRadius: 20, padding: "48px 24px", textDecoration: "none",
+                background: "#F2F2F2", boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+              }}
+            >
+              <MapPin size={20} color="#8F2740" />
+              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616" }}>
+                View our service area on Google Maps
+              </span>
+              <ArrowRight size={16} color="#8F2740" />
+            </a>
+          </AnimatedContent>
         </div>
       </section>
 

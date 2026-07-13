@@ -94,11 +94,30 @@ const trust = [
   { Icon: Clock,  title: "Always On Time", desc: "98% of deliveries arrive within the promised window." },
 ];
 
+const LOCAL_BUSINESS_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "LaundryService",
+  name: "StareX",
+  description: "Laundry pickup & delivery, dry cleaning, ironing, household items, and car & sofa detailing serving Brampton and Mississauga, Ontario.",
+  url: "https://starex-laundry-app-v2.vercel.app",
+  telephone: "+1-437-607-7251",
+  email: "hello@starexlaundry.ca",
+  priceRange: "$$",
+  areaServed: [
+    { "@type": "City", name: "Brampton" },
+    { "@type": "City", name: "Mississauga" },
+  ],
+  address: { "@type": "PostalAddress", addressLocality: "Brampton", addressRegion: "ON", addressCountry: "CA" },
+  aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "412" },
+  openingHoursSpecification: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], opens: "07:00", closes: "20:00" },
+};
+
 export default function Home() {
   const [promoDismissed, setPromoDismissed] = useState(false);
 
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }} />
 
       {/* ══ HERO — flat white/cream editorial, red used as bold accent only ══ */}
       <section style={{

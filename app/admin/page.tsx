@@ -5,6 +5,7 @@ import AdminTabs from "@/components/AdminTabs";
 import ContactUpdater from "@/components/ContactUpdater";
 import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersClient";
 import Logo from "@/components/Logo";
+import AdminLivePoll from "@/components/AdminLivePoll";
 import { Bell } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -114,6 +115,7 @@ export default async function AdminDashboardPage({
             <Logo color="#FFFFFF" fontSize="1.15rem" />
             <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
             <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#C85770", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>Owner console</p>
+            <AdminLivePoll initialCount={newOrders.length} />
             {newOrders.length > 0 && (
               <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#B8324F", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                 <Bell size={12} /> {newOrders.length} new
