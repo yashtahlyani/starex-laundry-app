@@ -564,10 +564,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ CTA — solid flat brand-red block, bold & graphic ══ */}
+      {/* ══ CTA — brand-red backdrop, bold & graphic ══ */}
       <section style={{
         padding: "120px 0", position: "relative", overflow: "hidden",
-        background: "var(--brand)",
+        backgroundImage: "linear-gradient(rgba(184,50,79,0.85), rgba(184,50,79,0.85)), url(/images/starex/towels-vase.png)",
+        backgroundSize: "cover", backgroundPosition: "center",
       }}>
         <div aria-hidden="true" style={{ position: "absolute", bottom: "-30px", left: "50%", transform: "translateX(-50%)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "160px", color: "rgba(255,255,255,0.08)", letterSpacing: "-8px", whiteSpace: "nowrap", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>
           StareX

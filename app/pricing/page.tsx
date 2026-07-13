@@ -265,7 +265,11 @@ export default function PricingPage() {
       <section style={{ padding: "0 0 80px", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
-            <div style={{ background: "var(--brand)", borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
+            <div style={{
+              borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden",
+              backgroundImage: "linear-gradient(rgba(184,50,79,0.92), rgba(184,50,79,0.92)), url(/images/starex/washer-basket-2.png)",
+              backgroundSize: "cover", backgroundPosition: "center",
+            }}>
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 32, alignItems: "center" }} className="detailing-grid">
                 <div>
                   <span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }}>New Service</span>

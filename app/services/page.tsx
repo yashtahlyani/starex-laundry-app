@@ -90,7 +90,11 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA strip */}
-      <section style={{ background: "var(--brand)", padding: "64px 0", textAlign: "center" }}>
+      <section style={{
+        padding: "64px 0", textAlign: "center", position: "relative",
+        backgroundImage: "linear-gradient(rgba(184,50,79,0.85), rgba(184,50,79,0.85)), url(/images/starex/basket-plant.png)",
+        backgroundSize: "cover", backgroundPosition: "center",
+      }}>
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>
