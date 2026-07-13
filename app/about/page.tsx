@@ -36,22 +36,21 @@ export default function About() {
     <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#241619", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }} className="about-hero">
           <div>
-            <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
+            <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
             <motion.h1
               initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.08, ease }}
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
             >
               Built on{" "}
-              <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>trust.</em>
+              <em style={{ fontStyle: "italic" }}>trust.</em>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-              style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif" }}
+              style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif" }}
             >
               StareX started in 2019 with one belief: laundry should be invisible. You should never have to think about it. Five years later, we serve over 10,000 Canadians who&apos;ve reclaimed their weekends.
             </motion.p>
@@ -60,16 +59,15 @@ export default function About() {
           <motion.div
             initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease }}
-            style={{ background: "#3B2A2E", borderRadius: 20, padding: "48px", position: "relative", overflow: "hidden" }}
+            style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 20, padding: "48px", position: "relative", overflow: "hidden" }}
           >
-            <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, background: "rgba(203,62,94,0.08)", borderRadius: "50%", pointerEvents: "none" }} />
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#CB3E5E", marginBottom: 8 }}>10,000+</p>
-            <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "1rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}>customers who stopped doing laundry</p>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#ffffff", marginBottom: 8 }}>10,000+</p>
+            <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "1rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}>customers who stopped doing laundry</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               {[["4.9★", "avg rating"], ["98%", "on-time"], ["24hr", "turnaround"], ["2019", "founded"]].map(([n, l]) => (
                 <div key={l}>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#ffffff", letterSpacing: "-0.02em" }}>{n}</p>
-                  <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>
+                  <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>
                 </div>
               ))}
             </div>
@@ -81,7 +79,7 @@ export default function About() {
       <section style={{ padding: "96px 0", background: "#FBF8F1" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
-            <span className="eyebrow" style={{ color: "#431E2C" }}>Our Values</span>
+            <span className="eyebrow" style={{ color: "#A82F4B" }}>Our Values</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
               What we stand <em className="display-accent" style={{ display: "inline" }}>for.</em>
             </h2>
@@ -104,17 +102,17 @@ export default function About() {
       </section>
 
       {/* Timeline */}
-      <section style={{ padding: "80px 0", background: "#241619" }}>
+      <section style={{ padding: "80px 0", background: "#F1EBDD" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
-            <span className="eyebrow">Our Story</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#ffffff" }}>
-              Five years of <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>growth.</em>
+            <span className="eyebrow" style={{ color: "#A82F4B" }}>Our Story</span>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
+              Five years of <em className="display-accent" style={{ display: "inline" }}>growth.</em>
             </h2>
           </AnimatedContent>
 
           <div ref={timelineRef} style={{ position: "relative", paddingLeft: 40 }}>
-            <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#3B2A2E" }}>
+            <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#E9E2D2" }}>
               <motion.div
                 style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #DA6178, #CB3E5E)" }}
                 animate={{ height: inView ? "100%" : "0%" }}
@@ -124,10 +122,10 @@ export default function About() {
             {milestones.map((m, i) => (
               <AnimatedContent key={m.year} delay={i * 0.12} style={{ marginBottom: i < milestones.length - 1 ? 40 : 0 }}>
                 <div style={{ position: "relative", paddingLeft: 24 }}>
-                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#CB3E5E", border: "2px solid #241619" }} />
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#CB3E5E", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#ffffff", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
-                  <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
+                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#CB3E5E", border: "2px solid #F1EBDD" }} />
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#A82F4B", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#241619", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
+                  <p style={{ color: "#6E5F5C", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
                 </div>
               </AnimatedContent>
             ))}

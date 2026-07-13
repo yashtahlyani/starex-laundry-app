@@ -28,10 +28,9 @@ export default function ServicesPage() {
     <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#241619", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "var(--brand)", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
-          <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
+          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             What We Offer
           </motion.span>
           <motion.h1
@@ -40,11 +39,11 @@ export default function ServicesPage() {
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
           >
             Every fabric,{" "}
-            <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>every need.</em>
+            <em style={{ fontStyle: "italic" }}>every need.</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-            style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
+            style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
           >
             From everyday wash-and-fold to delicate dry cleaning — we handle it all with professional care.
           </motion.p>
@@ -76,7 +75,7 @@ export default function ServicesPage() {
                       </li>
                     ))}
                   </ul>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#431E2C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#A82F4B", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>
@@ -87,18 +86,18 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA strip */}
-      <section style={{ background: "#241619", padding: "64px 0", textAlign: "center" }}>
+      <section style={{ background: "var(--brand)", padding: "64px 0", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>
               Not sure what you{" "}
-              <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>need?</em>
+              <em style={{ fontStyle: "italic" }}>need?</em>
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.5)", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>
+            <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>
               Book a pickup and we&apos;ll assess your items at collection. No commitment required.
               Commercial client? Ask about exclusive discounts on our monthly plan.
             </p>
-            <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "14px 32px", textDecoration: "none" }}>
+            <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "14px 32px", textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, borderRadius: 120 }}>
               Book Free Pickup <ArrowRight size={16} />
             </a>
           </AnimatedContent>

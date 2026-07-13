@@ -68,19 +68,18 @@ export default function HowItWorks() {
     <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 80, background: "#241619", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 80, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
-          <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>How It Works</motion.span>
+          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>How It Works</motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08, ease }}
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
           >
-            Laundry made <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>effortless.</em>
+            Laundry made <em style={{ fontStyle: "italic" }}>effortless.</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-            style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", lineHeight: 1.8, fontFamily: "Kodchasan, sans-serif" }}
+            style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, fontFamily: "Kodchasan, sans-serif" }}
           >
             Four simple steps and you&apos;re done. No trips to the laundromat, no sorting, no folding. Just clean clothes at your door.
           </motion.p>
@@ -130,19 +129,19 @@ export default function HowItWorks() {
       </section>
 
       {/* Mini FAQ */}
-      <section style={{ padding: "80px 0", background: "#241619" }}>
+      <section style={{ padding: "80px 0", background: "#F1EBDD" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40, textAlign: "center" }}>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", color: "#ffffff", letterSpacing: "-0.022em" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", color: "#241619", letterSpacing: "-0.022em" }}>
               Common <em className="display-accent" style={{ display: "inline" }}>questions.</em>
             </h2>
           </AnimatedContent>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {miniFaqs.map((f, i) => (
               <AnimatedContent key={i} delay={i * 0.08}>
-                <div style={{ background: "#1a2530", borderRadius: 14, padding: "24px 28px" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#ffffff", marginBottom: 10, letterSpacing: "-0.01em" }}>{f.q}</p>
-                  <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }} dangerouslySetInnerHTML={{ __html: f.a }} />
+                <div style={{ background: "#ffffff", borderRadius: 14, padding: "24px 28px", border: "1px solid rgba(36,22,26,0.06)" }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: 10, letterSpacing: "-0.01em" }}>{f.q}</p>
+                  <p style={{ color: "#6E5F5C", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }} dangerouslySetInnerHTML={{ __html: f.a }} />
                 </div>
               </AnimatedContent>
             ))}

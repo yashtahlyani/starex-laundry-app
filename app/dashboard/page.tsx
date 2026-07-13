@@ -78,7 +78,7 @@ export default function DashboardPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#431E2C" }}>{initial}</div>
+            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#FFFFFF" }}>{initial}</div>
             <div>
               <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#241619", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{greeting()}, {firstName}.</h1>
               <p style={{ color: "#8A7B77", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
@@ -133,14 +133,13 @@ export default function DashboardPage() {
           </motion.div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }}
-            style={{ background: "#241619", borderRadius: 20, padding: "40px", textAlign: "center", marginBottom: 32, position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 80% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+            style={{ background: "var(--brand)", borderRadius: 20, padding: "40px", textAlign: "center", marginBottom: 32, position: "relative", overflow: "hidden" }}>
             <div style={{ position: "relative" }}>
               <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#fff", marginBottom: 8 }}>
-                No active orders — <em className="display-accent" style={{ display: "inline" }}>enjoy your weekend.</em>
+                No active orders — <em style={{ fontStyle: "italic" }}>enjoy your weekend.</em>
               </h3>
-              <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Schedule a pickup and we&apos;ll handle the rest.</p>
-              <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+              <p style={{ color: "rgba(255,255,255,0.85)", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Schedule a pickup and we&apos;ll handle the rest.</p>
+              <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", padding: "13px 28px", borderRadius: 120 }}>
                 Book a pickup <ArrowRight size={16} />
               </a>
             </div>

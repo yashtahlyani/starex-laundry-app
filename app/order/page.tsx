@@ -22,14 +22,14 @@ type Order = {
 const STAGES = ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery", "delivered"];
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
-  placed:           { label: "Order placed",    desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#EBA3B4" },
-  confirmed:        { label: "Confirmed",        desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#EBA3B4" },
-  picked_up:        { label: "Picked up",        desc: "Our driver has collected your laundry.",         icon: Truck,       color: "#FBBF24" },
-  washing:          { label: "Cleaning",         desc: "Your laundry is being washed and processed.",    icon: Sparkles,    color: "#FB923C" },
-  folding:          { label: "Folding",          desc: "Cleaned and carefully folded.",                  icon: Layers,      color: "#A78BFA" },
-  out_for_delivery: { label: "On the way",       desc: "Your order is out for delivery.",                icon: Truck,       color: "#EBA3B4" },
-  delivered:        { label: "Delivered",        desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#EBA3B4" },
-  cancelled:        { label: "Cancelled",        desc: "This order has been cancelled.",                 icon: Package,     color: "#F87171" },
+  placed:           { label: "Order placed",    desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#A82F4B" },
+  confirmed:        { label: "Confirmed",        desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#A82F4B" },
+  picked_up:        { label: "Picked up",        desc: "Our driver has collected your laundry.",         icon: Truck,       color: "#C08A00" },
+  washing:          { label: "Cleaning",         desc: "Your laundry is being washed and processed.",    icon: Sparkles,    color: "#C2650C" },
+  folding:          { label: "Folding",          desc: "Cleaned and carefully folded.",                  icon: Layers,      color: "#7C5FC9" },
+  out_for_delivery: { label: "On the way",       desc: "Your order is out for delivery.",                icon: Truck,       color: "#A82F4B" },
+  delivered:        { label: "Delivered",        desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#A82F4B" },
+  cancelled:        { label: "Cancelled",        desc: "This order has been cancelled.",                 icon: Package,     color: "#DC2626" },
 };
 
 function OrderTracker() {
@@ -65,20 +65,20 @@ function OrderTracker() {
   const events: StatusEvent[] = order?.status_history ?? [];
 
   return (
-    <div className="min-h-screen bg-[#241619] pt-20">
+    <div className="min-h-screen bg-[#FBF8F1] pt-20">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14">
         <div className="text-center mb-10">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/10 mb-4">
-            <Package size={26} className="text-[#EBA3B4]" />
+            <Package size={26} className="text-[#A82F4B]" />
           </div>
-          <h1 className="text-3xl font-bold text-white font-heading">Track Your Order</h1>
-          <p className="text-white/45 mt-2 text-sm font-body">Enter your order code from your confirmation.</p>
+          <h1 className="text-3xl font-bold text-[#241619] font-heading">Track Your Order</h1>
+          <p className="text-[#6E5F5C] mt-2 text-sm font-body">Enter your order code from your confirmation.</p>
         </div>
 
         {/* Search */}
-        <div className="bg-[#322225] rounded-2xl border border-white/8 p-2 flex gap-2 mb-8">
+        <div className="bg-white rounded-2xl border border-[#241619]/8 shadow-sm p-2 flex gap-2 mb-8">
           <input
-            className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-white placeholder:text-white/30 font-body"
+            className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-[#241619] placeholder:text-[#8A7B77] font-body"
             placeholder="Order code — e.g. STX-482913"
             value={code}
             onChange={e => setCode(e.target.value)}
@@ -93,7 +93,7 @@ function OrderTracker() {
         </div>
 
         {error && (
-          <div className="rounded-2xl bg-red-900/30 border border-red-500/30 px-5 py-4 text-sm text-red-300 mb-6 font-body">
+          <div className="rounded-2xl bg-red-50 border border-red-100 px-5 py-4 text-sm text-red-700 mb-6 font-body">
             {error} — double-check your order code and try again.
           </div>
         )}
@@ -101,14 +101,14 @@ function OrderTracker() {
         {order && (
           <div className="space-y-5">
             {/* Status hero card */}
-            <div className="card-dark rounded-3xl p-6">
+            <div className="card rounded-3xl p-6">
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
-                  <p className="text-xs text-white/35 font-medium mb-1 font-body">Order</p>
-                  <p className="font-mono font-bold text-[#EBA3B4] text-xl">{order.code}</p>
+                  <p className="text-xs text-[#8A7B77] font-medium mb-1 font-body">Order</p>
+                  <p className="font-mono font-bold text-[#A82F4B] text-xl">{order.code}</p>
                 </div>
                 {meta && (
-                  <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-white/5 border border-white/10 text-xs font-semibold font-body"
+                  <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-[#241619]/5 border border-[#241619]/10 text-xs font-semibold font-body"
                     style={{ color: meta.color }}>
                     <meta.icon size={13} />
                     {meta.label}
@@ -117,17 +117,17 @@ function OrderTracker() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm mb-6">
-                <div className="bg-white/5 rounded-xl p-3 border border-white/8">
-                  <p className="text-xs text-white/35 mb-1 font-body">Service</p>
-                  <p className="font-semibold text-white font-heading">{order.service_title || order.service}</p>
+                <div className="bg-[#241619]/4 rounded-xl p-3 border border-[#241619]/8">
+                  <p className="text-xs text-[#8A7B77] mb-1 font-body">Service</p>
+                  <p className="font-semibold text-[#241619] font-heading">{order.service_title || order.service}</p>
                 </div>
-                <div className="bg-white/5 rounded-xl p-3 border border-white/8">
-                  <p className="text-xs text-white/35 mb-1 font-body">Pickup date</p>
-                  <p className="font-semibold text-white font-heading">{order.date}</p>
+                <div className="bg-[#241619]/4 rounded-xl p-3 border border-[#241619]/8">
+                  <p className="text-xs text-[#8A7B77] mb-1 font-body">Pickup date</p>
+                  <p className="font-semibold text-[#241619] font-heading">{order.date}</p>
                 </div>
-                <div className="bg-white/5 rounded-xl p-3 border border-white/8 col-span-2">
-                  <p className="text-xs text-white/35 mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
-                  <p className="font-semibold text-white text-sm font-heading">{order.address}</p>
+                <div className="bg-[#241619]/4 rounded-xl p-3 border border-[#241619]/8 col-span-2">
+                  <p className="text-xs text-[#8A7B77] mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
+                  <p className="font-semibold text-[#241619] text-sm font-heading">{order.address}</p>
                 </div>
               </div>
 
@@ -145,19 +145,19 @@ function OrderTracker() {
                           <div className={`h-8 w-8 rounded-full border-2 flex items-center justify-center transition-all ${
                             done
                               ? active ? "bg-mint border-mint shadow-[0_0_12px_rgba(203,62,94,0.4)]" : "bg-mint/30 border-mint/40"
-                              : "bg-white/5 border-white/15"
+                              : "bg-[#241619]/5 border-[#241619]/15"
                           }`}>
-                            <Icon size={14} className={done ? "text-[#FFFFFF]" : "text-white/20"} />
+                            <Icon size={14} className={done ? "text-[#FFFFFF]" : "text-[#241619]/25"} />
                           </div>
                           {i < STAGES.length - 1 && (
-                            <div className={`w-0.5 h-6 mt-1 ${i < currentStageIndex ? "bg-mint/40" : "bg-white/8"}`} />
+                            <div className={`w-0.5 h-6 mt-1 ${i < currentStageIndex ? "bg-mint/40" : "bg-[#241619]/8"}`} />
                           )}
                         </div>
                         <div className="pb-6 flex-1">
-                          <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-[#EBA3B4]" : "text-white/60") : "text-white/20"}`}>
+                          <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-[#A82F4B]" : "text-[#241619]/60") : "text-[#241619]/25"}`}>
                             {sm?.label ?? stage}
                           </p>
-                          {active && <p className="text-xs text-white/40 mt-0.5 font-body">{sm?.desc}</p>}
+                          {active && <p className="text-xs text-[#8A7B77] mt-0.5 font-body">{sm?.desc}</p>}
                         </div>
                       </div>
                     );
@@ -168,21 +168,21 @@ function OrderTracker() {
 
             {/* Event history from status_history jsonb */}
             {events.length > 0 && (
-              <div className="card-dark rounded-2xl p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-white/30 mb-4 font-body">Activity Log</p>
+              <div className="card rounded-2xl p-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-[#8A7B77] mb-4 font-body">Activity Log</p>
                 <ul className="space-y-3">
                   {[...events].reverse().map((ev, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <div className="h-6 w-6 rounded-full bg-mint/10 flex items-center justify-center mt-0.5 shrink-0">
-                        <CheckCircle size={12} className="text-[#EBA3B4]" />
+                        <CheckCircle size={12} className="text-[#A82F4B]" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-white font-heading">
+                        <p className="text-sm font-medium text-[#241619] font-heading">
                           {STAGE_META[ev.status]?.label ?? ev.status}
                         </p>
-                        {ev.note && <p className="text-xs text-white/40 font-body">{ev.note}</p>}
+                        {ev.note && <p className="text-xs text-[#8A7B77] font-body">{ev.note}</p>}
                         {(ev.time || ev.created_at) && (
-                          <p className="text-xs text-white/30 mt-0.5 font-body">
+                          <p className="text-xs text-[#8A7B77] mt-0.5 font-body">
                             {new Date(ev.time || ev.created_at!).toLocaleString("en-CA", {
                               month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true,
                             })}
@@ -195,9 +195,9 @@ function OrderTracker() {
               </div>
             )}
 
-            <p className="text-center text-xs text-white/25 font-body">
+            <p className="text-center text-xs text-[#8A7B77] font-body">
               Questions? Email us at{" "}
-              <a href="mailto:hello@starexlaundry.ca" className="text-[#EBA3B4] underline">hello@starexlaundry.ca</a>
+              <a href="mailto:hello@starexlaundry.ca" className="text-[#A82F4B] underline">hello@starexlaundry.ca</a>
             </p>
           </div>
         )}

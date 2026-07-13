@@ -64,19 +64,18 @@ export default function Contact() {
     <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#241619", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
-          <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Contact</motion.span>
+          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Contact</motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08, ease }}
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
           >
-            Get in <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>touch.</em>
+            Get in <em style={{ fontStyle: "italic" }}>touch.</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-            style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}
+            style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}
           >
             Questions, feedback, or just want to say hi — we&apos;d love to hear from you.
           </motion.p>

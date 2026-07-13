@@ -60,16 +60,15 @@ export default function TermsPage() {
   return (
     <div style={{ background: "#FBF8F1", minHeight: "100vh" }}>
       {/* Hero */}
-      <div style={{ background: "#241619", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+      <div style={{ background: "var(--brand)", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
-          <span style={{ display: "inline-block", background: "rgba(203,62,94,0.12)", border: "1px solid rgba(203,62,94,0.25)", color: "#CB3E5E", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
+          <span style={{ display: "inline-block", background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.3)", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
             Legal
           </span>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.8rem)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16 }}>
             Terms of Service
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "Kodchasan, sans-serif", fontSize: "1rem", marginBottom: 0 }}>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontFamily: "Kodchasan, sans-serif", fontSize: "1rem", marginBottom: 0 }}>
             Effective date: January 1, 2025 &nbsp;·&nbsp; Last updated: July 1, 2025
           </p>
         </div>

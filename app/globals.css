@@ -29,7 +29,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #241619;
+    background-color: #FBF8F1;
     color: #241619;
   }
 
@@ -37,8 +37,8 @@
     font-family: 'Kodchasan', 'Inter', system-ui, sans-serif;
     font-size: 1rem;
     line-height: 1.7;
-    color: rgba(255,255,255,0.75);
-    background-color: #241619;
+    color: #241619;
+    background-color: #FBF8F1;
     overflow-x: hidden;
   }
 
@@ -328,7 +328,8 @@
 
   /* ── Dark stat card ── */
   .card-stat {
-    background: #3B2A2E;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.16);
     border-radius: 16px;
     padding: 28px 24px;
   }

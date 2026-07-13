@@ -68,7 +68,7 @@ export default function AuthPage() {
 
   if (mode === "new-password") {
     return (
-      <div className="min-h-screen bg-[#241619] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#FBF8F1] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10">
             <div className="mb-8">
@@ -130,7 +130,7 @@ export default function AuthPage() {
 
   if (mode === "check-email") {
     return (
-      <div className="min-h-screen bg-[#241619] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#FBF8F1] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10 text-center">
             <div className="h-16 w-16 rounded-full bg-mint/15 flex items-center justify-center mx-auto mb-5">
@@ -150,14 +150,9 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex pt-16 bg-[#241619]">
-      {/* Left brand panel */}
-      <div className="hidden lg:flex lg:w-5/12 bg-[#431E2C] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-mint/10 blur-3xl" />
-          <div className="absolute bottom-20 -left-10 h-60 w-60 rounded-full bg-mint/5 blur-3xl" />
-        </div>
-
+    <div className="min-h-screen flex pt-16 bg-[#FBF8F1]">
+      {/* Left brand panel — flat brand red, echoes the homepage hero split */}
+      <div className="hidden lg:flex lg:w-5/12 bg-[#CB3E5E] flex-col justify-between p-12 relative overflow-hidden">
         <a href="/" className="relative flex items-center">
           <Logo color="#FFFFFF" fontSize="1.35rem" />
         </a>
@@ -165,9 +160,9 @@ export default function AuthPage() {
         <div className="relative space-y-8">
           <div>
             <h2 className="text-4xl font-bold text-white leading-tight mb-4 font-heading">
-              Your laundry,<br /><span className="display-accent" style={{ color: "var(--brand-rose)" }}>handled.</span>
+              Your laundry,<br /><span className="italic">handled.</span>
             </h2>
-            <p className="text-white/50 leading-relaxed font-body">
+            <p className="text-white/85 leading-relaxed font-body">
               Sign in to track your orders, view history, and manage your account — all in one place.
             </p>
           </div>
@@ -179,21 +174,21 @@ export default function AuthPage() {
               { icon: "💬", text: "Get email & WhatsApp updates" },
               { icon: "🏅", text: "Unlock StareX Monthly Plan perks" },
             ].map(({ icon, text }) => (
-              <div key={text} className="flex items-center gap-3 glass rounded-xl px-4 py-3">
+              <div key={text} className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.2)" }}>
                 <span className="text-lg">{icon}</span>
-                <span className="text-white/70 text-sm font-body">{text}</span>
+                <span className="text-white/90 text-sm font-body">{text}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="relative text-white/25 text-xs font-body">
+        <p className="relative text-white/60 text-xs font-body">
           © {new Date().getFullYear()} {BUSINESS_NAME}. Canada.
         </p>
       </div>
 
       {/* Right form panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#241619]">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FBF8F1]">
         <div className="w-full max-w-md">
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">

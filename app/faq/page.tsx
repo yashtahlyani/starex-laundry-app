@@ -100,19 +100,18 @@ export default function FAQ() {
     <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#241619", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
-          <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>FAQ</motion.span>
+          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>FAQ</motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08, ease }}
             style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
           >
-            Got <em className="display-accent" style={{ display: "inline", color: "var(--brand-rose)" }}>questions?</em>
+            Got <em style={{ fontStyle: "italic" }}>questions?</em>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-            style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}
+            style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}
           >
             Everything you need to know about StareX. Can&apos;t find an answer? We&apos;re just a message away.
           </motion.p>
@@ -151,7 +150,7 @@ export default function FAQ() {
                     display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: 10,
                     background: activeCategory === c.name ? "rgba(203,62,94,0.1)" : "none",
                     border: "none", cursor: "pointer", marginBottom: 4,
-                    color: activeCategory === c.name ? "#431E2C" : "#6E5F5C",
+                    color: activeCategory === c.name ? "#A82F4B" : "#6E5F5C",
                     fontFamily: "Poppins, sans-serif", fontWeight: activeCategory === c.name ? 600 : 400,
                     fontSize: "0.9rem",
                   }}
@@ -175,7 +174,7 @@ export default function FAQ() {
               {filtered.length === 0 ? (
                 <div style={{ padding: "48px 0", textAlign: "center" }}>
                   <p style={{ color: "#6E5F5C", fontFamily: "Kodchasan, sans-serif" }}>No results found. Try a different search term.</p>
-                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#431E2C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#A82F4B", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                     Contact us <ArrowRight size={14} />
                   </a>
                 </div>

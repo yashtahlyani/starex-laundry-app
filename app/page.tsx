@@ -240,34 +240,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ MARQUEE ══ */}
-      <div style={{ background: "#241619", padding: "14px 0", overflow: "hidden", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      {/* ══ MARQUEE — flat brand red strip ══ */}
+      <div style={{ background: "var(--brand)", padding: "14px 0", overflow: "hidden" }}>
         <div style={{ display: "flex", animation: "marquee 28s linear infinite", whiteSpace: "nowrap", width: "max-content", willChange: "transform" }}>
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span key={i} style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", fontWeight: 600, color: "rgba(255,255,255,0.35)", padding: "0 32px", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            <span key={i} style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", fontWeight: 600, color: "rgba(255,255,255,0.8)", padding: "0 32px", letterSpacing: "0.08em", textTransform: "uppercase" }}>
               {item}
-              <span style={{ marginLeft: 32, color: "#EBA3B4" }}>·</span>
+              <span style={{ marginLeft: 32, color: "#FFFFFF" }}>·</span>
             </span>
           ))}
         </div>
       </div>
 
-      {/* ══ STATS ══ */}
-      <section style={{ background: "#241619", padding: "80px 0" }}>
+      {/* ══ STATS — flat brand red band ══ */}
+      <section style={{ background: "var(--brand)", padding: "80px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "16px" }} className="stats-grid">
             {stats.map((s, i) => (
               <AnimatedContent key={s.label} delay={i * 0.08}>
                 <motion.div
                   className="card-stat"
-                  whileHover={{ y: -4, boxShadow: "0 12px 40px rgba(203,62,94,0.12)" }}
+                  whileHover={{ y: -4, boxShadow: "0 12px 40px rgba(0,0,0,0.15)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 >
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2rem,3.5vw,2.8rem)", letterSpacing: "-0.02em", color: "#EBA3B4", lineHeight: 1, marginBottom: "8px" }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,3.5vw,2.8rem)", letterSpacing: "-0.02em", color: "#ffffff", lineHeight: 1, marginBottom: "8px" }}>
                     <Counter target={s.value} suffix={s.suffix} fixed={s.fixed} />
                   </p>
                   <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", marginBottom: "4px" }}>{s.label}</p>
-                  <p style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem" }}>{s.desc}</p>
+                  <p style={{ color: "rgba(255,255,255,0.75)", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem" }}>{s.desc}</p>
                 </motion.div>
               </AnimatedContent>
             ))}
@@ -276,10 +276,10 @@ export default function Home() {
       </section>
 
       {/* ══ CITY COVERAGE ══ */}
-      <div style={{ background: "#241619", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "24px 0" }}>
+      <div style={{ background: "var(--brand-dark)", padding: "24px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
-            <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.7rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", whiteSpace: "nowrap", flexShrink: 0 }}>
+            <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.7rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", whiteSpace: "nowrap", flexShrink: 0 }}>
               Service Area
             </span>
             <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.1)", flexShrink: 0 }} />
@@ -428,16 +428,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ PRICING — dark ══ */}
-      <section style={{ background: "#241619", padding: "96px 0" }}>
+      {/* ══ PRICING — cream ══ */}
+      <section style={{ background: "#F1EBDD", padding: "96px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="eyebrow">Simple Pricing</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#FAFAFA", marginBottom: "12px" }}>
+            <span className="eyebrow" style={{ color: "#A82F4B" }}>Simple Pricing</span>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619", marginBottom: "12px" }}>
               Pricing that{" "}
-              <span className="display-accent" style={{ fontWeight: 600, color: "var(--brand-rose)" }}>works for you.</span>
+              <span className="display-accent" style={{ fontWeight: 600 }}>works for you.</span>
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "1.0625rem", maxWidth: "50ch", margin: "0 auto", fontFamily: "Kodchasan, sans-serif" }}>
+            <p style={{ color: "#6E5F5C", fontSize: "1.0625rem", maxWidth: "50ch", margin: "0 auto", fontFamily: "Kodchasan, sans-serif" }}>
               Pay per pound, or save with the monthly plan. No hidden fees, ever.
             </p>
           </AnimatedContent>
@@ -449,36 +449,36 @@ export default function Home() {
             ].map((plan, i) => (
               <AnimatedContent key={plan.name} delay={i * 0.08}>
                 <div style={{
-                  background: plan.popular ? "#ffffff" : "rgba(255,255,255,0.04)",
-                  border: plan.popular ? "none" : "1px solid rgba(255,255,255,0.08)",
+                  background: "#ffffff",
+                  border: plan.popular ? "none" : "1px solid rgba(36,22,26,0.08)",
                   borderRadius: "20px", padding: "32px",
                   transform: plan.popular ? "scale(1.03)" : "scale(1)",
                   position: "relative",
-                  boxShadow: plan.popular ? "0 24px 64px rgba(0,0,0,0.35)" : "none",
+                  boxShadow: plan.popular ? "0 24px 64px rgba(0,0,0,0.14)" : "none",
                 }}>
                   {plan.popular && (
-                    <div style={{ position: "absolute", top: 20, right: 20, background: "linear-gradient(180deg,#DA6178,#CB3E5E)", color: "#FFFFFF", fontSize: "0.7rem", fontWeight: 700, padding: "4px 12px", borderRadius: 999, letterSpacing: "0.06em", textTransform: "uppercase", fontFamily: "Kodchasan, sans-serif" }}>
+                    <div style={{ position: "absolute", top: 20, right: 20, background: "var(--brand)", color: "#FFFFFF", fontSize: "0.7rem", fontWeight: 700, padding: "4px 12px", borderRadius: 999, letterSpacing: "0.06em", textTransform: "uppercase", fontFamily: "Kodchasan, sans-serif" }}>
                       Popular
                     </div>
                   )}
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: plan.popular ? "rgba(36,22,26,0.45)" : "rgba(255,255,255,0.4)", marginBottom: "10px" }}>{plan.name}</p>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2.75rem", letterSpacing: "-0.03em", color: plan.popular ? "#241619" : "#FAFAFA", lineHeight: 1 }}>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8A7B77", marginBottom: "10px" }}>{plan.name}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2.75rem", letterSpacing: "-0.03em", color: "#241619", lineHeight: 1 }}>
                     {plan.price}<span style={{ fontSize: "1rem", fontWeight: 400 }}>{plan.period}</span>
                   </p>
-                  <p style={{ color: plan.popular ? "rgba(36,22,26,0.55)" : "rgba(255,255,255,0.4)", fontSize: "0.875rem", margin: "8px 0 24px", fontFamily: "Kodchasan, sans-serif" }}>{plan.desc}</p>
+                  <p style={{ color: "#6E5F5C", fontSize: "0.875rem", margin: "8px 0 24px", fontFamily: "Kodchasan, sans-serif" }}>{plan.desc}</p>
                   <ul style={{ listStyle: "none", marginBottom: "28px", display: "flex", flexDirection: "column", gap: "10px" }}>
                     {plan.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                        <CheckCircle size={15} color={plan.popular ? "#CB3E5E" : "#EBA3B4"} strokeWidth={2.5} />
-                        <span style={{ color: plan.popular ? "rgba(36,22,26,0.7)" : "rgba(255,255,255,0.5)", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                        <CheckCircle size={15} color="#CB3E5E" strokeWidth={2.5} />
+                        <span style={{ color: "#4C403D", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <a href="/pricing" style={{
+                  <a href="/pricing" className={plan.popular ? "btn-primary" : undefined} style={plan.popular ? { display: "block", textAlign: "center", textDecoration: "none" } : {
                     display: "block", textAlign: "center", padding: "12px", borderRadius: "120px",
-                    background: plan.popular ? "linear-gradient(180deg,#DA6178,#CB3E5E)" : "transparent",
-                    border: plan.popular ? "none" : "1.5px solid rgba(255,255,255,0.15)",
-                    color: plan.popular ? "#FFFFFF" : "rgba(255,255,255,0.6)",
+                    background: "transparent",
+                    border: "1.5px solid rgba(36,22,26,0.16)",
+                    color: "#241619",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem",
                     textDecoration: "none", transition: "all 0.2s ease",
                   }}>
@@ -495,7 +495,7 @@ export default function Home() {
       <section style={{ padding: "96px 0", background: "#FBF8F1" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: "48px" }}>
-            <span className="eyebrow" style={{ color: "#431E2C" }}>What People Say</span>
+            <span className="eyebrow" style={{ color: "#A82F4B" }}>What People Say</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
               Thousands of happy{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>customers.</span>
@@ -504,21 +504,21 @@ export default function Home() {
 
           {/* Featured testimonial */}
           <AnimatedContent style={{ marginBottom: "24px" }}>
-            <div style={{ background: "#241619", borderRadius: 20, padding: "40px 48px", position: "relative", overflow: "hidden" }}>
-              <p aria-hidden="true" style={{ position: "absolute", top: -20, left: 20, fontSize: "12rem", lineHeight: 1, fontFamily: "Poppins, sans-serif", color: "rgba(203,62,94,0.05)", pointerEvents: "none", userSelect: "none" }}>&ldquo;</p>
+            <div style={{ background: "var(--brand)", borderRadius: 20, padding: "40px 48px", position: "relative", overflow: "hidden" }}>
+              <p aria-hidden="true" style={{ position: "absolute", top: -20, left: 20, fontSize: "12rem", lineHeight: 1, fontFamily: "Poppins, sans-serif", color: "rgba(255,255,255,0.08)", pointerEvents: "none", userSelect: "none" }}>&ldquo;</p>
               <div style={{ display: "flex", gap: 3, marginBottom: 16, position: "relative" }}>
-                {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="#EBA3B4" color="#EBA3B4" />)}
+                {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="#FFFFFF" color="#FFFFFF" />)}
               </div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "clamp(1.1rem,2vw,1.375rem)", color: "#ffffff", lineHeight: 1.6, fontStyle: "italic", maxWidth: "72ch", marginBottom: 24, position: "relative" }}>
                 &ldquo;Switched to StareX six months ago and it&apos;s become the one subscription I&apos;d never cancel. My clothes come back cleaner than they&apos;ve ever been — pressed, folded, and always on time.&rdquo;
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.2)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
                   M
                 </div>
                 <div>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#ffffff" }}>Michael T.</p>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "rgba(255,255,255,0.4)" }}>Mississauga, ON · Monthly plan member</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "rgba(255,255,255,0.75)" }}>Mississauga, ON · Monthly plan member</p>
                 </div>
               </div>
             </div>
@@ -546,18 +546,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ TRUST BADGES — dark ══ */}
-      <section style={{ background: "#241619", padding: "64px 0" }}>
+      {/* ══ TRUST BADGES — cream ══ */}
+      <section style={{ background: "#FBF8F1", padding: "64px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "32px" }} className="trust-grid">
             {trust.map((t, i) => (
               <AnimatedContent key={t.title} delay={i * 0.07}>
                 <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(203,62,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                    <t.Icon size={20} color="#EBA3B4" />
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(203,62,94,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+                    <t.Icon size={20} color="#CB3E5E" />
                   </div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#ffffff", marginBottom: "8px" }}>{t.title}</p>
-                  <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: "8px" }}>{t.title}</p>
+                  <p style={{ color: "#6E5F5C", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>
                 </div>
               </AnimatedContent>
             ))}
