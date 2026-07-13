@@ -22,10 +22,10 @@ const milestones = [
 ];
 
 const values = [
-  { Icon: Shield, title: "Radical transparency", desc: "Price confirmed before we touch your clothes. No surprises, ever.", color: "#F7E3E6" },
-  { Icon: Leaf,   title: "Eco-first",            desc: "Biodegradable detergents, optimised wash loads, carbon-offset delivery.", color: "#F1EBDD" },
-  { Icon: Clock,  title: "Obsessed with time",   desc: "We know your time is precious. 98% of deliveries arrive on schedule.", color: "#EFE8D8" },
-  { Icon: Heart,  title: "Care in every fold",   desc: "Every garment is handled like it belongs to us — because for a few hours, it does.", color: "#E9E2D2" },
+  { Icon: Shield, title: "Radical transparency", desc: "Price confirmed before we touch your clothes. No surprises, ever.", color: "#EDEDED" },
+  { Icon: Leaf,   title: "Eco-first",            desc: "Biodegradable detergents, optimised wash loads, carbon-offset delivery.", color: "#F2F2F2" },
+  { Icon: Clock,  title: "Obsessed with time",   desc: "We know your time is precious. 98% of deliveries arrive on schedule.", color: "#EAEAEA" },
+  { Icon: Heart,  title: "Care in every fold",   desc: "Every garment is handled like it belongs to us — because for a few hours, it does.", color: "#E5E5E5" },
 ];
 
 export default function About() {
@@ -33,7 +33,7 @@ export default function About() {
   const inView = useInView(timelineRef, { once: true, margin: "-80px" });
 
   return (
-    <div style={{ background: "#FBF8F1" }}>
+    <div style={{ background: "#FFFFFF" }}>
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
@@ -76,11 +76,11 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section style={{ padding: "96px 0", background: "#FBF8F1" }}>
+      <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
             <span className="eyebrow" style={{ color: "#A82F4B" }}>Our Values</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               What we stand <em className="display-accent" style={{ display: "inline" }}>for.</em>
             </h2>
           </AnimatedContent>
@@ -90,10 +90,10 @@ export default function About() {
               <AnimatedContent key={v.title} delay={i * 0.08}>
                 <div style={{ background: v.color, borderRadius: 20, padding: "28px", height: "100%" }}>
                   <div style={{ width: 40, height: 40, background: "rgba(0,0,0,0.08)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                    <v.Icon size={18} color="#241619" />
+                    <v.Icon size={18} color="#161616" />
                   </div>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: 8, letterSpacing: "-0.01em" }}>{v.title}</h3>
-                  <p style={{ color: "#4C403D", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{v.desc}</p>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.01em" }}>{v.title}</h3>
+                  <p style={{ color: "#4A4A4A", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{v.desc}</p>
                 </div>
               </AnimatedContent>
             ))}
@@ -102,17 +102,17 @@ export default function About() {
       </section>
 
       {/* Timeline */}
-      <section style={{ padding: "80px 0", background: "#F1EBDD" }}>
+      <section style={{ padding: "80px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
             <span className="eyebrow" style={{ color: "#A82F4B" }}>Our Story</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Five years of <em className="display-accent" style={{ display: "inline" }}>growth.</em>
             </h2>
           </AnimatedContent>
 
           <div ref={timelineRef} style={{ position: "relative", paddingLeft: 40 }}>
-            <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#E9E2D2" }}>
+            <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#E5E5E5" }}>
               <motion.div
                 style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #DA6178, #CB3E5E)" }}
                 animate={{ height: inView ? "100%" : "0%" }}
@@ -122,10 +122,10 @@ export default function About() {
             {milestones.map((m, i) => (
               <AnimatedContent key={m.year} delay={i * 0.12} style={{ marginBottom: i < milestones.length - 1 ? 40 : 0 }}>
                 <div style={{ position: "relative", paddingLeft: 24 }}>
-                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#CB3E5E", border: "2px solid #F1EBDD" }} />
+                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#CB3E5E", border: "2px solid #F2F2F2" }} />
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#A82F4B", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#241619", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
-                  <p style={{ color: "#6E5F5C", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#161616", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
+                  <p style={{ color: "#6B6B6B", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
                 </div>
               </AnimatedContent>
             ))}
@@ -134,12 +134,12 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: "96px 0", background: "#FBF8F1", textAlign: "center" }}>
+      <section style={{ padding: "96px 0", background: "#FFFFFF", textAlign: "center" }}>
         <AnimatedContent style={{ maxWidth: 560, margin: "0 auto", padding: "0 24px" }}>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#241619", marginBottom: 16, letterSpacing: "-0.022em" }}>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#161616", marginBottom: 16, letterSpacing: "-0.022em" }}>
             Join our <em className="display-accent" style={{ display: "inline" }}>community.</em>
           </h2>
-          <p style={{ color: "#6E5F5C", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>Try StareX risk-free. First pickup on us.</p>
+          <p style={{ color: "#6B6B6B", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>Try StareX risk-free. First pickup on us.</p>
           <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "14px 32px" }}>
             Get Started Free <ArrowRight size={16} />
           </a>

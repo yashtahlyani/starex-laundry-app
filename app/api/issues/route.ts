@@ -76,14 +76,14 @@ export async function POST(req: NextRequest) {
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
           <h2 style="color:#DC2626;margin:0 0 16px">${isUrgent ? "Urgent" : "New"} Issue Reported</h2>
-          <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4C403D;">
+          <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
             ${orderCode ? `<tr><td style="color:#6B7280;width:120px">Order</td><td><strong style="font-family:monospace">${orderCode}</strong></td></tr>` : ""}
             <tr><td style="color:#6B7280">Customer</td><td>${customerName} — ${customerEmail}</td></tr>
             <tr><td style="color:#6B7280">Type</td><td>${issueType.replace(/_/g, " ")}</td></tr>
             <tr><td style="color:#6B7280">Priority</td><td>${priority}</td></tr>
           </table>
           <div style="background:#fef2f2;border-left:3px solid #DC2626;padding:16px;margin:16px 0;border-radius:4px;">
-            <p style="margin:0;font-size:14px;color:#4C403D;">${description.replace(/\n/g, "<br>")}</p>
+            <p style="margin:0;font-size:14px;color:#4A4A4A;">${description.replace(/\n/g, "<br>")}</p>
           </div>
           <p style="font-size:12px;color:#9CA3AF;">Issue ID: ${issue.id}</p>
         </div>

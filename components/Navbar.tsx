@@ -86,7 +86,7 @@ export default function Navbar() {
           height: scrolled ? "64px" : "72px",
           background: "rgba(255,255,255,0.96)",
           backdropFilter: "blur(10px)",
-          borderBottom: "1px solid rgba(36,22,26,0.07)",
+          borderBottom: "1px solid rgba(20,20,20,0.07)",
           transition: "height 0.3s ease",
         }}
       >
@@ -104,10 +104,10 @@ export default function Navbar() {
                   onClick={() => router.back()}
                   aria-label="Go back"
                   style={{
-                    background: "rgba(36,22,26,0.06)", border: "none", borderRadius: 8,
+                    background: "rgba(20,20,20,0.06)", border: "none", borderRadius: 8,
                     cursor: "pointer", width: 32, height: 32, display: "flex",
                     alignItems: "center", justifyContent: "center",
-                    color: "#4C403D", flexShrink: 0, overflow: "hidden",
+                    color: "#4A4A4A", flexShrink: 0, overflow: "hidden",
                   }}
                 >
                   <ChevronLeft size={16} />
@@ -116,7 +116,7 @@ export default function Navbar() {
             </AnimatePresence>
             <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               <motion.div whileHover={{ scale: 1.04 }} transition={{ type: "spring", stiffness: 320, damping: 20 }} style={{ display: "flex", alignItems: "center" }}>
-                <Logo color="#241619" fontSize="1.3rem" />
+                <Logo color="#161616" fontSize="1.3rem" />
               </motion.div>
             </a>
           </div>
@@ -134,11 +134,11 @@ export default function Navbar() {
                   fontSize: "0.9rem",
                   padding: "6px 14px",
                   borderRadius: 8,
-                  color: "#4C403D",
+                  color: "#4A4A4A",
                   transition: "color 0.2s, background 0.2s",
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#CB3E5E"; (e.currentTarget as HTMLElement).style.background = "rgba(203,62,94,0.06)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#4C403D"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#4A4A4A"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
                 {link.label}
               </a>
@@ -152,13 +152,13 @@ export default function Navbar() {
                 <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#A82F4B", textDecoration: "none", border: "1px solid rgba(168,47,75,0.3)", borderRadius: 8 }}>
                   <Settings size={13} /> Console
                 </a>
-                <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "#8A7B77", background: "none", border: "none", cursor: "pointer" }}>
+                <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "#8C8C8C", background: "none", border: "none", cursor: "pointer" }}>
                   <LogOut size={13} />
                 </button>
               </>
             ) : user ? (
               <div ref={acctRef} style={{ position: "relative" }}>
-                <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#241619", background: "rgba(36,22,26,0.05)", border: "1px solid rgba(36,22,26,0.1)", borderRadius: 999, cursor: "pointer" }}>
+                <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#161616", background: "rgba(20,20,20,0.05)", border: "1px solid rgba(20,20,20,0.1)", borderRadius: 999, cursor: "pointer" }}>
                   <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                     {initials}
                   </span>
@@ -167,20 +167,20 @@ export default function Navbar() {
                 <AnimatePresence>
                   {acctOpen && (
                     <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }} transition={{ duration: 0.15 }}
-                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#ffffff", border: "1px solid rgba(36,22,26,0.08)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.12)" }}>
+                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#ffffff", border: "1px solid rgba(20,20,20,0.08)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.12)" }}>
                       {[
                         { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
                         { href: "/account", icon: Settings, label: "Account settings" },
                       ].map(item => (
-                        <a key={item.href} href={item.href} onClick={() => setAcctOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "#241619", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}
-                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(36,22,26,0.05)"}
+                        <a key={item.href} href={item.href} onClick={() => setAcctOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "#161616", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}
+                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(20,20,20,0.05)"}
                           onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
                         >
                           <item.icon size={15} color="#CB3E5E" /> {item.label}
                         </a>
                       ))}
-                      <div style={{ height: 1, background: "rgba(36,22,26,0.08)", margin: "4px 0" }} />
-                      <button onClick={() => { setAcctOpen(false); handleSignOut(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "#4C403D", background: "none", border: "none", cursor: "pointer", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>
+                      <div style={{ height: 1, background: "rgba(20,20,20,0.08)", margin: "4px 0" }} />
+                      <button onClick={() => { setAcctOpen(false); handleSignOut(); }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 9, color: "#4A4A4A", background: "none", border: "none", cursor: "pointer", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>
                         <LogOut size={15} /> Sign out
                       </button>
                     </motion.div>
@@ -188,7 +188,7 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
             ) : (
-              <a href="/auth" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#4C403D", textDecoration: "none", border: "1px solid rgba(36,22,26,0.12)", borderRadius: 8, transition: "color 0.2s" }}>
+              <a href="/auth" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#4A4A4A", textDecoration: "none", border: "1px solid rgba(20,20,20,0.12)", borderRadius: 8, transition: "color 0.2s" }}>
                 <LogIn size={13} /> Sign In
               </a>
             )}
@@ -201,7 +201,7 @@ export default function Navbar() {
 
           {/* Hamburger */}
           <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu"
-            style={{ background: "none", border: "none", cursor: "pointer", color: "#241619", padding: "8px" }}>
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#161616", padding: "8px" }}>
             <AnimatePresence mode="wait">
               {menuOpen
                 ? <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}><X size={22} /></motion.div>
@@ -231,7 +231,7 @@ export default function Navbar() {
                   exit={{ y: 15, opacity: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
                 >
-                  <a href={link.href} onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", display: "block", fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "#241619", letterSpacing: "-0.025em", lineHeight: 1.2 }}>
+                  <a href={link.href} onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", display: "block", fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "#161616", letterSpacing: "-0.025em", lineHeight: 1.2 }}>
                     {link.label}
                   </a>
                 </motion.div>
@@ -244,10 +244,10 @@ export default function Navbar() {
                   <a href="/book" className="btn-primary" style={{ justifyContent: "center" }} onClick={() => setMenuOpen(false)}>
                     Book Pickup <ArrowRight size={14} />
                   </a>
-                  <a href="/dashboard" onClick={() => setMenuOpen(false)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "#4C403D", background: "none", textDecoration: "none", border: "1px solid rgba(36,22,26,0.15)", borderRadius: 12, cursor: "pointer" }}>
+                  <a href="/dashboard" onClick={() => setMenuOpen(false)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "#4A4A4A", background: "none", textDecoration: "none", border: "1px solid rgba(20,20,20,0.15)", borderRadius: 12, cursor: "pointer" }}>
                     <LayoutDashboard size={14} /> Dashboard
                   </a>
-                  <button onClick={() => { setMenuOpen(false); handleSignOut(); }} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "#4C403D", background: "none", border: "1px solid rgba(36,22,26,0.15)", borderRadius: 12, cursor: "pointer" }}>
+                  <button onClick={() => { setMenuOpen(false); handleSignOut(); }} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "#4A4A4A", background: "none", border: "1px solid rgba(20,20,20,0.15)", borderRadius: 12, cursor: "pointer" }}>
                     <LogOut size={14} /> Sign out
                   </button>
                 </>
@@ -256,7 +256,7 @@ export default function Navbar() {
                   <a href="/book" className="btn-primary" style={{ justifyContent: "center" }} onClick={() => setMenuOpen(false)}>
                     Book Pickup <ArrowRight size={14} />
                   </a>
-                  <a href="/auth" onClick={() => setMenuOpen(false)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "#4C403D", background: "none", textDecoration: "none", border: "1px solid rgba(36,22,26,0.15)", borderRadius: 12 }}>
+                  <a href="/auth" onClick={() => setMenuOpen(false)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.9rem", padding: "12px 20px", color: "#4A4A4A", background: "none", textDecoration: "none", border: "1px solid rgba(20,20,20,0.15)", borderRadius: 12 }}>
                     <LogIn size={14} /> Sign In
                   </a>
                 </>

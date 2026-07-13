@@ -62,7 +62,7 @@ export default function DashboardPage() {
   ];
 
   if (loading) return (
-    <div style={{ minHeight: "100vh", background: "#FBF8F1", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ minHeight: "100vh", background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center" }}>
         <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(203,62,94,0.2)", borderTopColor: "#CB3E5E", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
         <p style={{ color: "#A1A1AA", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Loading your orders…</p>
@@ -72,7 +72,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <div style={{ background: "#FBF8F1", minHeight: "100vh", paddingTop: 96 }}>
+    <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 96 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 96px" }}>
 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
@@ -80,8 +80,8 @@ export default function DashboardPage() {
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#FFFFFF" }}>{initial}</div>
             <div>
-              <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#241619", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{greeting()}, {firstName}.</h1>
-              <p style={{ color: "#8A7B77", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
+              <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#161616", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{greeting()}, {firstName}.</h1>
+              <p style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
             </div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
@@ -100,9 +100,9 @@ export default function DashboardPage() {
               style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, padding: "18px 20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
                 <s.icon size={15} color="#CB3E5E" />
-                <span style={{ color: "#8A7B77", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{s.label}</span>
+                <span style={{ color: "#8C8C8C", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{s.label}</span>
               </div>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.6rem", color: "#241619", letterSpacing: "-0.02em" }}>{s.value}</p>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.6rem", color: "#161616", letterSpacing: "-0.02em" }}>{s.value}</p>
             </motion.div>
           ))}
         </div>
@@ -114,10 +114,10 @@ export default function DashboardPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#241619" }}>{activeOrder.code}</span>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#161616" }}>{activeOrder.code}</span>
                     <StatusBadge status={activeOrder.status} pulse />
                   </div>
-                  <p style={{ color: "#8A7B77", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", marginTop: 4 }}>
+                  <p style={{ color: "#8C8C8C", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", marginTop: 4 }}>
                     {activeOrder.service_title ?? activeOrder.service} · {activeOrder.date}
                   </p>
                 </div>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
                   background: "none", cursor: "pointer", textAlign: "left",
                 }}>
                   <div>
-                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#241619" }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#161616" }}>
                       {o.service_title ?? o.service}
                       <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {o.code}</span>
                     </p>
@@ -185,8 +185,8 @@ export default function DashboardPage() {
             <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(203,62,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
               <Package size={24} color="#A82F4B" />
             </div>
-            <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#241619", marginBottom: 8 }}>No orders yet</h3>
-            <p style={{ color: "#8A7B77", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Book your first pickup — it takes under 2 minutes.</p>
+            <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#161616", marginBottom: 8 }}>No orders yet</h3>
+            <p style={{ color: "#8C8C8C", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Book your first pickup — it takes under 2 minutes.</p>
             <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
               Book a pickup <ArrowRight size={16} />
             </a>

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#FBF8F1] text-[#241619] antialiased font-body">
+      <body className="min-h-screen bg-[#FFFFFF] text-[#161616] antialiased font-body">
         <ScrollProgress />
         <PageLoader />
         <LayoutShell>{children}</LayoutShell>

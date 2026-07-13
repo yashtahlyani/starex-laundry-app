@@ -20,7 +20,7 @@ const steps = [
     num: "01",
     title: "Book in 2 minutes",
     desc: "Schedule a pickup from our website or app. Choose your time window, enter your address, and confirm your order. It takes under 2 minutes.",
-    color: "#F7E3E6",
+    color: "#EDEDED",
     accent: "#0ea5e9",
     details: ["Select wash preferences", "Add special care instructions", "Pick a convenient time slot"],
   },
@@ -29,7 +29,7 @@ const steps = [
     num: "02",
     title: "We pick up",
     desc: "Our driver arrives at your chosen window, scans your bag, and takes it to our facility. No waiting around — leave it at your door.",
-    color: "#F1EBDD",
+    color: "#F2F2F2",
     accent: "#16a34a",
     details: ["Real-time driver tracking", "Contactless pickup option", "Unique bag barcode tracking"],
   },
@@ -38,7 +38,7 @@ const steps = [
     num: "03",
     title: "Expert care",
     desc: "Our team sorts, washes, dries, and folds your laundry with professional-grade equipment and eco-friendly detergents.",
-    color: "#EFE8D8",
+    color: "#EAEAEA",
     accent: "#f59e0b",
     details: ["Sorted by colour & fabric", "Biodegradable detergents", "Folded to your preference"],
   },
@@ -47,7 +47,7 @@ const steps = [
     num: "04",
     title: "Delivered back",
     desc: "Your laundry is returned clean, fresh, and neatly folded — within 24–48 hours. Just put it away.",
-    color: "#E9E2D2",
+    color: "#E5E5E5",
     accent: "#8b5cf6",
     details: ["24–48h standard turnaround", "Real-time delivery updates", "Contactless drop-off"],
   },
@@ -65,7 +65,7 @@ export default function HowItWorks() {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <div style={{ background: "#FBF8F1" }}>
+    <div style={{ background: "#FFFFFF" }}>
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 80, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
@@ -109,13 +109,13 @@ export default function HowItWorks() {
                     </div>
                     <div>
                       <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.75rem", color: step.accent, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Step {step.num}</p>
-                      <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#241619", letterSpacing: "-0.015em" }}>{step.title}</h3>
+                      <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#161616", letterSpacing: "-0.015em" }}>{step.title}</h3>
                     </div>
                   </div>
-                  <p style={{ color: "#6E5F5C", fontSize: "0.9375rem", lineHeight: 1.75, marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>{step.desc}</p>
+                  <p style={{ color: "#6B6B6B", fontSize: "0.9375rem", lineHeight: 1.75, marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>{step.desc}</p>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
                     {step.details.map(d => (
-                      <li key={d} style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#4C403D" }}>
+                      <li key={d} style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#4A4A4A" }}>
                         <div style={{ width: 6, height: 6, borderRadius: "50%", background: step.accent, flexShrink: 0 }} />
                         {d}
                       </li>
@@ -129,19 +129,19 @@ export default function HowItWorks() {
       </section>
 
       {/* Mini FAQ */}
-      <section style={{ padding: "80px 0", background: "#F1EBDD" }}>
+      <section style={{ padding: "80px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40, textAlign: "center" }}>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", color: "#241619", letterSpacing: "-0.022em" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", color: "#161616", letterSpacing: "-0.022em" }}>
               Common <em className="display-accent" style={{ display: "inline" }}>questions.</em>
             </h2>
           </AnimatedContent>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {miniFaqs.map((f, i) => (
               <AnimatedContent key={i} delay={i * 0.08}>
-                <div style={{ background: "#ffffff", borderRadius: 14, padding: "24px 28px", border: "1px solid rgba(36,22,26,0.06)" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: 10, letterSpacing: "-0.01em" }}>{f.q}</p>
-                  <p style={{ color: "#6E5F5C", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }} dangerouslySetInnerHTML={{ __html: f.a }} />
+                <div style={{ background: "#ffffff", borderRadius: 14, padding: "24px 28px", border: "1px solid rgba(20,20,20,0.06)" }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616", marginBottom: 10, letterSpacing: "-0.01em" }}>{f.q}</p>
+                  <p style={{ color: "#6B6B6B", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }} dangerouslySetInnerHTML={{ __html: f.a }} />
                 </div>
               </AnimatedContent>
             ))}
@@ -152,10 +152,10 @@ export default function HowItWorks() {
       {/* CTA */}
       <section style={{ padding: "96px 0", textAlign: "center" }}>
         <AnimatedContent style={{ maxWidth: 560, margin: "0 auto", padding: "0 24px" }}>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#241619", marginBottom: 16, letterSpacing: "-0.022em" }}>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#161616", marginBottom: 16, letterSpacing: "-0.022em" }}>
             Ready to <em className="display-accent" style={{ display: "inline" }}>start?</em>
           </h2>
-          <p style={{ color: "#6E5F5C", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>First pickup is on us. No credit card required.</p>
+          <p style={{ color: "#6B6B6B", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>First pickup is on us. No credit card required.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", fontSize: "1rem" }}>
               Book First Pickup <ArrowRight size={16} />

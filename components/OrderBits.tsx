@@ -30,12 +30,12 @@ export const NEXT_STATUS: Record<string, string | null> = {
 };
 
 export const STATUS_META: Record<string, { label: string; bg: string; fg: string; dot: string }> = {
-  placed:           { label: "Order placed",     bg: "#E9E2D2", fg: "#4338CA", dot: "#6366F1" },
-  confirmed:        { label: "Confirmed",         bg: "#EFE8D8", fg: "#B45309", dot: "#F59E0B" },
+  placed:           { label: "Order placed",     bg: "#E5E5E5", fg: "#4338CA", dot: "#6366F1" },
+  confirmed:        { label: "Confirmed",         bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
   picked_up:        { label: "Picked up",         bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
-  washing:          { label: "Being cleaned",     bg: "#F1EBDD", fg: "#047857", dot: "#A82F4B" },
+  washing:          { label: "Being cleaned",     bg: "#F2F2F2", fg: "#047857", dot: "#A82F4B" },
   folding:          { label: "Folding",           bg: "#FEF3C7", fg: "#92400E", dot: "#D97706" },
-  out_for_delivery: { label: "Out for delivery",  bg: "#F1EBDD", fg: "#065F46", dot: "#10B981" },
+  out_for_delivery: { label: "Out for delivery",  bg: "#F2F2F2", fg: "#065F46", dot: "#10B981" },
   delivered:        { label: "Delivered",         bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
   cancelled:        { label: "Cancelled",         bg: "#FEE2E2", fg: "#991B1B", dot: "#EF4444" },
 };

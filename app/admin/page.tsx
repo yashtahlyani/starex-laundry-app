@@ -107,14 +107,14 @@ export default async function AdminDashboardPage({
     <div style={{ background: "#F4F5F7", minHeight: "100vh" }}>
 
       {/* Admin header */}
-      <header style={{ background: "#241619", position: "sticky", top: 0, zIndex: 100 }}>
+      <header style={{ background: "#161616", position: "sticky", top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
-              <rect width="36" height="36" rx="9" fill="#241619" />
+              <rect width="36" height="36" rx="9" fill="#161616" />
               <line x1="9" y1="9" x2="27" y2="27" stroke="#CB3E5E" strokeWidth="5" strokeLinecap="round" />
               <line x1="27" y1="9" x2="9" y2="27" stroke="#CB3E5E" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="3" fill="#241619" /><circle cx="18" cy="18" r="1.5" fill="#DA6178" />
+              <circle cx="18" cy="18" r="3" fill="#161616" /><circle cx="18" cy="18" r="1.5" fill="#DA6178" />
             </svg>
             <div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#fff", lineHeight: 1 }}>StareX</p>
@@ -148,8 +148,8 @@ export default async function AdminDashboardPage({
               background: k.accent ? "linear-gradient(135deg,#DA6178,#CB3E5E)" : "#fff",
               border: "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
             }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#241619", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#FFFFFF" : "#8A7B77", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#161616", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#FFFFFF" : "#8C8C8C", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
             </div>
           ))}
         </div>
@@ -170,7 +170,7 @@ export default async function AdminDashboardPage({
               {searchParams.q && <a href="/admin?tab=orders" className="btn-ghost px-5 py-2.5 text-sm">Clear</a>}
             </form>
 
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8A7B77", marginBottom: 12 }}>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 12 }}>
               Active Orders {q ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
             </p>
 
@@ -203,9 +203,9 @@ export default async function AdminDashboardPage({
                         {pastOrders!.map((o: any) => (
                           <tr key={o.id} style={{ borderBottom: "1px solid #F4F4F5", opacity: 0.8 }}>
                             <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>{o.code}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#6E5F5C" }}>{o.customer_name ?? "—"}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#8A7B77" }}>{o.service_title ?? o.service}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#8A7B77" }}>{o.date}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#6B6B6B" }}>{o.customer_name ?? "—"}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#8C8C8C" }}>{o.service_title ?? o.service}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#8C8C8C" }}>{o.date}</td>
                             <td className="px-4 py-3">
                               <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[o.status] ?? "bg-gray-100 text-gray-600"}`}>
                                 {STATUS_LABELS[o.status] ?? o.status}
@@ -231,7 +231,7 @@ export default async function AdminDashboardPage({
         {/* ── Contacts Tab ── */}
         {tab === "contacts" && (
           <div>
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8A7B77", marginBottom: 16 }}>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 16 }}>
               Contact Messages ({contacts?.length ?? 0})
             </p>
             {(contacts?.length ?? 0) === 0 ? (
@@ -247,14 +247,14 @@ export default async function AdminDashboardPage({
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
                           {c.status === "new" && <span style={{ background: "#CB3E5E", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
                           {c.status === "replied" && <span style={{ background: "rgba(203,62,94,0.12)", color: "#431E2C", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
-                          {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#6E5F5C" }}>{c.subject}</span>}
+                          {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#6B6B6B" }}>{c.subject}</span>}
                         </div>
-                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#241619", marginBottom: 2 }}>{c.name}</p>
-                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#8A7B77", marginBottom: 12 }}>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#161616", marginBottom: 2 }}>{c.name}</p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#8C8C8C", marginBottom: 12 }}>
                           <a href={`mailto:${c.email}`} style={{ color: "#A82F4B" }}>{c.email}</a>
                           {c.phone && ` · ${c.phone}`}
                         </p>
-                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6E5F5C", lineHeight: 1.7 }}>{c.message}</p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6B6B6B", lineHeight: 1.7 }}>{c.message}</p>
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#A1A1AA" }}>{fmtDate(c.created_at)}</p>
@@ -271,7 +271,7 @@ export default async function AdminDashboardPage({
         {/* ── Analytics Tab ── */}
         {tab === "analytics" && (
           <div>
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8A7B77", marginBottom: 16 }}>Business Overview</p>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 16 }}>Business Overview</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               {[
                 { label: "Total Orders",     value: totalOrders ?? 0 },
@@ -282,13 +282,13 @@ export default async function AdminDashboardPage({
               ].map(s => (
                 <div key={s.label} style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>{s.label}</p>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#241619", letterSpacing: "-0.025em" }}>{s.value}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#161616", letterSpacing: "-0.025em" }}>{s.value}</p>
                 </div>
               ))}
             </div>
             {(activeOrders?.length ?? 0) > 0 && (
               <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#241619", marginBottom: 16 }}>Status Breakdown (Active)</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#161616", marginBottom: 16 }}>Status Breakdown (Active)</p>
                 <div className="space-y-2">
                   {Object.entries(
                     (activeOrders as any[]).reduce<Record<string, number>>((acc, o) => {
@@ -303,7 +303,7 @@ export default async function AdminDashboardPage({
                       <div style={{ flex: 1, background: "#F4F4F5", borderRadius: 999, height: 8, overflow: "hidden" }}>
                         <div style={{ height: 8, background: "#CB3E5E", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
                       </div>
-                      <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#241619", minWidth: 24, textAlign: "right" }}>{count as number}</span>
+                      <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#161616", minWidth: 24, textAlign: "right" }}>{count as number}</span>
                     </div>
                   ))}
                 </div>

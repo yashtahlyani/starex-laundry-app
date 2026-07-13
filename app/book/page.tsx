@@ -8,12 +8,12 @@ import { getSupabaseBrowser } from "@/lib/supabaseClient";
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const services = [
-  { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",      price: "$2.29/lb",    color: "#F7E3E6" },
-  { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Subject to availability", price: "+50%",      color: "#F1EBDD" },
-  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",    price: "From $6.99",  color: "#EFE8D8" },
-  { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",         price: "From $1.99",  color: "#E9E2D2" },
-  { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs", price: "From $9.99", color: "#F7E3E6" },
-  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",  price: "From $199",   color: "#F1EBDD" },
+  { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",      price: "$2.29/lb",    color: "#EDEDED" },
+  { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Subject to availability", price: "+50%",      color: "#F2F2F2" },
+  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",    price: "From $6.99",  color: "#EAEAEA" },
+  { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",         price: "From $1.99",  color: "#E5E5E5" },
+  { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs", price: "From $9.99", color: "#EDEDED" },
+  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",  price: "From $199",   color: "#F2F2F2" },
 ];
 
 const timeSlots = [
@@ -26,7 +26,7 @@ const stepLabels = ["Service", "Schedule", "Details", "Confirm"];
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "13px 16px",
   border: "1.5px solid #E4E4E7", borderRadius: 12,
-  fontSize: "0.9375rem", color: "#241619",
+  fontSize: "0.9375rem", color: "#161616",
   fontFamily: "Kodchasan, sans-serif", outline: "none",
   background: "#ffffff", transition: "border-color 0.2s",
   boxSizing: "border-box",
@@ -34,7 +34,7 @@ const inputStyle: React.CSSProperties = {
 
 const labelStyle: React.CSSProperties = {
   display: "block", fontFamily: "Poppins, sans-serif",
-  fontWeight: 600, fontSize: "0.875rem", color: "#241619", marginBottom: 6,
+  fontWeight: 600, fontSize: "0.875rem", color: "#161616", marginBottom: 6,
 };
 
 type FormState = {
@@ -131,20 +131,20 @@ export default function BookPage() {
 
   if (step === 4 && orderId) {
     return (
-      <div style={{ background: "#FBF8F1", minHeight: "100vh", paddingTop: 80, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-            style={{ width: 80, height: 80, background: "#F1EBDD", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+            style={{ width: 80, height: 80, background: "#F2F2F2", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
             <CheckCircle size={40} color="#A82F4B" />
           </motion.div>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#241619", marginBottom: 12, letterSpacing: "-0.025em" }}>Pickup confirmed!</h2>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F1EBDD", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#161616", marginBottom: 12, letterSpacing: "-0.025em" }}>Pickup confirmed!</h2>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F2F2F2", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
             <span style={{ color: "#A82F4B", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
           </div>
-          <p style={{ color: "#6E5F5C", fontSize: "1.0625rem", maxWidth: "44ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
-            We&apos;ll send a confirmation to <strong style={{ color: "#241619" }}>{form.email}</strong>. See you on {form.date}!
+          <p style={{ color: "#6B6B6B", fontSize: "1.0625rem", maxWidth: "44ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
+            We&apos;ll send a confirmation to <strong style={{ color: "#161616" }}>{form.email}</strong>. See you on {form.date}!
           </p>
-          <p style={{ color: "#8A7B77", fontSize: "0.875rem", marginBottom: 36, fontFamily: "Kodchasan, sans-serif" }}>Final price is confirmed after we weigh your laundry at pickup.</p>
+          <p style={{ color: "#8C8C8C", fontSize: "0.875rem", marginBottom: 36, fontFamily: "Kodchasan, sans-serif" }}>Final price is confirmed after we weigh your laundry at pickup.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href={`/order?code=${orderId}`} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               Track my order <ArrowRight size={16} />
@@ -157,7 +157,7 @@ export default function BookPage() {
   }
 
   return (
-    <div style={{ background: "#FBF8F1", minHeight: "100vh", paddingTop: 80 }}>
+    <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80 }}>
 
       {/* Progress bar strip */}
       <div style={{ background: "var(--brand)", paddingTop: 0, paddingBottom: 0 }}>
@@ -183,10 +183,10 @@ export default function BookPage() {
             {/* Step 0: Service */}
             {step === 0 && (
               <motion.div key="step0" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#241619", marginBottom: 8, letterSpacing: "-0.02em" }}>
+                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   What do you need <em className="display-accent" style={{ display: "inline" }}>cleaned?</em>
                 </h2>
-                <p style={{ color: "#6E5F5C", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Select the service that best fits your needs.</p>
+                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Select the service that best fits your needs.</p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 12 }}>
                   {services.map(s => {
                     const Icon = s.icon;
@@ -199,11 +199,11 @@ export default function BookPage() {
                         boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
                       }}>
                         <div style={{ width: 36, height: 36, background: selected ? "rgba(0,0,0,0.1)" : "#F4F4F5", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                          <Icon size={17} color={selected ? "#A82F4B" : "#6E5F5C"} />
+                          <Icon size={17} color={selected ? "#A82F4B" : "#6B6B6B"} />
                         </div>
-                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#241619", marginBottom: 2 }}>{s.title}</p>
-                        <p style={{ color: "#8A7B77", fontSize: "0.8125rem", marginBottom: 6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
-                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#241619", fontSize: "0.875rem" }}>{s.price}</p>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 2 }}>{s.title}</p>
+                        <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#161616", fontSize: "0.875rem" }}>{s.price}</p>
                       </button>
                     );
                   })}
@@ -220,10 +220,10 @@ export default function BookPage() {
             {/* Step 1: Schedule */}
             {step === 1 && (
               <motion.div key="step1" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#241619", marginBottom: 8, letterSpacing: "-0.02em" }}>
+                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   When should we <em className="display-accent" style={{ display: "inline" }}>come?</em>
                 </h2>
-                <p style={{ color: "#6E5F5C", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Choose a pickup date and time window.</p>
+                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Choose a pickup date and time window.</p>
 
                 <div style={{ marginBottom: 24 }}>
                   <label style={labelStyle}><Calendar size={13} style={{ display: "inline", marginRight: 6 }} />Pickup Date</label>
@@ -241,8 +241,8 @@ export default function BookPage() {
                     {timeSlots.map(t => (
                       <button key={t} onClick={() => setForm(p => ({ ...p, time: t }))} style={{
                         padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#CB3E5E" : "#E4E4E7"}`,
-                        borderRadius: 10, background: form.time === t ? "#F1EBDD" : "#ffffff",
-                        color: form.time === t ? "#A82F4B" : "#6E5F5C",
+                        borderRadius: 10, background: form.time === t ? "#F2F2F2" : "#ffffff",
+                        color: form.time === t ? "#A82F4B" : "#6B6B6B",
                         fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === t ? 700 : 500, fontSize: "0.8125rem",
                         cursor: "pointer", transition: "all 0.15s",
                       }}>{t}</button>
@@ -263,10 +263,10 @@ export default function BookPage() {
             {/* Step 2: Details */}
             {step === 2 && (
               <motion.div key="step2" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#241619", marginBottom: 8, letterSpacing: "-0.02em" }}>
+                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   Your <em className="display-accent" style={{ display: "inline" }}>details.</em>
                 </h2>
-                <p style={{ color: "#6E5F5C", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>We need to know where to come and how to reach you.</p>
+                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>We need to know where to come and how to reach you.</p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 28 }}>
                   {([
@@ -287,7 +287,7 @@ export default function BookPage() {
                     </div>
                   ))}
                   <div>
-                    <label style={labelStyle}>Special instructions <span style={{ color: "#8A7B77", fontWeight: 400, fontFamily: "Kodchasan, sans-serif" }}>(optional)</span></label>
+                    <label style={labelStyle}>Special instructions <span style={{ color: "#8C8C8C", fontWeight: 400, fontFamily: "Kodchasan, sans-serif" }}>(optional)</span></label>
                     <textarea rows={3} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
                       placeholder="Buzzer code, fragile items, special requests…"
                       style={{ ...inputStyle, resize: "vertical" }}
@@ -309,12 +309,12 @@ export default function BookPage() {
             {/* Step 3: Confirm */}
             {step === 3 && (
               <motion.div key="step3" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#241619", marginBottom: 8, letterSpacing: "-0.02em" }}>
+                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   Ready to <em className="display-accent" style={{ display: "inline" }}>confirm?</em>
                 </h2>
-                <p style={{ color: "#6E5F5C", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Review your order details below.</p>
+                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Review your order details below.</p>
 
-                <div style={{ background: "#F1EBDD", borderRadius: 16, padding: "24px", marginBottom: 24, display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ background: "#F2F2F2", borderRadius: 16, padding: "24px", marginBottom: 24, display: "flex", flexDirection: "column", gap: 14 }}>
                   {([
                     { label: "Service", value: selectedService?.title },
                     { label: "Date",    value: form.date },
@@ -326,13 +326,13 @@ export default function BookPage() {
                     form.notes ? { label: "Notes", value: form.notes } : null,
                   ].filter(Boolean) as { label: string; value: string | undefined }[]).map(({ label, value }) => (
                     <div key={label} style={{ display: "flex", gap: 16 }}>
-                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.7rem", color: "#4C403D", minWidth: 80, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</span>
-                      <span style={{ color: "#241619", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif", fontWeight: 500 }}>{value}</span>
+                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.7rem", color: "#4A4A4A", minWidth: 80, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</span>
+                      <span style={{ color: "#161616", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif", fontWeight: 500 }}>{value}</span>
                     </div>
                   ))}
                 </div>
 
-                <p style={{ color: "#8A7B77", fontSize: "0.8125rem", marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>By confirming, you agree to our terms. Price confirmed via SMS after weigh-in.</p>
+                <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>By confirming, you agree to our terms. Price confirmed via SMS after weigh-in.</p>
 
                 {submitError && (
                   <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 16, color: "#EF4444", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>
@@ -359,8 +359,8 @@ export default function BookPage() {
 
           {/* Order Summary sidebar */}
           <div style={{ position: "sticky", top: 100 }}>
-            <div style={{ background: "#ffffff", border: "1px solid rgba(36,22,26,0.08)", borderRadius: 20, padding: "28px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#241619", marginBottom: 20 }}>Order Summary</p>
+            <div style={{ background: "#ffffff", border: "1px solid rgba(20,20,20,0.08)", borderRadius: 20, padding: "28px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 20 }}>Order Summary</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
                   { label: "Service", value: selectedService?.title },
@@ -368,19 +368,19 @@ export default function BookPage() {
                   { label: "Time",    value: form.time || null },
                 ].map(({ label, value }) => (
                   <div key={label} style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#8A7B77", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{label}</span>
-                    <span style={{ color: value ? "#241619" : "#C4BCB8", fontSize: "0.875rem", fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>{value || "—"}</span>
+                    <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{label}</span>
+                    <span style={{ color: value ? "#161616" : "#C4BCB8", fontSize: "0.875rem", fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>{value || "—"}</span>
                   </div>
                 ))}
-                <div style={{ borderTop: "1px solid rgba(36,22,26,0.08)", paddingTop: 14 }}>
+                <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)", paddingTop: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#8A7B77", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
+                    <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
                     <span style={{ color: "#CB3E5E", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
                   </div>
-                  <p style={{ color: "#8A7B77", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in</p>
+                  <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in</p>
                 </div>
               </div>
-              <div style={{ marginTop: 20, background: "#F1EBDD", borderRadius: 10, padding: "11px 14px" }}>
+              <div style={{ marginTop: 20, background: "#F2F2F2", borderRadius: 10, padding: "11px 14px" }}>
                 <p style={{ color: "#A82F4B", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
               </div>
             </div>

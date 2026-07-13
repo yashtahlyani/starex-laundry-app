@@ -65,20 +65,20 @@ function OrderTracker() {
   const events: StatusEvent[] = order?.status_history ?? [];
 
   return (
-    <div className="min-h-screen bg-[#FBF8F1] pt-20">
+    <div className="min-h-screen bg-[#FFFFFF] pt-20">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14">
         <div className="text-center mb-10">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/10 mb-4">
             <Package size={26} className="text-[#A82F4B]" />
           </div>
-          <h1 className="text-3xl font-bold text-[#241619] font-heading">Track Your Order</h1>
-          <p className="text-[#6E5F5C] mt-2 text-sm font-body">Enter your order code from your confirmation.</p>
+          <h1 className="text-3xl font-bold text-[#161616] font-heading">Track Your Order</h1>
+          <p className="text-[#6B6B6B] mt-2 text-sm font-body">Enter your order code from your confirmation.</p>
         </div>
 
         {/* Search */}
-        <div className="bg-white rounded-2xl border border-[#241619]/8 shadow-sm p-2 flex gap-2 mb-8">
+        <div className="bg-white rounded-2xl border border-[#161616]/8 shadow-sm p-2 flex gap-2 mb-8">
           <input
-            className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-[#241619] placeholder:text-[#8A7B77] font-body"
+            className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-[#161616] placeholder:text-[#8C8C8C] font-body"
             placeholder="Order code — e.g. STX-482913"
             value={code}
             onChange={e => setCode(e.target.value)}
@@ -104,11 +104,11 @@ function OrderTracker() {
             <div className="card rounded-3xl p-6">
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
-                  <p className="text-xs text-[#8A7B77] font-medium mb-1 font-body">Order</p>
+                  <p className="text-xs text-[#8C8C8C] font-medium mb-1 font-body">Order</p>
                   <p className="font-mono font-bold text-[#A82F4B] text-xl">{order.code}</p>
                 </div>
                 {meta && (
-                  <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-[#241619]/5 border border-[#241619]/10 text-xs font-semibold font-body"
+                  <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-[#161616]/5 border border-[#161616]/10 text-xs font-semibold font-body"
                     style={{ color: meta.color }}>
                     <meta.icon size={13} />
                     {meta.label}
@@ -117,17 +117,17 @@ function OrderTracker() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm mb-6">
-                <div className="bg-[#241619]/4 rounded-xl p-3 border border-[#241619]/8">
-                  <p className="text-xs text-[#8A7B77] mb-1 font-body">Service</p>
-                  <p className="font-semibold text-[#241619] font-heading">{order.service_title || order.service}</p>
+                <div className="bg-[#161616]/4 rounded-xl p-3 border border-[#161616]/8">
+                  <p className="text-xs text-[#8C8C8C] mb-1 font-body">Service</p>
+                  <p className="font-semibold text-[#161616] font-heading">{order.service_title || order.service}</p>
                 </div>
-                <div className="bg-[#241619]/4 rounded-xl p-3 border border-[#241619]/8">
-                  <p className="text-xs text-[#8A7B77] mb-1 font-body">Pickup date</p>
-                  <p className="font-semibold text-[#241619] font-heading">{order.date}</p>
+                <div className="bg-[#161616]/4 rounded-xl p-3 border border-[#161616]/8">
+                  <p className="text-xs text-[#8C8C8C] mb-1 font-body">Pickup date</p>
+                  <p className="font-semibold text-[#161616] font-heading">{order.date}</p>
                 </div>
-                <div className="bg-[#241619]/4 rounded-xl p-3 border border-[#241619]/8 col-span-2">
-                  <p className="text-xs text-[#8A7B77] mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
-                  <p className="font-semibold text-[#241619] text-sm font-heading">{order.address}</p>
+                <div className="bg-[#161616]/4 rounded-xl p-3 border border-[#161616]/8 col-span-2">
+                  <p className="text-xs text-[#8C8C8C] mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
+                  <p className="font-semibold text-[#161616] text-sm font-heading">{order.address}</p>
                 </div>
               </div>
 
@@ -145,19 +145,19 @@ function OrderTracker() {
                           <div className={`h-8 w-8 rounded-full border-2 flex items-center justify-center transition-all ${
                             done
                               ? active ? "bg-mint border-mint shadow-[0_0_12px_rgba(203,62,94,0.4)]" : "bg-mint/30 border-mint/40"
-                              : "bg-[#241619]/5 border-[#241619]/15"
+                              : "bg-[#161616]/5 border-[#161616]/15"
                           }`}>
-                            <Icon size={14} className={done ? "text-[#FFFFFF]" : "text-[#241619]/25"} />
+                            <Icon size={14} className={done ? "text-[#FFFFFF]" : "text-[#161616]/25"} />
                           </div>
                           {i < STAGES.length - 1 && (
-                            <div className={`w-0.5 h-6 mt-1 ${i < currentStageIndex ? "bg-mint/40" : "bg-[#241619]/8"}`} />
+                            <div className={`w-0.5 h-6 mt-1 ${i < currentStageIndex ? "bg-mint/40" : "bg-[#161616]/8"}`} />
                           )}
                         </div>
                         <div className="pb-6 flex-1">
-                          <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-[#A82F4B]" : "text-[#241619]/60") : "text-[#241619]/25"}`}>
+                          <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-[#A82F4B]" : "text-[#161616]/60") : "text-[#161616]/25"}`}>
                             {sm?.label ?? stage}
                           </p>
-                          {active && <p className="text-xs text-[#8A7B77] mt-0.5 font-body">{sm?.desc}</p>}
+                          {active && <p className="text-xs text-[#8C8C8C] mt-0.5 font-body">{sm?.desc}</p>}
                         </div>
                       </div>
                     );
@@ -169,7 +169,7 @@ function OrderTracker() {
             {/* Event history from status_history jsonb */}
             {events.length > 0 && (
               <div className="card rounded-2xl p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-[#8A7B77] mb-4 font-body">Activity Log</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-[#8C8C8C] mb-4 font-body">Activity Log</p>
                 <ul className="space-y-3">
                   {[...events].reverse().map((ev, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -177,12 +177,12 @@ function OrderTracker() {
                         <CheckCircle size={12} className="text-[#A82F4B]" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-[#241619] font-heading">
+                        <p className="text-sm font-medium text-[#161616] font-heading">
                           {STAGE_META[ev.status]?.label ?? ev.status}
                         </p>
-                        {ev.note && <p className="text-xs text-[#8A7B77] font-body">{ev.note}</p>}
+                        {ev.note && <p className="text-xs text-[#8C8C8C] font-body">{ev.note}</p>}
                         {(ev.time || ev.created_at) && (
-                          <p className="text-xs text-[#8A7B77] mt-0.5 font-body">
+                          <p className="text-xs text-[#8C8C8C] mt-0.5 font-body">
                             {new Date(ev.time || ev.created_at!).toLocaleString("en-CA", {
                               month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true,
                             })}
@@ -195,7 +195,7 @@ function OrderTracker() {
               </div>
             )}
 
-            <p className="text-center text-xs text-[#8A7B77] font-body">
+            <p className="text-center text-xs text-[#8C8C8C] font-body">
               Questions? Email us at{" "}
               <a href="mailto:hello@starexlaundry.ca" className="text-[#A82F4B] underline">hello@starexlaundry.ca</a>
             </p>

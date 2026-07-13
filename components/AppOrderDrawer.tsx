@@ -41,11 +41,11 @@ function Row({ icon: Icon, label, value }: { icon: React.ElementType; label: str
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
       <div style={{ width: 32, height: 32, borderRadius: 8, background: "#F4F4F5", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-        <Icon size={15} color="#6E5F5C" />
+        <Icon size={15} color="#6B6B6B" />
       </div>
       <div>
         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#A1A1AA", fontWeight: 700 }}>{label}</p>
-        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#241619", fontWeight: 500 }}>{value}</p>
+        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#161616", fontWeight: 500 }}>{value}</p>
       </div>
     </div>
   );
@@ -104,14 +104,14 @@ export default function AppOrderDrawer({
             {/* Header */}
             <div style={{ padding: "24px 28px", borderBottom: "1px solid #F4F4F5", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div>
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#241619" }}>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#161616" }}>
                   {order.service_title ?? SERVICE_LABELS[order.service] ?? order.service}
                   <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {order.code}</span>
                 </p>
                 <StatusBadge status={currentStatus} pulse={!["delivered","cancelled"].includes(currentStatus)} size="sm" />
               </div>
               <button onClick={onClose} style={{ background: "#F4F4F5", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <X size={16} color="#6E5F5C" />
+                <X size={16} color="#6B6B6B" />
               </button>
             </div>
 
@@ -139,7 +139,7 @@ export default function AppOrderDrawer({
                 <button
                   onClick={handleAdvance} disabled={advancing}
                   style={{
-                    width: "100%", padding: "13px", background: advancing ? "#A1A1AA" : "#241619",
+                    width: "100%", padding: "13px", background: advancing ? "#A1A1AA" : "#161616",
                     color: "#fff", border: "none", borderRadius: 120, cursor: advancing ? "not-allowed" : "pointer",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem",
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
@@ -151,7 +151,7 @@ export default function AppOrderDrawer({
               {!admin && !["delivered","cancelled"].includes(currentStatus) && (
                 <a href="/contact" style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  padding: "13px", background: "#F4F4F5", color: "#241619",
+                  padding: "13px", background: "#F4F4F5", color: "#161616",
                   borderRadius: 120, textDecoration: "none",
                   fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem",
                 }}>

@@ -15,10 +15,10 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const info = [
-  { Icon: Phone, title: "Phone", value: "437-607-7251", sub: "Call or text, 7 days a week", color: "#F7E3E6" },
-  { Icon: Mail, title: "Email", value: "hello@starexlaundry.ca", sub: "We reply within 1 business hour", color: "#F1EBDD" },
-  { Icon: MapPin, title: "Service Area", value: "Brampton & Mississauga", sub: "Ontario, Canada", color: "#EFE8D8" },
-  { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#E9E2D2" },
+  { Icon: Phone, title: "Phone", value: "437-607-7251", sub: "Call or text, 7 days a week", color: "#EDEDED" },
+  { Icon: Mail, title: "Email", value: "hello@starexlaundry.ca", sub: "We reply within 1 business hour", color: "#F2F2F2" },
+  { Icon: MapPin, title: "Service Area", value: "Brampton & Mississauga", sub: "Ontario, Canada", color: "#EAEAEA" },
+  { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#E5E5E5" },
 ];
 
 export default function Contact() {
@@ -51,17 +51,17 @@ export default function Contact() {
 
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "13px 16px", borderRadius: 10, border: "1px solid #E5E7EB",
-    fontSize: "0.9375rem", fontFamily: "Kodchasan, sans-serif", color: "#241619",
+    fontSize: "0.9375rem", fontFamily: "Kodchasan, sans-serif", color: "#161616",
     background: "#FAFAFA", outline: "none", boxSizing: "border-box",
   };
 
   const labelStyle: React.CSSProperties = {
     display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 500,
-    fontSize: "0.875rem", color: "#4C403D", marginBottom: 6,
+    fontSize: "0.875rem", color: "#4A4A4A", marginBottom: 6,
   };
 
   return (
-    <div style={{ background: "#FBF8F1" }}>
+    <div style={{ background: "#FFFFFF" }}>
 
       {/* Hero */}
       <section style={{ paddingTop: 120, paddingBottom: 72, background: "var(--brand)", position: "relative", overflow: "hidden" }}>
@@ -94,11 +94,11 @@ export default function Contact() {
                   initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
                   style={{ textAlign: "center", padding: "48px 0" }}
                 >
-                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#F1EBDD", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#F2F2F2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
                     <CheckCircle size={30} color="#16a34a" />
                   </div>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", color: "#241619", marginBottom: 10 }}>Message sent!</h3>
-                  <p style={{ color: "#6E5F5C", fontFamily: "Kodchasan, sans-serif", marginBottom: 28 }}>We&apos;ll get back to you within 1 business hour.</p>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", color: "#161616", marginBottom: 10 }}>Message sent!</h3>
+                  <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", marginBottom: 28 }}>We&apos;ll get back to you within 1 business hour.</p>
                   <button
                     onClick={() => { setForm({ name: "", email: "", subject: "", message: "" }); setSubmitted(false); setError(null); }}
                     className="btn-primary"
@@ -109,7 +109,7 @@ export default function Contact() {
                 </motion.div>
               ) : (
                 <>
-                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#241619", marginBottom: 28, letterSpacing: "-0.02em" }}>Send us a message</h2>
+                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#161616", marginBottom: 28, letterSpacing: "-0.02em" }}>Send us a message</h2>
                   <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="form-row">
                       <div>
@@ -152,11 +152,11 @@ export default function Contact() {
               <AnimatedContent key={item.title} delay={i * 0.07}>
                 <div style={{ background: item.color, borderRadius: 16, padding: "24px" }}>
                   <div style={{ width: 36, height: 36, background: "rgba(0,0,0,0.07)", borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                    <item.Icon size={16} color="#241619" />
+                    <item.Icon size={16} color="#161616" />
                   </div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#241619", marginBottom: 4 }}>{item.title}</p>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: 2 }}>{item.value}</p>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6E5F5C" }}>{item.sub}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#161616", marginBottom: 4 }}>{item.title}</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616", marginBottom: 2 }}>{item.value}</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B" }}>{item.sub}</p>
                 </div>
               </AnimatedContent>
             ))}

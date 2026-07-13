@@ -63,7 +63,7 @@ const stats = [
   { value: 24,    suffix: "hr", label: "Turnaround",     desc: "24–48h, door to door" },
 ];
 
-const pasteColors = ["#F7E3E6", "#F1EBDD", "#EFE8D8", "#E9E2D2", "#F7E3E6", "#F1EBDD"];
+const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
 
 const services = [
   { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2.29/lb",        tags: ["Everyday", "Colour-sorted"] },
@@ -150,12 +150,12 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease }}
               style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
               <div className="rule-mark" aria-hidden="true"><span /><span /><span /></div>
-              <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#241619" }}>
+              <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#161616" }}>
                 Canada&apos;s Premium Laundry Service
               </span>
             </motion.div>
 
-            <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2.75rem,5.5vw,4.75rem)", letterSpacing: "-0.03em", lineHeight: 1.02, color: "#241619", marginBottom: "28px" }}>
+            <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2.75rem,5.5vw,4.75rem)", letterSpacing: "-0.03em", lineHeight: 1.02, color: "#161616", marginBottom: "28px" }}>
               {["Fresh laundry,", "delivered to"].map((line, i) => (
                 <motion.span key={i} initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 + i * 0.1, ease }} style={{ display: "block" }}>
                   {line}
@@ -168,7 +168,7 @@ export default function Home() {
             </h1>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }}
-              style={{ color: "#6E5F5C", fontSize: "1.0625rem", lineHeight: 1.75, maxWidth: "42ch", marginBottom: 40, fontFamily: "Kodchasan, sans-serif" }}>
+              style={{ color: "#6B6B6B", fontSize: "1.0625rem", lineHeight: 1.75, maxWidth: "42ch", marginBottom: 40, fontFamily: "Kodchasan, sans-serif" }}>
               Schedule a pickup in 60 seconds. We wash, fold, and deliver — you relax.
               Just $2.29/lb with free pickup &amp; delivery over 15 lbs.
             </motion.p>
@@ -181,8 +181,8 @@ export default function Home() {
               <a href="/how-it-works" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem",
-                color: "#241619", padding: "13px 28px", borderRadius: 120,
-                border: "1.5px solid rgba(36,22,26,0.16)", textDecoration: "none",
+                color: "#161616", padding: "13px 28px", borderRadius: 120,
+                border: "1.5px solid rgba(20,20,20,0.16)", textDecoration: "none",
               }}>
                 See How It Works
               </a>
@@ -195,10 +195,10 @@ export default function Home() {
                 {[...Array(5)].map((_, i) => (
                   <div key={i} style={{
                     width: 30, height: 30, borderRadius: "50%", marginLeft: i === 0 ? 0 : -8,
-                    background: ["#D9A9B0","#DDB58C","#E4C4C8","#C793A2","#E3CFA3"][i],
+                    background: ["#CB3E5E","#4A4A4A","#B5233F","#8C8C8C","#161616"][i],
                     border: "2px solid #FFFFFF",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "0.65rem", fontWeight: 700, color: "#241619",
+                    fontSize: "0.65rem", fontWeight: 700, color: "#FFFFFF",
                     fontFamily: "Kodchasan, sans-serif",
                   }}>
                     {["SM","JK","PR","DL","AK"][i]}
@@ -209,8 +209,8 @@ export default function Home() {
                 <div style={{ display: "flex", gap: 2 }}>
                   {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="var(--brand)" color="var(--brand)" />)}
                 </div>
-                <p style={{ color: "#6E5F5C", fontSize: "0.8rem", marginTop: 2, fontFamily: "Kodchasan, sans-serif" }}>
-                  Loved by <strong style={{ color: "#241619" }}>10,000+</strong> Canadians
+                <p style={{ color: "#6B6B6B", fontSize: "0.8rem", marginTop: 2, fontFamily: "Kodchasan, sans-serif" }}>
+                  Loved by <strong style={{ color: "#161616" }}>10,000+</strong> Canadians
                 </p>
               </div>
             </motion.div>
@@ -307,27 +307,27 @@ export default function Home() {
       </div>
 
       {/* ══ HOW IT WORKS — light bg, vertical timeline ══ */}
-      <section style={{ padding: "96px 0", background: "#FBF8F1" }}>
+      <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: "72px" }}>
             <span className="eyebrow" style={{ color: "#431E2C" }}>How It Works</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619", maxWidth: "18ch" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616", maxWidth: "18ch" }}>
               Three steps to{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>clean.</span>
             </h2>
           </AnimatedContent>
 
           <div style={{ position: "relative", paddingLeft: "48px" }}>
-            <div style={{ position: "absolute", left: "9px", top: "16px", bottom: "16px", width: "2px", background: "rgba(36,22,26,0.1)", borderRadius: 2 }} />
+            <div style={{ position: "absolute", left: "9px", top: "16px", bottom: "16px", width: "2px", background: "rgba(20,20,20,0.1)", borderRadius: 2 }} />
             {steps.map((step, i) => (
               <AnimatedContent key={step.label} delay={i * 0.1}>
                 <div style={{ position: "relative", marginBottom: i < steps.length - 1 ? "64px" : 0 }}>
-                  <div style={{ position: "absolute", left: "-43px", top: "6px", width: 16, height: 16, borderRadius: "50%", background: "#CB3E5E", flexShrink: 0, boxShadow: "0 0 0 3px #FBF8F1, 0 0 0 5px rgba(203,62,94,0.22)" }} />
+                  <div style={{ position: "absolute", left: "-43px", top: "6px", width: 16, height: 16, borderRadius: "50%", background: "#CB3E5E", flexShrink: 0, boxShadow: "0 0 0 3px #FFFFFF, 0 0 0 5px rgba(203,62,94,0.22)" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                     <span className="step-pill">{step.label}</span>
                   </div>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", letterSpacing: "-0.015em", color: "#241619", marginBottom: "10px" }}>{step.title}</h3>
-                  <p style={{ color: "#6E5F5C", fontSize: "1rem", lineHeight: 1.75, maxWidth: "55ch", marginBottom: "16px", fontFamily: "Kodchasan, sans-serif" }}>{step.desc}</p>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", letterSpacing: "-0.015em", color: "#161616", marginBottom: "10px" }}>{step.title}</h3>
+                  <p style={{ color: "#6B6B6B", fontSize: "1rem", lineHeight: 1.75, maxWidth: "55ch", marginBottom: "16px", fontFamily: "Kodchasan, sans-serif" }}>{step.desc}</p>
                   <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                     {step.tags.map(tag => <span key={tag} className="tag-outline-dark">{tag}</span>)}
                   </div>
@@ -343,7 +343,7 @@ export default function Home() {
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: "56px" }}>
             <span className="eyebrow" style={{ color: "#431E2C" }}>What We Offer</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Services built for{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>your life.</span>
             </h2>
@@ -357,13 +357,13 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.6, delay: i * 0.06, ease }}
-                whileHover={{ y: -6, boxShadow: "0 20px 60px rgba(36,22,26,0.12)" }}
+                whileHover={{ y: -6, boxShadow: "0 20px 60px rgba(20,20,20,0.12)" }}
                 style={{ background: pasteColors[i % pasteColors.length], borderRadius: "20px", padding: "32px 28px", height: "100%", display: "flex", flexDirection: "column", cursor: "default" }}
               >
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2rem", letterSpacing: "-0.03em", color: "rgba(36,22,26,0.18)", lineHeight: 1, marginBottom: "28px" }}>{s.num}</p>
-                <div style={{ height: "1px", background: "rgba(36,22,26,0.1)", marginBottom: "20px" }} />
-                <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", letterSpacing: "-0.01em", color: "#241619", marginBottom: "10px" }}>{s.title}</h3>
-                <p style={{ color: "rgba(36,22,26,0.65)", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", flexGrow: 1, marginBottom: "20px" }}>{s.desc}</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2rem", letterSpacing: "-0.03em", color: "rgba(20,20,20,0.18)", lineHeight: 1, marginBottom: "28px" }}>{s.num}</p>
+                <div style={{ height: "1px", background: "rgba(20,20,20,0.1)", marginBottom: "20px" }} />
+                <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", letterSpacing: "-0.01em", color: "#161616", marginBottom: "10px" }}>{s.title}</h3>
+                <p style={{ color: "rgba(20,20,20,0.65)", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", flexGrow: 1, marginBottom: "20px" }}>{s.desc}</p>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#431E2C" }}>{s.price}</p>
                 </div>
@@ -380,18 +380,18 @@ export default function Home() {
       </section>
 
       {/* ══ WHY STAREX — comparison ══ */}
-      <section style={{ padding: "96px 0", background: "#FBF8F1" }}>
+      <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "80px", alignItems: "center" }} className="comparison-layout">
 
             {/* Left col */}
             <AnimatedContent>
               <span className="eyebrow" style={{ color: "#431E2C" }}>The Difference</span>
-              <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619", marginBottom: "16px" }}>
+              <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: "16px" }}>
                 Why StareX beats the{" "}
                 <span className="display-accent" style={{ fontWeight: 600 }}>laundromat.</span>
               </h2>
-              <p style={{ color: "#6E5F5C", fontSize: "1rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif", maxWidth: "38ch", marginBottom: "28px" }}>
+              <p style={{ color: "#6B6B6B", fontSize: "1rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif", maxWidth: "38ch", marginBottom: "28px" }}>
                 Skip the trip. Skip the wait. We handle everything, every time.
               </p>
               <a href="/book" className="btn-primary" style={{ display: "inline-flex" }}>
@@ -401,23 +401,23 @@ export default function Home() {
 
             {/* Right col — comparison table */}
             <AnimatedContent delay={0.15}>
-              <div style={{ background: "#ffffff", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(36,22,26,0.06)" }}>
+              <div style={{ background: "#ffffff", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(20,20,20,0.06)" }}>
                 {/* Header row */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(36,22,26,0.03)", borderBottom: "1px solid rgba(36,22,26,0.06)" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(20,20,20,0.03)", borderBottom: "1px solid rgba(20,20,20,0.06)" }}>
                   <span />
-                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(36,22,26,0.35)", textAlign: "center" }}>Traditional</span>
+                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(20,20,20,0.35)", textAlign: "center" }}>Traditional</span>
                   <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#CB3E5E", textAlign: "center" }}>StareX</span>
                 </div>
                 {comparisons.map((row, i) => (
-                  <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(36,22,26,0.06)" : "none", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "0.8125rem", color: "#241619" }}>{row.feature}</span>
+                  <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "0.8125rem", color: "#161616" }}>{row.feature}</span>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
-                      <XCircle size={13} color="rgba(36,22,26,0.3)" strokeWidth={2} />
-                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "rgba(36,22,26,0.45)", textAlign: "center" }}>{row.them}</span>
+                      <XCircle size={13} color="rgba(20,20,20,0.3)" strokeWidth={2} />
+                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "rgba(20,20,20,0.45)", textAlign: "center" }}>{row.them}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
                       <CheckCircle size={13} color="#CB3E5E" strokeWidth={2.5} />
-                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#241619", fontWeight: 600, textAlign: "center" }}>{row.us}</span>
+                      <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#161616", fontWeight: 600, textAlign: "center" }}>{row.us}</span>
                     </div>
                   </div>
                 ))}
@@ -429,15 +429,15 @@ export default function Home() {
       </section>
 
       {/* ══ PRICING — cream ══ */}
-      <section style={{ background: "#F1EBDD", padding: "96px 0" }}>
+      <section style={{ background: "#F2F2F2", padding: "96px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: "56px" }}>
             <span className="eyebrow" style={{ color: "#A82F4B" }}>Simple Pricing</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619", marginBottom: "12px" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: "12px" }}>
               Pricing that{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>works for you.</span>
             </h2>
-            <p style={{ color: "#6E5F5C", fontSize: "1.0625rem", maxWidth: "50ch", margin: "0 auto", fontFamily: "Kodchasan, sans-serif" }}>
+            <p style={{ color: "#6B6B6B", fontSize: "1.0625rem", maxWidth: "50ch", margin: "0 auto", fontFamily: "Kodchasan, sans-serif" }}>
               Pay per pound, or save with the monthly plan. No hidden fees, ever.
             </p>
           </AnimatedContent>
@@ -450,7 +450,7 @@ export default function Home() {
               <AnimatedContent key={plan.name} delay={i * 0.08}>
                 <div style={{
                   background: "#ffffff",
-                  border: plan.popular ? "none" : "1px solid rgba(36,22,26,0.08)",
+                  border: plan.popular ? "none" : "1px solid rgba(20,20,20,0.08)",
                   borderRadius: "20px", padding: "32px",
                   transform: plan.popular ? "scale(1.03)" : "scale(1)",
                   position: "relative",
@@ -461,24 +461,24 @@ export default function Home() {
                       Popular
                     </div>
                   )}
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8A7B77", marginBottom: "10px" }}>{plan.name}</p>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2.75rem", letterSpacing: "-0.03em", color: "#241619", lineHeight: 1 }}>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8C8C8C", marginBottom: "10px" }}>{plan.name}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2.75rem", letterSpacing: "-0.03em", color: "#161616", lineHeight: 1 }}>
                     {plan.price}<span style={{ fontSize: "1rem", fontWeight: 400 }}>{plan.period}</span>
                   </p>
-                  <p style={{ color: "#6E5F5C", fontSize: "0.875rem", margin: "8px 0 24px", fontFamily: "Kodchasan, sans-serif" }}>{plan.desc}</p>
+                  <p style={{ color: "#6B6B6B", fontSize: "0.875rem", margin: "8px 0 24px", fontFamily: "Kodchasan, sans-serif" }}>{plan.desc}</p>
                   <ul style={{ listStyle: "none", marginBottom: "28px", display: "flex", flexDirection: "column", gap: "10px" }}>
                     {plan.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                         <CheckCircle size={15} color="#CB3E5E" strokeWidth={2.5} />
-                        <span style={{ color: "#4C403D", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                        <span style={{ color: "#4A4A4A", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
                   <a href="/pricing" className={plan.popular ? "btn-primary" : undefined} style={plan.popular ? { display: "block", textAlign: "center", textDecoration: "none" } : {
                     display: "block", textAlign: "center", padding: "12px", borderRadius: "120px",
                     background: "transparent",
-                    border: "1.5px solid rgba(36,22,26,0.16)",
-                    color: "#241619",
+                    border: "1.5px solid rgba(20,20,20,0.16)",
+                    color: "#161616",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem",
                     textDecoration: "none", transition: "all 0.2s ease",
                   }}>
@@ -492,11 +492,11 @@ export default function Home() {
       </section>
 
       {/* ══ TESTIMONIALS — light ══ */}
-      <section style={{ padding: "96px 0", background: "#FBF8F1" }}>
+      <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: "48px" }}>
             <span className="eyebrow" style={{ color: "#A82F4B" }}>What People Say</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#241619" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Thousands of happy{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>customers.</span>
             </h2>
@@ -532,12 +532,12 @@ export default function Home() {
                   <div style={{ display: "flex", gap: 3, marginBottom: "16px" }}>
                     {[...Array(t.stars)].map((_, j) => <Star key={j} size={14} fill="#CB3E5E" color="#CB3E5E" />)}
                   </div>
-                  <p style={{ color: "#4C403D", fontSize: "1rem", lineHeight: 1.75, marginBottom: "24px", fontFamily: "Kodchasan, sans-serif", fontStyle: "italic" }}>
+                  <p style={{ color: "#4A4A4A", fontSize: "1rem", lineHeight: 1.75, marginBottom: "24px", fontFamily: "Kodchasan, sans-serif", fontStyle: "italic" }}>
                     &ldquo;{t.text}&rdquo;
                   </p>
-                  <div style={{ borderTop: "1px solid rgba(36,22,26,0.06)", paddingTop: "16px" }}>
-                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#241619" }}>{t.name}</p>
-                    <p style={{ color: "rgba(36,22,26,0.4)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>{t.role}</p>
+                  <div style={{ borderTop: "1px solid rgba(20,20,20,0.06)", paddingTop: "16px" }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616" }}>{t.name}</p>
+                    <p style={{ color: "rgba(20,20,20,0.4)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>{t.role}</p>
                   </div>
                 </div>
               </AnimatedContent>
@@ -547,7 +547,7 @@ export default function Home() {
       </section>
 
       {/* ══ TRUST BADGES — cream ══ */}
-      <section style={{ background: "#FBF8F1", padding: "64px 0" }}>
+      <section style={{ background: "#FFFFFF", padding: "64px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "32px" }} className="trust-grid">
             {trust.map((t, i) => (
@@ -556,8 +556,8 @@ export default function Home() {
                   <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(203,62,94,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
                     <t.Icon size={20} color="#CB3E5E" />
                   </div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: "8px" }}>{t.title}</p>
-                  <p style={{ color: "#6E5F5C", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616", marginBottom: "8px" }}>{t.title}</p>
+                  <p style={{ color: "#6B6B6B", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>
                 </div>
               </AnimatedContent>
             ))}

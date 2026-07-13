@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
-import { Mail, Lock, User, ArrowRight, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { BUSINESS_NAME } from "@/lib/pricing";
 import Logo from "@/components/Logo";
 
@@ -68,12 +68,15 @@ export default function AuthPage() {
 
   if (mode === "new-password") {
     return (
-      <div className="min-h-screen bg-[#FBF8F1] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-4 pt-16 relative">
+        <a href="/" className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#4A4A4A] hover:text-[#CB3E5E] transition-colors font-body">
+          <ArrowLeft size={15} /> Back to Home
+        </a>
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10">
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-[#241619] font-heading">Set new password</h1>
-              <p className="text-[#6E5F5C] text-sm mt-1 font-body">Choose a strong password for your account.</p>
+              <h1 className="text-2xl font-bold text-[#161616] font-heading">Set new password</h1>
+              <p className="text-[#6B6B6B] text-sm mt-1 font-body">Choose a strong password for your account.</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -81,7 +84,7 @@ export default function AuthPage() {
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                   <input
-                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#241619] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#161616] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                     type={showPw ? "text" : "password"}
                     placeholder="Min. 8 characters"
                     value={password}
@@ -89,7 +92,7 @@ export default function AuthPage() {
                     required
                     minLength={8}
                   />
-                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#6E5F5C]">
+                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#6B6B6B]">
                     {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
@@ -99,7 +102,7 @@ export default function AuthPage() {
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                   <input
-                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#241619] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#161616] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                     type={showPw ? "text" : "password"}
                     placeholder="Re-enter password"
                     value={confirmPassword}
@@ -130,17 +133,17 @@ export default function AuthPage() {
 
   if (mode === "check-email") {
     return (
-      <div className="min-h-screen bg-[#FBF8F1] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10 text-center">
             <div className="h-16 w-16 rounded-full bg-mint/15 flex items-center justify-center mx-auto mb-5">
               <CheckCircle size={32} className="text-mint" />
             </div>
-            <h2 className="text-2xl font-bold text-[#241619] mb-2 font-heading">Check your email</h2>
-            <p className="text-[#6E5F5C] text-sm leading-relaxed mb-6 font-body">
+            <h2 className="text-2xl font-bold text-[#161616] mb-2 font-heading">Check your email</h2>
+            <p className="text-[#6B6B6B] text-sm leading-relaxed mb-6 font-body">
               We sent a link to <strong>{email}</strong>. Click it to confirm your account and get started.
             </p>
-            <button onClick={() => setMode("signin")} className="btn-ghost w-full text-[#241619] border-[#241619]/20 hover:border-mint hover:text-mint">
+            <button onClick={() => setMode("signin")} className="btn-ghost w-full text-[#161616] border-[#161616]/20 hover:border-mint hover:text-mint">
               Back to Sign In
             </button>
           </div>
@@ -150,7 +153,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex pt-16 bg-[#FBF8F1]">
+    <div className="min-h-screen flex pt-16 bg-[#FFFFFF]">
       {/* Left brand panel — flat brand red, echoes the homepage hero split */}
       <div className="hidden lg:flex lg:w-5/12 bg-[#CB3E5E] flex-col justify-between p-12 relative overflow-hidden">
         <a href="/" className="relative flex items-center">
@@ -188,19 +191,22 @@ export default function AuthPage() {
       </div>
 
       {/* Right form panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FBF8F1]">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FFFFFF] relative">
+        <a href="/" className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#4A4A4A] hover:text-[#CB3E5E] transition-colors font-body">
+          <ArrowLeft size={15} /> Back to Home
+        </a>
         <div className="w-full max-w-md">
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">
               <a href="/" className="lg:hidden flex items-center mb-6">
                 <Logo color="#CB3E5E" fontSize="1.2rem" />
               </a>
-              <h1 className="text-2xl font-bold text-[#241619] font-heading">
+              <h1 className="text-2xl font-bold text-[#161616] font-heading">
                 {mode === "signin" && "Welcome back"}
                 {mode === "signup" && "Create your account"}
                 {mode === "reset" && "Reset your password"}
               </h1>
-              <p className="text-[#6E5F5C] text-sm mt-1 font-body">
+              <p className="text-[#6B6B6B] text-sm mt-1 font-body">
                 {mode === "signin" && "Sign in to manage your orders and account."}
                 {mode === "signup" && "Join thousands of Canadians who trust Starex."}
                 {mode === "reset" && "Enter your email and we'll send you a reset link."}
@@ -214,7 +220,7 @@ export default function AuthPage() {
                   <div className="relative">
                     <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                     <input
-                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#241619] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#161616] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                       placeholder="Your full name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -229,7 +235,7 @@ export default function AuthPage() {
                 <div className="relative">
                   <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                   <input
-                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#241619] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#161616] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                     type="email"
                     placeholder="you@example.com"
                     value={email}
@@ -252,7 +258,7 @@ export default function AuthPage() {
                   <div className="relative">
                     <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                     <input
-                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#241619] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#161616] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                       type={showPw ? "text" : "password"}
                       placeholder={mode === "signup" ? "Min. 8 characters" : "Your password"}
                       value={password}
@@ -263,7 +269,7 @@ export default function AuthPage() {
                     <button
                       type="button"
                       onClick={() => setShowPw(!showPw)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#6E5F5C]"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#6B6B6B]"
                     >
                       {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -297,7 +303,7 @@ export default function AuthPage() {
               </button>
 
               {mode === "reset" && (
-                <button type="button" onClick={() => setMode("signin")} className="btn-ghost w-full text-[#241619] border-[#241619]/20 hover:border-mint hover:text-mint">
+                <button type="button" onClick={() => setMode("signin")} className="btn-ghost w-full text-[#161616] border-[#161616]/20 hover:border-mint hover:text-mint">
                   Back to Sign In
                 </button>
               )}
@@ -305,7 +311,7 @@ export default function AuthPage() {
 
             {mode !== "reset" && (
               <div className="mt-6 pt-6 border-t border-[#F4F4F5] text-center">
-                <p className="text-sm text-[#8A7B77] font-body">
+                <p className="text-sm text-[#8C8C8C] font-body">
                   {mode === "signin" ? "Don't have an account?" : "Already have an account?"}{" "}
                   <button
                     onClick={() => { setError(null); setMode(mode === "signin" ? "signup" : "signin"); }}

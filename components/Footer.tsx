@@ -22,13 +22,13 @@ const colHead: React.CSSProperties = {
   fontSize: "0.7rem",
   letterSpacing: "0.1em",
   textTransform: "uppercase",
-  color: "#8A7B77",
+  color: "#8C8C8C",
   marginBottom: "20px",
   display: "block",
 };
 
 const linkStyle: React.CSSProperties = {
-  color: "#4C403D",
+  color: "#4A4A4A",
   fontSize: "0.875rem",
   textDecoration: "none",
   display: "block",
@@ -42,28 +42,28 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <footer style={{ background: "#F1EBDD" }}>
-      <div style={{ borderTop: "1px solid rgba(36,22,26,0.08)" }}>
+    <footer style={{ background: "#F2F2F2" }}>
+      <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "64px 24px 48px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "48px" }}>
 
             {/* Brand + newsletter */}
             <div>
               <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", marginBottom: 16 }}>
-                <Logo color="#241619" fontSize="1.25rem" />
+                <Logo color="#161616" fontSize="1.25rem" />
               </a>
-              <p style={{ color: "#6E5F5C", fontSize: "0.875rem", lineHeight: 1.7, marginBottom: "28px", maxWidth: "220px", fontFamily: "Kodchasan, sans-serif" }}>
+              <p style={{ color: "#6B6B6B", fontSize: "0.875rem", lineHeight: 1.7, marginBottom: "28px", maxWidth: "220px", fontFamily: "Kodchasan, sans-serif" }}>
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
                 <p style={{ color: "#A82F4B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
-                <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(36,22,26,0.15)", paddingBottom: "10px", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(20,20,20,0.15)", paddingBottom: "10px", gap: 8 }}>
                   <input
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="your@email.com"
-                    style={{ background: "none", border: "none", outline: "none", color: "#241619", fontSize: "0.875rem", flex: 1, fontFamily: "Kodchasan, sans-serif" }}
+                    style={{ background: "none", border: "none", outline: "none", color: "#161616", fontSize: "0.875rem", flex: 1, fontFamily: "Kodchasan, sans-serif" }}
                   />
                   <button
                     onClick={() => { if (email) setSubscribed(true); }}
@@ -82,7 +82,7 @@ export default function Footer() {
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
                   onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#CB3E5E"}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#4C403D"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#4A4A4A"}
                 >{p.label}</a>
               ))}
             </div>
@@ -110,7 +110,7 @@ export default function Footer() {
                 ].map((icon, i) => (
                   <motion.a
                     key={i} href="#"
-                    style={{ color: "#8A7B77", textDecoration: "none", display: "flex" }}
+                    style={{ color: "#8C8C8C", textDecoration: "none", display: "flex" }}
                     whileHover={{ color: "#CB3E5E", scale: 1.15 } as any}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
@@ -124,30 +124,30 @@ export default function Footer() {
       </div>
 
       {/* Bottom strip */}
-      <div style={{ borderTop: "1px solid rgba(36,22,26,0.08)", position: "relative", overflow: "hidden" }}>
+      <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)", position: "relative", overflow: "hidden" }}>
         {/* Ghost watermark */}
         <div style={{
           position: "absolute", bottom: "-12px", left: "50%", transform: "translateX(-50%)",
           fontFamily: "Poppins, sans-serif", fontWeight: 700,
           fontSize: "clamp(3rem,10vw,6rem)", letterSpacing: "-0.04em",
-          color: "rgba(36,22,26,0.04)", whiteSpace: "nowrap", userSelect: "none", pointerEvents: "none",
+          color: "rgba(20,20,20,0.04)", whiteSpace: "nowrap", userSelect: "none", pointerEvents: "none",
         }}>
           STAREX
         </div>
 
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", position: "relative" }}>
-          <p style={{ color: "#8A7B77", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
+          <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
             &copy; {new Date().getFullYear()} StareX Inc. Made in Canada 🍁
           </p>
           <div style={{ display: "flex", gap: "20px" }}>
-            <a href="/terms" style={{ color: "#8A7B77", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Terms</a>
-            <a href="/privacy" style={{ color: "#8A7B77", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Privacy</a>
+            <a href="/terms" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Terms</a>
+            <a href="/privacy" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Privacy</a>
           </div>
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             whileHover={{ rotate: -45 } as any}
             transition={{ type: "spring", stiffness: 300 }}
-            style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(36,22,26,0.15)", background: "none", cursor: "pointer", color: "#4C403D", display: "flex", alignItems: "center", justifyContent: "center" }}
+            style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(20,20,20,0.15)", background: "none", cursor: "pointer", color: "#4A4A4A", display: "flex", alignItems: "center", justifyContent: "center" }}
             aria-label="Back to top"
           >
             <ArrowUp size={15} />
