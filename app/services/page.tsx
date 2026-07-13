@@ -93,10 +93,13 @@ export default function ServicesPage() {
 
       {/* CTA strip */}
       <section style={{
-        padding: "64px 0", textAlign: "center", position: "relative",
-        background: "var(--brand)",
+        padding: "64px 0", textAlign: "center", position: "relative", minHeight: 340,
+        backgroundColor: "var(--brand)",
+        backgroundImage: "url(/images/starex/fresh-laundry-door.png)",
+        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
       }}>
-        <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px" }}>
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.75)" }} />
+        <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>
               Not sure what you{" "}
