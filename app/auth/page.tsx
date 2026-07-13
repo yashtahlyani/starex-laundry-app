@@ -155,16 +155,8 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex bg-[#FFFFFF]">
-      {/* Left brand panel — real photo backdrop, echoes the homepage hero split */}
-      <div
-        className="hidden lg:flex lg:w-5/12 flex-col justify-between p-12 relative overflow-hidden"
-        style={{
-          backgroundColor: "#B8324F",
-          backgroundImage: "url(/images/starex/clean-clothes-days.png)",
-          backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div aria-hidden="true" className="absolute inset-0" style={{ background: "rgba(184,50,79,0.78)" }} />
+      {/* Left brand panel — flat brand red, echoes the homepage hero split */}
+      <div className="hidden lg:flex lg:w-5/12 bg-[#B8324F] flex-col justify-between p-12 relative overflow-hidden">
         <a href="/" className="relative flex items-center">
           <Logo color="#FFFFFF" fontSize="1.35rem" />
         </a>

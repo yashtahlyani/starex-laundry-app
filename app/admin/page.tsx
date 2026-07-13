@@ -4,6 +4,7 @@ import StatusUpdater from "@/components/StatusUpdater";
 import AdminTabs from "@/components/AdminTabs";
 import ContactUpdater from "@/components/ContactUpdater";
 import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersClient";
+import Logo from "@/components/Logo";
 import { Bell } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -109,17 +110,10 @@ export default async function AdminDashboardPage({
       {/* Admin header */}
       <header style={{ background: "#161616", position: "sticky", top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
-              <rect width="36" height="36" rx="9" fill="#161616" />
-              <line x1="9" y1="9" x2="27" y2="27" stroke="#B8324F" strokeWidth="5" strokeLinecap="round" />
-              <line x1="27" y1="9" x2="9" y2="27" stroke="#B8324F" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="3" fill="#161616" /><circle cx="18" cy="18" r="1.5" fill="#C85770" />
-            </svg>
-            <div>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#fff", lineHeight: 1 }}>StareX</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#B8324F", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <Logo color="#FFFFFF" fontSize="1.15rem" />
+            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
+            <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#C85770", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>Owner console</p>
             {newOrders.length > 0 && (
               <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#B8324F", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                 <Bell size={12} /> {newOrders.length} new

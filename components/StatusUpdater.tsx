@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const STATUSES = [
   { value: "placed",           label: "Placed" },
@@ -25,6 +26,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function StatusUpdater({ orderCode, currentStatus }: { orderCode: string; currentStatus: string }) {
+  const router = useRouter();
   const [status, setStatus]   = useState(currentStatus);
   const [saving, setSaving]   = useState(false);
   const [saved,  setSaved]    = useState(false);
@@ -42,6 +44,7 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
       if (!res.ok) { const d = await res.json(); throw new Error(d.error ?? "Update failed"); }
       setStatus(newStatus);
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2500);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error");

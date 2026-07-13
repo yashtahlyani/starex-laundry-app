@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const STATUSES = [
   { value: "new",     label: "New" },
@@ -9,6 +10,7 @@ const STATUSES = [
 ];
 
 export default function ContactUpdater({ contactId, currentStatus, email }: { contactId: string; currentStatus: string; email: string }) {
+  const router = useRouter();
   const [status, setStatus] = useState(currentStatus);
   const [saving, setSaving] = useState(false);
   const [saved,  setSaved]  = useState(false);
@@ -26,6 +28,7 @@ export default function ContactUpdater({ contactId, currentStatus, email }: { co
       if (!res.ok) { const d = await res.json(); throw new Error(d.error ?? "Update failed"); }
       setStatus(newStatus);
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error");

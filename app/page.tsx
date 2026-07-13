@@ -566,14 +566,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ CTA — real product photo backdrop, cropped to the photo half only ══ */}
+      {/* ══ CTA — flat brand red, bold & graphic ══ */}
       <section style={{
-        padding: "120px 0", position: "relative", overflow: "hidden", minHeight: 480,
-        backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/premium-229-lb.png)",
-        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+        padding: "120px 0", position: "relative", overflow: "hidden",
+        background: "var(--brand)",
       }}>
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.75)" }} />
         <div aria-hidden="true" style={{ position: "absolute", bottom: "-30px", left: "50%", transform: "translateX(-50%)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "160px", color: "rgba(255,255,255,0.08)", letterSpacing: "-8px", whiteSpace: "nowrap", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>
           StareX
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Check } from "lucide-react";
 import { StatusBadge, fmtSlot } from "./OrderBits";
@@ -11,6 +12,7 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 type AdminOrder = DrawerOrder;
 
 export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
+  const router = useRouter();
   const [acknowledged, setAcknowledged] = useState<Set<string>>(new Set());
   const [selected,     setSelected]     = useState<DrawerOrder | null>(null);
 
@@ -23,6 +25,7 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
       body: JSON.stringify({ status: "confirmed" }),
     });
     setAcknowledged(prev => new Set([...prev, o.id]));
+    router.refresh();
   }
 
   const visible = orders.filter(o => !acknowledged.has(o.id));
