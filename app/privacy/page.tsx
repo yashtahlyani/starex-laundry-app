@@ -58,8 +58,8 @@ export default function PrivacyPage() {
       {/* Hero */}
       <div style={{
         paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(rgba(184,50,79,0.82), rgba(184,50,79,0.82)), url(/images/starex/washer-plant-logo.png)",
-        backgroundSize: "cover", backgroundPosition: "center", minHeight: 380,
+        background: "var(--brand)",
+        minHeight: 380,
       }}>
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
           <span style={{ display: "inline-block", background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.3)", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>

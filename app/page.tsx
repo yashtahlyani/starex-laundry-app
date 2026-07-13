@@ -250,10 +250,12 @@ export default function Home() {
       {/* ══ STATS — brand red band with a clean text-free backdrop ══ */}
       <section style={{
         padding: "80px 0", position: "relative",
-        backgroundImage: "linear-gradient(rgba(184,50,79,0.82), rgba(184,50,79,0.82)), url(/images/starex/rack-clothes.png)",
-        backgroundSize: "cover", backgroundPosition: "center",
+        backgroundColor: "var(--brand)",
+        backgroundImage: "url(/images/starex/rack-clothes.png)",
+        backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat",
       }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "16px" }} className="stats-grid">
             {stats.map((s, i) => (
               <AnimatedContent key={s.label} delay={i * 0.08}>
@@ -567,8 +569,7 @@ export default function Home() {
       {/* ══ CTA — brand-red backdrop, bold & graphic ══ */}
       <section style={{
         padding: "120px 0", position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(rgba(184,50,79,0.85), rgba(184,50,79,0.85)), url(/images/starex/towels-vase.png)",
-        backgroundSize: "cover", backgroundPosition: "center",
+        background: "var(--brand)",
       }}>
         <div aria-hidden="true" style={{ position: "absolute", bottom: "-30px", left: "50%", transform: "translateX(-50%)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "160px", color: "rgba(255,255,255,0.08)", letterSpacing: "-8px", whiteSpace: "nowrap", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>
           StareX

@@ -38,9 +38,11 @@ export default function About() {
       {/* Hero — clean text-free photo as a true backdrop, no baked-in copy to fight with */}
       <section style={{
         paddingTop: 120, paddingBottom: 88, position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(rgba(184,50,79,0.82), rgba(184,50,79,0.82)), url(/images/starex/folded-towels-sprig.png)",
-        backgroundSize: "cover", backgroundPosition: "center", minHeight: 460,
+        backgroundColor: "var(--brand)",
+        backgroundImage: "url(/images/starex/folded-towels-sprig.png)",
+        backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 460,
       }}>
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
           <motion.h1

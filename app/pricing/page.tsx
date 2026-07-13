@@ -57,9 +57,11 @@ export default function PricingPage() {
       {/* Hero — clean text-free photo as a true backdrop */}
       <section style={{
         paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(rgba(184,50,79,0.82), rgba(184,50,79,0.82)), url(/images/starex/stack-bag-plain.png)",
-        backgroundSize: "cover", backgroundPosition: "center", minHeight: 440,
+        backgroundColor: "var(--brand)",
+        backgroundImage: "url(/images/starex/stack-bag-plain.png)",
+        backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 440,
       }}>
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             Simple Pricing
@@ -267,9 +269,11 @@ export default function PricingPage() {
           <AnimatedContent>
             <div style={{
               borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden",
-              backgroundImage: "linear-gradient(rgba(184,50,79,0.92), rgba(184,50,79,0.92)), url(/images/starex/washer-basket-2.png)",
-              backgroundSize: "cover", backgroundPosition: "center",
+              backgroundColor: "var(--brand)",
+              backgroundImage: "url(/images/starex/washer-basket-2.png)",
+              backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat",
             }}>
+              <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.6)" }} />
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 32, alignItems: "center" }} className="detailing-grid">
                 <div>
                   <span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }}>New Service</span>
