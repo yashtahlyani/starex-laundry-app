@@ -107,21 +107,21 @@ export default async function AdminDashboardPage({
     <div style={{ background: "#F4F5F7", minHeight: "100vh" }}>
 
       {/* Admin header */}
-      <header style={{ background: "#150E10", position: "sticky", top: 0, zIndex: 100 }}>
+      <header style={{ background: "#1F1B1B", position: "sticky", top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
               <rect width="36" height="36" rx="9" fill="#1a2530" />
-              <line x1="9" y1="9" x2="27" y2="27" stroke="#E8192C" strokeWidth="5" strokeLinecap="round" />
-              <line x1="27" y1="9" x2="9" y2="27" stroke="#E8192C" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="3" fill="#1a2530" /><circle cx="18" cy="18" r="1.5" fill="#FF6B77" />
+              <line x1="9" y1="9" x2="27" y2="27" stroke="#A4243B" strokeWidth="5" strokeLinecap="round" />
+              <line x1="27" y1="9" x2="9" y2="27" stroke="#A4243B" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="18" cy="18" r="3" fill="#1a2530" /><circle cx="18" cy="18" r="1.5" fill="#BE4459" />
             </svg>
             <div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#fff", lineHeight: 1 }}>StareX</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#E8192C", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#A4243B", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
             </div>
             {newOrders.length > 0 && (
-              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#E8192C", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#A4243B", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                 <Bell size={12} /> {newOrders.length} new
               </span>
             )}
@@ -145,11 +145,11 @@ export default async function AdminDashboardPage({
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12, marginBottom: 28 }} className="admin-kpis">
           {kpis.map(k => (
             <div key={k.label} style={{
-              background: k.accent ? "linear-gradient(135deg,#FF6B77,#E8192C)" : "#fff",
+              background: k.accent ? "linear-gradient(135deg,#BE4459,#A4243B)" : "#fff",
               border: "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
             }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#09090B", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#4A0E17" : "#71717A", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#1F1B1B", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#4A1522" : "#857C78", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
             </div>
           ))}
         </div>
@@ -170,7 +170,7 @@ export default async function AdminDashboardPage({
               {searchParams.q && <a href="/admin?tab=orders" className="btn-ghost px-5 py-2.5 text-sm">Clear</a>}
             </form>
 
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#71717A", marginBottom: 12 }}>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#857C78", marginBottom: 12 }}>
               Active Orders {q ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
             </p>
 
@@ -203,9 +203,9 @@ export default async function AdminDashboardPage({
                         {pastOrders!.map((o: any) => (
                           <tr key={o.id} style={{ borderBottom: "1px solid #F4F4F5", opacity: 0.8 }}>
                             <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>{o.code}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#52525B" }}>{o.customer_name ?? "—"}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#71717A" }}>{o.service_title ?? o.service}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#71717A" }}>{o.date}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#6B6360" }}>{o.customer_name ?? "—"}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#857C78" }}>{o.service_title ?? o.service}</td>
+                            <td className="px-4 py-3 text-xs" style={{ color: "#857C78" }}>{o.date}</td>
                             <td className="px-4 py-3">
                               <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[o.status] ?? "bg-gray-100 text-gray-600"}`}>
                                 {STATUS_LABELS[o.status] ?? o.status}
@@ -231,7 +231,7 @@ export default async function AdminDashboardPage({
         {/* ── Contacts Tab ── */}
         {tab === "contacts" && (
           <div>
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#71717A", marginBottom: 16 }}>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#857C78", marginBottom: 16 }}>
               Contact Messages ({contacts?.length ?? 0})
             </p>
             {(contacts?.length ?? 0) === 0 ? (
@@ -241,20 +241,20 @@ export default async function AdminDashboardPage({
             ) : (
               <div className="space-y-3">
                 {contacts!.map((c: any) => (
-                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#E8192C" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
+                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#A4243B" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-                          {c.status === "new" && <span style={{ background: "#E8192C", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
-                          {c.status === "replied" && <span style={{ background: "rgba(232,25,44,0.12)", color: "#4A0E17", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
-                          {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#52525B" }}>{c.subject}</span>}
+                          {c.status === "new" && <span style={{ background: "#A4243B", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
+                          {c.status === "replied" && <span style={{ background: "rgba(164,36,59,0.12)", color: "#4A1522", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
+                          {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#6B6360" }}>{c.subject}</span>}
                         </div>
-                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#09090B", marginBottom: 2 }}>{c.name}</p>
-                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#71717A", marginBottom: 12 }}>
-                          <a href={`mailto:${c.email}`} style={{ color: "#C1121F" }}>{c.email}</a>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#1F1B1B", marginBottom: 2 }}>{c.name}</p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#857C78", marginBottom: 12 }}>
+                          <a href={`mailto:${c.email}`} style={{ color: "#7A1B2E" }}>{c.email}</a>
                           {c.phone && ` · ${c.phone}`}
                         </p>
-                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#52525B", lineHeight: 1.7 }}>{c.message}</p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6B6360", lineHeight: 1.7 }}>{c.message}</p>
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#A1A1AA" }}>{fmtDate(c.created_at)}</p>
@@ -271,7 +271,7 @@ export default async function AdminDashboardPage({
         {/* ── Analytics Tab ── */}
         {tab === "analytics" && (
           <div>
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#71717A", marginBottom: 16 }}>Business Overview</p>
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#857C78", marginBottom: 16 }}>Business Overview</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               {[
                 { label: "Total Orders",     value: totalOrders ?? 0 },
@@ -282,13 +282,13 @@ export default async function AdminDashboardPage({
               ].map(s => (
                 <div key={s.label} style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>{s.label}</p>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#09090B", letterSpacing: "-0.025em" }}>{s.value}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#1F1B1B", letterSpacing: "-0.025em" }}>{s.value}</p>
                 </div>
               ))}
             </div>
             {(activeOrders?.length ?? 0) > 0 && (
               <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#09090B", marginBottom: 16 }}>Status Breakdown (Active)</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#1F1B1B", marginBottom: 16 }}>Status Breakdown (Active)</p>
                 <div className="space-y-2">
                   {Object.entries(
                     (activeOrders as any[]).reduce<Record<string, number>>((acc, o) => {
@@ -301,9 +301,9 @@ export default async function AdminDashboardPage({
                         {STATUS_LABELS[status] ?? status}
                       </span>
                       <div style={{ flex: 1, background: "#F4F4F5", borderRadius: 999, height: 8, overflow: "hidden" }}>
-                        <div style={{ height: 8, background: "#E8192C", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
+                        <div style={{ height: 8, background: "#A4243B", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
                       </div>
-                      <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#09090B", minWidth: 24, textAlign: "right" }}>{count as number}</span>
+                      <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#1F1B1B", minWidth: 24, textAlign: "right" }}>{count as number}</span>
                     </div>
                   ))}
                 </div>

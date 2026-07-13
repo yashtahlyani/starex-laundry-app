@@ -54,12 +54,12 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <div style={{ background: "#F7F7F7", minHeight: "100vh" }}>
+    <div style={{ background: "#FDFBFA", minHeight: "100vh" }}>
       {/* Hero */}
-      <div style={{ background: "#150E10", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
+      <div style={{ background: "#1F1B1B", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
-          <span style={{ display: "inline-block", background: "rgba(232,25,44,0.12)", border: "1px solid rgba(232,25,44,0.25)", color: "#E8192C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
+          <span style={{ display: "inline-block", background: "rgba(164,36,59,0.12)", border: "1px solid rgba(164,36,59,0.25)", color: "#A4243B", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
             Legal
           </span>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.8rem)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16 }}>
@@ -73,27 +73,27 @@ export default function PrivacyPage() {
 
       {/* Content */}
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "64px 24px 96px" }}>
-        <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#52525B", fontSize: "1rem", lineHeight: 1.75, marginBottom: 48 }}>
+        <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#6B6360", fontSize: "1rem", lineHeight: 1.75, marginBottom: 48 }}>
           Your privacy matters to us. This Privacy Policy explains how Starex Laundry Inc. collects, uses, shares, and protects your personal information when you use our platform and services.
         </p>
 
         {sections.map((s, i) => (
           <div key={i} style={{ marginBottom: 40 }}>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#09090B", marginBottom: 12 }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#1F1B1B", marginBottom: 12 }}>
               {i + 1}. {s.title}
             </h2>
-            <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#52525B", fontSize: "0.9625rem", lineHeight: 1.8 }}>
+            <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#6B6360", fontSize: "0.9625rem", lineHeight: 1.8 }}>
               {s.body}
             </p>
           </div>
         ))}
 
         <div style={{ borderTop: "1px solid #E4E4E7", paddingTop: 32, marginTop: 16 }}>
-          <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#71717A", fontSize: "0.875rem" }}>
+          <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#857C78", fontSize: "0.875rem" }}>
             See also our{" "}
-            <a href="/terms" style={{ color: "#C1121F", textDecoration: "underline" }}>Terms of Service</a>.
+            <a href="/terms" style={{ color: "#7A1B2E", textDecoration: "underline" }}>Terms of Service</a>.
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#C1121F", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#7A1B2E", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
           </p>
         </div>
       </div>

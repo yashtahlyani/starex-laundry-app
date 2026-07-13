@@ -6,18 +6,31 @@
 
 @layer base {
   :root {
-    --mint-light: #FF6B77;
-    --mint-mid:   #E8192C;
-    --dark-base:  #150E10;
-    --dark-card:  #1F1416;
+    /* ── StareX design tokens — premium garnet & warm white ── */
+    --brand:        #A4243B;  /* primary — CTAs, accents, sparingly */
+    --brand-dark:   #7A1B2E;  /* hover / pressed / accents on light */
+    --brand-soft:   #BE4459;  /* gradient light end */
+    --brand-rose:   #D9909B;  /* accent text/icons on dark surfaces */
+    --bg:           #FFFFFF;
+    --bg-warm:      #FDFBFA;  /* soft warm white page bg */
+    --surface:      #F5F1EE;  /* warm ivory */
+    --surface-2:    #ECE7E3;
+    --blush:        #F7E9E8;  /* soft blush section bg */
+    --ink:          #1F1B1B;  /* charcoal text / dark sections */
+    --ink-2:        #6B6360;  /* secondary text */
+    --dark-base:    #1F1B1B;
+    --dark-card:    #2A2424;
+    /* legacy aliases (older classes referenced these) */
+    --mint-light:   var(--brand-soft);
+    --mint-mid:     var(--brand);
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #150E10;
-    color: #09090B;
+    background-color: #1F1B1B;
+    color: #1F1B1B;
   }
 
   body {
@@ -25,21 +38,21 @@
     font-size: 1rem;
     line-height: 1.7;
     color: rgba(255,255,255,0.75);
-    background-color: #150E10;
+    background-color: #1F1B1B;
     overflow-x: hidden;
   }
 
   * { box-sizing: border-box; }
 
-  ::selection { background-color: #E8192C; color: #150E10; }
+  ::selection { background-color: var(--brand); color: #FFFFFF; }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #2D2225; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #E8192C; }
+  ::-webkit-scrollbar-thumb { background: #332C2C; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--brand); }
 
   *:focus-visible {
-    outline: 2px solid #E8192C;
+    outline: 2px solid var(--brand);
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -54,9 +67,9 @@
 
 @layer components {
 
-  /* ── Gradient text — mint ── */
+  /* ── Gradient text — garnet ── */
   .gradient-text, .text-gradient {
-    background: linear-gradient(41deg, #FF6B77 0%, #E8192C 85%);
+    background: linear-gradient(41deg, var(--brand-rose) 0%, var(--brand-soft) 85%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -67,7 +80,7 @@
     font-family: 'Poppins', sans-serif;
     font-style: italic;
     font-weight: 600;
-    background: linear-gradient(41deg, #FF6B77 0%, #E8192C 85%);
+    background: linear-gradient(41deg, var(--brand-rose) 0%, var(--brand-soft) 85%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -76,14 +89,14 @@
   /* ── White card (light) ── */
   .card {
     background: #FFFFFF;
-    border: 1px solid rgba(74,14,23,0.08);
+    border: 1px solid rgba(74,21,34,0.08);
     border-radius: 20px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
-    color: #09090B;
+    color: #1F1B1B;
   }
-  .card h1, .card h2, .card h3, .card h4, .card h5, .card h6 { color: #09090B; }
-  .card p, .card span { color: #52525B; }
+  .card h1, .card h2, .card h3, .card h4, .card h5, .card h6 { color: #1F1B1B; }
+  .card p, .card span { color: #6B6360; }
   .card:hover {
     box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     transform: translateY(-3px);
@@ -91,16 +104,16 @@
 
   /* ── Dark glass card ── */
   .card-dark {
-    background: #1F1416;
+    background: #2A2424;
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 20px;
   }
 
   /* ── Pastel cards ── */
-  .card-pastel-blue     { background: #FCEBEC; border-radius: 20px; }
-  .card-pastel-mint     { background: #FAE9E1; border-radius: 20px; }
-  .card-pastel-peach    { background: #FDF1E1; border-radius: 20px; }
-  .card-pastel-lavender { background: #F1EEEF; border-radius: 20px; }
+  .card-pastel-blue     { background: #F7E9E8; border-radius: 20px; }
+  .card-pastel-mint     { background: #F5F1EE; border-radius: 20px; }
+  .card-pastel-peach    { background: #F0EAE1; border-radius: 20px; }
+  .card-pastel-lavender { background: #ECE7E3; border-radius: 20px; }
 
   /* ── Glass overlay ── */
   .glass {
@@ -109,13 +122,13 @@
     border: 1px solid rgba(255,255,255,0.10);
   }
 
-  /* ── Primary button — mint gradient pill ── */
+  /* ── Primary button — garnet gradient pill ── */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(180deg, #FF6B77 0%, #E8192C 100%);
+    background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -131,7 +144,7 @@
   .btn-primary:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(232,25,44,0.35);
+    box-shadow: 0 6px 24px rgba(164,36,59,0.35);
   }
 
   /* ── Ghost button on dark ── */
@@ -154,8 +167,8 @@
     white-space: nowrap;
   }
   .btn-ghost:hover, .btn-secondary:hover {
-    border-color: #E8192C;
-    color: #E8192C;
+    border-color: var(--brand-rose);
+    color: var(--brand-rose);
   }
 
   /* ── White button (used on dark hero) ── */
@@ -164,7 +177,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(180deg, #FF6B77 0%, #E8192C 100%);
+    background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -180,7 +193,7 @@
   .btn-white:hover {
     opacity: 0.88;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(232,25,44,0.35);
+    box-shadow: 0 6px 24px rgba(164,36,59,0.35);
   }
 
   /* ── Eyebrow label ── */
@@ -190,7 +203,7 @@
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #E8192C;
+    color: var(--brand-rose); /* rose reads cleanly on dark; light pages override inline */
     display: block;
     margin-bottom: 14px;
   }
@@ -215,7 +228,7 @@
   .step-pill {
     display: inline-flex;
     align-items: center;
-    background: #E8192C;
+    background: var(--brand);
     color: #FFFFFF;
     font-family: 'Kodchasan', sans-serif;
     font-size: 0.8125rem;
@@ -239,8 +252,8 @@
   .input-field::placeholder { color: rgba(255,255,255,0.35); }
   .input-field:focus {
     outline: none;
-    border-color: #E8192C;
-    box-shadow: 0 0 0 3px rgba(232,25,44,0.15);
+    border-color: var(--brand-soft);
+    box-shadow: 0 0 0 3px rgba(190,68,89,0.18);
   }
 
   /* ── Badge ── */
@@ -261,7 +274,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(180deg, #FF6B77 0%, #E8192C 100%);
+    background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
     color: #FFFFFF;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -277,7 +290,7 @@
   .btn-sky:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(232,25,44,0.35);
+    box-shadow: 0 6px 24px rgba(164,36,59,0.35);
   }
 
   /* ── btn-ghost-dark ── */
@@ -298,11 +311,11 @@
     transition: border-color 0.2s ease, color 0.2s ease;
     text-decoration: none;
   }
-  .btn-ghost-dark:hover { border-color: #E8192C; color: #E8192C; }
+  .btn-ghost-dark:hover { border-color: var(--brand-rose); color: var(--brand-rose); }
 
   /* ── Dark stat card ── */
   .card-stat {
-    background: #2D2225;
+    background: #332C2C;
     border-radius: 16px;
     padding: 28px 24px;
   }
@@ -313,12 +326,12 @@
     align-items: center;
     padding: 4px 12px;
     border-radius: 999px;
-    border: 1px solid rgba(24,13,16,0.18);
+    border: 1px solid rgba(31,27,27,0.18);
     font-family: 'Kodchasan', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(24,13,16,0.6);
-    background: rgba(24,13,16,0.05);
+    color: rgba(31,27,27,0.6);
+    background: rgba(31,27,27,0.05);
   }
 
   /* section title/subtitle aliases used by existing pages */

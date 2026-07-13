@@ -30,12 +30,12 @@ export const NEXT_STATUS: Record<string, string | null> = {
 };
 
 export const STATUS_META: Record<string, { label: string; bg: string; fg: string; dot: string }> = {
-  placed:           { label: "Order placed",     bg: "#F1EEEF", fg: "#4338CA", dot: "#6366F1" },
-  confirmed:        { label: "Confirmed",         bg: "#FDF1E1", fg: "#B45309", dot: "#F59E0B" },
+  placed:           { label: "Order placed",     bg: "#ECE7E3", fg: "#4338CA", dot: "#6366F1" },
+  confirmed:        { label: "Confirmed",         bg: "#F0EAE1", fg: "#B45309", dot: "#F59E0B" },
   picked_up:        { label: "Picked up",         bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
-  washing:          { label: "Being cleaned",     bg: "#FAE9E1", fg: "#047857", dot: "#C1121F" },
+  washing:          { label: "Being cleaned",     bg: "#F5F1EE", fg: "#047857", dot: "#7A1B2E" },
   folding:          { label: "Folding",           bg: "#FEF3C7", fg: "#92400E", dot: "#D97706" },
-  out_for_delivery: { label: "Out for delivery",  bg: "#FAE9E1", fg: "#065F46", dot: "#10B981" },
+  out_for_delivery: { label: "Out for delivery",  bg: "#F5F1EE", fg: "#065F46", dot: "#10B981" },
   delivered:        { label: "Delivered",         bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
   cancelled:        { label: "Cancelled",         bg: "#FEE2E2", fg: "#991B1B", dot: "#EF4444" },
 };
@@ -80,14 +80,14 @@ export function ProgressTrack({ status }: { status: string }) {
         return (
           <div key={s.id} style={{ display: "flex", alignItems: "center", flex: i < ORDER_STAGES.length - 1 ? 1 : undefined }}>
             <motion.div
-              animate={{ background: done ? "#C1121F" : "#E4E4E7", scale: active ? 1.15 : 1 }}
+              animate={{ background: done ? "#7A1B2E" : "#E4E4E7", scale: active ? 1.15 : 1 }}
               transition={{ duration: 0.3 }}
               style={{ width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
             >
               {done && <Check size={10} color="#fff" strokeWidth={3} />}
             </motion.div>
             {i < ORDER_STAGES.length - 1 && (
-              <div style={{ flex: 1, height: 2, background: done && i < current ? "#C1121F" : "#E4E4E7", margin: "0 2px", transition: "background 0.3s" }} />
+              <div style={{ flex: 1, height: 2, background: done && i < current ? "#7A1B2E" : "#E4E4E7", margin: "0 2px", transition: "background 0.3s" }} />
             )}
           </div>
         );

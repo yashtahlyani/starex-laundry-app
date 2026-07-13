@@ -20,7 +20,7 @@ const steps = [
     num: "01",
     title: "Book in 2 minutes",
     desc: "Schedule a pickup from our website or app. Choose your time window, enter your address, and confirm your order. It takes under 2 minutes.",
-    color: "#FCEBEC",
+    color: "#F7E9E8",
     accent: "#0ea5e9",
     details: ["Select wash preferences", "Add special care instructions", "Pick a convenient time slot"],
   },
@@ -29,7 +29,7 @@ const steps = [
     num: "02",
     title: "We pick up",
     desc: "Our driver arrives at your chosen window, scans your bag, and takes it to our facility. No waiting around — leave it at your door.",
-    color: "#FAE9E1",
+    color: "#F5F1EE",
     accent: "#16a34a",
     details: ["Real-time driver tracking", "Contactless pickup option", "Unique bag barcode tracking"],
   },
@@ -38,7 +38,7 @@ const steps = [
     num: "03",
     title: "Expert care",
     desc: "Our team sorts, washes, dries, and folds your laundry with professional-grade equipment and eco-friendly detergents.",
-    color: "#FDF1E1",
+    color: "#F0EAE1",
     accent: "#f59e0b",
     details: ["Sorted by colour & fabric", "Biodegradable detergents", "Folded to your preference"],
   },
@@ -47,7 +47,7 @@ const steps = [
     num: "04",
     title: "Delivered back",
     desc: "Your laundry is returned clean, fresh, and neatly folded — within 24–48 hours. Just put it away.",
-    color: "#F1EEEF",
+    color: "#ECE7E3",
     accent: "#8b5cf6",
     details: ["24–48h standard turnaround", "Real-time delivery updates", "Contactless drop-off"],
   },
@@ -65,11 +65,11 @@ export default function HowItWorks() {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <div style={{ background: "#F7F7F7" }}>
+    <div style={{ background: "#FDFBFA" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 80, background: "#150E10", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 80, background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>How It Works</motion.span>
           <motion.h1
@@ -93,7 +93,7 @@ export default function HowItWorks() {
           <div ref={timelineRef} style={{ position: "relative" }}>
             {/* vertical line */}
             <div style={{ position: "absolute", left: 32, top: 0, bottom: 0, width: 2, background: "#E5E7EB" }} className="timeline-line">
-              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #FF6B77, #E8192C)", height: lineHeight }} />
+              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #BE4459, #A4243B)", height: lineHeight }} />
             </div>
 
             {steps.map((step, i) => (
@@ -110,13 +110,13 @@ export default function HowItWorks() {
                     </div>
                     <div>
                       <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.75rem", color: step.accent, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Step {step.num}</p>
-                      <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#09090B", letterSpacing: "-0.015em" }}>{step.title}</h3>
+                      <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#1F1B1B", letterSpacing: "-0.015em" }}>{step.title}</h3>
                     </div>
                   </div>
-                  <p style={{ color: "#52525B", fontSize: "0.9375rem", lineHeight: 1.75, marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>{step.desc}</p>
+                  <p style={{ color: "#6B6360", fontSize: "0.9375rem", lineHeight: 1.75, marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>{step.desc}</p>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
                     {step.details.map(d => (
-                      <li key={d} style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#374151" }}>
+                      <li key={d} style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#4A4340" }}>
                         <div style={{ width: 6, height: 6, borderRadius: "50%", background: step.accent, flexShrink: 0 }} />
                         {d}
                       </li>
@@ -130,7 +130,7 @@ export default function HowItWorks() {
       </section>
 
       {/* Mini FAQ */}
-      <section style={{ padding: "80px 0", background: "#150E10" }}>
+      <section style={{ padding: "80px 0", background: "#1F1B1B" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40, textAlign: "center" }}>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", color: "#ffffff", letterSpacing: "-0.022em" }}>
@@ -153,10 +153,10 @@ export default function HowItWorks() {
       {/* CTA */}
       <section style={{ padding: "96px 0", textAlign: "center" }}>
         <AnimatedContent style={{ maxWidth: 560, margin: "0 auto", padding: "0 24px" }}>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#09090B", marginBottom: 16, letterSpacing: "-0.022em" }}>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#1F1B1B", marginBottom: 16, letterSpacing: "-0.022em" }}>
             Ready to <em className="display-accent" style={{ display: "inline" }}>start?</em>
           </h2>
-          <p style={{ color: "#52525B", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>First pickup is on us. No credit card required.</p>
+          <p style={{ color: "#6B6360", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>First pickup is on us. No credit card required.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", fontSize: "1rem" }}>
               Book First Pickup <ArrowRight size={16} />

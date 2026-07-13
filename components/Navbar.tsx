@@ -86,7 +86,7 @@ export default function Navbar() {
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
           height: scrolled ? "64px" : "72px",
-          background: (scrolled || needsDark) ? "rgba(24,13,16,0.97)" : "transparent",
+          background: (scrolled || needsDark) ? "rgba(31,27,27,0.97)" : "transparent",
           backdropFilter: (scrolled || needsDark) ? "blur(14px)" : "none",
           borderBottom: (scrolled || needsDark) ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
           transition: "height 0.3s ease, background 0.3s ease, border-color 0.3s ease",
@@ -121,20 +121,20 @@ export default function Navbar() {
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="lgo" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#FF6B77"/>
-                      <stop offset="100%" stopColor="#C1121F"/>
+                      <stop offset="0%" stopColor="#BE4459"/>
+                      <stop offset="100%" stopColor="#7A1B2E"/>
                     </linearGradient>
                     <filter id="glow">
                       <feGaussianBlur stdDeviation="1.2" result="blur"/>
                       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
                   </defs>
-                  <rect width="36" height="36" rx="10" fill="#150E10"/>
+                  <rect width="36" height="36" rx="10" fill="#1F1B1B"/>
                   <polygon points="18,5 21.9,14.6 32.3,15 24.2,21.5 27.2,31.4 18,25.6 8.8,31.4 11.8,21.5 3.7,15 14.1,14.6" fill="url(#lgo)" filter="url(#glow)"/>
                 </svg>
               </motion.div>
               <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem", color: "#ffffff", letterSpacing: "-0.02em" }}>
-                Stare<span style={{ color: "#E8192C" }}>X</span>
+                Stare<span style={{ color: "#D9909B" }}>X</span>
               </span>
             </a>
           </div>
@@ -167,7 +167,7 @@ export default function Navbar() {
           <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
             {isOwner ? (
               <>
-                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#E8192C", textDecoration: "none", border: "1px solid rgba(232,25,44,0.35)", borderRadius: 8 }}>
+                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#D9909B", textDecoration: "none", border: "1px solid rgba(217,144,155,0.35)", borderRadius: 8 }}>
                   <Settings size={13} /> Console
                 </a>
                 <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "rgba(255,255,255,0.5)", background: "none", border: "none", cursor: "pointer" }}>
@@ -177,7 +177,7 @@ export default function Navbar() {
             ) : user ? (
               <div ref={acctRef} style={{ position: "relative" }}>
                 <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#fff", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 999, cursor: "pointer" }}>
-                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#FF6B77,#E8192C)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#BE4459,#A4243B)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                     {initials}
                   </span>
                   {firstName}
@@ -185,7 +185,7 @@ export default function Navbar() {
                 <AnimatePresence>
                   {acctOpen && (
                     <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }} transition={{ duration: 0.15 }}
-                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#201517", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
+                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#2A2424", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
                       {[
                         { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
                         { href: "/account", icon: Settings, label: "Account settings" },
@@ -194,7 +194,7 @@ export default function Navbar() {
                           onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"}
                           onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
                         >
-                          <item.icon size={15} color="#E8192C" /> {item.label}
+                          <item.icon size={15} color="#D9909B" /> {item.label}
                         </a>
                       ))}
                       <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "4px 0" }} />
@@ -238,7 +238,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            style={{ position: "fixed", inset: 0, zIndex: 490, background: "#150E10", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
+            style={{ position: "fixed", inset: 0, zIndex: 490, background: "#1F1B1B", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
           >
             <nav style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {links.map((link, i) => (

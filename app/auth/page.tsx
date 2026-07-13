@@ -67,12 +67,12 @@ export default function AuthPage() {
 
   if (mode === "new-password") {
     return (
-      <div className="min-h-screen bg-[#150E10] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#1F1B1B] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10">
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-[#09090B] font-heading">Set new password</h1>
-              <p className="text-[#52525B] text-sm mt-1 font-body">Choose a strong password for your account.</p>
+              <h1 className="text-2xl font-bold text-[#1F1B1B] font-heading">Set new password</h1>
+              <p className="text-[#6B6360] text-sm mt-1 font-body">Choose a strong password for your account.</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -80,7 +80,7 @@ export default function AuthPage() {
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                   <input
-                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#1F1B1B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                     type={showPw ? "text" : "password"}
                     placeholder="Min. 8 characters"
                     value={password}
@@ -88,7 +88,7 @@ export default function AuthPage() {
                     required
                     minLength={8}
                   />
-                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#52525B]">
+                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#6B6360]">
                     {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
@@ -98,7 +98,7 @@ export default function AuthPage() {
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                   <input
-                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#1F1B1B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                     type={showPw ? "text" : "password"}
                     placeholder="Re-enter password"
                     value={confirmPassword}
@@ -129,17 +129,17 @@ export default function AuthPage() {
 
   if (mode === "check-email") {
     return (
-      <div className="min-h-screen bg-[#150E10] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#1F1B1B] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10 text-center">
             <div className="h-16 w-16 rounded-full bg-mint/15 flex items-center justify-center mx-auto mb-5">
               <CheckCircle size={32} className="text-mint" />
             </div>
-            <h2 className="text-2xl font-bold text-[#09090B] mb-2 font-heading">Check your email</h2>
-            <p className="text-[#52525B] text-sm leading-relaxed mb-6 font-body">
+            <h2 className="text-2xl font-bold text-[#1F1B1B] mb-2 font-heading">Check your email</h2>
+            <p className="text-[#6B6360] text-sm leading-relaxed mb-6 font-body">
               We sent a link to <strong>{email}</strong>. Click it to confirm your account and get started.
             </p>
-            <button onClick={() => setMode("signin")} className="btn-ghost w-full text-[#150E10] border-[#150E10]/20 hover:border-mint hover:text-mint">
+            <button onClick={() => setMode("signin")} className="btn-ghost w-full text-[#1F1B1B] border-[#1F1B1B]/20 hover:border-mint hover:text-mint">
               Back to Sign In
             </button>
           </div>
@@ -149,9 +149,9 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex pt-16 bg-[#150E10]">
+    <div className="min-h-screen flex pt-16 bg-[#1F1B1B]">
       {/* Left brand panel */}
-      <div className="hidden lg:flex lg:w-5/12 bg-[#4A0E17] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
+      <div className="hidden lg:flex lg:w-5/12 bg-[#4A1522] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-mint/10 blur-3xl" />
           <div className="absolute bottom-20 -left-10 h-60 w-60 rounded-full bg-mint/5 blur-3xl" />
@@ -195,7 +195,7 @@ export default function AuthPage() {
       </div>
 
       {/* Right form panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#150E10]">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#1F1B1B]">
         <div className="w-full max-w-md">
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">
@@ -205,12 +205,12 @@ export default function AuthPage() {
                 </div>
                 <span className="font-bold text-mint font-heading">{BUSINESS_NAME}</span>
               </a>
-              <h1 className="text-2xl font-bold text-[#09090B] font-heading">
+              <h1 className="text-2xl font-bold text-[#1F1B1B] font-heading">
                 {mode === "signin" && "Welcome back"}
                 {mode === "signup" && "Create your account"}
                 {mode === "reset" && "Reset your password"}
               </h1>
-              <p className="text-[#52525B] text-sm mt-1 font-body">
+              <p className="text-[#6B6360] text-sm mt-1 font-body">
                 {mode === "signin" && "Sign in to manage your orders and account."}
                 {mode === "signup" && "Join thousands of Canadians who trust Starex."}
                 {mode === "reset" && "Enter your email and we'll send you a reset link."}
@@ -224,7 +224,7 @@ export default function AuthPage() {
                   <div className="relative">
                     <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                     <input
-                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#1F1B1B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                       placeholder="Your full name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -239,7 +239,7 @@ export default function AuthPage() {
                 <div className="relative">
                   <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                   <input
-                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                    className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 text-sm text-[#1F1B1B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                     type="email"
                     placeholder="you@example.com"
                     value={email}
@@ -262,7 +262,7 @@ export default function AuthPage() {
                   <div className="relative">
                     <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
                     <input
-                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#09090B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-white px-4 py-3 pl-10 pr-10 text-sm text-[#1F1B1B] placeholder:text-[#A1A1AA] focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition-all font-body"
                       type={showPw ? "text" : "password"}
                       placeholder={mode === "signup" ? "Min. 8 characters" : "Your password"}
                       value={password}
@@ -273,7 +273,7 @@ export default function AuthPage() {
                     <button
                       type="button"
                       onClick={() => setShowPw(!showPw)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#52525B]"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#6B6360]"
                     >
                       {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -307,7 +307,7 @@ export default function AuthPage() {
               </button>
 
               {mode === "reset" && (
-                <button type="button" onClick={() => setMode("signin")} className="btn-ghost w-full text-[#150E10] border-[#150E10]/20 hover:border-mint hover:text-mint">
+                <button type="button" onClick={() => setMode("signin")} className="btn-ghost w-full text-[#1F1B1B] border-[#1F1B1B]/20 hover:border-mint hover:text-mint">
                   Back to Sign In
                 </button>
               )}
@@ -315,7 +315,7 @@ export default function AuthPage() {
 
             {mode !== "reset" && (
               <div className="mt-6 pt-6 border-t border-[#F4F4F5] text-center">
-                <p className="text-sm text-[#71717A] font-body">
+                <p className="text-sm text-[#857C78] font-body">
                   {mode === "signin" ? "Don't have an account?" : "Already have an account?"}{" "}
                   <button
                     onClick={() => { setError(null); setMode(mode === "signin" ? "signup" : "signin"); }}

@@ -11,39 +11,40 @@ const config: Config = {
       },
       colors: {
         dark: {
-          DEFAULT: "#150E10",
-          card:    "#1F1416",
-          card2:   "#2D2225",
+          DEFAULT: "#1F1B1B",
+          card:    "#2A2424",
+          card2:   "#332C2C",
           border:  "rgba(255,255,255,0.08)",
         },
         mint: {
-          light:   "#FF6B77",
-          DEFAULT: "#E8192C",
-          dark:    "#C1121F",
+          light:   "#BE4459",
+          DEFAULT: "#A4243B",
+          dark:    "#7A1B2E",
+          rose:    "#D9909B", // accent on dark surfaces
         },
         teal: {
-          deep:  "#4A0E17",
-          mid:   "#D94856",
+          deep:  "#4A1522",
+          mid:   "#C08691",
         },
         ink: {
-          DEFAULT:   "#09090B",
-          secondary: "#52525B",
-          muted:     "#71717A",
+          DEFAULT:   "#1F1B1B",
+          secondary: "#6B6360",
+          muted:     "#857C78",
         },
         // keep "brand" alias pointing to mint so existing code doesn't break
         brand: {
-          DEFAULT: "#E8192C",
-          light:   "#FF6B77",
-          dark:    "#C1121F",
-          50:      "#FEF2F3",
-          100:     "#FDE4E6",
-          900:     "#150E10",
+          DEFAULT: "#A4243B",
+          light:   "#BE4459",
+          dark:    "#7A1B2E",
+          50:      "#FBF3F2",
+          100:     "#F7E9E8",
+          900:     "#1F1B1B",
         },
       },
       backgroundImage: {
-        "hero-gradient": "linear-gradient(135deg, #2B0A10 0%, #4A0E17 50%, #150E10 100%)",
-        "mint-gradient": "linear-gradient(180deg, #FF6B77 0%, #E8192C 100%)",
-        "dark-card":     "linear-gradient(145deg, #1F1416 0%, #150E10 100%)",
+        "hero-gradient": "linear-gradient(135deg, #3A1520 0%, #4A1522 50%, #1F1B1B 100%)",
+        "mint-gradient": "linear-gradient(180deg, #BE4459 0%, #A4243B 100%)",
+        "dark-card":     "linear-gradient(145deg, #2A2424 0%, #1F1B1B 100%)",
       },
       borderRadius: {
         pill: "120px",
@@ -53,8 +54,8 @@ const config: Config = {
       boxShadow: {
         card:        "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)",
         "card-hover":"0 8px 32px rgba(0,0,0,0.08)",
-        mint:        "0 6px 24px rgba(232,25,44,0.30)",
-        glow:        "0 0 40px rgba(232,25,44,0.20)",
+        mint:        "0 6px 24px rgba(164,36,59,0.30)",
+        glow:        "0 0 40px rgba(164,36,59,0.20)",
       },
       keyframes: {
         "fade-up": {

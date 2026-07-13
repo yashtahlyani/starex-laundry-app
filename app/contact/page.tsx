@@ -15,10 +15,10 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const info = [
-  { Icon: Phone, title: "Phone", value: "437-607-7251", sub: "Call or text, 7 days a week", color: "#FCEBEC" },
-  { Icon: Mail, title: "Email", value: "hello@starexlaundry.ca", sub: "We reply within 1 business hour", color: "#FAE9E1" },
-  { Icon: MapPin, title: "Service Area", value: "Brampton & Mississauga", sub: "Ontario, Canada", color: "#FDF1E1" },
-  { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#F1EEEF" },
+  { Icon: Phone, title: "Phone", value: "437-607-7251", sub: "Call or text, 7 days a week", color: "#F7E9E8" },
+  { Icon: Mail, title: "Email", value: "hello@starexlaundry.ca", sub: "We reply within 1 business hour", color: "#F5F1EE" },
+  { Icon: MapPin, title: "Service Area", value: "Brampton & Mississauga", sub: "Ontario, Canada", color: "#F0EAE1" },
+  { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#ECE7E3" },
 ];
 
 export default function Contact() {
@@ -51,21 +51,21 @@ export default function Contact() {
 
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "13px 16px", borderRadius: 10, border: "1px solid #E5E7EB",
-    fontSize: "0.9375rem", fontFamily: "Kodchasan, sans-serif", color: "#09090B",
+    fontSize: "0.9375rem", fontFamily: "Kodchasan, sans-serif", color: "#1F1B1B",
     background: "#FAFAFA", outline: "none", boxSizing: "border-box",
   };
 
   const labelStyle: React.CSSProperties = {
     display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 500,
-    fontSize: "0.875rem", color: "#374151", marginBottom: 6,
+    fontSize: "0.875rem", color: "#4A4340", marginBottom: 6,
   };
 
   return (
-    <div style={{ background: "#F7F7F7" }}>
+    <div style={{ background: "#FDFBFA" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#150E10", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A1522 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Contact</motion.span>
           <motion.h1
@@ -95,11 +95,11 @@ export default function Contact() {
                   initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
                   style={{ textAlign: "center", padding: "48px 0" }}
                 >
-                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#FAE9E1", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#F5F1EE", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
                     <CheckCircle size={30} color="#16a34a" />
                   </div>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", color: "#09090B", marginBottom: 10 }}>Message sent!</h3>
-                  <p style={{ color: "#52525B", fontFamily: "Kodchasan, sans-serif", marginBottom: 28 }}>We&apos;ll get back to you within 1 business hour.</p>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", color: "#1F1B1B", marginBottom: 10 }}>Message sent!</h3>
+                  <p style={{ color: "#6B6360", fontFamily: "Kodchasan, sans-serif", marginBottom: 28 }}>We&apos;ll get back to you within 1 business hour.</p>
                   <button
                     onClick={() => { setForm({ name: "", email: "", subject: "", message: "" }); setSubmitted(false); setError(null); }}
                     className="btn-primary"
@@ -110,7 +110,7 @@ export default function Contact() {
                 </motion.div>
               ) : (
                 <>
-                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#09090B", marginBottom: 28, letterSpacing: "-0.02em" }}>Send us a message</h2>
+                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#1F1B1B", marginBottom: 28, letterSpacing: "-0.02em" }}>Send us a message</h2>
                   <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="form-row">
                       <div>
@@ -153,11 +153,11 @@ export default function Contact() {
               <AnimatedContent key={item.title} delay={i * 0.07}>
                 <div style={{ background: item.color, borderRadius: 16, padding: "24px" }}>
                   <div style={{ width: 36, height: 36, background: "rgba(0,0,0,0.07)", borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                    <item.Icon size={16} color="#150E10" />
+                    <item.Icon size={16} color="#1F1B1B" />
                   </div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#150E10", marginBottom: 4 }}>{item.title}</p>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#09090B", marginBottom: 2 }}>{item.value}</p>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#52525B" }}>{item.sub}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#1F1B1B", marginBottom: 4 }}>{item.title}</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#1F1B1B", marginBottom: 2 }}>{item.value}</p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6360" }}>{item.sub}</p>
                 </div>
               </AnimatedContent>
             ))}

@@ -41,7 +41,7 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <footer style={{ background: "#150E10" }}>
+    <footer style={{ background: "#1F1B1B" }}>
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "64px 24px 48px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "48px" }}>
@@ -49,7 +49,7 @@ export default function Footer() {
             {/* Brand + newsletter */}
             <div>
               <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
-                <div style={{ width: 32, height: 32, background: "linear-gradient(180deg,#FF6B77,#E8192C)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ width: 32, height: 32, background: "linear-gradient(180deg,#BE4459,#A4243B)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2l2.47 6.9 7.32.1-5.87 4.38 2.16 7L12 16.2l-6.08 4.18 2.16-7L2.21 9l7.32-.1L12 2z" fill="#FFFFFF"/>
                   </svg>
@@ -60,7 +60,7 @@ export default function Footer() {
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
-                <p style={{ color: "#E8192C", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+                <p style={{ color: "#D9909B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.12)", paddingBottom: "10px", gap: 8 }}>
                   <input
@@ -71,7 +71,7 @@ export default function Footer() {
                   />
                   <button
                     onClick={() => { if (email) setSubscribed(true); }}
-                    style={{ background: "none", border: "none", color: "#E8192C", cursor: "pointer", padding: "4px", display: "flex" }}
+                    style={{ background: "none", border: "none", color: "#D9909B", cursor: "pointer", padding: "4px", display: "flex" }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -85,7 +85,7 @@ export default function Footer() {
               <span style={colHead}>Pages</span>
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#E8192C"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#D9909B"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)"}
                 >{p.label}</a>
               ))}
@@ -115,7 +115,7 @@ export default function Footer() {
                   <motion.a
                     key={i} href="#"
                     style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none", display: "flex" }}
-                    whileHover={{ color: "#E8192C", scale: 1.15 } as any}
+                    whileHover={{ color: "#D9909B", scale: 1.15 } as any}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     {icon}
