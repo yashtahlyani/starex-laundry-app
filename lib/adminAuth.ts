@@ -4,10 +4,20 @@ import { redirect } from "next/navigation";
 
 const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",")
-  .map((e) => e.trim().toLowerCase())
-  .filter(Boolean);
+// Hardcoded fallback so admin access never silently breaks if ADMIN_EMAILS
+// isn't set (or is set to something unexpected) in a given deployment
+// environment — this is the same address the rest of the app (Navbar,
+// Footer) already treats as the owner account.
+const FALLBACK_ADMIN_EMAILS = ["owner@starex.ca"];
+
+const ADMIN_EMAILS = Array.from(new Set([
+  ...FALLBACK_ADMIN_EMAILS,
+  ...(process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean),
+]));
+
+function checkIsAdmin(user: { email?: string | null; user_metadata?: any }) {
+  return ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "") || user.user_metadata?.is_admin === true;
+}
 
 export async function requireAdmin() {
   const cookieStore = cookies();
@@ -18,13 +28,7 @@ export async function requireAdmin() {
   );
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth");
-
-  const isAdmin =
-    ADMIN_EMAILS.length > 0
-      ? ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "")
-      : user.user_metadata?.is_admin === true;
-
-  if (!isAdmin) redirect("/");
+  if (!checkIsAdmin(user)) redirect("/");
   return user;
 }
 
@@ -37,9 +41,5 @@ export async function getAdminUser() {
   );
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
-  const isAdmin =
-    ADMIN_EMAILS.length > 0
-      ? ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "")
-      : user.user_metadata?.is_admin === true;
-  return isAdmin ? user : null;
+  return checkIsAdmin(user) ? user : null;
 }

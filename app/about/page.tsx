@@ -38,8 +38,8 @@ export default function About() {
       {/* Hero — clean text-free photo as a true backdrop, no baked-in copy to fight with */}
       <section style={{
         paddingTop: 120, paddingBottom: 88, position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(100deg, rgba(184,50,79,0.94) 0%, rgba(184,50,79,0.82) 45%, rgba(184,50,79,0.55) 100%), url(/images/starex/folded-towels-sprig.png)",
-        backgroundSize: "cover", backgroundPosition: "center",
+        backgroundImage: "linear-gradient(100deg, rgba(184,50,79,0.9) 0%, rgba(184,50,79,0.78) 50%, rgba(184,50,79,0.6) 100%), url(/images/starex/folded-towels-sprig.png)",
+        backgroundSize: "cover, contain", backgroundPosition: "center, center", backgroundRepeat: "no-repeat, no-repeat",
       }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
