@@ -27,30 +27,44 @@ export default function ServicesPage() {
   return (
     <div style={{ background: "#FFFFFF" }}>
 
-      {/* Hero */}
-      <section style={{
-        paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(90deg, rgba(184,50,79,0.88) 0%, rgba(184,50,79,0.6) 55%, rgba(20,20,20,0.35) 100%), url(/images/starex/pickup-clean-deliver-2.png)",
-        backgroundSize: "cover", backgroundPosition: "center",
-      }}>
-        <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
-          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
-            What We Offer
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.08, ease }}
-            style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
+      {/* Hero — solid brand red for text, the branded photo shown as its own clean card */}
+      <section style={{ paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden", background: "var(--brand)" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 56, alignItems: "center", position: "relative" }} className="services-hero">
+          <div>
+            <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
+              What We Offer
+            </motion.span>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.08, ease }}
+              style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,3.75rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
+            >
+              Every fabric,{" "}
+              <em style={{ fontStyle: "italic" }}>every need.</em>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
+              style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
+            >
+              From everyday wash-and-fold to delicate dry cleaning — we handle it all with professional care.
+            </motion.p>
+          </div>
+
+          {/* Branded photo — shown untouched, no text layered on top of it */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
+            className="services-hero-photo"
+            style={{
+              position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 320, alignSelf: "stretch",
+              boxShadow: "0 24px 60px rgba(20,20,20,0.18)",
+            }}
           >
-            Every fabric,{" "}
-            <em style={{ fontStyle: "italic" }}>every need.</em>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-            style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
-          >
-            From everyday wash-and-fold to delicate dry cleaning — we handle it all with professional care.
-          </motion.p>
+            <img
+              src="/images/starex/pickup-clean-deliver-2.png"
+              alt="StareX — we pick up, we clean, we deliver"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -109,7 +123,11 @@ export default function ServicesPage() {
       </section>
 
       <style>{`
-        @media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 900px) {
+          .services-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .services-hero { grid-template-columns: 1fr !important; text-align: center; }
+          .services-hero-photo { min-height: 240px !important; }
+        }
         @media (max-width: 560px) { .services-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </div>

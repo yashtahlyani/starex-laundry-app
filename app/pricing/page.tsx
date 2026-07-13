@@ -54,32 +54,46 @@ export default function PricingPage() {
   return (
     <div style={{ background: "#FFFFFF" }}>
 
-      {/* Hero — flat brand red, bold & confident */}
-      <section style={{
-        paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(90deg, rgba(184,50,79,0.9) 0%, rgba(184,50,79,0.65) 55%, rgba(20,20,20,0.35) 100%), url(/images/starex/premium-229-lb.png)",
-        backgroundSize: "cover", backgroundPosition: "center",
-      }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
-          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
-            Simple Pricing
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.08, ease }}
-            style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
+      {/* Hero — solid brand red for text, the branded photo shown as its own clean card */}
+      <section style={{ paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden", background: "var(--brand)" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 56, alignItems: "center", position: "relative" }} className="pricing-hero">
+          <div>
+            <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
+              Simple Pricing
+            </motion.span>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.08, ease }}
+              style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 16 }}
+            >
+              Pay for what you{" "}
+              <em style={{ fontStyle: "italic" }}>need.</em>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.18, ease }}
+              style={{ color: "rgba(255,255,255,0.8)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
+            >
+              No hidden fees, no surprises. Laundry at $2.29 per pound, or one flat monthly plan.
+              Every price confirmed before we begin.
+            </motion.p>
+          </div>
+
+          {/* Branded photo — shown untouched, no text layered on top of it */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
+            className="pricing-hero-photo"
+            style={{
+              position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 320, alignSelf: "stretch",
+              boxShadow: "0 24px 60px rgba(20,20,20,0.18)",
+            }}
           >
-            Pay for what you{" "}
-            <em style={{ fontStyle: "italic" }}>need.</em>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.18, ease }}
-            style={{ color: "rgba(255,255,255,0.8)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
-          >
-            No hidden fees, no surprises. Laundry at $2.29 per pound, or one flat monthly plan.
-            Every price confirmed before we begin.
-          </motion.p>
+            <img
+              src="/images/starex/premium-229-lb.png"
+              alt="StareX — premium care at $2.29/lb, free pickup & delivery on orders over 15 lbs"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -334,6 +348,8 @@ export default function PricingPage() {
           .plans-grid { grid-template-columns: 1fr !important; }
           .catalog-grid { grid-template-columns: 1fr !important; }
           .detailing-grid { grid-template-columns: 1fr !important; }
+          .pricing-hero { grid-template-columns: 1fr !important; text-align: center; }
+          .pricing-hero-photo { min-height: 240px !important; }
         }
         @media (max-width: 480px) { .paygo-grid { grid-template-columns: 1fr !important; } }
       `}</style>

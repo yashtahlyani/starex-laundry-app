@@ -222,13 +222,14 @@ export default function Home() {
             className="hero-panel"
             style={{
               position: "relative", borderRadius: 28, overflow: "hidden", minHeight: 460,
+              alignSelf: "stretch",
               boxShadow: "0 24px 60px rgba(20,20,20,0.12)",
             }}
           >
             <img
               src="/images/starex-hero-banner.png"
               alt="StareX premium laundry service — fresh laundry, delivered to your door"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
           </motion.div>
         </div>

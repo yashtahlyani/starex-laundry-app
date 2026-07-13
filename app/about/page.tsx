@@ -35,12 +35,8 @@ export default function About() {
   return (
     <div style={{ background: "#FFFFFF" }}>
 
-      {/* Hero */}
-      <section style={{
-        paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(100deg, rgba(184,50,79,0.86) 0%, rgba(184,50,79,0.7) 60%, rgba(20,20,20,0.3) 100%), url(/images/starex/premium-care-trust.png)",
-        backgroundSize: "cover", backgroundPosition: "center",
-      }}>
+      {/* Hero — solid brand red for text, the branded photo shown as its own clean card (never both layered) */}
+      <section style={{ paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden", background: "var(--brand)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }} className="about-hero">
           <div>
             <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
@@ -54,27 +50,36 @@ export default function About() {
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-              style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif" }}
+              style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif", marginBottom: 32 }}
             >
               StareX started in 2019 with one belief: laundry should be invisible. You should never have to think about it. Five years later, we serve over 10,000 Canadians who&apos;ve reclaimed their weekends.
             </motion.p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease }}
-            style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 20, padding: "48px", position: "relative", overflow: "hidden" }}
-          >
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#ffffff", marginBottom: 8 }}>10,000+</p>
-            <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "1rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}>customers who stopped doing laundry</p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-              {[["4.9★", "avg rating"], ["98%", "on-time"], ["24hr", "turnaround"], ["2019", "founded"]].map(([n, l]) => (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.35 }}
+              style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20, maxWidth: 420 }}
+            >
+              {[["10,000+", "customers"], ["4.9★", "avg rating"], ["98%", "on-time"], ["2019", "founded"]].map(([n, l]) => (
                 <div key={l}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#ffffff", letterSpacing: "-0.02em" }}>{n}</p>
-                  <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#ffffff", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{n}</p>
+                  <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>
                 </div>
               ))}
-            </div>
+            </motion.div>
+          </div>
+
+          {/* Branded photo — shown untouched, no text layered on top of it */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
+            style={{
+              position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 380, alignSelf: "stretch",
+              boxShadow: "0 24px 60px rgba(20,20,20,0.18)",
+            }}
+          >
+            <img
+              src="/images/starex/premium-care-trust-banner.png"
+              alt="StareX — premium care you can trust"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
           </motion.div>
         </div>
       </section>
