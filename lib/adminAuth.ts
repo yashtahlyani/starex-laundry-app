@@ -19,12 +19,16 @@ function checkIsAdmin(user: { email?: string | null; user_metadata?: any }) {
   return ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "") || user.user_metadata?.is_admin === true;
 }
 
+// getAll (not get-only) is required so a session cookie that Supabase has
+// split into chunks (sb-<ref>-auth-token.0, .1, ...) — which happens once
+// the session payload crosses ~3180 bytes — gets correctly reassembled.
+// get-only silently sees no session at all for a chunked cookie.
 export async function requireAdmin() {
   const cookieStore = cookies();
   const supabase = createServerClient(
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""),
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
-    { cookies: { get: (name: string) => cookieStore.get(name)?.value } }
+    { cookies: { getAll: () => cookieStore.getAll() } }
   );
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth");
@@ -37,7 +41,7 @@ export async function getAdminUser() {
   const supabase = createServerClient(
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""),
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
-    { cookies: { get: (name: string) => cookieStore.get(name)?.value } }
+    { cookies: { getAll: () => cookieStore.getAll() } }
   );
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;

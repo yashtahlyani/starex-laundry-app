@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const supabase = createServerClient(
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""),
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
-    { cookies: { get: (name) => cookieStore.get(name)?.value } }
+    { cookies: { getAll: () => cookieStore.getAll() } }
   );
   // Signing in is optional — guests can book with just their contact details.
   const { data: { user } } = await supabase.auth.getUser();
