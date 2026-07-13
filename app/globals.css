@@ -7,10 +7,10 @@
 @layer base {
   :root {
     /* ── StareX design tokens — premium garnet & warm white ── */
-    --brand:        #CB3E5E;  /* primary — CTAs, accents, sparingly */
-    --brand-dark:   #A82F4B;  /* hover / pressed / accents on light */
-    --brand-soft:   #DA6178;  /* gradient light end */
-    --brand-rose:   #EBA3B4;  /* accent text/icons on dark surfaces */
+    --brand:        #B8324F;  /* primary — CTAs, accents, sparingly */
+    --brand-dark:   #8F2740;  /* hover / pressed / accents on light */
+    --brand-soft:   #C85770;  /* gradient light end */
+    --brand-rose:   #E08FA0;  /* accent text/icons on dark surfaces */
     --bg:           #FFFFFF;
     --bg-warm:      #FFFFFF;  /* soft warm white page bg */
     --surface:      #F2F2F2;  /* warm ivory */
@@ -157,31 +157,31 @@
   .btn-primary:hover {
     background: var(--brand-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(203,62,94,0.35);
+    box-shadow: 0 6px 24px rgba(184,50,79,0.35);
   }
 
-  /* ── Ghost button on dark ── */
+  /* ── Ghost button — every usage in this app sits on a light surface now ── */
   .btn-ghost, .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     background: transparent;
-    color: rgba(255,255,255,0.8);
+    color: #4A4A4A;
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
     font-size: 0.9375rem;
     padding: 12px 28px;
     border-radius: 120px;
-    border: 1.5px solid rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(20,20,20,0.16);
     cursor: pointer;
     transition: border-color 0.2s ease, color 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
   }
   .btn-ghost:hover, .btn-secondary:hover {
-    border-color: var(--brand-rose);
-    color: var(--brand-rose);
+    border-color: var(--brand);
+    color: var(--brand);
   }
 
   /* ── White button (used on dark hero) ── */
@@ -206,7 +206,7 @@
   .btn-white:hover {
     background: var(--brand-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(203,62,94,0.35);
+    box-shadow: 0 6px 24px rgba(184,50,79,0.35);
   }
 
   /* ── Eyebrow label ── */
@@ -266,7 +266,7 @@
   .input-field:focus {
     outline: none;
     border-color: var(--brand-soft);
-    box-shadow: 0 0 0 3px rgba(218,97,120,0.18);
+    box-shadow: 0 0 0 3px rgba(200,87,112,0.18);
   }
 
   /* ── Badge ── */
@@ -303,7 +303,7 @@
   .btn-sky:hover {
     background: var(--brand-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(203,62,94,0.35);
+    box-shadow: 0 6px 24px rgba(184,50,79,0.35);
   }
 
   /* ── btn-ghost-dark ── */

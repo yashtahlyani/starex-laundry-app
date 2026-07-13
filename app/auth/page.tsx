@@ -68,8 +68,8 @@ export default function AuthPage() {
 
   if (mode === "new-password") {
     return (
-      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-4 pt-16 relative">
-        <a href="/" className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#4A4A4A] hover:text-[#CB3E5E] transition-colors font-body">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-4 relative">
+        <a href="/" className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#4A4A4A] hover:text-[#B8324F] transition-colors font-body">
           <ArrowLeft size={15} /> Back to Home
         </a>
         <div className="max-w-md w-full">
@@ -133,7 +133,7 @@ export default function AuthPage() {
 
   if (mode === "check-email") {
     return (
-      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center px-4">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10 text-center">
             <div className="h-16 w-16 rounded-full bg-mint/15 flex items-center justify-center mx-auto mb-5">
@@ -153,9 +153,9 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex pt-16 bg-[#FFFFFF]">
+    <div className="min-h-screen flex bg-[#FFFFFF]">
       {/* Left brand panel — flat brand red, echoes the homepage hero split */}
-      <div className="hidden lg:flex lg:w-5/12 bg-[#CB3E5E] flex-col justify-between p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-5/12 bg-[#B8324F] flex-col justify-between p-12 relative overflow-hidden">
         <a href="/" className="relative flex items-center">
           <Logo color="#FFFFFF" fontSize="1.35rem" />
         </a>
@@ -192,14 +192,14 @@ export default function AuthPage() {
 
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FFFFFF] relative">
-        <a href="/" className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#4A4A4A] hover:text-[#CB3E5E] transition-colors font-body">
+        <a href="/" className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#4A4A4A] hover:text-[#B8324F] transition-colors font-body">
           <ArrowLeft size={15} /> Back to Home
         </a>
         <div className="w-full max-w-md">
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">
               <a href="/" className="lg:hidden flex items-center mb-6">
-                <Logo color="#CB3E5E" fontSize="1.2rem" />
+                <Logo color="#B8324F" fontSize="1.2rem" />
               </a>
               <h1 className="text-2xl font-bold text-[#161616] font-heading">
                 {mode === "signin" && "Welcome back"}

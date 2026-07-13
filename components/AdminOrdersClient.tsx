@@ -37,7 +37,7 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
               <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }}
-                style={{ width: 9, height: 9, borderRadius: "50%", background: "#CB3E5E", flexShrink: 0 }} />
+                style={{ width: 9, height: 9, borderRadius: "50%", background: "#B8324F", flexShrink: 0 }} />
               <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#161616" }}>
                 New orders — need your confirmation
               </h2>
@@ -45,7 +45,7 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 12 }}>
               {visible.map(o => (
                 <motion.div key={o.id} layout initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                  style={{ background: "#fff", border: "2px solid #CB3E5E", borderRadius: 16, padding: "20px", boxShadow: "0 6px 24px rgba(203,62,94,0.22)" }}>
+                  style={{ background: "#fff", border: "2px solid #B8324F", borderRadius: 16, padding: "20px", boxShadow: "0 6px 24px rgba(184,50,79,0.22)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                     <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#161616" }}>{o.code}</span>
                     <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA" }}>{o.date} · {o.time_slot}</span>
@@ -97,7 +97,7 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
             <div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "#161616" }}>
                 {o.code}
-                {o.status === "placed" && <span style={{ color: "#A82F4B" }}> •</span>}
+                {o.status === "placed" && <span style={{ color: "#8F2740" }}> •</span>}
               </p>
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.76rem", color: "#A1A1AA" }}>
                 {o.service_title ?? o.service} · {o.date}

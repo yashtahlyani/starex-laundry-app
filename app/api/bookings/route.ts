@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
     stripBOM(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""),
     { cookies: { get: (name) => cookieStore.get(name)?.value } }
   );
+  // Signing in is optional — guests can book with just their contact details.
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "You must be signed in to book a pickup." }, { status: 401 });
 
   let body: BookingRequest;
   try { body = await req.json(); }
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
   try {
     const bookingService = new BookingService(getSupabaseAdmin());
     const result = await bookingService.createBooking({
-      userId: user.id,
+      userId: user?.id ?? null,
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone.trim(),

@@ -58,7 +58,7 @@ export default function ServicesPage() {
               <AnimatedContent key={s.title} delay={i * 0.07}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
                   {s.featured && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CB3E5E", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#B8324F", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
@@ -70,12 +70,12 @@ export default function ServicesPage() {
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24, flex: 1 }}>
                     {s.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        <CheckCircle size={14} color="#A82F4B" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <CheckCircle size={14} color="#8F2740" style={{ flexShrink: 0, marginTop: 3 }} />
                         <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#A82F4B", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>

@@ -32,7 +32,7 @@ export default function FloatingCTA() {
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            background: "linear-gradient(180deg,#DA6178 0%,#CB3E5E 100%)",
+            background: "linear-gradient(180deg,#C85770 0%,#B8324F 100%)",
             color: "#FFFFFF",
             fontFamily: "Poppins, sans-serif",
             fontWeight: 600,
@@ -40,7 +40,7 @@ export default function FloatingCTA() {
             padding: "13px 24px",
             borderRadius: 120,
             textDecoration: "none",
-            boxShadow: "0 8px 32px rgba(203,62,94,0.4), 0 2px 8px rgba(0,0,0,0.25)",
+            boxShadow: "0 8px 32px rgba(184,50,79,0.4), 0 2px 8px rgba(0,0,0,0.25)",
             whiteSpace: "nowrap",
           }}
         >

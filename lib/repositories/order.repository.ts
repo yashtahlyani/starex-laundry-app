@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 export interface Order {
   id: string;
   code: string;
-  user_id: string;
+  user_id: string | null;
   customer_name: string;
   email: string;
   phone: string;
@@ -97,7 +97,7 @@ export class OrderRepository {
   }
 
   async create(input: {
-    userId: string;
+    userId: string | null;
     customerName: string;
     email: string;
     phone: string;

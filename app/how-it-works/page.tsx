@@ -92,7 +92,7 @@ export default function HowItWorks() {
           <div ref={timelineRef} style={{ position: "relative" }}>
             {/* vertical line */}
             <div style={{ position: "absolute", left: 32, top: 0, bottom: 0, width: 2, background: "#E5E7EB" }} className="timeline-line">
-              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #DA6178, #CB3E5E)", height: lineHeight }} />
+              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #C85770, #B8324F)", height: lineHeight }} />
             </div>
 
             {steps.map((step, i) => (

@@ -22,7 +22,7 @@ export default function NotFound() {
         transition={{ duration: 0.7, ease }}
         style={{ textAlign: "center", padding: "0 24px", position: "relative", zIndex: 1 }}
       >
-        <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: "#A82F4B" }}>Page Not Found</span>
+        <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: "#8F2740" }}>Page Not Found</span>
 
         <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2rem,5vw,3.5rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#161616", marginBottom: 16 }}>
           This page got{" "}

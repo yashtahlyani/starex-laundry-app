@@ -45,8 +45,8 @@ export default function Logo({ color = "#FFFFFF", fontSize = "1.2rem" }: LogoPro
       >
         <defs>
           <linearGradient id={gid} x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#D95672" />
-            <stop offset="100%" stopColor="#B93353" />
+            <stop offset="0%" stopColor="#C24862" />
+            <stop offset="100%" stopColor="#8F2740" />
           </linearGradient>
         </defs>
         {/* outer star in brand red */}

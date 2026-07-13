@@ -56,7 +56,7 @@ export default function Footer() {
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
-                <p style={{ color: "#A82F4B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+                <p style={{ color: "#8F2740", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(20,20,20,0.15)", paddingBottom: "10px", gap: 8 }}>
                   <input
@@ -67,7 +67,7 @@ export default function Footer() {
                   />
                   <button
                     onClick={() => { if (email) setSubscribed(true); }}
-                    style={{ background: "none", border: "none", color: "#CB3E5E", cursor: "pointer", padding: "4px", display: "flex" }}
+                    style={{ background: "none", border: "none", color: "#B8324F", cursor: "pointer", padding: "4px", display: "flex" }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -81,7 +81,7 @@ export default function Footer() {
               <span style={colHead}>Pages</span>
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#CB3E5E"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#B8324F"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#4A4A4A"}
                 >{p.label}</a>
               ))}
@@ -111,7 +111,7 @@ export default function Footer() {
                   <motion.a
                     key={i} href="#"
                     style={{ color: "#8C8C8C", textDecoration: "none", display: "flex" }}
-                    whileHover={{ color: "#CB3E5E", scale: 1.15 } as any}
+                    whileHover={{ color: "#B8324F", scale: 1.15 } as any}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     {icon}

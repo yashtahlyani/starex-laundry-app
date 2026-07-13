@@ -83,12 +83,12 @@ export default function PricingPage() {
       <section style={{ padding: "80px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="eyebrow" style={{ color: "#A82F4B" }}>Item Pricing</span>
+            <span className="eyebrow" style={{ color: "#8F2740" }}>Item Pricing</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 8 }}>
               The full <em className="display-accent" style={{ display: "inline" }}>price list.</em>
             </h2>
             <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
-              Prices marked with a <strong style={{ color: "#A82F4B" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
+              Prices marked with a <strong style={{ color: "#8F2740" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
             </p>
           </AnimatedContent>
 
@@ -101,8 +101,8 @@ export default function PricingPage() {
                   onClick={() => setActiveTab(t.id)}
                   style={{
                     padding: "9px 20px", borderRadius: 999, cursor: "pointer",
-                    border: activeTab === t.id ? "1.5px solid #CB3E5E" : "1.5px solid rgba(20,20,20,0.12)",
-                    background: activeTab === t.id ? "#CB3E5E" : "#ffffff",
+                    border: activeTab === t.id ? "1.5px solid #B8324F" : "1.5px solid rgba(20,20,20,0.12)",
+                    background: activeTab === t.id ? "#B8324F" : "#ffffff",
                     color: activeTab === t.id ? "#ffffff" : "#4A4A4A",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.85rem",
                     transition: "all 0.2s ease",
@@ -126,7 +126,7 @@ export default function PricingPage() {
               <div style={{ display: "grid", gridTemplateColumns: tab.sections.length > 1 ? "repeat(2,1fr)" : "minmax(0,560px)", gap: 20, justifyContent: "center" }} className="catalog-grid">
                 {tab.sections.map((section) => (
                   <div key={section.title} style={{ background: "#ffffff", borderRadius: 20, padding: "26px 28px", border: "1px solid rgba(20,20,20,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)" }}>
-                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#A82F4B", marginBottom: 16 }}>
+                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8F2740", marginBottom: 16 }}>
                       {section.title}
                     </h3>
                     <ul style={{ listStyle: "none", display: "flex", flexDirection: "column" }}>
@@ -134,7 +134,7 @@ export default function PricingPage() {
                         <li key={item.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, padding: "10px 0", borderBottom: i < section.items.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none" }}>
                           <span style={{ color: "#4A4A4A", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{item.name}</span>
                           <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#161616", whiteSpace: "nowrap" }}>
-                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#A82F4B" }}> +</span>}
+                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#8F2740" }}> +</span>}
                           </span>
                         </li>
                       ))}
@@ -151,7 +151,7 @@ export default function PricingPage() {
       <section style={{ padding: "80px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
-            <span className="eyebrow" style={{ color: "#A82F4B" }}>Choose Your Plan</span>
+            <span className="eyebrow" style={{ color: "#8F2740" }}>Choose Your Plan</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 16 }}>
               Two ways to <em className="display-accent" style={{ display: "inline" }}>StareX.</em>
             </h2>
@@ -173,7 +173,7 @@ export default function PricingPage() {
                 <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
                   {planPPP.features.map((f) => (
                     <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={15} color="#CB3E5E" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <CheckCircle size={15} color="#B8324F" style={{ flexShrink: 0, marginTop: 2 }} />
                       <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                     </li>
                   ))}
@@ -199,7 +199,7 @@ export default function PricingPage() {
                 <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
                   {planMonthly.features.map((f) => (
                     <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={15} color="#CB3E5E" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <CheckCircle size={15} color="#B8324F" style={{ flexShrink: 0, marginTop: 2 }} />
                       <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                     </li>
                   ))}
@@ -217,12 +217,12 @@ export default function PricingPage() {
       <section style={{ padding: "80px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#A82F4B" }}>At A Glance</span>
+            <span className="eyebrow" style={{ color: "#8F2740" }}>At A Glance</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 8 }}>
               Every service, <em className="display-accent" style={{ display: "inline" }}>one glance.</em>
             </h2>
             <p style={{ color: "#6B6B6B", maxWidth: "50ch", fontFamily: "Kodchasan, sans-serif" }}>
-              See the full breakdown on the <a href="/services" style={{ color: "#A82F4B", textDecoration: "underline" }}>Services</a> page.
+              See the full breakdown on the <a href="/services" style={{ color: "#8F2740", textDecoration: "underline" }}>Services</a> page.
             </p>
           </AnimatedContent>
 
@@ -231,7 +231,7 @@ export default function PricingPage() {
               <AnimatedContent key={s.title} delay={i * 0.06}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "28px", position: "relative", height: "100%" }}>
                   {s.badge && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CB3E5E", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#B8324F", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}

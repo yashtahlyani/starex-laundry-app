@@ -195,7 +195,7 @@ export default function Home() {
                 {[...Array(5)].map((_, i) => (
                   <div key={i} style={{
                     width: 30, height: 30, borderRadius: "50%", marginLeft: i === 0 ? 0 : -8,
-                    background: ["#CB3E5E","#4A4A4A","#B5233F","#8C8C8C","#161616"][i],
+                    background: ["#B8324F","#4A4A4A","#B5233F","#8C8C8C","#161616"][i],
                     border: "2px solid #FFFFFF",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: "0.65rem", fontWeight: 700, color: "#FFFFFF",
@@ -222,14 +222,14 @@ export default function Home() {
             className="hero-panel"
             style={{
               position: "relative", borderRadius: 28, overflow: "hidden", minHeight: 460,
-              background: "var(--brand)", display: "flex", alignItems: "flex-end", padding: 40,
+              display: "flex", alignItems: "flex-end", padding: 40,
+              backgroundImage: "url(/images/laundromat-interior.png)",
+              backgroundSize: "cover", backgroundPosition: "center",
             }}
           >
-            <div aria-hidden="true" style={{ position: "absolute", top: -40, right: -40, width: 240, height: 240, opacity: 0.14 }}>
-              <svg viewBox="0 0 24 24" width="100%" height="100%"><polygon points="12,1 14.6,8.6 22.8,8.9 16.3,13.8 18.5,21.6 12,17 5.5,21.6 7.7,13.8 1.2,8.9 9.4,8.6" fill="#FFFFFF" /></svg>
-            </div>
+            <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(20,20,20,0.75) 0%, rgba(20,20,20,0.15) 45%, transparent 70%)" }} />
             <div style={{ position: "relative" }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", marginBottom: 10 }}>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--brand-rose)", marginBottom: 10 }}>
                 24–48h Turnaround
               </p>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", letterSpacing: "-0.02em", color: "#FFFFFF", lineHeight: 1.1, maxWidth: "16ch" }}>
@@ -322,7 +322,7 @@ export default function Home() {
             {steps.map((step, i) => (
               <AnimatedContent key={step.label} delay={i * 0.1}>
                 <div style={{ position: "relative", marginBottom: i < steps.length - 1 ? "64px" : 0 }}>
-                  <div style={{ position: "absolute", left: "-43px", top: "6px", width: 16, height: 16, borderRadius: "50%", background: "#CB3E5E", flexShrink: 0, boxShadow: "0 0 0 3px #FFFFFF, 0 0 0 5px rgba(203,62,94,0.22)" }} />
+                  <div style={{ position: "absolute", left: "-43px", top: "6px", width: 16, height: 16, borderRadius: "50%", background: "#B8324F", flexShrink: 0, boxShadow: "0 0 0 3px #FFFFFF, 0 0 0 5px rgba(184,50,79,0.22)" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                     <span className="step-pill">{step.label}</span>
                   </div>
@@ -406,7 +406,7 @@ export default function Home() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(20,20,20,0.03)", borderBottom: "1px solid rgba(20,20,20,0.06)" }}>
                   <span />
                   <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(20,20,20,0.35)", textAlign: "center" }}>Traditional</span>
-                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#CB3E5E", textAlign: "center" }}>StareX</span>
+                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#B8324F", textAlign: "center" }}>StareX</span>
                 </div>
                 {comparisons.map((row, i) => (
                   <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none", alignItems: "center", gap: 8 }}>
@@ -416,7 +416,7 @@ export default function Home() {
                       <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "rgba(20,20,20,0.45)", textAlign: "center" }}>{row.them}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
-                      <CheckCircle size={13} color="#CB3E5E" strokeWidth={2.5} />
+                      <CheckCircle size={13} color="#B8324F" strokeWidth={2.5} />
                       <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#161616", fontWeight: 600, textAlign: "center" }}>{row.us}</span>
                     </div>
                   </div>
@@ -432,7 +432,7 @@ export default function Home() {
       <section style={{ background: "#F2F2F2", padding: "96px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="eyebrow" style={{ color: "#A82F4B" }}>Simple Pricing</span>
+            <span className="eyebrow" style={{ color: "#8F2740" }}>Simple Pricing</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: "12px" }}>
               Pricing that{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>works for you.</span>
@@ -469,7 +469,7 @@ export default function Home() {
                   <ul style={{ listStyle: "none", marginBottom: "28px", display: "flex", flexDirection: "column", gap: "10px" }}>
                     {plan.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                        <CheckCircle size={15} color="#CB3E5E" strokeWidth={2.5} />
+                        <CheckCircle size={15} color="#B8324F" strokeWidth={2.5} />
                         <span style={{ color: "#4A4A4A", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
@@ -495,7 +495,7 @@ export default function Home() {
       <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: "48px" }}>
-            <span className="eyebrow" style={{ color: "#A82F4B" }}>What People Say</span>
+            <span className="eyebrow" style={{ color: "#8F2740" }}>What People Say</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Thousands of happy{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>customers.</span>
@@ -530,7 +530,7 @@ export default function Home() {
               <AnimatedContent key={t.name} delay={i * 0.06}>
                 <div className="card" style={{ padding: "28px 32px", height: "100%" }}>
                   <div style={{ display: "flex", gap: 3, marginBottom: "16px" }}>
-                    {[...Array(t.stars)].map((_, j) => <Star key={j} size={14} fill="#CB3E5E" color="#CB3E5E" />)}
+                    {[...Array(t.stars)].map((_, j) => <Star key={j} size={14} fill="#B8324F" color="#B8324F" />)}
                   </div>
                   <p style={{ color: "#4A4A4A", fontSize: "1rem", lineHeight: 1.75, marginBottom: "24px", fontFamily: "Kodchasan, sans-serif", fontStyle: "italic" }}>
                     &ldquo;{t.text}&rdquo;
@@ -553,8 +553,8 @@ export default function Home() {
             {trust.map((t, i) => (
               <AnimatedContent key={t.title} delay={i * 0.07}>
                 <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(203,62,94,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                    <t.Icon size={20} color="#CB3E5E" />
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(184,50,79,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+                    <t.Icon size={20} color="#B8324F" />
                   </div>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616", marginBottom: "8px" }}>{t.title}</p>
                   <p style={{ color: "#6B6B6B", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>

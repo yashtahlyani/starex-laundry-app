@@ -2,8 +2,8 @@
   <rect width="36" height="36" rx="9" fill="#FFFFFF"/>
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#D95672"/>
-      <stop offset="100%" stop-color="#B93353"/>
+      <stop offset="0%" stop-color="#C24862"/>
+      <stop offset="100%" stop-color="#8F2740"/>
     </linearGradient>
   </defs>
   <!-- STAREX star: brand-red star with the signature white inner-star cutout -->

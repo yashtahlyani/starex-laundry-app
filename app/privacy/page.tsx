@@ -90,9 +90,9 @@ export default function PrivacyPage() {
         <div style={{ borderTop: "1px solid #E4E4E7", paddingTop: 32, marginTop: 16 }}>
           <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#8C8C8C", fontSize: "0.875rem" }}>
             See also our{" "}
-            <a href="/terms" style={{ color: "#A82F4B", textDecoration: "underline" }}>Terms of Service</a>.
+            <a href="/terms" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms of Service</a>.
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#A82F4B", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#8F2740", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
           </p>
         </div>
       </div>

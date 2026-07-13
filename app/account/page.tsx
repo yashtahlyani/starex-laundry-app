@@ -63,7 +63,7 @@ export default function AccountPage() {
 
   if (loading) return (
     <div style={{ minHeight: "100vh", background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ width: 36, height: 36, borderRadius: "50%", border: "4px solid rgba(203,62,94,0.2)", borderTopColor: "#CB3E5E", animation: "spin 0.8s linear infinite" }} />
+      <div style={{ width: 36, height: 36, borderRadius: "50%", border: "4px solid rgba(184,50,79,0.2)", borderTopColor: "#B8324F", animation: "spin 0.8s linear infinite" }} />
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </div>
   );
@@ -89,8 +89,8 @@ export default function AccountPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.4, ease }}
           style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 20, padding: "28px 28px", marginBottom: 20 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(203,62,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <User size={18} color="#A82F4B" />
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(184,50,79,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <User size={18} color="#8F2740" />
             </div>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616" }}>Profile information</h2>
           </div>
@@ -119,8 +119,8 @@ export default function AccountPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14, duration: 0.4, ease }}
           style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 20, padding: "28px 28px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(203,62,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Lock size={18} color="#A82F4B" />
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(184,50,79,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Lock size={18} color="#8F2740" />
             </div>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616" }}>Change password</h2>
           </div>

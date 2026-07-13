@@ -135,11 +135,11 @@ export default function BookPage() {
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
             style={{ width: 80, height: 80, background: "#F2F2F2", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
-            <CheckCircle size={40} color="#A82F4B" />
+            <CheckCircle size={40} color="#8F2740" />
           </motion.div>
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#161616", marginBottom: 12, letterSpacing: "-0.025em" }}>Pickup confirmed!</h2>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F2F2F2", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
-            <span style={{ color: "#A82F4B", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
+            <span style={{ color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
           </div>
           <p style={{ color: "#6B6B6B", fontSize: "1.0625rem", maxWidth: "44ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
             We&apos;ll send a confirmation to <strong style={{ color: "#161616" }}>{form.email}</strong>. See you on {form.date}!
@@ -193,13 +193,13 @@ export default function BookPage() {
                     const selected = form.service === s.id;
                     return (
                       <button key={s.id} onClick={() => setForm(p => ({ ...p, service: s.id }))} style={{
-                        padding: 20, border: `2px solid ${selected ? "#CB3E5E" : "transparent"}`,
+                        padding: 20, border: `2px solid ${selected ? "#B8324F" : "transparent"}`,
                         borderRadius: 16, background: selected ? s.color : "#ffffff",
                         cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
                         boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
                       }}>
                         <div style={{ width: 36, height: 36, background: selected ? "rgba(0,0,0,0.1)" : "#F4F4F5", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                          <Icon size={17} color={selected ? "#A82F4B" : "#6B6B6B"} />
+                          <Icon size={17} color={selected ? "#8F2740" : "#6B6B6B"} />
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 2 }}>{s.title}</p>
                         <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
@@ -230,7 +230,7 @@ export default function BookPage() {
                   <input type="date" value={form.date} min={new Date().toISOString().split("T")[0]}
                     onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
                     style={inputStyle}
-                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#CB3E5E"}
+                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#B8324F"}
                     onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"}
                   />
                 </div>
@@ -240,9 +240,9 @@ export default function BookPage() {
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
                     {timeSlots.map(t => (
                       <button key={t} onClick={() => setForm(p => ({ ...p, time: t }))} style={{
-                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#CB3E5E" : "#E4E4E7"}`,
+                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#B8324F" : "#E4E4E7"}`,
                         borderRadius: 10, background: form.time === t ? "#F2F2F2" : "#ffffff",
-                        color: form.time === t ? "#A82F4B" : "#6B6B6B",
+                        color: form.time === t ? "#8F2740" : "#6B6B6B",
                         fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === t ? 700 : 500, fontSize: "0.8125rem",
                         cursor: "pointer", transition: "all 0.15s",
                       }}>{t}</button>
@@ -266,7 +266,10 @@ export default function BookPage() {
                 <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   Your <em className="display-accent" style={{ display: "inline" }}>details.</em>
                 </h2>
-                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>We need to know where to come and how to reach you.</p>
+                <p style={{ color: "#6B6B6B", marginBottom: 12, fontFamily: "Kodchasan, sans-serif" }}>We need to know where to come and how to reach you.</p>
+                <p style={{ display: "inline-block", color: "#B93A57", background: "#FDF0F2", border: "1px solid rgba(184,50,79,0.18)", borderRadius: 999, padding: "5px 14px", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 24, fontFamily: "Kodchasan, sans-serif" }}>
+                  No account needed — book as a guest, or <a href="/auth" style={{ color: "inherit", textDecoration: "underline" }}>sign in</a> to track orders in one place.
+                </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 28 }}>
                   {([
@@ -280,7 +283,7 @@ export default function BookPage() {
                       <input type={type} value={form[key]} onChange={e => { setForm(p => ({ ...p, [key]: e.target.value })); setErrors(p => ({ ...p, [key]: "" })); }}
                         placeholder={placeholder}
                         style={{ ...inputStyle, borderColor: errors[key] ? "#F87171" : "#E4E4E7", boxShadow: errors[key] ? "0 0 0 3px rgba(248,113,113,0.12)" : "none" }}
-                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#CB3E5E"; }}
+                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#B8324F"; }}
                         onBlur={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"; }}
                       />
                       {errors[key] && <p style={{ color: "#EF4444", fontSize: "0.8rem", marginTop: 5, fontFamily: "Kodchasan, sans-serif" }}>{errors[key]}</p>}
@@ -291,7 +294,7 @@ export default function BookPage() {
                     <textarea rows={3} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
                       placeholder="Buzzer code, fragile items, special requests…"
                       style={{ ...inputStyle, resize: "vertical" }}
-                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#CB3E5E"}
+                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#B8324F"}
                       onBlur={e => (e.target as HTMLTextAreaElement).style.borderColor = "#E4E4E7"}
                     />
                   </div>
@@ -375,13 +378,13 @@ export default function BookPage() {
                 <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)", paddingTop: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
-                    <span style={{ color: "#CB3E5E", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
+                    <span style={{ color: "#B8324F", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
                   </div>
                   <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in</p>
                 </div>
               </div>
               <div style={{ marginTop: 20, background: "#F2F2F2", borderRadius: 10, padding: "11px 14px" }}>
-                <p style={{ color: "#A82F4B", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
+                <p style={{ color: "#8F2740", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
               </div>
             </div>
           </div>

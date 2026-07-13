@@ -137,7 +137,7 @@ export default function Navbar() {
                   color: "#4A4A4A",
                   transition: "color 0.2s, background 0.2s",
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#CB3E5E"; (e.currentTarget as HTMLElement).style.background = "rgba(203,62,94,0.06)"; }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#B8324F"; (e.currentTarget as HTMLElement).style.background = "rgba(184,50,79,0.06)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#4A4A4A"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
                 {link.label}
@@ -149,7 +149,7 @@ export default function Navbar() {
           <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
             {isOwner ? (
               <>
-                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#A82F4B", textDecoration: "none", border: "1px solid rgba(168,47,75,0.3)", borderRadius: 8 }}>
+                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#8F2740", textDecoration: "none", border: "1px solid rgba(168,47,75,0.3)", borderRadius: 8 }}>
                   <Settings size={13} /> Console
                 </a>
                 <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "#8C8C8C", background: "none", border: "none", cursor: "pointer" }}>
@@ -159,7 +159,7 @@ export default function Navbar() {
             ) : user ? (
               <div ref={acctRef} style={{ position: "relative" }}>
                 <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#161616", background: "rgba(20,20,20,0.05)", border: "1px solid rgba(20,20,20,0.1)", borderRadius: 999, cursor: "pointer" }}>
-                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                     {initials}
                   </span>
                   {firstName}
@@ -176,7 +176,7 @@ export default function Navbar() {
                           onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(20,20,20,0.05)"}
                           onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
                         >
-                          <item.icon size={15} color="#CB3E5E" /> {item.label}
+                          <item.icon size={15} color="#B8324F" /> {item.label}
                         </a>
                       ))}
                       <div style={{ height: 1, background: "rgba(20,20,20,0.08)", margin: "4px 0" }} />

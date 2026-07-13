@@ -3,7 +3,7 @@ import { OrderRepository } from "@/lib/repositories/order.repository";
 import { CustomerRepository } from "@/lib/repositories/customer.repository";
 
 export interface BookingInput {
-  userId: string;
+  userId: string | null;
   name: string;
   email: string;
   phone: string;
@@ -29,8 +29,11 @@ export class BookingService {
   }
 
   async createBooking(input: BookingInput): Promise<BookingResult> {
-    // Ensure profile exists
-    await this.customers.upsert({ id: input.userId, name: input.name, email: input.email, phone: input.phone });
+    // Only signed-in users have a profile row (profiles.id = auth.uid) — guests
+    // skip this and their contact details live on the order row itself.
+    if (input.userId) {
+      await this.customers.upsert({ id: input.userId, name: input.name, email: input.email, phone: input.phone });
+    }
 
     const order = await this.orders.create({
       userId: input.userId,

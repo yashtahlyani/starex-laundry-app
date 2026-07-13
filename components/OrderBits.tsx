@@ -33,7 +33,7 @@ export const STATUS_META: Record<string, { label: string; bg: string; fg: string
   placed:           { label: "Order placed",     bg: "#E5E5E5", fg: "#4338CA", dot: "#6366F1" },
   confirmed:        { label: "Confirmed",         bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
   picked_up:        { label: "Picked up",         bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
-  washing:          { label: "Being cleaned",     bg: "#F2F2F2", fg: "#047857", dot: "#A82F4B" },
+  washing:          { label: "Being cleaned",     bg: "#F2F2F2", fg: "#047857", dot: "#8F2740" },
   folding:          { label: "Folding",           bg: "#FEF3C7", fg: "#92400E", dot: "#D97706" },
   out_for_delivery: { label: "Out for delivery",  bg: "#F2F2F2", fg: "#065F46", dot: "#10B981" },
   delivered:        { label: "Delivered",         bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
@@ -80,14 +80,14 @@ export function ProgressTrack({ status }: { status: string }) {
         return (
           <div key={s.id} style={{ display: "flex", alignItems: "center", flex: i < ORDER_STAGES.length - 1 ? 1 : undefined }}>
             <motion.div
-              animate={{ background: done ? "#A82F4B" : "#E4E4E7", scale: active ? 1.15 : 1 }}
+              animate={{ background: done ? "#8F2740" : "#E4E4E7", scale: active ? 1.15 : 1 }}
               transition={{ duration: 0.3 }}
               style={{ width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
             >
               {done && <Check size={10} color="#fff" strokeWidth={3} />}
             </motion.div>
             {i < ORDER_STAGES.length - 1 && (
-              <div style={{ flex: 1, height: 2, background: done && i < current ? "#A82F4B" : "#E4E4E7", margin: "0 2px", transition: "background 0.3s" }} />
+              <div style={{ flex: 1, height: 2, background: done && i < current ? "#8F2740" : "#E4E4E7", margin: "0 2px", transition: "background 0.3s" }} />
             )}
           </div>
         );
