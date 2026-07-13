@@ -7,30 +7,30 @@ import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 const reviews = [
   {
     name: "Sarah M.",
-    location: "Vancouver, BC",
+    location: "Brampton, ON",
     rating: 5,
     text: "Honestly the best decision I've made for my weekly routine. They pick up Tuesday, it's back Thursday, perfectly folded. I don't even think about laundry anymore.",
     initial: "S",
   },
   {
     name: "Ahmed K.",
-    location: "Toronto, ON",
+    location: "Mississauga, ON",
     rating: 5,
     text: "Used them for my suit dry cleaning before a big meeting. Came back looking brand new. The WhatsApp updates throughout the process were a really nice touch.",
     initial: "A",
   },
   {
     name: "Jessica T.",
-    location: "Calgary, AB",
+    location: "Brampton, ON",
     rating: 5,
     text: "I was skeptical at first but booking was so easy. Driver was on time, clothes came back smelling amazing. 100% recommend to anyone.",
     initial: "J",
   },
   {
     name: "Marcus L.",
-    location: "Edmonton, AB",
+    location: "Mississauga, ON",
     rating: 5,
-    text: "Starex Club member for 3 months now. The recurring pickup alone has saved me so much time every week. Worth every penny.",
+    text: "Monthly plan member for 3 months now. The recurring pickup alone has saved me so much time every week. Worth every penny.",
     initial: "M",
   },
 ];

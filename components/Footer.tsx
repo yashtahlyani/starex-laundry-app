@@ -6,14 +6,14 @@ import { ArrowRight, ArrowUp } from "lucide-react";
 
 const pages = [
   { label: "Services",     href: "/services" },
-  { label: "Pricing",      href: "/services#pricing" },
+  { label: "Pricing",      href: "/pricing" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "About",        href: "/about" },
   { label: "FAQ",          href: "/faq" },
   { label: "Contact",      href: "/contact" },
 ];
 
-const serviceList = ["Wash & Fold", "Dry Cleaning", "Express 24hr", "Ironing & Press", "Commercial", "Pickup & Delivery"];
+const serviceList = ["Wash & Fold — $2.29/lb", "Dry Cleaning", "Same-Day Express", "Ironing & Press", "Household & Bedding", "Car & Sofa Detailing"];
 
 const colHead: React.CSSProperties = {
   fontFamily: "Kodchasan, sans-serif",
@@ -41,7 +41,7 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <footer style={{ background: "#111921" }}>
+    <footer style={{ background: "#150E10" }}>
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "64px 24px 48px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "48px" }}>
@@ -49,11 +49,9 @@ export default function Footer() {
             {/* Brand + newsletter */}
             <div>
               <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
-                <div style={{ width: 32, height: 32, background: "linear-gradient(180deg,#C9F8DE,#78EDB2)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <svg width="16" height="16" viewBox="0 0 36 36" fill="none">
-                    <line x1="9" y1="9" x2="27" y2="27" stroke="#0a1a0f" strokeWidth="5" strokeLinecap="round"/>
-                    <line x1="27" y1="9" x2="9" y2="27" stroke="#0a1a0f" strokeWidth="5" strokeLinecap="round"/>
-                    <circle cx="18" cy="18" r="2" fill="#0a1a0f"/>
+                <div style={{ width: 32, height: 32, background: "linear-gradient(180deg,#FF6B77,#E8192C)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2l2.47 6.9 7.32.1-5.87 4.38 2.16 7L12 16.2l-6.08 4.18 2.16-7L2.21 9l7.32-.1L12 2z" fill="#FFFFFF"/>
                   </svg>
                 </div>
                 <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.05rem", color: "#ffffff" }}>StareX</span>
@@ -62,7 +60,7 @@ export default function Footer() {
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
-                <p style={{ color: "#78EDB2", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+                <p style={{ color: "#E8192C", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.12)", paddingBottom: "10px", gap: 8 }}>
                   <input
@@ -73,7 +71,7 @@ export default function Footer() {
                   />
                   <button
                     onClick={() => { if (email) setSubscribed(true); }}
-                    style={{ background: "none", border: "none", color: "#78EDB2", cursor: "pointer", padding: "4px", display: "flex" }}
+                    style={{ background: "none", border: "none", color: "#E8192C", cursor: "pointer", padding: "4px", display: "flex" }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -87,7 +85,7 @@ export default function Footer() {
               <span style={colHead}>Pages</span>
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#78EDB2"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#E8192C"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)"}
                 >{p.label}</a>
               ))}
@@ -104,9 +102,10 @@ export default function Footer() {
             {/* Contact */}
             <div>
               <span style={colHead}>Contact</span>
-              <p style={linkStyle}>hello@starex.ca</p>
-              <p style={linkStyle}>(416) 555-1234</p>
-              <p style={{ ...linkStyle, lineHeight: 1.65 }}>Toronto, ON<br />Mississauga, ON</p>
+              <a href="mailto:hello@starexlaundry.ca" style={linkStyle}>hello@starexlaundry.ca</a>
+              <a href="tel:+14376077251" style={linkStyle}>437-607-7251</a>
+              <p style={{ ...linkStyle, lineHeight: 1.65 }}>Brampton, ON<br />Mississauga, ON</p>
+              <p style={linkStyle}>www.starexlaundry.ca</p>
               <div style={{ display: "flex", gap: "16px", marginTop: "24px" }}>
                 {[
                   <svg key="ig" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>,
@@ -116,7 +115,7 @@ export default function Footer() {
                   <motion.a
                     key={i} href="#"
                     style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none", display: "flex" }}
-                    whileHover={{ color: "#78EDB2", scale: 1.15 } as any}
+                    whileHover={{ color: "#E8192C", scale: 1.15 } as any}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     {icon}

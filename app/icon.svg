@@ -1,13 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
-  <rect width="36" height="36" rx="9" fill="#111921"/>
+  <rect width="36" height="36" rx="9" fill="#FFFFFF"/>
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#C9F8DE"/>
-      <stop offset="100%" stop-color="#4ECDA0"/>
+      <stop offset="0%" stop-color="#FF3B4A"/>
+      <stop offset="100%" stop-color="#C1121F"/>
     </linearGradient>
   </defs>
-  <line x1="9" y1="9" x2="27" y2="27" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
-  <line x1="27" y1="9" x2="9" y2="27" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="18" cy="18" r="3" fill="#111921"/>
-  <circle cx="18" cy="18" r="1.5" fill="#C9F8DE"/>
+  <polygon points="18,4 22.3,14.5 33.6,15 24.7,22.1 28,33 18,26.6 8,33 11.3,22.1 2.4,15 13.7,14.5" fill="url(#g)"/>
 </svg>

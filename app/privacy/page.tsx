@@ -48,7 +48,7 @@ const sections = [
   },
   {
     title: "Contact Us",
-    body: `For privacy-related questions, concerns, or requests, please contact our Privacy Officer at hello@starexlaundry.ca or by mail at Starex Laundry Inc., Toronto, ON, Canada. We take all privacy inquiries seriously and will respond within 30 days.`,
+    body: `For privacy-related questions, concerns, or requests, please contact our Privacy Officer at hello@starexlaundry.ca or by mail at Starex Laundry Inc., Brampton, ON, Canada. We take all privacy inquiries seriously and will respond within 30 days.`,
   },
 ];
 
@@ -56,10 +56,10 @@ export default function PrivacyPage() {
   return (
     <div style={{ background: "#F7F7F7", minHeight: "100vh" }}>
       {/* Hero */}
-      <div style={{ background: "#111921", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <div style={{ background: "#150E10", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
-          <span style={{ display: "inline-block", background: "rgba(120,237,178,0.12)", border: "1px solid rgba(120,237,178,0.25)", color: "#78EDB2", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
+          <span style={{ display: "inline-block", background: "rgba(232,25,44,0.12)", border: "1px solid rgba(232,25,44,0.25)", color: "#E8192C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
             Legal
           </span>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.8rem)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16 }}>
@@ -91,9 +91,9 @@ export default function PrivacyPage() {
         <div style={{ borderTop: "1px solid #E4E4E7", paddingTop: 32, marginTop: 16 }}>
           <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#71717A", fontSize: "0.875rem" }}>
             See also our{" "}
-            <a href="/terms" style={{ color: "#4ECDA0", textDecoration: "underline" }}>Terms of Service</a>.
+            <a href="/terms" style={{ color: "#C1121F", textDecoration: "underline" }}>Terms of Service</a>.
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#4ECDA0", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#C1121F", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
           </p>
         </div>
       </div>

@@ -10,21 +10,21 @@ const categories = [
   {
     name: "Getting Started",
     faqs: [
-      { q: "How does StareX work?", a: "Schedule a pickup online, leave your laundry bag at your door, and we'll return it clean, fresh, and folded — usually within 24 hours." },
-      { q: "What areas do you serve?", a: "We currently serve the Greater Toronto Area including Toronto, Mississauga, Brampton, Markham, Scarborough, Richmond Hill, Vaughan, and Oakville." },
+      { q: "How does StareX work?", a: "Schedule a pickup online, leave your laundry bag at your door, and we'll return it clean, fresh, and folded — within 24–48 hours." },
+      { q: "What areas do you serve?", a: "We currently serve Brampton and Mississauga, Ontario. Not sure if you're in our zone? Call or text us at 437-607-7251." },
       { q: "Do I need to be home for pickup?", a: "No! Just leave your bag at your door. Our driver will pick it up safely." },
       { q: "How do I schedule a pickup?", a: "Book online in under 2 minutes. Choose a time window, add your address, and we'll handle the rest." },
-      { q: "What if I need same-day service?", a: "Same-day pickup is available for orders placed before 10 AM. Rush delivery adds $10 to your order." },
+      { q: "What if I need same-day service?", a: "Same-day service is available at a 50% surcharge, subject to availability. Book early in the day to secure your slot." },
     ],
   },
   {
     name: "Pricing & Plans",
     faqs: [
-      { q: "How much does StareX cost?", a: "Wash & Fold starts at $2.49/lb with a 10 lb minimum. Dry cleaning is priced per item. No hidden fees — ever." },
-      { q: "Is there a minimum order?", a: "Yes, there's a 10 lb minimum for Wash & Fold orders. Dry cleaning and special items have no minimum." },
-      { q: "Do you offer subscription plans?", a: "Yes! Our monthly plans save you 15–20% versus one-off orders. Perfect for busy professionals and families." },
+      { q: "How much does StareX cost?", a: "Wash & Fold is $2.29/lb with free pickup & delivery on orders of 15 lbs or more. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. No hidden fees — ever." },
+      { q: "Is there a minimum order?", a: "No strict minimum — but pickup & delivery is free on orders of 15 lbs or more." },
+      { q: "Do you offer subscription plans?", a: "Yes! The StareX Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
       { q: "Are there any hidden fees?", a: "Never. Your price is confirmed before we touch your laundry. What you see is what you pay." },
-      { q: "Do you offer first-order discounts?", a: "Yes — first-time customers get 20% off their first order automatically. No promo code needed." },
+      { q: "How does car & sofa detailing pricing work?", a: "Car detailing/shampoo starts from $199 per vehicle and sofa deep cleaning is $49 per seat. Final pricing is confirmed upon inspection." },
     ],
   },
   {
@@ -44,7 +44,7 @@ const categories = [
       { q: "How do I track my order?", a: "You'll receive real-time SMS and email updates at every stage — pickup, processing, and delivery." },
       { q: "What if I miss my delivery?", a: "We'll reattempt delivery the next available time slot at no extra charge." },
       { q: "Can I change my delivery address?", a: "Yes, contact us at least 2 hours before your scheduled delivery and we'll update your address." },
-      { q: "Is there a delivery fee?", a: "Free delivery on orders over $30. A flat $5 fee applies to smaller orders." },
+      { q: "Is there a delivery fee?", a: "Pickup and delivery are free on orders of 15 lbs or more. For smaller orders, we'll confirm any fee with you before pickup." },
     ],
   },
   {
@@ -100,8 +100,8 @@ export default function FAQ() {
     <div style={{ background: "#F7F7F7" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#111921", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#150E10", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>FAQ</motion.span>
           <motion.h1
@@ -149,9 +149,9 @@ export default function FAQ() {
                   onClick={() => setActiveCategory(c.name)}
                   style={{
                     display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: 10,
-                    background: activeCategory === c.name ? "rgba(120,237,178,0.1)" : "none",
+                    background: activeCategory === c.name ? "rgba(232,25,44,0.1)" : "none",
                     border: "none", cursor: "pointer", marginBottom: 4,
-                    color: activeCategory === c.name ? "#0a3547" : "#52525B",
+                    color: activeCategory === c.name ? "#4A0E17" : "#52525B",
                     fontFamily: "Poppins, sans-serif", fontWeight: activeCategory === c.name ? 600 : 400,
                     fontSize: "0.9rem",
                   }}
@@ -175,7 +175,7 @@ export default function FAQ() {
               {filtered.length === 0 ? (
                 <div style={{ padding: "48px 0", textAlign: "center" }}>
                   <p style={{ color: "#52525B", fontFamily: "Kodchasan, sans-serif" }}>No results found. Try a different search term.</p>
-                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#0a3547", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#4A0E17", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                     Contact us <ArrowRight size={14} />
                   </a>
                 </div>

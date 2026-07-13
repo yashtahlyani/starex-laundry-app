@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shirt, Sparkles, Zap, Package, Star, Truck, CheckCircle, ArrowRight } from "lucide-react";
+import { Shirt, Sparkles, Zap, Package, Home, Car, CheckCircle, ArrowRight } from "lucide-react";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
-const pastelColors = ["#E4F4FB", "#D1F9E3", "#FDF1E1", "#EAEDf9", "#E4F4FB", "#D1F9E3"];
+const pastelColors = ["#FCEBEC", "#FAE9E1", "#FDF1E1", "#F1EEEF", "#FCEBEC", "#FAE9E1"];
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
   return (
@@ -15,12 +15,12 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const services = [
-  { Icon: Shirt,    num: "01", title: "Wash & Fold",      tagline: "Everyday laundry, done right.",        price: "From $2.50/lb",   min: "Min. $15",  features: ["Sorted by colour and fabric", "Dried at optimal temperature", "Folded and returned neatly", "24-48hr turnaround", "Free pickup & delivery"], featured: true },
-  { Icon: Zap,      num: "02", title: "Express Same-Day", tagline: "Same-day. No excuses.",                price: "From $3.50/lb",   min: "Min. $20",  features: ["Book before noon", "Back by 6 PM same day", "Full wash, dry and fold", "SMS tracking updates", "Priority processing"], featured: false },
-  { Icon: Sparkles, num: "03", title: "Dry Cleaning",     tagline: "Delicates deserve better.",            price: "From $12.99/item",min: null,         features: ["Silks, wool, cashmere", "Formal and evening wear", "Spot treatment included", "48-72hr turnaround", "Individual garment tracking"], featured: false },
-  { Icon: Package,  num: "04", title: "Ironing & Press",  tagline: "Crisp. Sharp. Professional.",          price: "From $4.99/item", min: null,         features: ["Shirts, trousers, dresses", "Suits and blazers", "Steam-pressed to perfection", "Hung or folded to order", "24hr turnaround"], featured: false },
-  { Icon: Star,     num: "05", title: "Duvet & Bedding",  tagline: "Big loads, no problem.",               price: "$24.99/item",     min: null,         features: ["Duvets, comforters, pillows", "King and queen sizes", "Eco wash and dry", "Fluffed and bagged", "48hr turnaround"], featured: false },
-  { Icon: Truck,    num: "06", title: "Commercial Linen", tagline: "Scale your laundry operations.",       price: "Custom quote",    min: null,         features: ["Hotels and B&Bs", "Restaurants and cafes", "Gyms and spas", "Regular schedule available", "Volume discounts"], featured: false },
+  { Icon: Shirt,    num: "01", title: "Wash & Fold",           tagline: "Everyday laundry, done right.",     price: "$2.29/lb",         min: "Free pickup & delivery on 15 lbs+", features: ["Sorted by colour and fabric", "Washed, dried and folded neatly", "24–48hr turnaround", "Free pickup & delivery over 15 lbs", "Serving Brampton & Mississauga"], featured: true, badge: "POPULAR" },
+  { Icon: Zap,      num: "02", title: "Same-Day Express",      tagline: "Same-day. No excuses.",             price: "+50%",             min: "Subject to availability",           features: ["Back the same day", "Full wash, dry and fold", "Priority processing", "SMS tracking updates", "Book early to secure your slot"], featured: false },
+  { Icon: Sparkles, num: "03", title: "Dry Cleaning",          tagline: "Delicates deserve better.",         price: "From $6.99/item",  min: null,                                features: ["Suits, sarees, gowns and silks", "Leather jackets and winter coats", "Wedding dress specialists", "24–48hr turnaround", "Every price confirmed first"], featured: false },
+  { Icon: Package,  num: "04", title: "Ironing & Press",       tagline: "Crisp. Sharp. Professional.",       price: "From $1.99/item",  min: null,                                features: ["Shirts, pants, jeans and skirts", "Complex dresses, saree and pleated", "Bedding and table cloths", "Steam-pressed to perfection", "24–48hr turnaround"], featured: false },
+  { Icon: Home,     num: "05", title: "Household & Bedding",   tagline: "Big loads, no problem.",            price: "From $9.99/item",  min: null,                                features: ["Duvets, comforters and quilts", "Blankets — single to king", "Curtains, sheer to lined", "Rugs, pillows and sleeping bags", "Fluffed, bagged and returned"], featured: false },
+  { Icon: Car,      num: "06", title: "Car & Sofa Detailing",  tagline: "Fabric care, beyond the bag.",      price: "From $199",        min: "Sofa $49 per seat",                 features: ["Full interior detailing & shampoo", "Sofa deep clean, per-seat pricing", "Stain and odour treatment", "Final pricing upon inspection", "By appointment"], featured: true, badge: "NEW" },
 ];
 
 export default function ServicesPage() {
@@ -28,8 +28,8 @@ export default function ServicesPage() {
     <div style={{ background: "#F7F7F7" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#111921", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#150E10", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             What We Offer
@@ -59,24 +59,24 @@ export default function ServicesPage() {
               <AnimatedContent key={s.title} delay={i * 0.07}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
                   {s.featured && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#78EDB2", color: "#0a1a0f", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
-                      POPULAR
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#E8192C", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
+                      {s.badge}
                     </span>
                   )}
                   <div style={{ fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "rgba(9,9,11,0.1)", letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 12 }}>{s.num}</div>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.2rem", color: "#09090B", marginBottom: 4, letterSpacing: "-0.01em" }}>{s.title}</h3>
                   <p style={{ color: "#52525B", fontSize: "0.9rem", marginBottom: 16, fontStyle: "italic", fontFamily: "Kodchasan, sans-serif" }}>{s.tagline}</p>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#111921", letterSpacing: "-0.02em", marginBottom: s.min ? 2 : 16 }}>{s.price}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#150E10", letterSpacing: "-0.02em", marginBottom: s.min ? 2 : 16 }}>{s.price}</p>
                   {s.min && <p style={{ color: "#71717A", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24, flex: 1 }}>
                     {s.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        <CheckCircle size={14} color="#4ECDA0" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <CheckCircle size={14} color="#C1121F" style={{ flexShrink: 0, marginTop: 3 }} />
                         <span style={{ color: "#374151", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#0a3547", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#4A0E17", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>
@@ -87,7 +87,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA strip */}
-      <section style={{ background: "#111921", padding: "64px 0", textAlign: "center" }}>
+      <section style={{ background: "#150E10", padding: "64px 0", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>
@@ -96,6 +96,7 @@ export default function ServicesPage() {
             </h2>
             <p style={{ color: "rgba(255,255,255,0.5)", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>
               Book a pickup and we&apos;ll assess your items at collection. No commitment required.
+              Commercial client? Ask about exclusive discounts on our monthly plan.
             </p>
             <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "14px 32px", textDecoration: "none" }}>
               Book Free Pickup <ArrowRight size={16} />

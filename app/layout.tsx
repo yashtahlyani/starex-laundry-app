@@ -13,20 +13,20 @@ export const metadata: Metadata = {
     default: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
     template: `%s | ${BUSINESS_NAME}`,
   },
-  description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across the GTA. 24-hour turnaround.",
-  keywords: "laundry pickup delivery, dry cleaning, wash fold, Canada, Toronto, GTA, Mississauga",
+  description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Dry cleaning, ironing, household items, and car & sofa detailing. Serving Brampton & Mississauga with 24–48h turnaround.",
+  keywords: "laundry pickup delivery, dry cleaning, wash fold, Brampton, Mississauga, Canada, car detailing, sofa cleaning",
   openGraph: {
     type: "website",
     siteName: BUSINESS_NAME,
     title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
-    description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across the GTA. 24-hour turnaround.",
+    description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Serving Brampton & Mississauga with 24–48h turnaround.",
     url: PROD_URL,
     locale: "en_CA",
   },
   twitter: {
     card: "summary_large_image",
     title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
-    description: "Book laundry and dry cleaning pickup online in minutes. Free pickup & delivery across the GTA.",
+    description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Serving Brampton & Mississauga.",
   },
   robots: { index: true, follow: true },
   alternates: { canonical: PROD_URL },
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#111921] text-white antialiased font-body">
+      <body className="min-h-screen bg-[#150E10] text-white antialiased font-body">
         <ScrollProgress />
         <PageLoader />
         <LayoutShell>{children}</LayoutShell>

@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const services = [
-  { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",      desc: "Everyday laundry",   price: "$2.50/lb",   color: "#E4F4FB" },
-  { id: "express",     icon: Zap,      title: "Express Same-Day", desc: "Back by 6 PM",       price: "$3.50/lb",   color: "#D1F9E3" },
-  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",     desc: "Delicates & formal", price: "From $12.99", color: "#FDF1E1" },
-  { id: "ironing",     icon: Package,  title: "Ironing & Press",  desc: "Crisp & sharp",      price: "From $4.99", color: "#EAEDf9" },
+  { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",      price: "$2.29/lb",    color: "#FCEBEC" },
+  { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Subject to availability", price: "+50%",      color: "#FAE9E1" },
+  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",    price: "From $6.99",  color: "#FDF1E1" },
+  { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",         price: "From $1.99",  color: "#F1EEEF" },
+  { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs", price: "From $9.99", color: "#FCEBEC" },
+  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",  price: "From $199",   color: "#FAE9E1" },
 ];
 
 const timeSlots = [
@@ -132,12 +134,12 @@ export default function BookPage() {
       <div style={{ background: "#F7F7F7", minHeight: "100vh", paddingTop: 80, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-            style={{ width: 80, height: 80, background: "#D1F9E3", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
-            <CheckCircle size={40} color="#4ECDA0" />
+            style={{ width: 80, height: 80, background: "#FAE9E1", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+            <CheckCircle size={40} color="#C1121F" />
           </motion.div>
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#09090B", marginBottom: 12, letterSpacing: "-0.025em" }}>Pickup confirmed!</h2>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#D1F9E3", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
-            <span style={{ color: "#0a3547", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#FAE9E1", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
+            <span style={{ color: "#4A0E17", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
           </div>
           <p style={{ color: "#52525B", fontSize: "1.0625rem", maxWidth: "44ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
             We&apos;ll send a confirmation to <strong style={{ color: "#09090B" }}>{form.email}</strong>. See you on {form.date}!
@@ -158,16 +160,16 @@ export default function BookPage() {
     <div style={{ background: "#F7F7F7", minHeight: "100vh", paddingTop: 80 }}>
 
       {/* Progress bar strip */}
-      <div style={{ background: "#111921", paddingTop: 0, paddingBottom: 0 }}>
+      <div style={{ background: "#150E10", paddingTop: 0, paddingBottom: 0 }}>
         <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 24px 0" }}>
           <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
             {stepLabels.map((s, i) => (
-              <div key={s} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= step ? "#78EDB2" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+              <div key={s} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= step ? "#E8192C" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
             ))}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: 20 }}>
             {stepLabels.map((s, i) => (
-              <p key={s} style={{ fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif", fontWeight: i === step ? 700 : 400, color: i <= step ? "#78EDB2" : "rgba(255,255,255,0.3)" }}>{s}</p>
+              <p key={s} style={{ fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif", fontWeight: i === step ? 700 : 400, color: i <= step ? "#E8192C" : "rgba(255,255,255,0.3)" }}>{s}</p>
             ))}
           </div>
         </div>
@@ -191,17 +193,17 @@ export default function BookPage() {
                     const selected = form.service === s.id;
                     return (
                       <button key={s.id} onClick={() => setForm(p => ({ ...p, service: s.id }))} style={{
-                        padding: 20, border: `2px solid ${selected ? "#78EDB2" : "transparent"}`,
+                        padding: 20, border: `2px solid ${selected ? "#E8192C" : "transparent"}`,
                         borderRadius: 16, background: selected ? s.color : "#ffffff",
                         cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
                         boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
                       }}>
                         <div style={{ width: 36, height: 36, background: selected ? "rgba(0,0,0,0.1)" : "#F4F4F5", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                          <Icon size={17} color={selected ? "#0a3547" : "#52525B"} />
+                          <Icon size={17} color={selected ? "#4A0E17" : "#52525B"} />
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#09090B", marginBottom: 2 }}>{s.title}</p>
                         <p style={{ color: "#71717A", fontSize: "0.8125rem", marginBottom: 6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
-                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#111921", fontSize: "0.875rem" }}>{s.price}</p>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "#150E10", fontSize: "0.875rem" }}>{s.price}</p>
                       </button>
                     );
                   })}
@@ -228,7 +230,7 @@ export default function BookPage() {
                   <input type="date" value={form.date} min={new Date().toISOString().split("T")[0]}
                     onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
                     style={inputStyle}
-                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#78EDB2"}
+                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#E8192C"}
                     onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"}
                   />
                 </div>
@@ -238,9 +240,9 @@ export default function BookPage() {
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
                     {timeSlots.map(t => (
                       <button key={t} onClick={() => setForm(p => ({ ...p, time: t }))} style={{
-                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#78EDB2" : "#E4E4E7"}`,
-                        borderRadius: 10, background: form.time === t ? "#D1F9E3" : "#ffffff",
-                        color: form.time === t ? "#0a3547" : "#52525B",
+                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#E8192C" : "#E4E4E7"}`,
+                        borderRadius: 10, background: form.time === t ? "#FAE9E1" : "#ffffff",
+                        color: form.time === t ? "#4A0E17" : "#52525B",
                         fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === t ? 700 : 500, fontSize: "0.8125rem",
                         cursor: "pointer", transition: "all 0.15s",
                       }}>{t}</button>
@@ -270,15 +272,15 @@ export default function BookPage() {
                   {([
                     { key: "name",    label: "Full name",      type: "text",  placeholder: "Jane Smith" },
                     { key: "email",   label: "Email address",  type: "email", placeholder: "jane@example.com" },
-                    { key: "phone",   label: "Phone number",   type: "tel",   placeholder: "(416) 555-1234" },
-                    { key: "address", label: "Pickup address", type: "text",  placeholder: "123 King St W, Toronto, ON M5H 1A1" },
+                    { key: "phone",   label: "Phone number",   type: "tel",   placeholder: "(437) 607-7251" },
+                    { key: "address", label: "Pickup address", type: "text",  placeholder: "123 Main St, Brampton, ON L6Y 1N7" },
                   ] as { key: keyof FormState; label: string; type: string; placeholder: string }[]).map(({ key, label, type, placeholder }) => (
                     <div key={key}>
                       <label style={labelStyle}>{label}</label>
                       <input type={type} value={form[key]} onChange={e => { setForm(p => ({ ...p, [key]: e.target.value })); setErrors(p => ({ ...p, [key]: "" })); }}
                         placeholder={placeholder}
                         style={{ ...inputStyle, borderColor: errors[key] ? "#F87171" : "#E4E4E7", boxShadow: errors[key] ? "0 0 0 3px rgba(248,113,113,0.12)" : "none" }}
-                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#78EDB2"; }}
+                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#E8192C"; }}
                         onBlur={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"; }}
                       />
                       {errors[key] && <p style={{ color: "#EF4444", fontSize: "0.8rem", marginTop: 5, fontFamily: "Kodchasan, sans-serif" }}>{errors[key]}</p>}
@@ -289,7 +291,7 @@ export default function BookPage() {
                     <textarea rows={3} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
                       placeholder="Buzzer code, fragile items, special requests…"
                       style={{ ...inputStyle, resize: "vertical" }}
-                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#78EDB2"}
+                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#E8192C"}
                       onBlur={e => (e.target as HTMLTextAreaElement).style.borderColor = "#E4E4E7"}
                     />
                   </div>
@@ -312,7 +314,7 @@ export default function BookPage() {
                 </h2>
                 <p style={{ color: "#52525B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Review your order details below.</p>
 
-                <div style={{ background: "#D1F9E3", borderRadius: 16, padding: "24px", marginBottom: 24, display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ background: "#FAE9E1", borderRadius: 16, padding: "24px", marginBottom: 24, display: "flex", flexDirection: "column", gap: 14 }}>
                   {([
                     { label: "Service", value: selectedService?.title },
                     { label: "Date",    value: form.date },
@@ -343,7 +345,7 @@ export default function BookPage() {
                   <button onClick={handleSubmit} disabled={submitting} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: submitting ? 0.7 : 1 }}>
                     {submitting ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(10,26,15,0.3)", borderTopColor: "#0a1a0f", animation: "spin 0.8s linear infinite", display: "inline-block" }} />
+                        <span style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(10,26,15,0.3)", borderTopColor: "#FFFFFF", animation: "spin 0.8s linear infinite", display: "inline-block" }} />
                         Confirming…
                       </span>
                     ) : (
@@ -357,7 +359,7 @@ export default function BookPage() {
 
           {/* Order Summary sidebar */}
           <div style={{ position: "sticky", top: 100 }}>
-            <div style={{ background: "#111921", borderRadius: 20, padding: "28px" }}>
+            <div style={{ background: "#150E10", borderRadius: 20, padding: "28px" }}>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#ffffff", marginBottom: 20 }}>Order Summary</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
@@ -373,13 +375,13 @@ export default function BookPage() {
                 <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
-                    <span style={{ color: "#78EDB2", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
+                    <span style={{ color: "#E8192C", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
                   </div>
                   <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in</p>
                 </div>
               </div>
-              <div style={{ marginTop: 20, background: "#D1F9E3", borderRadius: 10, padding: "11px 14px" }}>
-                <p style={{ color: "#0a3547", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders $15+</p>
+              <div style={{ marginTop: 20, background: "#FAE9E1", borderRadius: 10, padding: "11px 14px" }}>
+                <p style={{ color: "#4A0E17", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
               </div>
             </div>
           </div>

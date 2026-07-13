@@ -9,10 +9,11 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const SERVICE_LABELS: Record<string, string> = {
   "wash-fold": "Wash & Fold",
-  "express":   "Express Same-Day",
+  "express":   "Same-Day Express",
   "dry-clean": "Dry Cleaning",
   ironing:     "Ironing",
-  alteration:  "Alteration",
+  household:   "Household Items",
+  detailing:   "Car & Sofa Detailing",
 };
 
 // Matches the freshdrop orders schema
@@ -138,7 +139,7 @@ export default function AppOrderDrawer({
                 <button
                   onClick={handleAdvance} disabled={advancing}
                   style={{
-                    width: "100%", padding: "13px", background: advancing ? "#A1A1AA" : "#111921",
+                    width: "100%", padding: "13px", background: advancing ? "#A1A1AA" : "#150E10",
                     color: "#fff", border: "none", borderRadius: 120, cursor: advancing ? "not-allowed" : "pointer",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem",
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
@@ -150,7 +151,7 @@ export default function AppOrderDrawer({
               {!admin && !["delivered","cancelled"].includes(currentStatus) && (
                 <a href="/contact" style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  padding: "13px", background: "#F4F4F5", color: "#111921",
+                  padding: "13px", background: "#F4F4F5", color: "#150E10",
                   borderRadius: 120, textDecoration: "none",
                   fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem",
                 }}>

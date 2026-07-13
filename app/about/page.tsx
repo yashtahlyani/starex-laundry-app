@@ -16,16 +16,16 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 
 const milestones = [
   { year: "2019", title: "Founded in a garage", desc: "Started with two laundry machines and a dream to make laundry day disappear for good." },
-  { year: "2020", title: "First 500 customers",  desc: "Word of mouth grew us across North York. Quality over everything — always." },
-  { year: "2022", title: "Expanded to 5 cities", desc: "Opened processing facilities in Mississauga, Scarborough, and Brampton." },
-  { year: "2024", title: "10,000+ customers served", desc: "Now serving the full GTA with a fleet of 30 drivers and a team of 80 people." },
+  { year: "2020", title: "First 500 customers",  desc: "Word of mouth grew us across Brampton. Quality over everything — always." },
+  { year: "2022", title: "Expanded across Peel", desc: "Grew our pickup & delivery routes to cover Brampton and Mississauga end to end." },
+  { year: "2024", title: "10,000+ customers served", desc: "Now serving Brampton & Mississauga — plus car & sofa detailing, our newest service." },
 ];
 
 const values = [
-  { Icon: Shield, title: "Radical transparency", desc: "Price confirmed before we touch your clothes. No surprises, ever.", color: "#E4F4FB" },
-  { Icon: Leaf,   title: "Eco-first",            desc: "Biodegradable detergents, optimised wash loads, carbon-offset delivery.", color: "#D1F9E3" },
+  { Icon: Shield, title: "Radical transparency", desc: "Price confirmed before we touch your clothes. No surprises, ever.", color: "#FCEBEC" },
+  { Icon: Leaf,   title: "Eco-first",            desc: "Biodegradable detergents, optimised wash loads, carbon-offset delivery.", color: "#FAE9E1" },
   { Icon: Clock,  title: "Obsessed with time",   desc: "We know your time is precious. 98% of deliveries arrive on schedule.", color: "#FDF1E1" },
-  { Icon: Heart,  title: "Care in every fold",   desc: "Every garment is handled like it belongs to us — because for a few hours, it does.", color: "#EAEDf9" },
+  { Icon: Heart,  title: "Care in every fold",   desc: "Every garment is handled like it belongs to us — because for a few hours, it does.", color: "#F1EEEF" },
 ];
 
 export default function About() {
@@ -36,8 +36,8 @@ export default function About() {
     <div style={{ background: "#F7F7F7" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#111921", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#150E10", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }} className="about-hero">
           <div>
             <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
@@ -60,10 +60,10 @@ export default function About() {
           <motion.div
             initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease }}
-            style={{ background: "#32373B", borderRadius: 20, padding: "48px", position: "relative", overflow: "hidden" }}
+            style={{ background: "#2D2225", borderRadius: 20, padding: "48px", position: "relative", overflow: "hidden" }}
           >
-            <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, background: "rgba(120,237,178,0.08)", borderRadius: "50%", filter: "blur(40px)", pointerEvents: "none" }} />
-            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#78EDB2", marginBottom: 8 }}>10,000+</p>
+            <div style={{ position: "absolute", top: -60, right: -60, width: 200, height: 200, background: "rgba(232,25,44,0.08)", borderRadius: "50%", filter: "blur(40px)", pointerEvents: "none" }} />
+            <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1, color: "#E8192C", marginBottom: 8 }}>10,000+</p>
             <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "1rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}>customers who stopped doing laundry</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               {[["4.9★", "avg rating"], ["98%", "on-time"], ["24hr", "turnaround"], ["2019", "founded"]].map(([n, l]) => (
@@ -81,7 +81,7 @@ export default function About() {
       <section style={{ padding: "96px 0", background: "#F7F7F7" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
-            <span className="eyebrow" style={{ color: "#0a3547" }}>Our Values</span>
+            <span className="eyebrow" style={{ color: "#4A0E17" }}>Our Values</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#09090B" }}>
               What we stand <em className="display-accent" style={{ display: "inline" }}>for.</em>
             </h2>
@@ -92,7 +92,7 @@ export default function About() {
               <AnimatedContent key={v.title} delay={i * 0.08}>
                 <div style={{ background: v.color, borderRadius: 20, padding: "28px", height: "100%" }}>
                   <div style={{ width: 40, height: 40, background: "rgba(0,0,0,0.08)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                    <v.Icon size={18} color="#111921" />
+                    <v.Icon size={18} color="#150E10" />
                   </div>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#09090B", marginBottom: 8, letterSpacing: "-0.01em" }}>{v.title}</h3>
                   <p style={{ color: "#374151", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{v.desc}</p>
@@ -104,7 +104,7 @@ export default function About() {
       </section>
 
       {/* Timeline */}
-      <section style={{ padding: "80px 0", background: "#111921" }}>
+      <section style={{ padding: "80px 0", background: "#150E10" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
             <span className="eyebrow">Our Story</span>
@@ -114,9 +114,9 @@ export default function About() {
           </AnimatedContent>
 
           <div ref={timelineRef} style={{ position: "relative", paddingLeft: 40 }}>
-            <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#32373B" }}>
+            <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#2D2225" }}>
               <motion.div
-                style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #C9F8DE, #78EDB2)" }}
+                style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #FF6B77, #E8192C)" }}
                 animate={{ height: inView ? "100%" : "0%" }}
                 transition={{ duration: 1.5, ease }}
               />
@@ -124,8 +124,8 @@ export default function About() {
             {milestones.map((m, i) => (
               <AnimatedContent key={m.year} delay={i * 0.12} style={{ marginBottom: i < milestones.length - 1 ? 40 : 0 }}>
                 <div style={{ position: "relative", paddingLeft: 24 }}>
-                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#78EDB2", border: "2px solid #111921" }} />
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#78EDB2", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
+                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#E8192C", border: "2px solid #150E10" }} />
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#E8192C", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#ffffff", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
                   <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
                 </div>

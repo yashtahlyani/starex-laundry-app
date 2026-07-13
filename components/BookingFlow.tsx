@@ -5,7 +5,7 @@ import {
   motion, AnimatePresence, useReducedMotion,
 } from "framer-motion";
 import {
-  Shirt, Wind, Sparkles, Scissors, CheckCircle, ArrowRight,
+  Shirt, Wind, Sparkles, Zap, Car, Home, CheckCircle, ArrowRight,
   MapPin, Clock, User, Phone, Mail, ChevronRight, Package,
 } from "lucide-react";
 import { PLANS, estimateOrderAmountCents } from "@/lib/pricing";
@@ -17,21 +17,27 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 const SERVICE_ICONS: Record<string, React.ElementType> = {
   "wash-fold": Shirt,
+  express: Zap,
   "dry-clean": Wind,
   ironing: Sparkles,
-  alteration: Scissors,
+  household: Home,
+  detailing: Car,
 };
 const SERVICE_BG: Record<string, string> = {
-  "wash-fold": "bg-blue-50 border-blue-200",
+  "wash-fold": "bg-red-50 border-red-200",
+  express: "bg-amber-50 border-amber-200",
   "dry-clean": "bg-purple-50 border-purple-200",
   ironing: "bg-orange-50 border-orange-200",
-  alteration: "bg-green-50 border-green-200",
+  household: "bg-blue-50 border-blue-200",
+  detailing: "bg-stone-100 border-stone-200",
 };
 const SERVICE_ICON_COLOR: Record<string, string> = {
-  "wash-fold": "text-blue-600",
+  "wash-fold": "text-red-600",
+  express: "text-amber-600",
   "dry-clean": "text-purple-600",
   ironing: "text-orange-600",
-  alteration: "text-green-600",
+  household: "text-blue-600",
+  detailing: "text-stone-600",
 };
 
 const SLOTS = [
@@ -342,12 +348,12 @@ export default function BookingFlow() {
                   }`}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  animate={selected ? { boxShadow: "0 0 0 3px rgba(30,95,160,0.15)" } : { boxShadow: "0 0 0 0px rgba(0,0,0,0)" }}
+                  animate={selected ? { boxShadow: "0 0 0 3px rgba(232,25,44,0.15)" } : { boxShadow: "0 0 0 0px rgba(0,0,0,0)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 >
                   <motion.div
                     className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${selected ? "bg-brand" : SERVICE_BG[s.id]}`}
-                    animate={{ backgroundColor: selected ? "#1E5FA0" : undefined }}
+                    animate={{ backgroundColor: selected ? "#E8192C" : undefined }}
                     transition={{ duration: 0.2 }}
                   >
                     <Icon size={22} className={selected ? "text-white" : SERVICE_ICON_COLOR[s.id]} />

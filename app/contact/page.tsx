@@ -15,10 +15,10 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const info = [
-  { Icon: Phone, title: "Phone", value: "+1 (647) 555-0192", sub: "Mon–Fri, 8 AM – 8 PM EST", color: "#E4F4FB" },
-  { Icon: Mail, title: "Email", value: "hello@starex.ca", sub: "We reply within 1 business hour", color: "#D1F9E3" },
-  { Icon: MapPin, title: "Headquarters", value: "Toronto, Ontario, Canada", sub: "Serving the full GTA", color: "#FDF1E1" },
-  { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#EAEDf9" },
+  { Icon: Phone, title: "Phone", value: "437-607-7251", sub: "Call or text, 7 days a week", color: "#FCEBEC" },
+  { Icon: Mail, title: "Email", value: "hello@starexlaundry.ca", sub: "We reply within 1 business hour", color: "#FAE9E1" },
+  { Icon: MapPin, title: "Service Area", value: "Brampton & Mississauga", sub: "Ontario, Canada", color: "#FDF1E1" },
+  { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#F1EEEF" },
 ];
 
 export default function Contact() {
@@ -64,8 +64,8 @@ export default function Contact() {
     <div style={{ background: "#F7F7F7" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#111921", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#150E10", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>Contact</motion.span>
           <motion.h1
@@ -95,7 +95,7 @@ export default function Contact() {
                   initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
                   style={{ textAlign: "center", padding: "48px 0" }}
                 >
-                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#D1F9E3", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#FAE9E1", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
                     <CheckCircle size={30} color="#16a34a" />
                   </div>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.375rem", color: "#09090B", marginBottom: 10 }}>Message sent!</h3>
@@ -153,9 +153,9 @@ export default function Contact() {
               <AnimatedContent key={item.title} delay={i * 0.07}>
                 <div style={{ background: item.color, borderRadius: 16, padding: "24px" }}>
                   <div style={{ width: 36, height: 36, background: "rgba(0,0,0,0.07)", borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                    <item.Icon size={16} color="#111921" />
+                    <item.Icon size={16} color="#150E10" />
                   </div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#111921", marginBottom: 4 }}>{item.title}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#150E10", marginBottom: 4 }}>{item.title}</p>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#09090B", marginBottom: 2 }}>{item.value}</p>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#52525B" }}>{item.sub}</p>
                 </div>

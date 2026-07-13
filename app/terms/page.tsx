@@ -12,7 +12,7 @@ const sections = [
   },
   {
     title: "Description of Service",
-    body: `Starex provides an online platform for scheduling residential and commercial laundry pickup, washing, dry cleaning, ironing, and delivery services in select Canadian cities. We act as both a technology platform and a direct service provider. Service availability, turnaround times, and pricing are listed at the time of booking and are subject to change.`,
+    body: `Starex provides an online platform for scheduling residential and commercial laundry pickup, washing, dry cleaning, ironing, household-item cleaning, car and sofa detailing, and delivery services in Brampton and Mississauga, Ontario. We act as both a technology platform and a direct service provider. Service availability, turnaround times, and pricing are listed at the time of booking and are subject to change.`,
   },
   {
     title: "Accounts and Registration",
@@ -24,7 +24,7 @@ const sections = [
   },
   {
     title: "Pricing and Payment",
-    body: `Service pricing is calculated based on weight (for Wash & Fold) or per item (for Dry Cleaning, Ironing, and Alteration), plus applicable pickup and delivery fees. The price shown at booking is an estimate; the final price is confirmed via SMS after your laundry is weighed or counted at our facility. Payment is collected upon delivery using the payment method on file. All prices are in Canadian Dollars (CAD) and are inclusive of applicable taxes where required by law.`,
+    body: `Service pricing is calculated based on weight (for Wash & Fold, at $2.29 per pound) or per item (for Dry Cleaning, Ironing, and Household items). Car and sofa detailing is priced upon inspection. Pickup and delivery are free on orders of 15 lbs or more; same-day service carries a 50% surcharge and is subject to availability. The price shown at booking is an estimate; the final price is confirmed via SMS after your laundry is weighed or counted at our facility. Payment is collected upon delivery using the payment method on file. All prices are in Canadian Dollars (CAD) and are inclusive of applicable taxes where required by law.`,
   },
   {
     title: "Care of Items",
@@ -52,7 +52,7 @@ const sections = [
   },
   {
     title: "Contact Us",
-    body: `If you have questions about these Terms, please contact us at hello@starexlaundry.ca or by mail at Starex Laundry Inc., Toronto, ON, Canada.`,
+    body: `If you have questions about these Terms, please contact us at hello@starexlaundry.ca, by phone at 437-607-7251, or by mail at Starex Laundry Inc., Brampton, ON, Canada.`,
   },
 ];
 
@@ -60,10 +60,10 @@ export default function TermsPage() {
   return (
     <div style={{ background: "#F7F7F7", minHeight: "100vh" }}>
       {/* Hero */}
-      <div style={{ background: "#111921", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <div style={{ background: "#150E10", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
-          <span style={{ display: "inline-block", background: "rgba(120,237,178,0.12)", border: "1px solid rgba(120,237,178,0.25)", color: "#78EDB2", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
+          <span style={{ display: "inline-block", background: "rgba(232,25,44,0.12)", border: "1px solid rgba(232,25,44,0.25)", color: "#E8192C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
             Legal
           </span>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.8rem)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16 }}>
@@ -95,9 +95,9 @@ export default function TermsPage() {
         <div style={{ borderTop: "1px solid #E4E4E7", paddingTop: 32, marginTop: 16 }}>
           <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#71717A", fontSize: "0.875rem" }}>
             See also our{" "}
-            <a href="/privacy" style={{ color: "#4ECDA0", textDecoration: "underline" }}>Privacy Policy</a>.
+            <a href="/privacy" style={{ color: "#C1121F", textDecoration: "underline" }}>Privacy Policy</a>.
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#4ECDA0", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#C1121F", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
           </p>
         </div>
       </div>

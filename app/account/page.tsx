@@ -63,7 +63,7 @@ export default function AccountPage() {
 
   if (loading) return (
     <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ width: 36, height: 36, borderRadius: "50%", border: "4px solid rgba(120,237,178,0.2)", borderTopColor: "#78EDB2", animation: "spin 0.8s linear infinite" }} />
+      <div style={{ width: 36, height: 36, borderRadius: "50%", border: "4px solid rgba(232,25,44,0.2)", borderTopColor: "#E8192C", animation: "spin 0.8s linear infinite" }} />
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </div>
   );
@@ -89,8 +89,8 @@ export default function AccountPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.4, ease }}
           style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 20, padding: "28px 28px", marginBottom: 20 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(120,237,178,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <User size={18} color="#4ECDA0" />
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(232,25,44,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <User size={18} color="#C1121F" />
             </div>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#09090B" }}>Profile information</h2>
           </div>
@@ -106,10 +106,10 @@ export default function AccountPage() {
             </div>
             <div>
               <label style={{ display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.78rem", color: "#09090B", marginBottom: 6 }}>Phone number</label>
-              <input style={input} value={profile.phone} onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))} placeholder="+1 (416) 555-1234" />
+              <input style={input} value={profile.phone} onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))} placeholder="+1 (437) 607-7251" />
             </div>
             <button type="submit" disabled={saving}
-              style={{ alignSelf: "flex-start", padding: "11px 24px", background: saving ? "#A1A1AA" : "#111921", color: "#fff", border: "none", borderRadius: 120, cursor: saving ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", display: "inline-flex", alignItems: "center", gap: 8 }}>
+              style={{ alignSelf: "flex-start", padding: "11px 24px", background: saving ? "#A1A1AA" : "#150E10", color: "#fff", border: "none", borderRadius: 120, cursor: saving ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", display: "inline-flex", alignItems: "center", gap: 8 }}>
               {saved ? <><CheckCircle size={15} /> Saved!</> : saving ? "Saving…" : "Save changes"}
             </button>
           </form>
@@ -119,8 +119,8 @@ export default function AccountPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14, duration: 0.4, ease }}
           style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 20, padding: "28px 28px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(120,237,178,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Lock size={18} color="#4ECDA0" />
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(232,25,44,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Lock size={18} color="#C1121F" />
             </div>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#09090B" }}>Change password</h2>
           </div>
@@ -140,7 +140,7 @@ export default function AccountPage() {
               </p>
             )}
             <button type="submit" disabled={pwSaving}
-              style={{ alignSelf: "flex-start", padding: "11px 24px", background: pwSaving ? "#A1A1AA" : "#111921", color: "#fff", border: "none", borderRadius: 120, cursor: pwSaving ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem" }}>
+              style={{ alignSelf: "flex-start", padding: "11px 24px", background: pwSaving ? "#A1A1AA" : "#150E10", color: "#fff", border: "none", borderRadius: 120, cursor: pwSaving ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem" }}>
               {pwSaving ? "Updating…" : "Update password"}
             </button>
           </form>

@@ -11,19 +11,19 @@ const config: Config = {
       },
       colors: {
         dark: {
-          DEFAULT: "#111921",
-          card:    "#1a2332",
-          card2:   "#32373B",
+          DEFAULT: "#150E10",
+          card:    "#1F1416",
+          card2:   "#2D2225",
           border:  "rgba(255,255,255,0.08)",
         },
         mint: {
-          light:   "#C9F8DE",
-          DEFAULT: "#78EDB2",
-          dark:    "#4ECDA0",
+          light:   "#FF6B77",
+          DEFAULT: "#E8192C",
+          dark:    "#C1121F",
         },
         teal: {
-          deep:  "#0a3547",
-          mid:   "#1b8fc0",
+          deep:  "#4A0E17",
+          mid:   "#D94856",
         },
         ink: {
           DEFAULT:   "#09090B",
@@ -32,18 +32,18 @@ const config: Config = {
         },
         // keep "brand" alias pointing to mint so existing code doesn't break
         brand: {
-          DEFAULT: "#78EDB2",
-          light:   "#C9F8DE",
-          dark:    "#4ECDA0",
-          50:      "#f0fdf4",
-          100:     "#dcfce7",
-          900:     "#111921",
+          DEFAULT: "#E8192C",
+          light:   "#FF6B77",
+          dark:    "#C1121F",
+          50:      "#FEF2F3",
+          100:     "#FDE4E6",
+          900:     "#150E10",
         },
       },
       backgroundImage: {
-        "hero-gradient": "linear-gradient(135deg, #0a1e14 0%, #0a3547 50%, #111921 100%)",
-        "mint-gradient": "linear-gradient(180deg, #C9F8DE 0%, #78EDB2 100%)",
-        "dark-card":     "linear-gradient(145deg, #1a2332 0%, #111921 100%)",
+        "hero-gradient": "linear-gradient(135deg, #2B0A10 0%, #4A0E17 50%, #150E10 100%)",
+        "mint-gradient": "linear-gradient(180deg, #FF6B77 0%, #E8192C 100%)",
+        "dark-card":     "linear-gradient(145deg, #1F1416 0%, #150E10 100%)",
       },
       borderRadius: {
         pill: "120px",
@@ -53,8 +53,8 @@ const config: Config = {
       boxShadow: {
         card:        "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)",
         "card-hover":"0 8px 32px rgba(0,0,0,0.08)",
-        mint:        "0 6px 24px rgba(120,237,178,0.30)",
-        glow:        "0 0 40px rgba(120,237,178,0.20)",
+        mint:        "0 6px 24px rgba(232,25,44,0.30)",
+        glow:        "0 0 40px rgba(232,25,44,0.20)",
       },
       keyframes: {
         "fade-up": {

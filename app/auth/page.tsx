@@ -67,7 +67,7 @@ export default function AuthPage() {
 
   if (mode === "new-password") {
     return (
-      <div className="min-h-screen bg-[#111921] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#150E10] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10">
             <div className="mb-8">
@@ -113,7 +113,7 @@ export default function AuthPage() {
               <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 rounded-full border-2 border-[#0a1a0f]/30 border-t-[#0a1a0f] animate-spin" />
+                    <span className="h-4 w-4 rounded-full border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] animate-spin" />
                     Updating…
                   </span>
                 ) : (
@@ -129,7 +129,7 @@ export default function AuthPage() {
 
   if (mode === "check-email") {
     return (
-      <div className="min-h-screen bg-[#111921] flex items-center justify-center px-4 pt-16">
+      <div className="min-h-screen bg-[#150E10] flex items-center justify-center px-4 pt-16">
         <div className="max-w-md w-full">
           <div className="card rounded-3xl p-10 text-center">
             <div className="h-16 w-16 rounded-full bg-mint/15 flex items-center justify-center mx-auto mb-5">
@@ -139,7 +139,7 @@ export default function AuthPage() {
             <p className="text-[#52525B] text-sm leading-relaxed mb-6 font-body">
               We sent a link to <strong>{email}</strong>. Click it to confirm your account and get started.
             </p>
-            <button onClick={() => setMode("signin")} className="btn-ghost w-full text-[#111921] border-[#111921]/20 hover:border-mint hover:text-mint">
+            <button onClick={() => setMode("signin")} className="btn-ghost w-full text-[#150E10] border-[#150E10]/20 hover:border-mint hover:text-mint">
               Back to Sign In
             </button>
           </div>
@@ -149,9 +149,9 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex pt-16 bg-[#111921]">
+    <div className="min-h-screen flex pt-16 bg-[#150E10]">
       {/* Left brand panel */}
-      <div className="hidden lg:flex lg:w-5/12 bg-[#0a3547] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
+      <div className="hidden lg:flex lg:w-5/12 bg-[#4A0E17] flex-col justify-between p-12 relative overflow-hidden border-r border-white/8">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-mint/10 blur-3xl" />
           <div className="absolute bottom-20 -left-10 h-60 w-60 rounded-full bg-mint/5 blur-3xl" />
@@ -159,7 +159,7 @@ export default function AuthPage() {
 
         <a href="/" className="relative flex items-center gap-2.5">
           <div className="h-9 w-9 rounded-xl bg-mint flex items-center justify-center">
-            <Sparkles size={16} className="text-[#0a1a0f]" />
+            <Sparkles size={16} className="text-[#FFFFFF]" />
           </div>
           <span className="text-white text-xl font-bold font-heading">{BUSINESS_NAME}</span>
         </a>
@@ -179,7 +179,7 @@ export default function AuthPage() {
               { icon: "📦", text: "Track all your orders in real time" },
               { icon: "📅", text: "Book and reschedule pickups easily" },
               { icon: "💬", text: "Get email & WhatsApp updates" },
-              { icon: "🏅", text: "Earn Starex Club loyalty perks" },
+              { icon: "🏅", text: "Unlock StareX Monthly Plan perks" },
             ].map(({ icon, text }) => (
               <div key={text} className="flex items-center gap-3 glass rounded-xl px-4 py-3">
                 <span className="text-lg">{icon}</span>
@@ -195,13 +195,13 @@ export default function AuthPage() {
       </div>
 
       {/* Right form panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#111921]">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#150E10]">
         <div className="w-full max-w-md">
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">
               <a href="/" className="lg:hidden flex items-center gap-2 mb-6">
                 <div className="h-8 w-8 rounded-lg bg-mint flex items-center justify-center">
-                  <Sparkles size={14} className="text-[#0a1a0f]" />
+                  <Sparkles size={14} className="text-[#FFFFFF]" />
                 </div>
                 <span className="font-bold text-mint font-heading">{BUSINESS_NAME}</span>
               </a>
@@ -293,7 +293,7 @@ export default function AuthPage() {
               <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 rounded-full border-2 border-[#0a1a0f]/30 border-t-[#0a1a0f] animate-spin" />
+                    <span className="h-4 w-4 rounded-full border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] animate-spin" />
                     {mode === "signin" ? "Signing in…" : mode === "signup" ? "Creating account…" : "Sending link…"}
                   </span>
                 ) : (
@@ -307,7 +307,7 @@ export default function AuthPage() {
               </button>
 
               {mode === "reset" && (
-                <button type="button" onClick={() => setMode("signin")} className="btn-ghost w-full text-[#111921] border-[#111921]/20 hover:border-mint hover:text-mint">
+                <button type="button" onClick={() => setMode("signin")} className="btn-ghost w-full text-[#150E10] border-[#150E10]/20 hover:border-mint hover:text-mint">
                   Back to Sign In
                 </button>
               )}

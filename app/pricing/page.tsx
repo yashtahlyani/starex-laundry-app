@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, X, ArrowRight, Shirt, Sparkles, Zap, Package, Star, Briefcase } from "lucide-react";
+import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Search } from "lucide-react";
+import { CATALOG, MEMBERSHIP, DETAILING } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
-const pastelColors = ["#E4F4FB", "#D1F9E3", "#FDF1E1", "#EAEDf9", "#E4F4FB", "#D1F9E3"];
+const pastelColors = ["#FCEBEC", "#FAE9E1", "#FDF1E1", "#F1EEEF", "#FCEBEC", "#FAE9E1"];
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
   return (
@@ -16,65 +17,46 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const payAsYouGo = [
-  { Icon: Shirt,     title: "Wash & Fold",       price: "$2.50",      unit: "/lb",   min: "Min. $15", desc: "24-48hr turnaround" },
-  { Icon: Zap,       title: "Express Wash",       price: "$3.50",      unit: "/lb",   min: "Min. $20", desc: "Back by 6 PM same day" },
-  { Icon: Sparkles,  title: "Dry Cleaning",       price: "From $12.99",unit: "/item", min: null,       desc: "48-72hr delicates & formalwear" },
-  { Icon: Package,   title: "Ironing & Press",    price: "From $4.99", unit: "/item", min: null,       desc: "Shirts, suits, dresses" },
-  { Icon: Star,      title: "Duvet / Comforter",  price: "$24.99",     unit: "/item", min: null,       desc: "King/Queen eco wash" },
-  { Icon: Briefcase, title: "Commercial Linen",   price: "Custom",     unit: "",      min: null,       desc: "Hotels, restaurants, gyms", badge: "Quote" },
+  { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2.29",      unit: "/lb",     min: "Free pickup & delivery on 15 lbs+", desc: "24–48h turnaround, washed, dried & folded" },
+  { Icon: Zap,      title: "Same-Day Express",            price: "+50%",       unit: "",        min: "Subject to availability",           desc: "Back the same day when you need it fast" },
+  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $6.99", unit: "/item",   min: null,                                desc: "Suits, dresses, delicates & formalwear" },
+  { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: null,                                desc: "Shirts, pants, sarees & complex dresses" },
+  { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: null,                                desc: "Duvets, blankets, curtains, rugs & more" },
+  { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $199",  unit: "",        min: "Sofa $49 per seat",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },
 ];
 
-const plans = [
-  {
-    name: "Basic", tagline: "Perfect for individuals", price: "$24", annual: "$19", popular: false,
-    features: [
-      { label: "10 lbs of laundry / month", ok: true },
-      { label: "1 pickup per week",          ok: true },
-      { label: "48hr turnaround",            ok: true },
-      { label: "Free pickup & delivery",     ok: true },
-      { label: "Eco-certified detergents",   ok: true },
-      { label: "Priority processing",        ok: false },
-      { label: "Express (add-on $1/lb)",     ok: false },
-      { label: "Dry cleaning credit",        ok: false },
-    ],
-  },
-  {
-    name: "Standard", tagline: "Best for families", price: "$54", annual: "$43", popular: true,
-    features: [
-      { label: "30 lbs of laundry / month",  ok: true },
-      { label: "2 pickups per week",          ok: true },
-      { label: "24-48hr turnaround",          ok: true },
-      { label: "Free pickup & delivery",      ok: true },
-      { label: "Eco-certified detergents",    ok: true },
-      { label: "Priority processing",         ok: true },
-      { label: "Express included (2x/mo)",    ok: true },
-      { label: "Dry cleaning credit",         ok: false },
-    ],
-  },
-  {
-    name: "Premium", tagline: "Unlimited for power users", price: "$99", annual: "$79", popular: false,
-    features: [
-      { label: "Unlimited lbs / month",       ok: true },
-      { label: "Daily pickup available",       ok: true },
-      { label: "24hr turnaround",             ok: true },
-      { label: "Free pickup & delivery",      ok: true },
-      { label: "Eco-certified detergents",    ok: true },
-      { label: "Priority processing",         ok: true },
-      { label: "Express always included",     ok: true },
-      { label: "3 dry cleaning pieces/mo",    ok: true },
-    ],
-  },
-];
+const planPPP = {
+  name: "Pay-Per-Pound",
+  tagline: "No commitment, pay as you go",
+  price: "$2.29",
+  suffix: "/lb",
+  features: [
+    "Free pickup & delivery on 15 lbs or more",
+    "24–48h turnaround service",
+    "Serving Brampton & Mississauga",
+    "Same-day service +50% (subject to availability)",
+    "Wash preferences from $2.99",
+  ],
+};
+
+const planMonthly = {
+  name: "Monthly Plan",
+  tagline: "Best value for regulars & businesses",
+  price: `$${MEMBERSHIP.monthlyPriceCad}`,
+  suffix: "/month",
+  features: MEMBERSHIP.perks,
+};
 
 export default function PricingPage() {
-  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+  const [activeTab, setActiveTab] = useState(CATALOG[0].id);
+  const tab = CATALOG.find((t) => t.id === activeTab)!;
 
   return (
     <div style={{ background: "#F7F7F7" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#111921", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#150E10", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             Simple Pricing
@@ -92,7 +74,8 @@ export default function PricingPage() {
             transition={{ duration: 0.6, delay: 0.18, ease }}
             style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
           >
-            No hidden fees, no surprises. Laundry priced by the pound, plans priced by the month.
+            No hidden fees, no surprises. Laundry at $2.29 per pound, or one flat monthly plan.
+            Every price confirmed before we begin.
           </motion.p>
         </div>
       </section>
@@ -101,12 +84,12 @@ export default function PricingPage() {
       <section style={{ padding: "80px 0", background: "#F7F7F7" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#4ECDA0" }}>Pay As You Go</span>
+            <span className="eyebrow" style={{ color: "#C1121F" }}>Our Services</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#09090B", marginBottom: 8 }}>
               Just need a <em className="display-accent" style={{ display: "inline" }}>pickup?</em>
             </h2>
             <p style={{ color: "#52525B", maxWidth: "50ch", fontFamily: "Kodchasan, sans-serif" }}>
-              No subscription needed. Pay exactly for what you use. Prices confirmed before we begin.
+              No subscription needed. Pay exactly for what you use — prices confirmed before we begin.
             </p>
           </AnimatedContent>
 
@@ -115,15 +98,15 @@ export default function PricingPage() {
               <AnimatedContent key={s.title} delay={i * 0.06}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "28px", position: "relative", height: "100%" }}>
                   {s.badge && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#78EDB2", color: "#0a1a0f", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#E8192C", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
                   <div style={{ width: 40, height: 40, background: "rgba(0,0,0,0.08)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                    <s.Icon size={18} color="#111921" />
+                    <s.Icon size={18} color="#150E10" />
                   </div>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#09090B", marginBottom: 8, letterSpacing: "-0.01em" }}>{s.title}</h3>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: s.price.startsWith("From") ? "1.375rem" : s.price === "Custom" ? "1.5rem" : "1.75rem", letterSpacing: "-0.02em", color: "#111921", lineHeight: 1 }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: s.price.startsWith("From") ? "1.375rem" : "1.75rem", letterSpacing: "-0.02em", color: "#150E10", lineHeight: 1 }}>
                     {s.price}<span style={{ fontSize: "0.875rem", fontWeight: 400, color: "#52525B", fontFamily: "Kodchasan, sans-serif" }}>{s.unit}</span>
                   </p>
                   {s.min && <p style={{ color: "#71717A", fontSize: "0.8125rem", marginTop: 4, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
@@ -135,97 +118,198 @@ export default function PricingPage() {
 
           <AnimatedContent>
             <p style={{ color: "#71717A", fontSize: "0.875rem", marginTop: 24, textAlign: "center", fontFamily: "Kodchasan, sans-serif" }}>
-              Free pickup and delivery on all orders $15+. We weigh at pickup and send you a price confirmation via SMS.
+              Free pickup and delivery on orders of 15 lbs or more. We weigh at pickup and confirm your price before washing.
             </p>
           </AnimatedContent>
         </div>
       </section>
 
-      {/* Monthly plans */}
-      <section style={{ padding: "80px 0", background: "#111921" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+      {/* Choose your plan */}
+      <section style={{ padding: "80px 0", background: "#150E10" }}>
+        <div style={{ maxWidth: 980, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
-            <span className="eyebrow">Subscription Plans</span>
+            <span className="eyebrow">Choose Your Plan</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 16 }}>
-              Save with a <em className="display-accent" style={{ display: "inline" }}>monthly plan.</em>
+              Two ways to <em className="display-accent" style={{ display: "inline" }}>StareX.</em>
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.45)", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>
-              Subscribe and save up to 20%. Pickup, wash, deliver, repeat.
+            <p style={{ color: "rgba(255,255,255,0.45)", fontFamily: "Kodchasan, sans-serif" }}>
+              Pay by the pound whenever you need us, or lock in the monthly plan and never think about laundry again.
             </p>
-            {/* Billing toggle */}
-            <div style={{ display: "inline-flex", background: "#32373B", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 999, padding: "4px", gap: "4px" }}>
-              {(["monthly", "annual"] as const).map(b => (
-                <button key={b} onClick={() => setBilling(b)} style={{
-                  padding: "8px 20px", borderRadius: 999, border: "none", cursor: "pointer",
-                  background: billing === b ? "#ffffff" : "transparent",
-                  color: billing === b ? "#111921" : "rgba(255,255,255,0.5)",
-                  fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem",
-                  transition: "all 0.2s ease", display: "inline-flex", alignItems: "center", gap: 8,
-                }}>
-                  {b === "monthly" ? "Monthly" : "Annual"}
-                  {b === "annual" && <span style={{ background: "#78EDB2", color: "#0a1a0f", fontSize: "0.65rem", fontWeight: 700, padding: "2px 6px", borderRadius: 999 }}>Save 20%</span>}
+          </AnimatedContent>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 20 }} className="plans-grid">
+            {/* Pay-Per-Pound */}
+            <AnimatedContent>
+              <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "36px", height: "100%", display: "flex", flexDirection: "column" }}>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>{planPPP.name}</p>
+                <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{planPPP.tagline}</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "3rem", letterSpacing: "-0.025em", color: "#ffffff", lineHeight: 1, marginBottom: 24 }}>
+                  {planPPP.price}
+                  <span style={{ fontSize: "1rem", fontWeight: 400, color: "rgba(255,255,255,0.4)", fontFamily: "Kodchasan, sans-serif" }}>{planPPP.suffix}</span>
+                </p>
+                <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
+                  {planPPP.features.map((f) => (
+                    <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                      <CheckCircle size={15} color="#FF6B77" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "transparent", border: "1px solid rgba(255,255,255,0.16)", color: "rgba(255,255,255,0.75)", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  Book a pickup
+                </a>
+              </div>
+            </AnimatedContent>
+
+            {/* Monthly Plan */}
+            <AnimatedContent delay={0.08}>
+              <div style={{ background: "#ffffff", borderRadius: 20, padding: "36px", position: "relative", overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.4)", height: "100%", display: "flex", flexDirection: "column" }}>
+                <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(180deg,#FF6B77,#E8192C)", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "6px 16px", borderRadius: "0 0 10px 10px", letterSpacing: "0.08em", whiteSpace: "nowrap", fontFamily: "Kodchasan, sans-serif" }}>
+                  BEST VALUE
+                </div>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#71717A", marginBottom: 4, marginTop: 12 }}>{planMonthly.name}</p>
+                <p style={{ color: "#52525B", fontSize: "0.875rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{planMonthly.tagline}</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "3rem", letterSpacing: "-0.025em", color: "#09090B", lineHeight: 1, marginBottom: 24 }}>
+                  {planMonthly.price}
+                  <span style={{ fontSize: "1rem", fontWeight: 400, color: "#52525B", fontFamily: "Kodchasan, sans-serif" }}>{planMonthly.suffix}</span>
+                </p>
+                <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
+                  {planMonthly.features.map((f) => (
+                    <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                      <CheckCircle size={15} color="#E8192C" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <span style={{ color: "#374151", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "linear-gradient(180deg,#FF6B77,#E8192C)", color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  Get started
+                </a>
+              </div>
+            </AnimatedContent>
+          </div>
+        </div>
+      </section>
+
+      {/* Full item price list */}
+      <section style={{ padding: "80px 0", background: "#F7F7F7" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
+            <span className="eyebrow" style={{ color: "#C1121F" }}>Item Pricing</span>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#09090B", marginBottom: 8 }}>
+              The full <em className="display-accent" style={{ display: "inline" }}>price list.</em>
+            </h2>
+            <p style={{ color: "#52525B", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
+              Prices marked with a <strong style={{ color: "#C1121F" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
+            </p>
+          </AnimatedContent>
+
+          {/* Tabs */}
+          <AnimatedContent>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 32 }}>
+              {CATALOG.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setActiveTab(t.id)}
+                  style={{
+                    padding: "9px 20px", borderRadius: 999, cursor: "pointer",
+                    border: activeTab === t.id ? "1.5px solid #E8192C" : "1.5px solid rgba(24,13,16,0.12)",
+                    background: activeTab === t.id ? "#E8192C" : "#ffffff",
+                    color: activeTab === t.id ? "#ffffff" : "#374151",
+                    fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.85rem",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {t.label}
                 </button>
               ))}
             </div>
           </AnimatedContent>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }} className="plans-grid">
-            {plans.map((plan, i) => (
-              <AnimatedContent key={plan.name} delay={i * 0.08}>
-                <div style={{
-                  background: plan.popular ? "#ffffff" : "rgba(255,255,255,0.04)",
-                  border: plan.popular ? "none" : "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: 20, padding: "32px",
-                  transform: plan.popular ? "scale(1.04)" : "scale(1)",
-                  position: "relative", overflow: "hidden",
-                  boxShadow: plan.popular ? "0 20px 60px rgba(0,0,0,0.4)" : "none",
-                }}>
-                  {plan.popular && (
-                    <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(180deg,#C9F8DE,#78EDB2)", color: "#0a1a0f", fontSize: "0.65rem", fontWeight: 700, padding: "6px 16px", borderRadius: "0 0 10px 10px", letterSpacing: "0.08em", whiteSpace: "nowrap", fontFamily: "Kodchasan, sans-serif" }}>
-                      MOST POPULAR
-                    </div>
-                  )}
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: plan.popular ? "#71717A" : "rgba(255,255,255,0.4)", marginBottom: 4, marginTop: plan.popular ? 12 : 0 }}>{plan.name}</p>
-                  <p style={{ color: plan.popular ? "#52525B" : "rgba(255,255,255,0.5)", fontSize: "0.875rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{plan.tagline}</p>
-                  <AnimatePresence mode="wait">
-                    <motion.p key={billing + plan.name} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.2 }}
-                      style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "3rem", letterSpacing: "-0.025em", color: plan.popular ? "#09090B" : "#ffffff", lineHeight: 1, marginBottom: 24 }}>
-                      {billing === "annual" ? plan.annual : plan.price}
-                      <span style={{ fontSize: "1rem", fontWeight: 400, color: plan.popular ? "#52525B" : "rgba(255,255,255,0.4)", fontFamily: "Kodchasan, sans-serif" }}>/mo</span>
-                    </motion.p>
-                  </AnimatePresence>
-                  <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10 }}>
-                    {plan.features.map(f => (
-                      <li key={f.label} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        {f.ok
-                          ? <CheckCircle size={15} color="#78EDB2" style={{ flexShrink: 0, marginTop: 2 }} />
-                          : <X size={15} color="#71717A" style={{ flexShrink: 0, marginTop: 2, opacity: 0.4 }} />
-                        }
-                        <span style={{ color: f.ok ? (plan.popular ? "#374151" : "rgba(255,255,255,0.65)") : (plan.popular ? "#A1A1AA" : "rgba(255,255,255,0.3)"), fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>
-                          {f.label}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="/book" style={{
-                    display: "block", textAlign: "center", padding: "12px", borderRadius: 120,
-                    background: plan.popular ? "linear-gradient(180deg,#C9F8DE,#78EDB2)" : "transparent",
-                    border: plan.popular ? "none" : "1px solid rgba(255,255,255,0.12)",
-                    color: plan.popular ? "#0a1a0f" : "rgba(255,255,255,0.6)",
-                    fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem",
-                    textDecoration: "none",
-                  }}>
-                    Get started free
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tab.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.35, ease }}
+            >
+              <p style={{ textAlign: "center", color: "#71717A", fontSize: "0.9rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>{tab.blurb}</p>
+              <div style={{ display: "grid", gridTemplateColumns: tab.sections.length > 1 ? "repeat(2,1fr)" : "minmax(0,560px)", gap: 20, justifyContent: "center" }} className="catalog-grid">
+                {tab.sections.map((section) => (
+                  <div key={section.title} style={{ background: "#ffffff", borderRadius: 20, padding: "26px 28px", border: "1px solid rgba(24,13,16,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)" }}>
+                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#C1121F", marginBottom: 16 }}>
+                      {section.title}
+                    </h3>
+                    <ul style={{ listStyle: "none", display: "flex", flexDirection: "column" }}>
+                      {section.items.map((item, i) => (
+                        <li key={item.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, padding: "10px 0", borderBottom: i < section.items.length - 1 ? "1px solid rgba(24,13,16,0.06)" : "none" }}>
+                          <span style={{ color: "#374151", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{item.name}</span>
+                          <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#150E10", whiteSpace: "nowrap" }}>
+                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#C1121F" }}> +</span>}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Detailing highlight */}
+      <section style={{ padding: "0 0 80px", background: "#F7F7F7" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent>
+            <div style={{ background: "#150E10", borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 85% 20%, rgba(232,25,44,0.18) 0%, transparent 65%)", pointerEvents: "none" }} />
+              <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 32, alignItems: "center" }} className="detailing-grid">
+                <div>
+                  <span className="eyebrow">New Service</span>
+                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 12 }}>
+                    Car & sofa <em className="display-accent" style={{ display: "inline" }}>detailing.</em>
+                  </h2>
+                  <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>
+                    Interior detailing, dry cleaning and shampoo for your vehicle and upholstery —
+                    the same fabric care expertise, beyond the laundry bag. {DETAILING.note}.
+                  </p>
+                  <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+                    Request an inspection <ArrowRight size={14} />
                   </a>
                 </div>
-              </AnimatedContent>
-            ))}
-          </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(232,25,44,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Car size={20} color="#FF6B77" />
+                    </div>
+                    <div>
+                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Car detailing / shampoo</p>
+                      <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>From ${DETAILING.carFromCad} per vehicle</p>
+                    </div>
+                  </div>
+                  <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(232,25,44,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Sofa size={20} color="#FF6B77" />
+                    </div>
+                    <div>
+                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Sofa deep clean / shampoo</p>
+                      <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>${DETAILING.sofaPerSeatCad} per seat</p>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, paddingLeft: 4 }}>
+                    <Search size={13} color="rgba(255,255,255,0.4)" />
+                    <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{DETAILING.note}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedContent>
         </div>
       </section>
 
       {/* CTA */}
-      <section style={{ padding: "80px 0", background: "#F7F7F7", textAlign: "center" }}>
+      <section style={{ padding: "0 0 80px", background: "#F7F7F7", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", color: "#09090B", marginBottom: 12, letterSpacing: "-0.022em" }}>
@@ -233,9 +317,9 @@ export default function PricingPage() {
             </h2>
             <p style={{ color: "#52525B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>All prices confirmed before we start. No surprises, no bills that shock you.</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="/faq" className="btn-ghost" style={{ textDecoration: "none" }}>Read FAQ</a>
+              <a href="/faq" className="btn-ghost" style={{ textDecoration: "none", color: "#374151", borderColor: "rgba(24,13,16,0.2)" }}>Read FAQ</a>
               <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-                Start Free Pickup <ArrowRight size={14} />
+                Book Your First Pickup <ArrowRight size={14} />
               </a>
             </div>
           </AnimatedContent>
@@ -243,7 +327,12 @@ export default function PricingPage() {
       </section>
 
       <style>{`
-        @media (max-width: 900px) { .paygo-grid { grid-template-columns: repeat(2,1fr) !important; } .plans-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 900px) {
+          .paygo-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .plans-grid { grid-template-columns: 1fr !important; }
+          .catalog-grid { grid-template-columns: 1fr !important; }
+          .detailing-grid { grid-template-columns: 1fr !important; }
+        }
         @media (max-width: 480px) { .paygo-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </div>

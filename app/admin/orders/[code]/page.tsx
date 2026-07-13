@@ -7,9 +7,11 @@ export const dynamic = "force-dynamic";
 
 const SERVICE_LABELS: Record<string, string> = {
   "wash-fold": "Wash & Fold",
+  express: "Same-Day Express",
   "dry-clean": "Dry Cleaning",
   ironing: "Ironing",
-  alteration: "Alteration",
+  household: "Household Items",
+  detailing: "Car & Sofa Detailing",
 };
 
 const STATUS_LABELS: Record<string, string> = {

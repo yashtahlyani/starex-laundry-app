@@ -20,7 +20,7 @@ const steps = [
     num: "01",
     title: "Book in 2 minutes",
     desc: "Schedule a pickup from our website or app. Choose your time window, enter your address, and confirm your order. It takes under 2 minutes.",
-    color: "#E4F4FB",
+    color: "#FCEBEC",
     accent: "#0ea5e9",
     details: ["Select wash preferences", "Add special care instructions", "Pick a convenient time slot"],
   },
@@ -29,7 +29,7 @@ const steps = [
     num: "02",
     title: "We pick up",
     desc: "Our driver arrives at your chosen window, scans your bag, and takes it to our facility. No waiting around — leave it at your door.",
-    color: "#D1F9E3",
+    color: "#FAE9E1",
     accent: "#16a34a",
     details: ["Real-time driver tracking", "Contactless pickup option", "Unique bag barcode tracking"],
   },
@@ -46,10 +46,10 @@ const steps = [
     Icon: CheckCircle,
     num: "04",
     title: "Delivered back",
-    desc: "Your laundry is returned clean, fresh, and neatly folded — usually within 24 hours. Just put it away.",
-    color: "#EAEDf9",
+    desc: "Your laundry is returned clean, fresh, and neatly folded — within 24–48 hours. Just put it away.",
+    color: "#F1EEEF",
     accent: "#8b5cf6",
-    details: ["24-hour standard turnaround", "Real-time delivery updates", "Contactless drop-off"],
+    details: ["24–48h standard turnaround", "Real-time delivery updates", "Contactless drop-off"],
   },
 ];
 
@@ -68,8 +68,8 @@ export default function HowItWorks() {
     <div style={{ background: "#F7F7F7" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 80, background: "#111921", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 80, background: "#150E10", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>How It Works</motion.span>
           <motion.h1
@@ -93,7 +93,7 @@ export default function HowItWorks() {
           <div ref={timelineRef} style={{ position: "relative" }}>
             {/* vertical line */}
             <div style={{ position: "absolute", left: 32, top: 0, bottom: 0, width: 2, background: "#E5E7EB" }} className="timeline-line">
-              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #C9F8DE, #78EDB2)", height: lineHeight }} />
+              <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #FF6B77, #E8192C)", height: lineHeight }} />
             </div>
 
             {steps.map((step, i) => (
@@ -130,7 +130,7 @@ export default function HowItWorks() {
       </section>
 
       {/* Mini FAQ */}
-      <section style={{ padding: "80px 0", background: "#111921" }}>
+      <section style={{ padding: "80px 0", background: "#150E10" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40, textAlign: "center" }}>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", color: "#ffffff", letterSpacing: "-0.022em" }}>

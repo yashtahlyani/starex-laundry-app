@@ -64,7 +64,7 @@ export default function DashboardPage() {
   if (loading) return (
     <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(120,237,178,0.2)", borderTopColor: "#78EDB2", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
+        <div style={{ width: 40, height: 40, borderRadius: "50%", border: "4px solid rgba(232,25,44,0.2)", borderTopColor: "#E8192C", animation: "spin 0.8s linear infinite", margin: "0 auto 12px" }} />
         <p style={{ color: "#A1A1AA", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Loading your orders…</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
@@ -78,7 +78,7 @@ export default function DashboardPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#C9F8DE,#78EDB2)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#0a3547" }}>{initial}</div>
+            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#FF6B77,#E8192C)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#4A0E17" }}>{initial}</div>
             <div>
               <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.55rem", color: "#09090B", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{greeting()}, {firstName}.</h1>
               <p style={{ color: "#71717A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
             <motion.div key={s.label} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease }}
               style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, padding: "18px 20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <s.icon size={15} color="#78EDB2" />
+                <s.icon size={15} color="#E8192C" />
                 <span style={{ color: "#71717A", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{s.label}</span>
               </div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.6rem", color: "#09090B", letterSpacing: "-0.02em" }}>{s.value}</p>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
         {activeOrder ? (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }} style={{ marginBottom: 32 }}>
             <p className="eyebrow" style={{ marginBottom: 12 }}>Active order</p>
-            <div style={{ background: "#fff", border: "1.5px solid #C9F8DE", borderRadius: 20, padding: "28px 30px", boxShadow: "0 4px 20px rgba(120,237,178,0.1)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid #FF6B77", borderRadius: 20, padding: "28px 30px", boxShadow: "0 4px 20px rgba(232,25,44,0.1)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -133,8 +133,8 @@ export default function DashboardPage() {
           </motion.div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.45, ease }}
-            style={{ background: "#111921", borderRadius: 20, padding: "40px", textAlign: "center", marginBottom: 32, position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 80% at 50% 0%, #0a3547 0%, #111921 70%)", pointerEvents: "none" }} />
+            style={{ background: "#150E10", borderRadius: 20, padding: "40px", textAlign: "center", marginBottom: 32, position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 80% at 50% 0%, #4A0E17 0%, #150E10 70%)", pointerEvents: "none" }} />
             <div style={{ position: "relative" }}>
               <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.5rem", color: "#fff", marginBottom: 8 }}>
                 No active orders — <em className="display-accent" style={{ display: "inline" }}>enjoy your weekend.</em>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
               <p className="eyebrow" style={{ margin: 0 }}>Recent orders</p>
               {orders.length > 5 && (
-                <a href="/order" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem", color: "#4ECDA0", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+                <a href="/order" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem", color: "#C1121F", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
                   View all <ChevronRight size={13} />
                 </a>
               )}
@@ -183,8 +183,8 @@ export default function DashboardPage() {
         {orders.length === 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
             style={{ background: "#fff", borderRadius: 20, padding: "64px 40px", textAlign: "center", border: "1px solid #EDEDED" }}>
-            <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(120,237,178,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-              <Package size={24} color="#4ECDA0" />
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(232,25,44,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+              <Package size={24} color="#C1121F" />
             </div>
             <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.25rem", color: "#09090B", marginBottom: 8 }}>No orders yet</h3>
             <p style={{ color: "#71717A", fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>Book your first pickup — it takes under 2 minutes.</p>

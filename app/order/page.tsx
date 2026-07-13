@@ -22,13 +22,13 @@ type Order = {
 const STAGES = ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery", "delivered"];
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
-  placed:           { label: "Order placed",    desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#78EDB2" },
-  confirmed:        { label: "Confirmed",        desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#78EDB2" },
+  placed:           { label: "Order placed",    desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#E8192C" },
+  confirmed:        { label: "Confirmed",        desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#E8192C" },
   picked_up:        { label: "Picked up",        desc: "Our driver has collected your laundry.",         icon: Truck,       color: "#FBBF24" },
   washing:          { label: "Cleaning",         desc: "Your laundry is being washed and processed.",    icon: Sparkles,    color: "#FB923C" },
   folding:          { label: "Folding",          desc: "Cleaned and carefully folded.",                  icon: Layers,      color: "#A78BFA" },
-  out_for_delivery: { label: "On the way",       desc: "Your order is out for delivery.",                icon: Truck,       color: "#78EDB2" },
-  delivered:        { label: "Delivered",        desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#78EDB2" },
+  out_for_delivery: { label: "On the way",       desc: "Your order is out for delivery.",                icon: Truck,       color: "#E8192C" },
+  delivered:        { label: "Delivered",        desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#E8192C" },
   cancelled:        { label: "Cancelled",        desc: "This order has been cancelled.",                 icon: Package,     color: "#F87171" },
 };
 
@@ -65,7 +65,7 @@ function OrderTracker() {
   const events: StatusEvent[] = order?.status_history ?? [];
 
   return (
-    <div className="min-h-screen bg-[#111921] pt-20">
+    <div className="min-h-screen bg-[#150E10] pt-20">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14">
         <div className="text-center mb-10">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/10 mb-4">
@@ -76,7 +76,7 @@ function OrderTracker() {
         </div>
 
         {/* Search */}
-        <div className="bg-[#1a2332] rounded-2xl border border-white/8 p-2 flex gap-2 mb-8">
+        <div className="bg-[#1F1416] rounded-2xl border border-white/8 p-2 flex gap-2 mb-8">
           <input
             className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-white placeholder:text-white/30 font-body"
             placeholder="Order code — e.g. STX-482913"
@@ -87,7 +87,7 @@ function OrderTracker() {
           <button className="btn-primary px-5 py-2.5 text-sm shrink-0 disabled:opacity-40"
             onClick={() => fetchOrder(code)} disabled={loading || !code.trim()}>
             {loading
-              ? <span className="h-4 w-4 rounded-full border-2 border-[#0a1a0f]/30 border-t-[#0a1a0f] animate-spin" />
+              ? <span className="h-4 w-4 rounded-full border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] animate-spin" />
               : <><Search size={15} /> Track</>}
           </button>
         </div>
@@ -144,10 +144,10 @@ function OrderTracker() {
                         <div className="flex flex-col items-center">
                           <div className={`h-8 w-8 rounded-full border-2 flex items-center justify-center transition-all ${
                             done
-                              ? active ? "bg-mint border-mint shadow-[0_0_12px_rgba(120,237,178,0.4)]" : "bg-mint/30 border-mint/40"
+                              ? active ? "bg-mint border-mint shadow-[0_0_12px_rgba(232,25,44,0.4)]" : "bg-mint/30 border-mint/40"
                               : "bg-white/5 border-white/15"
                           }`}>
-                            <Icon size={14} className={done ? "text-[#0a1a0f]" : "text-white/20"} />
+                            <Icon size={14} className={done ? "text-[#FFFFFF]" : "text-white/20"} />
                           </div>
                           {i < STAGES.length - 1 && (
                             <div className={`w-0.5 h-6 mt-1 ${i < currentStageIndex ? "bg-mint/40" : "bg-white/8"}`} />

@@ -107,21 +107,21 @@ export default async function AdminDashboardPage({
     <div style={{ background: "#F4F5F7", minHeight: "100vh" }}>
 
       {/* Admin header */}
-      <header style={{ background: "#111921", position: "sticky", top: 0, zIndex: 100 }}>
+      <header style={{ background: "#150E10", position: "sticky", top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
               <rect width="36" height="36" rx="9" fill="#1a2530" />
-              <line x1="9" y1="9" x2="27" y2="27" stroke="#78EDB2" strokeWidth="5" strokeLinecap="round" />
-              <line x1="27" y1="9" x2="9" y2="27" stroke="#78EDB2" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="18" cy="18" r="3" fill="#1a2530" /><circle cx="18" cy="18" r="1.5" fill="#C9F8DE" />
+              <line x1="9" y1="9" x2="27" y2="27" stroke="#E8192C" strokeWidth="5" strokeLinecap="round" />
+              <line x1="27" y1="9" x2="9" y2="27" stroke="#E8192C" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="18" cy="18" r="3" fill="#1a2530" /><circle cx="18" cy="18" r="1.5" fill="#FF6B77" />
             </svg>
             <div>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#fff", lineHeight: 1 }}>StareX</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#78EDB2", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.68rem", color: "#E8192C", letterSpacing: "0.08em", textTransform: "uppercase" }}>Owner console</p>
             </div>
             {newOrders.length > 0 && (
-              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#78EDB2", color: "#0a1a0f", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#E8192C", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                 <Bell size={12} /> {newOrders.length} new
               </span>
             )}
@@ -145,11 +145,11 @@ export default async function AdminDashboardPage({
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12, marginBottom: 28 }} className="admin-kpis">
           {kpis.map(k => (
             <div key={k.label} style={{
-              background: k.accent ? "linear-gradient(135deg,#C9F8DE,#78EDB2)" : "#fff",
+              background: k.accent ? "linear-gradient(135deg,#FF6B77,#E8192C)" : "#fff",
               border: "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
             }}>
               <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#09090B", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#0a3547" : "#71717A", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#4A0E17" : "#71717A", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
             </div>
           ))}
         </div>
@@ -241,17 +241,17 @@ export default async function AdminDashboardPage({
             ) : (
               <div className="space-y-3">
                 {contacts!.map((c: any) => (
-                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#78EDB2" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
+                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#E8192C" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-                          {c.status === "new" && <span style={{ background: "#78EDB2", color: "#0a1a0f", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
-                          {c.status === "replied" && <span style={{ background: "rgba(120,237,178,0.12)", color: "#0a3547", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
+                          {c.status === "new" && <span style={{ background: "#E8192C", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
+                          {c.status === "replied" && <span style={{ background: "rgba(232,25,44,0.12)", color: "#4A0E17", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
                           {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#52525B" }}>{c.subject}</span>}
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#09090B", marginBottom: 2 }}>{c.name}</p>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#71717A", marginBottom: 12 }}>
-                          <a href={`mailto:${c.email}`} style={{ color: "#4ECDA0" }}>{c.email}</a>
+                          <a href={`mailto:${c.email}`} style={{ color: "#C1121F" }}>{c.email}</a>
                           {c.phone && ` · ${c.phone}`}
                         </p>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#52525B", lineHeight: 1.7 }}>{c.message}</p>
@@ -301,7 +301,7 @@ export default async function AdminDashboardPage({
                         {STATUS_LABELS[status] ?? status}
                       </span>
                       <div style={{ flex: 1, background: "#F4F4F5", borderRadius: 999, height: 8, overflow: "hidden" }}>
-                        <div style={{ height: 8, background: "#78EDB2", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
+                        <div style={{ height: 8, background: "#E8192C", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
                       </div>
                       <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#09090B", minWidth: 24, textAlign: "right" }}>{count as number}</span>
                     </div>
