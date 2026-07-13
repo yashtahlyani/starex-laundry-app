@@ -42,9 +42,10 @@ export default function AuthPage() {
         if (error) throw error;
         setMode("check-email");
       } else if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        window.location.href = "/dashboard";
+        const isOwner = data.user?.email === "owner@starex.ca" || data.user?.user_metadata?.is_admin === true;
+        window.location.href = isOwner ? "/admin" : "/dashboard";
       } else if (mode === "reset") {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/auth/callback?type=recovery`,

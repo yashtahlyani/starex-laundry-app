@@ -31,6 +31,8 @@ export default function DashboardPage() {
     const supabase = getSupabaseBrowser();
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { window.location.href = "/auth"; return; }
+      const isOwner = user.email === "owner@starex.ca" || user.user_metadata?.is_admin === true;
+      if (isOwner) { window.location.href = "/admin"; return; }
       setUser(user);
       const res = await fetch("/api/dashboard/orders");
       if (res.ok) { const data = await res.json(); setOrders(data.orders ?? []); }
