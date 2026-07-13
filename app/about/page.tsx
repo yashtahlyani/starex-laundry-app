@@ -35,51 +35,38 @@ export default function About() {
   return (
     <div style={{ background: "#FFFFFF" }}>
 
-      {/* Hero — solid brand red for text, the branded photo shown as its own clean card (never both layered) */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden", background: "var(--brand)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }} className="about-hero">
-          <div>
-            <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.08, ease }}
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
-            >
-              Built on{" "}
-              <em style={{ fontStyle: "italic" }}>trust.</em>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
-              style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif", marginBottom: 32 }}
-            >
-              StareX started in 2019 with one belief: laundry should be invisible. You should never have to think about it. Five years later, we serve over 10,000 Canadians who&apos;ve reclaimed their weekends.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.35 }}
-              style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20, maxWidth: 420 }}
-            >
-              {[["10,000+", "customers"], ["4.9★", "avg rating"], ["98%", "on-time"], ["2019", "founded"]].map(([n, l]) => (
-                <div key={l}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#ffffff", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{n}</p>
-                  <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Branded photo — shown untouched, no text layered on top of it */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
-            style={{
-              position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 380, alignSelf: "stretch",
-              boxShadow: "0 24px 60px rgba(20,20,20,0.18)",
-            }}
+      {/* Hero — clean text-free photo as a true backdrop, no baked-in copy to fight with */}
+      <section style={{
+        paddingTop: 120, paddingBottom: 88, position: "relative", overflow: "hidden",
+        backgroundImage: "linear-gradient(100deg, rgba(184,50,79,0.94) 0%, rgba(184,50,79,0.82) 45%, rgba(184,50,79,0.55) 100%), url(/images/starex/folded-towels-sprig.png)",
+        backgroundSize: "cover", backgroundPosition: "center",
+      }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
+          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.08, ease }}
+            style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(2.5rem,5vw,4rem)", letterSpacing: "-0.022em", lineHeight: 1.1, color: "#ffffff", marginBottom: 20 }}
           >
-            <img
-              src="/images/starex/premium-care-trust-banner.png"
-              alt="StareX — premium care you can trust"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-            />
+            Built on{" "}
+            <em style={{ fontStyle: "italic" }}>trust.</em>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
+            style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif", marginBottom: 36 }}
+          >
+            StareX started in 2019 with one belief: laundry should be invisible. You should never have to think about it. Five years later, we serve over 10,000 Canadians who&apos;ve reclaimed their weekends.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.35 }}
+            style={{ display: "flex", gap: 32, flexWrap: "wrap" }}
+          >
+            {[["10,000+", "customers"], ["4.9★", "avg rating"], ["98%", "on-time"], ["2019", "founded"]].map(([n, l]) => (
+              <div key={l}>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#ffffff", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{n}</p>
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>
+              </div>
+            ))}
           </motion.div>
         </div>
       </section>

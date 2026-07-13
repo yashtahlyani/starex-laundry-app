@@ -216,20 +216,20 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Right — official StareX brand imagery, no overlay copy needed */}
+          {/* Right — official StareX brand imagery, shown at its own aspect ratio so nothing gets cropped */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
             className="hero-panel"
             style={{
-              position: "relative", borderRadius: 28, overflow: "hidden", minHeight: 460,
-              alignSelf: "stretch",
+              position: "relative", borderRadius: 28, overflow: "hidden",
+              aspectRatio: "1717 / 916", width: "100%",
               boxShadow: "0 24px 60px rgba(20,20,20,0.12)",
             }}
           >
             <img
               src="/images/starex-hero-banner.png"
               alt="StareX premium laundry service — fresh laundry, delivered to your door"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", display: "block" }}
             />
           </motion.div>
         </div>
