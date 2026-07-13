@@ -102,8 +102,8 @@ export default function FAQ() {
       {/* Hero */}
       <section style={{
         paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(180deg, rgba(184,50,79,0.88) 0%, rgba(184,50,79,0.72) 55%, rgba(184,50,79,0.55) 100%), url(/images/starex/folded-towels-logo.png)",
-        backgroundSize: "cover, contain", backgroundPosition: "center, center", backgroundRepeat: "no-repeat, no-repeat",
+        backgroundImage: "linear-gradient(rgba(184,50,79,0.82), rgba(184,50,79,0.82)), url(/images/starex/folded-towels-logo.png)",
+        backgroundSize: "cover", backgroundPosition: "center", minHeight: 440,
       }}>
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>FAQ</motion.span>

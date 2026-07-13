@@ -250,8 +250,8 @@ export default function Home() {
       {/* ══ STATS — brand red band with a clean text-free backdrop ══ */}
       <section style={{
         padding: "80px 0", position: "relative",
-        backgroundImage: "linear-gradient(180deg, rgba(184,50,79,0.9) 0%, rgba(184,50,79,0.78) 100%), url(/images/starex/washer-plant.png)",
-        backgroundSize: "cover, contain", backgroundPosition: "center, center", backgroundRepeat: "no-repeat, no-repeat",
+        backgroundImage: "linear-gradient(rgba(184,50,79,0.82), rgba(184,50,79,0.82)), url(/images/starex/rack-clothes.png)",
+        backgroundSize: "cover", backgroundPosition: "center",
       }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "16px" }} className="stats-grid">
