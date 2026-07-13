@@ -249,10 +249,10 @@ export default function Home() {
 
       {/* ══ STATS — brand red band with a clean text-free backdrop ══ */}
       <section style={{
-        padding: "80px 0", position: "relative",
+        padding: "80px 0", position: "relative", minHeight: 480,
         backgroundColor: "var(--brand)",
         backgroundImage: "url(/images/starex/rack-clothes.png)",
-        backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px", position: "relative" }}>

@@ -72,7 +72,7 @@ export default function HowItWorks() {
         paddingTop: 120, paddingBottom: 80, position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
         backgroundImage: "url(/images/starex/basket-plant.png)",
-        backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 460,
+        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 560,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>

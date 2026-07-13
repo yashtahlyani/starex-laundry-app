@@ -59,7 +59,7 @@ export default function PricingPage() {
         paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
         backgroundImage: "url(/images/starex/stack-bag-plain.png)",
-        backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 440,
+        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 540,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
@@ -271,7 +271,8 @@ export default function PricingPage() {
               borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden",
               backgroundColor: "var(--brand)",
               backgroundImage: "url(/images/starex/washer-basket-2.png)",
-              backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+              backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+              minHeight: 320,
             }}>
               <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.6)" }} />
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 32, alignItems: "center" }} className="detailing-grid">
