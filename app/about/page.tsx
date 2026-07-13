@@ -38,7 +38,7 @@ export default function About() {
       {/* Hero */}
       <section style={{
         paddingTop: 120, paddingBottom: 72, position: "relative", overflow: "hidden",
-        backgroundImage: "linear-gradient(100deg, rgba(184,50,79,0.92) 0%, rgba(184,50,79,0.88) 55%, rgba(20,20,20,0.55) 100%), url(/images/laundromat-interior.png)",
+        backgroundImage: "linear-gradient(100deg, rgba(184,50,79,0.86) 0%, rgba(184,50,79,0.7) 60%, rgba(20,20,20,0.3) 100%), url(/images/starex/premium-care-trust.png)",
         backgroundSize: "cover", backgroundPosition: "center",
       }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }} className="about-hero">

@@ -28,7 +28,11 @@ export default function ServicesPage() {
     <div style={{ background: "#FFFFFF" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "var(--brand)", position: "relative", overflow: "hidden" }}>
+      <section style={{
+        paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
+        backgroundImage: "linear-gradient(90deg, rgba(184,50,79,0.88) 0%, rgba(184,50,79,0.6) 55%, rgba(20,20,20,0.35) 100%), url(/images/starex/pickup-clean-deliver-2.png)",
+        backgroundSize: "cover", backgroundPosition: "center",
+      }}>
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             What We Offer

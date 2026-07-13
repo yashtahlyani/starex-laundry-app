@@ -216,26 +216,20 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Right — bold flat-red graphic panel, echoes the reference's solid color block */}
+          {/* Right — official StareX brand imagery, no overlay copy needed */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
             className="hero-panel"
             style={{
               position: "relative", borderRadius: 28, overflow: "hidden", minHeight: 460,
-              display: "flex", alignItems: "flex-end", padding: 40,
-              backgroundImage: "url(/images/laundromat-interior.png)",
-              backgroundSize: "cover", backgroundPosition: "center",
+              boxShadow: "0 24px 60px rgba(20,20,20,0.12)",
             }}
           >
-            <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(20,20,20,0.75) 0%, rgba(20,20,20,0.15) 45%, transparent 70%)" }} />
-            <div style={{ position: "relative" }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--brand-rose)", marginBottom: 10 }}>
-                24–48h Turnaround
-              </p>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", letterSpacing: "-0.02em", color: "#FFFFFF", lineHeight: 1.1, maxWidth: "16ch" }}>
-                Wash, fold &amp; deliver — done right.
-              </p>
-            </div>
+            <img
+              src="/images/starex-hero-banner.png"
+              alt="StareX premium laundry service — fresh laundry, delivered to your door"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
           </motion.div>
         </div>
       </section>
