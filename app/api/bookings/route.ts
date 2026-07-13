@@ -4,6 +4,8 @@ import { createServerClient } from "@supabase/ssr";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { BookingService } from "@/lib/services/booking.service";
 import { PLANS } from "@/lib/pricing";
+import { enqueueBookingConfirmation } from "@/lib/queue/notification.queue";
+import { notifyOwnerOfNewOrder } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +58,22 @@ export async function POST(req: NextRequest) {
       timeSlot,
       notes: notes?.trim(),
     });
+
+    // Fire-and-forget: never let a notification failure block the booking response.
+    const notificationPayload = {
+      orderId: result.orderId,
+      orderCode: result.orderCode,
+      customerName: name.trim(),
+      customerEmail: email.trim().toLowerCase(),
+      customerPhone: phone.trim(),
+      serviceType: service,
+      pickupDate: date,
+      pickupTimeSlot: timeSlot,
+      pickupAddress: address.trim(),
+    };
+    enqueueBookingConfirmation(notificationPayload).catch(() => {});
+    notifyOwnerOfNewOrder(notificationPayload).catch(() => {});
+
     return NextResponse.json(result, { status: 201 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? "Failed to create booking" }, { status: 500 });

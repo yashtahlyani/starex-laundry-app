@@ -50,9 +50,9 @@ async function fetchStats(): Promise<AdminStats> {
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", startOfDay.toISOString()),
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", startOfWeek.toISOString()),
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", startOfMonth.toISOString()),
-    db.from("orders").select("*", { count: "exact", head: true }).in("status", ["scheduled", "picked_up", "in_progress", "ready", "out_for_delivery"]),
+    db.from("orders").select("*", { count: "exact", head: true }).in("status", ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery"]),
     db.from("issues").select("*", { count: "exact", head: true }).in("status", ["open", "in_review"]),
-    db.from("customers").select("*", { count: "exact", head: true }),
+    db.from("profiles").select("*", { count: "exact", head: true }),
     db.from("contact_submissions").select("*", { count: "exact", head: true }).eq("status", "new"),
     db.from("orders").select("status").gte("created_at", startOfMonth.toISOString()),
   ]);

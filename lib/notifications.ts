@@ -17,21 +17,32 @@ export type BookingNotificationPayload = {
   customerEmail: string;
   customerPhone: string;
   serviceType: string;
-  pickupSlotStart: string;
-  pickupSlotEnd: string;
+  pickupDate: string;
+  pickupTimeSlot: string;
   pickupAddress: string;
 };
 
-// Status change messages sent to the customer
+// Status change messages sent to the customer. Keys must match VALID_STATUSES
+// in lib/services/order.service.ts, not an arbitrary label.
 const STATUS_MESSAGES: Partial<Record<string, { subject: string; body: string; whatsapp: string }>> = {
+  confirmed: {
+    subject: "Your booking is confirmed!",
+    body: "We've confirmed your pickup and locked in your slot.",
+    whatsapp: "Your booking is confirmed! We'll see you at pickup.",
+  },
   picked_up: {
     subject: "We've picked up your laundry!",
     body: "Your laundry has been picked up and is on its way to us. We'll notify you when it's ready.",
     whatsapp: "We've picked up your laundry and are getting it cleaned. We'll message you when it's ready!",
   },
-  ready: {
+  washing: {
+    subject: "Your laundry is being cleaned!",
+    body: "Your items are in the wash now — we'll let you know as soon as they're ready.",
+    whatsapp: "Your laundry is being cleaned right now. Hang tight!",
+  },
+  folding: {
     subject: "Your laundry is clean and ready!",
-    body: "Great news — your laundry is freshly cleaned and ready. Our driver will be heading your way soon.",
+    body: "Great news — your laundry is freshly cleaned and folded. Our driver will be heading your way soon.",
     whatsapp: "Your laundry is clean and ready! Our driver will be on the way to you shortly.",
   },
   out_for_delivery: {
@@ -72,6 +83,66 @@ export async function sendStatusNotification(
   ]);
 }
 
+// ─── Owner notifications ────────────────────────────────────────────────────
+// Alerts the owner's inbox on new activity, so they don't have to keep
+// refreshing /admin to notice a new booking or message. Set
+// ADMIN_NOTIFICATION_EMAIL (and RESEND_API_KEY) in the environment to enable —
+// both are optional and this no-ops silently until they're set.
+
+export async function notifyOwnerOfNewOrder(p: BookingNotificationPayload) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!adminEmail || !resend) return;
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: adminEmail,
+      subject: `New booking — Order ${p.orderCode} (${formatService(p.serviceType)})`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
+          <h2 style="color:#B8324F;margin:0 0 16px">New Booking Received</h2>
+          <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
+            <tr><td style="color:#6B7280;width:120px">Order</td><td><strong style="font-family:monospace">${p.orderCode}</strong></td></tr>
+            <tr><td style="color:#6B7280">Customer</td><td>${p.customerName} — ${p.customerEmail} — ${p.customerPhone}</td></tr>
+            <tr><td style="color:#6B7280">Service</td><td>${formatService(p.serviceType)}</td></tr>
+            <tr><td style="color:#6B7280">Pickup</td><td>${formatDate(p.pickupDate)} · ${p.pickupTimeSlot}</td></tr>
+            <tr><td style="color:#6B7280">Address</td><td>${p.pickupAddress}</td></tr>
+          </table>
+          <a href="${SITE_URL}/admin" style="display:inline-block;margin-top:16px;color:#B8324F;">Open Admin Console →</a>
+        </div>
+      `,
+    });
+  } catch {
+    // Best-effort — never block the booking flow on a notification failure.
+  }
+}
+
+export async function notifyOwnerOfNewContact(p: { name: string; email: string; subject?: string | null; message: string }) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!adminEmail || !resend) return;
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: adminEmail,
+      subject: `New contact message${p.subject ? `: ${p.subject}` : ""}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
+          <h2 style="color:#B8324F;margin:0 0 16px">New Contact Message</h2>
+          <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
+            <tr><td style="color:#6B7280;width:120px">From</td><td>${p.name} — ${p.email}</td></tr>
+            ${p.subject ? `<tr><td style="color:#6B7280">Subject</td><td>${p.subject}</td></tr>` : ""}
+          </table>
+          <div style="background:#fdf2f4;border-left:3px solid #B8324F;padding:16px;margin:16px 0;border-radius:4px;">
+            <p style="margin:0;font-size:14px;color:#4A4A4A;">${p.message.replace(/\n/g, "<br>")}</p>
+          </div>
+          <a href="${SITE_URL}/admin?tab=contacts" style="display:inline-block;color:#B8324F;">Open Admin Console →</a>
+        </div>
+      `,
+    });
+  } catch {
+    // Best-effort — never block the contact form on a notification failure.
+  }
+}
+
 // ─── Email helpers ────────────────────────────────────────────────────────────
 
 async function sendBookingEmail(p: BookingNotificationPayload) {
@@ -79,13 +150,12 @@ async function sendBookingEmail(p: BookingNotificationPayload) {
     await logNotification(p.orderId, "email", "booking_confirmed", "skipped");
     return;
   }
-  const { pickupStart, pickupEnd } = formatSlot(p.pickupSlotStart, p.pickupSlotEnd);
   try {
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: p.customerEmail,
       subject: `Booking confirmed — Order ${p.orderCode}`,
-      html: buildBookingEmailHtml(p, pickupStart, pickupEnd),
+      html: buildBookingEmailHtml(p),
     });
     await logNotification(p.orderId, "email", "booking_confirmed", error ? "failed" : "sent", data?.id);
   } catch {
@@ -121,12 +191,11 @@ async function sendStatusEmail(
 // ─── WhatsApp helpers (Twilio REST API — no SDK needed) ──────────────────────
 
 async function sendBookingWhatsApp(p: BookingNotificationPayload) {
-  const { pickupStart, pickupEnd } = formatSlot(p.pickupSlotStart, p.pickupSlotEnd);
   const body =
     `Hi ${p.customerName}! Your ${BUSINESS_NAME} booking is confirmed.\n\n` +
     `Order ID: *${p.orderCode}*\n` +
     `Service: ${formatService(p.serviceType)}\n` +
-    `Pickup window: ${pickupStart} – ${pickupEnd}\n` +
+    `Pickup window: ${formatDate(p.pickupDate)} · ${p.pickupTimeSlot}\n` +
     `Address: ${p.pickupAddress}\n\n` +
     `Track your order: ${SITE_URL}/order\n\n` +
     `Questions? Just reply to this message.`;
@@ -184,6 +253,9 @@ async function dispatchWhatsApp(orderId: string, phone: string, body: string, ev
 
 // ─── Notification log ─────────────────────────────────────────────────────────
 
+// Best-effort audit trail — the notification_log table is optional (see
+// supabase/schema.sql). If it hasn't been created in this environment yet,
+// this must not throw and break the actual booking/status-update flow.
 async function logNotification(
   orderId: string,
   channel: string,
@@ -191,35 +263,28 @@ async function logNotification(
   status: string,
   providerMessageId?: string
 ) {
-  await getSupabaseAdmin().from("notification_log").insert({
-    order_id: orderId,
-    channel,
-    event_type: eventType,
-    status,
-    provider_message_id: providerMessageId ?? null,
-  });
+  try {
+    await getSupabaseAdmin().from("notification_log").insert({
+      order_id: orderId,
+      channel,
+      event_type: eventType,
+      status,
+      provider_message_id: providerMessageId ?? null,
+    });
+  } catch {
+    // No-op — logging is diagnostic only, never load-bearing.
+  }
 }
 
 // ─── Formatting utilities ─────────────────────────────────────────────────────
 
-function formatSlot(start: string, end: string) {
-  const opts: Intl.DateTimeFormatOptions = { timeZone: "America/Toronto" };
-  const pickupStart = new Date(start).toLocaleString("en-CA", {
-    ...opts,
+function formatDate(date: string) {
+  return new Date(`${date}T00:00:00`).toLocaleDateString("en-CA", {
+    timeZone: "America/Toronto",
     weekday: "long",
     month: "long",
     day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
   });
-  const pickupEnd = new Date(end).toLocaleTimeString("en-CA", {
-    ...opts,
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-  return { pickupStart, pickupEnd };
 }
 
 function formatService(id: string) {
@@ -241,7 +306,7 @@ function emailShell(content: string) {
     <tr><td align="center">
       <table width="560" cellpadding="0" cellspacing="0" role="presentation" style="max-width:560px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
         <tr>
-          <td style="background:#2E5F8A;padding:28px 40px;text-align:center;">
+          <td style="background:#B8324F;padding:28px 40px;text-align:center;">
             <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">${BUSINESS_NAME}</h1>
             <p style="margin:6px 0 0;color:rgba(255,255,255,0.75);font-size:13px;">Laundry &amp; Dry Cleaning · Canada</p>
           </td>
@@ -260,22 +325,18 @@ function emailShell(content: string) {
 </html>`;
 }
 
-function buildBookingEmailHtml(
-  p: BookingNotificationPayload,
-  pickupStart: string,
-  pickupEnd: string
-) {
+function buildBookingEmailHtml(p: BookingNotificationPayload) {
   const content = `
     <h2 style="margin:0 0 6px;color:#1a1a2e;font-size:20px;">Booking Confirmed!</h2>
     <p style="margin:0 0 24px;color:#555;font-size:15px;line-height:1.5;">
       Hi ${p.customerName}, your pickup is all set. Here's everything you need to know:
     </p>
 
-    <div style="background:#EAF2F8;border-radius:10px;padding:20px 24px;margin:0 0 24px;">
+    <div style="background:#FBEEF1;border-radius:10px;padding:20px 24px;margin:0 0 24px;">
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;vertical-align:top;">Order ID</td>
-          <td style="padding:8px 0;text-align:right;font-family:monospace;font-size:16px;font-weight:700;color:#2E5F8A;">${p.orderCode}</td>
+          <td style="padding:8px 0;text-align:right;font-family:monospace;font-size:16px;font-weight:700;color:#B8324F;">${p.orderCode}</td>
         </tr>
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;border-top:1px solid rgba(0,0,0,0.06);">Service</td>
@@ -283,7 +344,7 @@ function buildBookingEmailHtml(
         </tr>
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;border-top:1px solid rgba(0,0,0,0.06);vertical-align:top;">Pickup window</td>
-          <td style="padding:8px 0;text-align:right;font-weight:600;font-size:14px;border-top:1px solid rgba(0,0,0,0.06);">${pickupStart}<br><span style="font-weight:400;color:#888;">until ${pickupEnd}</span></td>
+          <td style="padding:8px 0;text-align:right;font-weight:600;font-size:14px;border-top:1px solid rgba(0,0,0,0.06);">${formatDate(p.pickupDate)}<br><span style="font-weight:400;color:#888;">${p.pickupTimeSlot}</span></td>
         </tr>
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;border-top:1px solid rgba(0,0,0,0.06);">Address</td>
@@ -300,7 +361,7 @@ function buildBookingEmailHtml(
     </div>
 
     <a href="${SITE_URL}/order"
-       style="display:block;background:#2E5F8A;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
+       style="display:block;background:#B8324F;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
       Track My Order →
     </a>`;
 
@@ -311,9 +372,9 @@ function buildStatusEmailHtml(customerName: string, orderCode: string, bodyText:
   const content = `
     <p style="margin:0 0 16px;color:#555;font-size:15px;line-height:1.5;">Hi ${customerName},</p>
     <p style="margin:0 0 24px;color:#1a1a2e;font-size:16px;line-height:1.6;font-weight:500;">${bodyText}</p>
-    <p style="margin:0 0 28px;color:#888;font-size:13px;">Order: <span style="font-family:monospace;font-weight:700;color:#2E5F8A;">${orderCode}</span></p>
+    <p style="margin:0 0 28px;color:#888;font-size:13px;">Order: <span style="font-family:monospace;font-weight:700;color:#B8324F;">${orderCode}</span></p>
     <a href="${SITE_URL}/order"
-       style="display:block;background:#2E5F8A;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
+       style="display:block;background:#B8324F;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
       Track My Order →
     </a>`;
 

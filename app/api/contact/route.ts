@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { notifyOwnerOfNewContact } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,9 @@ export async function POST(req: NextRequest) {
     });
 
     if (error) throw error;
+
+    notifyOwnerOfNewContact({ name, email, subject, message }).catch(() => {});
+
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? "Failed to send message" }, { status: 500 });

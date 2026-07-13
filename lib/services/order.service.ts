@@ -34,7 +34,7 @@ export class OrderService {
     if (!order) throw Object.assign(new Error("Order not found"), { statusCode: 404 });
 
     const currentStatus = order.status as OrderStatus;
-    if (currentStatus === newStatus) return { unchanged: true };
+    if (currentStatus === newStatus) return { unchanged: true as const };
 
     if (!TRANSITIONS[currentStatus]?.includes(newStatus)) {
       throw Object.assign(
@@ -44,7 +44,15 @@ export class OrderService {
     }
 
     await this.orders.updateStatus(order.id, newStatus, note ?? undefined);
-    return { unchanged: false, orderCode, status: newStatus };
+    return {
+      unchanged: false as const,
+      orderCode,
+      status: newStatus,
+      orderId: order.id,
+      customerName: order.customer_name,
+      customerEmail: order.email,
+      customerPhone: order.phone,
+    };
   }
 
   async getOrderWithHistory(orderCode: string) {
