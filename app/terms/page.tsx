@@ -58,12 +58,12 @@ const sections = [
 
 export default function TermsPage() {
   return (
-    <div style={{ background: "#FDFBFA", minHeight: "100vh" }}>
+    <div style={{ background: "#FBF8F1", minHeight: "100vh" }}>
       {/* Hero */}
-      <div style={{ background: "#1F1B1B", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+      <div style={{ background: "#241619", paddingTop: 100, paddingBottom: 64, textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
-          <span style={{ display: "inline-block", background: "rgba(206,66,87,0.12)", border: "1px solid rgba(206,66,87,0.25)", color: "#CE4257", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
+          <span style={{ display: "inline-block", background: "rgba(203,62,94,0.12)", border: "1px solid rgba(203,62,94,0.25)", color: "#CB3E5E", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 20 }}>
             Legal
           </span>
           <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.8rem)", color: "#fff", letterSpacing: "-0.025em", marginBottom: 16 }}>
@@ -77,27 +77,27 @@ export default function TermsPage() {
 
       {/* Content */}
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "64px 24px 96px" }}>
-        <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#6B6360", fontSize: "1rem", lineHeight: 1.75, marginBottom: 48 }}>
+        <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#6E5F5C", fontSize: "1rem", lineHeight: 1.75, marginBottom: 48 }}>
           Please read these Terms of Service carefully before using the Starex platform. These Terms constitute a legally binding agreement between you and Starex Laundry Inc.
         </p>
 
         {sections.map((s, i) => (
           <div key={i} style={{ marginBottom: 40 }}>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#1F1B1B", marginBottom: 12 }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#241619", marginBottom: 12 }}>
               {i + 1}. {s.title}
             </h2>
-            <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#6B6360", fontSize: "0.9625rem", lineHeight: 1.8 }}>
+            <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#6E5F5C", fontSize: "0.9625rem", lineHeight: 1.8 }}>
               {s.body}
             </p>
           </div>
         ))}
 
         <div style={{ borderTop: "1px solid #E4E4E7", paddingTop: 32, marginTop: 16 }}>
-          <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#857C78", fontSize: "0.875rem" }}>
+          <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#8A7B77", fontSize: "0.875rem" }}>
             See also our{" "}
-            <a href="/privacy" style={{ color: "#A63446", textDecoration: "underline" }}>Privacy Policy</a>.
+            <a href="/privacy" style={{ color: "#A82F4B", textDecoration: "underline" }}>Privacy Policy</a>.
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#A63446", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#A82F4B", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
           </p>
         </div>
       </div>

@@ -1,14 +1,25 @@
-// STAREX brand lockup — bold wordmark with the red star standing in as the "A",
-// recreated as a vector from the client's logo (red star + STAREX, red on white).
+// STAREX brand lockup — vector recreation of the client's logo:
+// bold STAREX wordmark with the brand star as the "A"; the star carries the
+// signature white inner-star cutout from the original mark.
 type LogoProps = {
   /** Letter color — white on dark surfaces, brand red on light */
   color?: string;
-  /** Star fill override; defaults to the brand gradient */
   fontSize?: string;
 };
 
 // Same gradient in every instance, so a shared id is safe (first definition wins).
 const gid = "starex-star-grad";
+
+// 5-point star points for a given center/radius pair
+function starPoints(cx: number, cy: number, outer: number, inner: number): string {
+  const pts: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = (Math.PI / 5) * i - Math.PI / 2;
+    pts.push(`${(cx + r * Math.cos(a)).toFixed(2)},${(cy + r * Math.sin(a)).toFixed(2)}`);
+  }
+  return pts.join(" ");
+}
 
 export default function Logo({ color = "#FFFFFF", fontSize = "1.2rem" }: LogoProps) {
   return (
@@ -29,19 +40,19 @@ export default function Logo({ color = "#FFFFFF", fontSize = "1.2rem" }: LogoPro
       ST
       <svg
         viewBox="0 0 24 24"
-        style={{ width: "1.06em", height: "1.06em", margin: "0 0.03em", transform: "translateY(-0.04em)" }}
+        style={{ width: "1.12em", height: "1.12em", margin: "0 0.03em", transform: "translateY(-0.04em)" }}
         aria-hidden="true"
       >
         <defs>
           <linearGradient id={gid} x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#E0525F" />
-            <stop offset="100%" stopColor="#C13A4E" />
+            <stop offset="0%" stopColor="#D95672" />
+            <stop offset="100%" stopColor="#B93353" />
           </linearGradient>
         </defs>
-        <polygon
-          points="12,1.2 15,8.5 22.8,8.9 16.7,13.8 18.9,21.4 12,17 5.1,21.4 7.3,13.8 1.2,8.9 9,8.5"
-          fill={`url(#${gid})`}
-        />
+        {/* outer star in brand red */}
+        <polygon points={starPoints(12, 12.6, 11.2, 4.5)} fill={`url(#${gid})`} />
+        {/* signature white inner-star cutout, as in the client's mark */}
+        <polygon points={starPoints(12, 12.6, 5.6, 2.25)} fill="#FFFFFF" />
       </svg>
       REX
     </span>

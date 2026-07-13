@@ -7,7 +7,7 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 
 export default function NotFound() {
   return (
-    <div style={{ background: "#1F1B1B", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+    <div style={{ background: "#241619", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
       {/* Ghost 404 */}
       <p aria-hidden="true" style={{
         position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)",

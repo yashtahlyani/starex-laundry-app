@@ -2,9 +2,11 @@
   <rect width="36" height="36" rx="9" fill="#FFFFFF"/>
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#CE4257"/>
-      <stop offset="100%" stop-color="#A63446"/>
+      <stop offset="0%" stop-color="#D95672"/>
+      <stop offset="100%" stop-color="#B93353"/>
     </linearGradient>
   </defs>
-  <polygon points="18,4 22.3,14.5 33.6,15 24.7,22.1 28,33 18,26.6 8,33 11.3,22.1 2.4,15 13.7,14.5" fill="url(#g)"/>
+  <!-- STAREX star: brand-red star with the signature white inner-star cutout -->
+  <polygon points="18,2.2 21.72,12.03 32.22,12.51 24.02,19.09 26.82,29.22 18,23.5 9.18,29.22 11.98,19.09 3.78,12.51 14.28,12.03" fill="url(#g)"/>
+  <polygon points="18,10.6 19.86,15.52 25.11,15.75 21.01,19.04 22.41,24.11 18,21.25 13.59,24.11 14.99,19.04 10.89,15.75 16.14,15.52" fill="#FFFFFF"/>
 </svg>

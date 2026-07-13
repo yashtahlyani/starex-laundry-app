@@ -6,7 +6,7 @@ import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa
 import { CATALOG, MEMBERSHIP, DETAILING } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
-const pastelColors = ["#F7E9E8", "#F5F1EE", "#F0EAE1", "#ECE7E3", "#F7E9E8", "#F5F1EE"];
+const pastelColors = ["#F7E3E6", "#F1EBDD", "#EFE8D8", "#E9E2D2", "#F7E3E6", "#F1EBDD"];
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
   return (
@@ -52,11 +52,11 @@ export default function PricingPage() {
   const tab = CATALOG.find((t) => t.id === activeTab)!;
 
   return (
-    <div style={{ background: "#FDFBFA" }}>
+    <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#241619", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             Simple Pricing
@@ -81,14 +81,14 @@ export default function PricingPage() {
       </section>
 
       {/* Pay-as-you-go */}
-      <section style={{ padding: "80px 0", background: "#FDFBFA" }}>
+      <section style={{ padding: "80px 0", background: "#FBF8F1" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#A63446" }}>Our Services</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#1F1B1B", marginBottom: 8 }}>
+            <span className="eyebrow" style={{ color: "#A82F4B" }}>Our Services</span>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#241619", marginBottom: 8 }}>
               Just need a <em className="display-accent" style={{ display: "inline" }}>pickup?</em>
             </h2>
-            <p style={{ color: "#6B6360", maxWidth: "50ch", fontFamily: "Kodchasan, sans-serif" }}>
+            <p style={{ color: "#6E5F5C", maxWidth: "50ch", fontFamily: "Kodchasan, sans-serif" }}>
               No subscription needed. Pay exactly for what you use — prices confirmed before we begin.
             </p>
           </AnimatedContent>
@@ -98,26 +98,26 @@ export default function PricingPage() {
               <AnimatedContent key={s.title} delay={i * 0.06}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "28px", position: "relative", height: "100%" }}>
                   {s.badge && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CE4257", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CB3E5E", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
                   <div style={{ width: 40, height: 40, background: "rgba(0,0,0,0.08)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                    <s.Icon size={18} color="#1F1B1B" />
+                    <s.Icon size={18} color="#241619" />
                   </div>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#1F1B1B", marginBottom: 8, letterSpacing: "-0.01em" }}>{s.title}</h3>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: s.price.startsWith("From") ? "1.375rem" : "1.75rem", letterSpacing: "-0.02em", color: "#1F1B1B", lineHeight: 1 }}>
-                    {s.price}<span style={{ fontSize: "0.875rem", fontWeight: 400, color: "#6B6360", fontFamily: "Kodchasan, sans-serif" }}>{s.unit}</span>
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#241619", marginBottom: 8, letterSpacing: "-0.01em" }}>{s.title}</h3>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: s.price.startsWith("From") ? "1.375rem" : "1.75rem", letterSpacing: "-0.02em", color: "#241619", lineHeight: 1 }}>
+                    {s.price}<span style={{ fontSize: "0.875rem", fontWeight: 400, color: "#6E5F5C", fontFamily: "Kodchasan, sans-serif" }}>{s.unit}</span>
                   </p>
-                  {s.min && <p style={{ color: "#857C78", fontSize: "0.8125rem", marginTop: 4, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
-                  <p style={{ color: "#4A4340", fontSize: "0.875rem", marginTop: 8, lineHeight: 1.6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
+                  {s.min && <p style={{ color: "#8A7B77", fontSize: "0.8125rem", marginTop: 4, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
+                  <p style={{ color: "#4C403D", fontSize: "0.875rem", marginTop: 8, lineHeight: 1.6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
                 </div>
               </AnimatedContent>
             ))}
           </div>
 
           <AnimatedContent>
-            <p style={{ color: "#857C78", fontSize: "0.875rem", marginTop: 24, textAlign: "center", fontFamily: "Kodchasan, sans-serif" }}>
+            <p style={{ color: "#8A7B77", fontSize: "0.875rem", marginTop: 24, textAlign: "center", fontFamily: "Kodchasan, sans-serif" }}>
               Free pickup and delivery on orders of 15 lbs or more. We weigh at pickup and confirm your price before washing.
             </p>
           </AnimatedContent>
@@ -125,7 +125,7 @@ export default function PricingPage() {
       </section>
 
       {/* Choose your plan */}
-      <section style={{ padding: "80px 0", background: "#1F1B1B" }}>
+      <section style={{ padding: "80px 0", background: "#241619" }}>
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
             <span className="eyebrow">Choose Your Plan</span>
@@ -150,7 +150,7 @@ export default function PricingPage() {
                 <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
                   {planPPP.features.map((f) => (
                     <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={15} color="#ECA9B1" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <CheckCircle size={15} color="#EBA3B4" style={{ flexShrink: 0, marginTop: 2 }} />
                       <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                     </li>
                   ))}
@@ -164,24 +164,24 @@ export default function PricingPage() {
             {/* Monthly Plan */}
             <AnimatedContent delay={0.08}>
               <div style={{ background: "#ffffff", borderRadius: 20, padding: "36px", position: "relative", overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.4)", height: "100%", display: "flex", flexDirection: "column" }}>
-                <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(180deg,#DE6E7A,#CE4257)", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "6px 16px", borderRadius: "0 0 10px 10px", letterSpacing: "0.08em", whiteSpace: "nowrap", fontFamily: "Kodchasan, sans-serif" }}>
+                <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(180deg,#DA6178,#CB3E5E)", color: "#ffffff", fontSize: "0.65rem", fontWeight: 700, padding: "6px 16px", borderRadius: "0 0 10px 10px", letterSpacing: "0.08em", whiteSpace: "nowrap", fontFamily: "Kodchasan, sans-serif" }}>
                   BEST VALUE
                 </div>
-                <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#857C78", marginBottom: 4, marginTop: 12 }}>{planMonthly.name}</p>
-                <p style={{ color: "#6B6360", fontSize: "0.875rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{planMonthly.tagline}</p>
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "3rem", letterSpacing: "-0.025em", color: "#1F1B1B", lineHeight: 1, marginBottom: 24 }}>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#8A7B77", marginBottom: 4, marginTop: 12 }}>{planMonthly.name}</p>
+                <p style={{ color: "#6E5F5C", fontSize: "0.875rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{planMonthly.tagline}</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "3rem", letterSpacing: "-0.025em", color: "#241619", lineHeight: 1, marginBottom: 24 }}>
                   {planMonthly.price}
-                  <span style={{ fontSize: "1rem", fontWeight: 400, color: "#6B6360", fontFamily: "Kodchasan, sans-serif" }}>{planMonthly.suffix}</span>
+                  <span style={{ fontSize: "1rem", fontWeight: 400, color: "#6E5F5C", fontFamily: "Kodchasan, sans-serif" }}>{planMonthly.suffix}</span>
                 </p>
                 <ul style={{ listStyle: "none", marginBottom: 28, display: "flex", flexDirection: "column", gap: 10, flexGrow: 1 }}>
                   {planMonthly.features.map((f) => (
                     <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={15} color="#CE4257" style={{ flexShrink: 0, marginTop: 2 }} />
-                      <span style={{ color: "#4A4340", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                      <CheckCircle size={15} color="#CB3E5E" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <span style={{ color: "#4C403D", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                     </li>
                   ))}
                 </ul>
-                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "linear-gradient(180deg,#DE6E7A,#CE4257)", color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "linear-gradient(180deg,#DA6178,#CB3E5E)", color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                   Get started
                 </a>
               </div>
@@ -191,15 +191,15 @@ export default function PricingPage() {
       </section>
 
       {/* Full item price list */}
-      <section style={{ padding: "80px 0", background: "#FDFBFA" }}>
+      <section style={{ padding: "80px 0", background: "#FBF8F1" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="eyebrow" style={{ color: "#A63446" }}>Item Pricing</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#1F1B1B", marginBottom: 8 }}>
+            <span className="eyebrow" style={{ color: "#A82F4B" }}>Item Pricing</span>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#241619", marginBottom: 8 }}>
               The full <em className="display-accent" style={{ display: "inline" }}>price list.</em>
             </h2>
-            <p style={{ color: "#6B6360", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
-              Prices marked with a <strong style={{ color: "#A63446" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
+            <p style={{ color: "#6E5F5C", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
+              Prices marked with a <strong style={{ color: "#A82F4B" }}>+</strong> are starting prices — the final price depends on size, fabric and condition, and is always confirmed with you first.
             </p>
           </AnimatedContent>
 
@@ -212,9 +212,9 @@ export default function PricingPage() {
                   onClick={() => setActiveTab(t.id)}
                   style={{
                     padding: "9px 20px", borderRadius: 999, cursor: "pointer",
-                    border: activeTab === t.id ? "1.5px solid #CE4257" : "1.5px solid rgba(31,27,27,0.12)",
-                    background: activeTab === t.id ? "#CE4257" : "#ffffff",
-                    color: activeTab === t.id ? "#ffffff" : "#4A4340",
+                    border: activeTab === t.id ? "1.5px solid #CB3E5E" : "1.5px solid rgba(36,22,26,0.12)",
+                    background: activeTab === t.id ? "#CB3E5E" : "#ffffff",
+                    color: activeTab === t.id ? "#ffffff" : "#4C403D",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.85rem",
                     transition: "all 0.2s ease",
                   }}
@@ -233,19 +233,19 @@ export default function PricingPage() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.35, ease }}
             >
-              <p style={{ textAlign: "center", color: "#857C78", fontSize: "0.9rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>{tab.blurb}</p>
+              <p style={{ textAlign: "center", color: "#8A7B77", fontSize: "0.9rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>{tab.blurb}</p>
               <div style={{ display: "grid", gridTemplateColumns: tab.sections.length > 1 ? "repeat(2,1fr)" : "minmax(0,560px)", gap: 20, justifyContent: "center" }} className="catalog-grid">
                 {tab.sections.map((section) => (
-                  <div key={section.title} style={{ background: "#ffffff", borderRadius: 20, padding: "26px 28px", border: "1px solid rgba(31,27,27,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)" }}>
-                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#A63446", marginBottom: 16 }}>
+                  <div key={section.title} style={{ background: "#ffffff", borderRadius: 20, padding: "26px 28px", border: "1px solid rgba(36,22,26,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)" }}>
+                    <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#A82F4B", marginBottom: 16 }}>
                       {section.title}
                     </h3>
                     <ul style={{ listStyle: "none", display: "flex", flexDirection: "column" }}>
                       {section.items.map((item, i) => (
-                        <li key={item.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, padding: "10px 0", borderBottom: i < section.items.length - 1 ? "1px solid rgba(31,27,27,0.06)" : "none" }}>
-                          <span style={{ color: "#4A4340", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{item.name}</span>
-                          <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#1F1B1B", whiteSpace: "nowrap" }}>
-                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#A63446" }}> +</span>}
+                        <li key={item.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, padding: "10px 0", borderBottom: i < section.items.length - 1 ? "1px solid rgba(36,22,26,0.06)" : "none" }}>
+                          <span style={{ color: "#4C403D", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{item.name}</span>
+                          <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#241619", whiteSpace: "nowrap" }}>
+                            ${item.price.toFixed(2)}{item.from && <span style={{ color: "#A82F4B" }}> +</span>}
                           </span>
                         </li>
                       ))}
@@ -259,11 +259,11 @@ export default function PricingPage() {
       </section>
 
       {/* Detailing highlight */}
-      <section style={{ padding: "0 0 80px", background: "#FDFBFA" }}>
+      <section style={{ padding: "0 0 80px", background: "#FBF8F1" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
-            <div style={{ background: "#1F1B1B", borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 85% 20%, rgba(206,66,87,0.18) 0%, transparent 65%)", pointerEvents: "none" }} />
+            <div style={{ background: "#241619", borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 85% 20%, rgba(203,62,94,0.18) 0%, transparent 65%)", pointerEvents: "none" }} />
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 32, alignItems: "center" }} className="detailing-grid">
                 <div>
                   <span className="eyebrow">New Service</span>
@@ -280,8 +280,8 @@ export default function PricingPage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(206,66,87,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Car size={20} color="#ECA9B1" />
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(203,62,94,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Car size={20} color="#EBA3B4" />
                     </div>
                     <div>
                       <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Car detailing / shampoo</p>
@@ -289,8 +289,8 @@ export default function PricingPage() {
                     </div>
                   </div>
                   <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(206,66,87,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Sofa size={20} color="#ECA9B1" />
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(203,62,94,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Sofa size={20} color="#EBA3B4" />
                     </div>
                     <div>
                       <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Sofa deep clean / shampoo</p>
@@ -309,15 +309,15 @@ export default function PricingPage() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: "0 0 80px", background: "#FDFBFA", textAlign: "center" }}>
+      <section style={{ padding: "0 0 80px", background: "#FBF8F1", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", color: "#1F1B1B", marginBottom: 12, letterSpacing: "-0.022em" }}>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", color: "#241619", marginBottom: 12, letterSpacing: "-0.022em" }}>
               Still have <em className="display-accent" style={{ display: "inline" }}>questions?</em>
             </h2>
-            <p style={{ color: "#6B6360", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>All prices confirmed before we start. No surprises, no bills that shock you.</p>
+            <p style={{ color: "#6E5F5C", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>All prices confirmed before we start. No surprises, no bills that shock you.</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="/faq" className="btn-ghost" style={{ textDecoration: "none", color: "#4A4340", borderColor: "rgba(31,27,27,0.2)" }}>Read FAQ</a>
+              <a href="/faq" className="btn-ghost" style={{ textDecoration: "none", color: "#4C403D", borderColor: "rgba(36,22,26,0.2)" }}>Read FAQ</a>
               <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
                 Book Your First Pickup <ArrowRight size={14} />
               </a>

@@ -7,19 +7,19 @@
 @layer base {
   :root {
     /* ── StareX design tokens — premium garnet & warm white ── */
-    --brand:        #CE4257;  /* primary — CTAs, accents, sparingly */
-    --brand-dark:   #A63446;  /* hover / pressed / accents on light */
-    --brand-soft:   #DE6E7A;  /* gradient light end */
-    --brand-rose:   #ECA9B1;  /* accent text/icons on dark surfaces */
+    --brand:        #CB3E5E;  /* primary — CTAs, accents, sparingly */
+    --brand-dark:   #A82F4B;  /* hover / pressed / accents on light */
+    --brand-soft:   #DA6178;  /* gradient light end */
+    --brand-rose:   #EBA3B4;  /* accent text/icons on dark surfaces */
     --bg:           #FFFFFF;
-    --bg-warm:      #FDFBFA;  /* soft warm white page bg */
-    --surface:      #F5F1EE;  /* warm ivory */
-    --surface-2:    #ECE7E3;
-    --blush:        #F7E9E8;  /* soft blush section bg */
-    --ink:          #1F1B1B;  /* charcoal text / dark sections */
-    --ink-2:        #6B6360;  /* secondary text */
-    --dark-base:    #1F1B1B;
-    --dark-card:    #2A2424;
+    --bg-warm:      #FBF8F1;  /* soft warm white page bg */
+    --surface:      #F1EBDD;  /* warm ivory */
+    --surface-2:    #E9E2D2;
+    --blush:        #F7E3E6;  /* soft blush section bg */
+    --ink:          #241619;  /* charcoal text / dark sections */
+    --ink-2:        #6E5F5C;  /* secondary text */
+    --dark-base:    #241619;
+    --dark-card:    #322225;
     /* legacy aliases (older classes referenced these) */
     --mint-light:   var(--brand-soft);
     --mint-mid:     var(--brand);
@@ -29,8 +29,8 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #1F1B1B;
-    color: #1F1B1B;
+    background-color: #241619;
+    color: #241619;
   }
 
   body {
@@ -38,7 +38,7 @@
     font-size: 1rem;
     line-height: 1.7;
     color: rgba(255,255,255,0.75);
-    background-color: #1F1B1B;
+    background-color: #241619;
     overflow-x: hidden;
   }
 
@@ -48,7 +48,7 @@
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #332C2C; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb { background: #3B2A2E; border-radius: 2px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--brand); }
 
   *:focus-visible {
@@ -89,14 +89,14 @@
   /* ── White card (light) ── */
   .card {
     background: #FFFFFF;
-    border: 1px solid rgba(63,37,44,0.08);
+    border: 1px solid rgba(64,26,38,0.08);
     border-radius: 20px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
-    color: #1F1B1B;
+    color: #241619;
   }
-  .card h1, .card h2, .card h3, .card h4, .card h5, .card h6 { color: #1F1B1B; }
-  .card p, .card span { color: #6B6360; }
+  .card h1, .card h2, .card h3, .card h4, .card h5, .card h6 { color: #241619; }
+  .card p, .card span { color: #6E5F5C; }
   .card:hover {
     box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     transform: translateY(-3px);
@@ -104,16 +104,16 @@
 
   /* ── Dark glass card ── */
   .card-dark {
-    background: #2A2424;
+    background: #322225;
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 20px;
   }
 
   /* ── Pastel cards ── */
-  .card-pastel-blue     { background: #F7E9E8; border-radius: 20px; }
-  .card-pastel-mint     { background: #F5F1EE; border-radius: 20px; }
-  .card-pastel-peach    { background: #F0EAE1; border-radius: 20px; }
-  .card-pastel-lavender { background: #ECE7E3; border-radius: 20px; }
+  .card-pastel-blue     { background: #F7E3E6; border-radius: 20px; }
+  .card-pastel-mint     { background: #F1EBDD; border-radius: 20px; }
+  .card-pastel-peach    { background: #EFE8D8; border-radius: 20px; }
+  .card-pastel-lavender { background: #E9E2D2; border-radius: 20px; }
 
   /* ── Glass overlay ── */
   .glass {
@@ -144,7 +144,7 @@
   .btn-primary:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(206,66,87,0.35);
+    box-shadow: 0 6px 24px rgba(203,62,94,0.35);
   }
 
   /* ── Ghost button on dark ── */
@@ -193,7 +193,7 @@
   .btn-white:hover {
     opacity: 0.88;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(206,66,87,0.35);
+    box-shadow: 0 6px 24px rgba(203,62,94,0.35);
   }
 
   /* ── Eyebrow label ── */
@@ -253,7 +253,7 @@
   .input-field:focus {
     outline: none;
     border-color: var(--brand-soft);
-    box-shadow: 0 0 0 3px rgba(222,110,122,0.18);
+    box-shadow: 0 0 0 3px rgba(218,97,120,0.18);
   }
 
   /* ── Badge ── */
@@ -290,7 +290,7 @@
   .btn-sky:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(206,66,87,0.35);
+    box-shadow: 0 6px 24px rgba(203,62,94,0.35);
   }
 
   /* ── btn-ghost-dark ── */
@@ -315,7 +315,7 @@
 
   /* ── Dark stat card ── */
   .card-stat {
-    background: #332C2C;
+    background: #3B2A2E;
     border-radius: 16px;
     padding: 28px 24px;
   }
@@ -326,12 +326,12 @@
     align-items: center;
     padding: 4px 12px;
     border-radius: 999px;
-    border: 1px solid rgba(31,27,27,0.18);
+    border: 1px solid rgba(36,22,26,0.18);
     font-family: 'Kodchasan', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(31,27,27,0.6);
-    background: rgba(31,27,27,0.05);
+    color: rgba(36,22,26,0.6);
+    background: rgba(36,22,26,0.05);
   }
 
   /* section title/subtitle aliases used by existing pages */

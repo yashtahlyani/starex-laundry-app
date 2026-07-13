@@ -348,12 +348,12 @@ export default function BookingFlow() {
                   }`}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  animate={selected ? { boxShadow: "0 0 0 3px rgba(206,66,87,0.15)" } : { boxShadow: "0 0 0 0px rgba(0,0,0,0)" }}
+                  animate={selected ? { boxShadow: "0 0 0 3px rgba(203,62,94,0.15)" } : { boxShadow: "0 0 0 0px rgba(0,0,0,0)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 >
                   <motion.div
                     className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${selected ? "bg-brand" : SERVICE_BG[s.id]}`}
-                    animate={{ backgroundColor: selected ? "#CE4257" : undefined }}
+                    animate={{ backgroundColor: selected ? "#CB3E5E" : undefined }}
                     transition={{ duration: 0.2 }}
                   >
                     <Icon size={22} className={selected ? "text-white" : SERVICE_ICON_COLOR[s.id]} />

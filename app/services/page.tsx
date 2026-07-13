@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Shirt, Sparkles, Zap, Package, Home, Car, CheckCircle, ArrowRight } from "lucide-react";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
-const pastelColors = ["#F7E9E8", "#F5F1EE", "#F0EAE1", "#ECE7E3", "#F7E9E8", "#F5F1EE"];
+const pastelColors = ["#F7E3E6", "#F1EBDD", "#EFE8D8", "#E9E2D2", "#F7E3E6", "#F1EBDD"];
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
   return (
@@ -25,11 +25,11 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div style={{ background: "#FDFBFA" }}>
+    <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, textAlign: "center", background: "#241619", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>
             What We Offer
@@ -59,24 +59,24 @@ export default function ServicesPage() {
               <AnimatedContent key={s.title} delay={i * 0.07}>
                 <div style={{ background: pastelColors[i], borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
                   {s.featured && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CE4257", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#CB3E5E", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
                   <div style={{ fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "rgba(9,9,11,0.1)", letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 12 }}>{s.num}</div>
-                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.2rem", color: "#1F1B1B", marginBottom: 4, letterSpacing: "-0.01em" }}>{s.title}</h3>
-                  <p style={{ color: "#6B6360", fontSize: "0.9rem", marginBottom: 16, fontStyle: "italic", fontFamily: "Kodchasan, sans-serif" }}>{s.tagline}</p>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#1F1B1B", letterSpacing: "-0.02em", marginBottom: s.min ? 2 : 16 }}>{s.price}</p>
-                  {s.min && <p style={{ color: "#857C78", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
+                  <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.2rem", color: "#241619", marginBottom: 4, letterSpacing: "-0.01em" }}>{s.title}</h3>
+                  <p style={{ color: "#6E5F5C", fontSize: "0.9rem", marginBottom: 16, fontStyle: "italic", fontFamily: "Kodchasan, sans-serif" }}>{s.tagline}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#241619", letterSpacing: "-0.02em", marginBottom: s.min ? 2 : 16 }}>{s.price}</p>
+                  {s.min && <p style={{ color: "#8A7B77", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>{s.min}</p>}
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24, flex: 1 }}>
                     {s.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        <CheckCircle size={14} color="#A63446" style={{ flexShrink: 0, marginTop: 3 }} />
-                        <span style={{ color: "#4A4340", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
+                        <CheckCircle size={14} color="#A82F4B" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <span style={{ color: "#4C403D", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#3F252C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#431E2C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>
@@ -87,7 +87,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA strip */}
-      <section style={{ background: "#1F1B1B", padding: "64px 0", textAlign: "center" }}>
+      <section style={{ background: "#241619", padding: "64px 0", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#ffffff", marginBottom: 16, letterSpacing: "-0.02em" }}>

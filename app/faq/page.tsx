@@ -66,9 +66,9 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "20px 0", background: "none", border: "none", cursor: "pointer", textAlign: "left", gap: 16 }}
       >
-        <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "1rem", color: "#1F1B1B", letterSpacing: "-0.01em" }}>{q}</span>
+        <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "1rem", color: "#241619", letterSpacing: "-0.01em" }}>{q}</span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.25 }} style={{ flexShrink: 0 }}>
-          <ChevronDown size={18} color="#6B6360" />
+          <ChevronDown size={18} color="#6E5F5C" />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>
@@ -80,7 +80,7 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease }}
           >
-            <p style={{ paddingBottom: 20, color: "#6B6360", fontSize: "0.9375rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}>{a}</p>
+            <p style={{ paddingBottom: 20, color: "#6E5F5C", fontSize: "0.9375rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}>{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -97,11 +97,11 @@ export default function FAQ() {
     : (categories.find(c => c.name === activeCategory)?.faqs ?? []);
 
   return (
-    <div style={{ background: "#FDFBFA" }}>
+    <div style={{ background: "#FBF8F1" }}>
 
       {/* Hero */}
-      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#1F1B1B", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #3F252C 0%, #1F1B1B 70%)", pointerEvents: "none" }} />
+      <section style={{ paddingTop: 120, paddingBottom: 72, background: "#241619", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, #431E2C 0%, #241619 70%)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", textAlign: "center", position: "relative" }}>
           <motion.span className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>FAQ</motion.span>
           <motion.h1
@@ -149,9 +149,9 @@ export default function FAQ() {
                   onClick={() => setActiveCategory(c.name)}
                   style={{
                     display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: 10,
-                    background: activeCategory === c.name ? "rgba(206,66,87,0.1)" : "none",
+                    background: activeCategory === c.name ? "rgba(203,62,94,0.1)" : "none",
                     border: "none", cursor: "pointer", marginBottom: 4,
-                    color: activeCategory === c.name ? "#3F252C" : "#6B6360",
+                    color: activeCategory === c.name ? "#431E2C" : "#6E5F5C",
                     fontFamily: "Poppins, sans-serif", fontWeight: activeCategory === c.name ? 600 : 400,
                     fontSize: "0.9rem",
                   }}
@@ -167,15 +167,15 @@ export default function FAQ() {
 
           <div style={search ? { gridColumn: "1 / -1" } : {}}>
             {search && (
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6B6360", marginBottom: 24 }}>
+              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6E5F5C", marginBottom: 24 }}>
                 {filtered.length} result{filtered.length !== 1 ? "s" : ""} for &quot;{search}&quot;
               </p>
             )}
             <div style={{ background: "#ffffff", borderRadius: 20, padding: "8px 32px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
               {filtered.length === 0 ? (
                 <div style={{ padding: "48px 0", textAlign: "center" }}>
-                  <p style={{ color: "#6B6360", fontFamily: "Kodchasan, sans-serif" }}>No results found. Try a different search term.</p>
-                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#3F252C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  <p style={{ color: "#6E5F5C", fontFamily: "Kodchasan, sans-serif" }}>No results found. Try a different search term.</p>
+                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#431E2C", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                     Contact us <ArrowRight size={14} />
                   </a>
                 </div>
@@ -190,10 +190,10 @@ export default function FAQ() {
       {/* Still need help */}
       <section style={{ padding: "64px 0 96px", textAlign: "center" }}>
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 24px" }}>
-          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2rem)", color: "#1F1B1B", marginBottom: 12, letterSpacing: "-0.022em" }}>
+          <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2rem)", color: "#241619", marginBottom: 12, letterSpacing: "-0.022em" }}>
             Still need <em className="display-accent" style={{ display: "inline" }}>help?</em>
           </h2>
-          <p style={{ color: "#6B6360", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Our team responds within 1 business hour, 7 days a week.</p>
+          <p style={{ color: "#6E5F5C", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Our team responds within 1 business hour, 7 days a week.</p>
           <a href="/contact" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px" }}>
             Contact Us <ArrowRight size={15} />
           </a>

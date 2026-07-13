@@ -87,8 +87,8 @@ export default function Navbar() {
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
           height: scrolled ? "64px" : "72px",
-          background: (scrolled || needsDark) ? "rgba(31,27,27,0.97)" : "transparent",
-          backdropFilter: (scrolled || needsDark) ? "blur(14px)" : "none",
+          background: (scrolled || needsDark) ? "rgba(36,22,26,0.97)" : "transparent",
+          backdropFilter: (scrolled || needsDark) ? "blur(10px)" : "none",
           borderBottom: (scrolled || needsDark) ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
           transition: "height 0.3s ease, background 0.3s ease, border-color 0.3s ease",
         }}
@@ -152,7 +152,7 @@ export default function Navbar() {
           <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
             {isOwner ? (
               <>
-                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#ECA9B1", textDecoration: "none", border: "1px solid rgba(236,169,177,0.35)", borderRadius: 8 }}>
+                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#EBA3B4", textDecoration: "none", border: "1px solid rgba(235,163,180,0.35)", borderRadius: 8 }}>
                   <Settings size={13} /> Console
                 </a>
                 <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "rgba(255,255,255,0.5)", background: "none", border: "none", cursor: "pointer" }}>
@@ -162,7 +162,7 @@ export default function Navbar() {
             ) : user ? (
               <div ref={acctRef} style={{ position: "relative" }}>
                 <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#fff", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 999, cursor: "pointer" }}>
-                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#DE6E7A,#CE4257)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#DA6178,#CB3E5E)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                     {initials}
                   </span>
                   {firstName}
@@ -170,7 +170,7 @@ export default function Navbar() {
                 <AnimatePresence>
                   {acctOpen && (
                     <motion.div initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: 0.97 }} transition={{ duration: 0.15 }}
-                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#2A2424", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
+                      style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 210, background: "#322225", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: 6, boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
                       {[
                         { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
                         { href: "/account", icon: Settings, label: "Account settings" },
@@ -179,7 +179,7 @@ export default function Navbar() {
                           onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"}
                           onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
                         >
-                          <item.icon size={15} color="#ECA9B1" /> {item.label}
+                          <item.icon size={15} color="#EBA3B4" /> {item.label}
                         </a>
                       ))}
                       <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "4px 0" }} />
@@ -223,7 +223,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            style={{ position: "fixed", inset: 0, zIndex: 490, background: "#1F1B1B", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
+            style={{ position: "fixed", inset: 0, zIndex: 490, background: "#241619", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
           >
             <nav style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {links.map((link, i) => (

@@ -42,7 +42,7 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <footer style={{ background: "#1F1B1B" }}>
+    <footer style={{ background: "#241619" }}>
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "64px 24px 48px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "48px" }}>
@@ -56,7 +56,7 @@ export default function Footer() {
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
-                <p style={{ color: "#ECA9B1", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+                <p style={{ color: "#EBA3B4", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.12)", paddingBottom: "10px", gap: 8 }}>
                   <input
@@ -67,7 +67,7 @@ export default function Footer() {
                   />
                   <button
                     onClick={() => { if (email) setSubscribed(true); }}
-                    style={{ background: "none", border: "none", color: "#ECA9B1", cursor: "pointer", padding: "4px", display: "flex" }}
+                    style={{ background: "none", border: "none", color: "#EBA3B4", cursor: "pointer", padding: "4px", display: "flex" }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -81,7 +81,7 @@ export default function Footer() {
               <span style={colHead}>Pages</span>
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#ECA9B1"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#EBA3B4"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)"}
                 >{p.label}</a>
               ))}
@@ -111,7 +111,7 @@ export default function Footer() {
                   <motion.a
                     key={i} href="#"
                     style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none", display: "flex" }}
-                    whileHover={{ color: "#ECA9B1", scale: 1.15 } as any}
+                    whileHover={{ color: "#EBA3B4", scale: 1.15 } as any}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     {icon}
