@@ -6,7 +6,8 @@ import ContactUpdater from "@/components/ContactUpdater";
 import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersClient";
 import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
-import { Bell } from "lucide-react";
+import { getItemTracking } from "@/lib/itemTracking";
+import { Bell, AlertTriangle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -196,9 +197,18 @@ export default async function AdminDashboardPage({
                         </tr>
                       </thead>
                       <tbody>
-                        {pastOrders!.map((o: any) => (
+                        {pastOrders!.map((o: any) => {
+                          const { missing } = getItemTracking(o.status_history);
+                          return (
                           <tr key={o.id} style={{ borderBottom: "1px solid #F4F4F5", opacity: 0.8 }}>
-                            <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>{o.code}</td>
+                            <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>
+                              {o.code}
+                              {missing ? (
+                                <span title={`${missing} item${missing !== 1 ? "s" : ""} missing`} style={{ display: "inline-flex", alignItems: "center", marginLeft: 6 }}>
+                                  <AlertTriangle size={11} color="#DC2626" />
+                                </span>
+                              ) : null}
+                            </td>
                             <td className="px-4 py-3 text-xs" style={{ color: "#6B6B6B" }}>{o.customer_name ?? "—"}</td>
                             <td className="px-4 py-3 text-xs" style={{ color: "#8C8C8C" }}>{o.service_title ?? o.service}</td>
                             <td className="px-4 py-3 text-xs" style={{ color: "#8C8C8C" }}>{o.date}</td>
@@ -214,7 +224,8 @@ export default async function AdminDashboardPage({
                               }
                             </td>
                           </tr>
-                        ))}
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>

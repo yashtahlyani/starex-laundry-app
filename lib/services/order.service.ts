@@ -29,7 +29,12 @@ export class OrderService {
     this.customers = new CustomerRepository(db);
   }
 
-  async updateStatus(orderCode: string, newStatus: OrderStatus, note: string | null) {
+  async updateStatus(
+    orderCode: string,
+    newStatus: OrderStatus,
+    note: string | null,
+    extra?: { itemCount?: number; weight?: string }
+  ) {
     const order = await this.orders.findByCode(orderCode);
     if (!order) throw Object.assign(new Error("Order not found"), { statusCode: 404 });
 
@@ -43,7 +48,7 @@ export class OrderService {
       );
     }
 
-    await this.orders.updateStatus(order.id, newStatus, note ?? undefined);
+    await this.orders.updateStatus(order.id, newStatus, note ?? undefined, extra);
     return {
       unchanged: false as const,
       orderCode,

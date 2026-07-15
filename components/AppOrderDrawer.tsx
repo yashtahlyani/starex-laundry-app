@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Package, MapPin, CalendarClock, ArrowRight } from "lucide-react";
+import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle } from "lucide-react";
 import { StatusBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
+import { getItemTracking } from "@/lib/itemTracking";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -34,6 +35,7 @@ export type DrawerOrder = {
   customer_name?: string;
   email?: string;
   phone?: string;
+  status_history?: { status: string; itemCount?: number }[];
 };
 
 function Row({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: string | null }) {
@@ -62,21 +64,52 @@ export default function AppOrderDrawer({
 }) {
   const [advancing, setAdvancing] = useState(false);
   const [localStatus, setLocalStatus] = useState<string | null>(null);
+  const [localTracking, setLocalTracking] = useState<{ received?: number; returned?: number } | null>(null);
+  const [pendingCount, setPendingCount] = useState<string>("");
+  const [pendingWeight, setPendingWeight] = useState<string>("");
+  const [countError, setCountError] = useState<string | null>(null);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
   const nextStatusId = NEXT_STATUS[currentStatus] ?? null;
   const nextLabel = nextStatusId ? STATUS_META[nextStatusId]?.label : null;
+  const needsCount = nextStatusId === "picked_up" || nextStatusId === "delivered";
+
+  const tracking = order ? getItemTracking(order.status_history as any) : { received: null, returned: null, missing: null };
+  const received = localTracking?.received ?? tracking.received;
+  const returned = localTracking?.returned ?? tracking.returned;
+  const missing = received != null && returned != null ? received - returned : null;
 
   async function handleAdvance() {
     if (!order || !nextStatusId) return;
+
+    let itemCount: number | undefined;
+    if (needsCount) {
+      if (!pendingCount.trim()) { setCountError("Enter an item count"); return; }
+      itemCount = parseInt(pendingCount, 10);
+      if (isNaN(itemCount) || itemCount < 0) { setCountError("Enter a valid item count"); return; }
+    }
+
     setAdvancing(true);
+    setCountError(null);
     try {
       const res = await fetch(`/api/orders/${order.code}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatusId, note: null }),
+        body: JSON.stringify({
+          status: nextStatusId, note: null,
+          itemCount,
+          weight: nextStatusId === "picked_up" ? (pendingWeight.trim() || undefined) : undefined,
+        }),
       });
-      if (res.ok) setLocalStatus(nextStatusId);
+      if (res.ok) {
+        setLocalStatus(nextStatusId);
+        if (itemCount != null) {
+          setLocalTracking((prev) => nextStatusId === "picked_up"
+            ? { ...prev, received: itemCount }
+            : { ...prev, returned: itemCount });
+        }
+        setPendingCount(""); setPendingWeight("");
+      }
     } finally {
       setAdvancing(false);
     }
@@ -131,10 +164,47 @@ export default function AppOrderDrawer({
                 {order.notes && <Row icon={Package} label="Notes" value={order.notes} />}
                 {admin && order.customer_name && <Row icon={Package} label="Customer" value={`${order.customer_name} · ${order.email} · ${order.phone}`} />}
               </div>
+
+              {admin && (received != null || returned != null) && (
+                <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 12, background: missing ? "#FEF2F2" : "#F4F4F5", border: missing ? "1px solid #FCA5A5" : "none" }}>
+                  {missing ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                      <AlertTriangle size={15} color="#DC2626" />
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#DC2626" }}>
+                        {missing} item{missing !== 1 ? "s" : ""} missing
+                      </p>
+                    </div>
+                  ) : null}
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B" }}>
+                    Received: <strong style={{ color: "#161616" }}>{received ?? "—"}</strong>
+                    {" · "}Returned: <strong style={{ color: "#161616" }}>{returned ?? "—"}</strong>
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Footer */}
             <div style={{ padding: "20px 28px", borderTop: "1px solid #F4F4F5", display: "flex", flexDirection: "column", gap: 10 }}>
+              {admin && nextLabel && needsCount && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
+                  <input
+                    type="number" min={0} inputMode="numeric"
+                    placeholder={nextStatusId === "picked_up" ? "Items received from customer" : "Items returned to customer"}
+                    value={pendingCount}
+                    onChange={e => setPendingCount(e.target.value)}
+                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
+                  />
+                  {nextStatusId === "picked_up" && (
+                    <input
+                      type="text" placeholder="Weight (optional, e.g. 8.2 lbs)"
+                      value={pendingWeight}
+                      onChange={e => setPendingWeight(e.target.value)}
+                      style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
+                    />
+                  )}
+                  {countError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{countError}</p>}
+                </div>
+              )}
               {admin && nextLabel && (
                 <button
                   onClick={handleAdvance} disabled={advancing}

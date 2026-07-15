@@ -10,7 +10,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { code: stri
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: { status: string; note?: string };
+  let body: { status: string; note?: string; itemCount?: number; weight?: string };
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
@@ -18,10 +18,16 @@ export async function PATCH(req: NextRequest, { params }: { params: { code: stri
   if (!VALID_STATUSES.includes(newStatus)) {
     return NextResponse.json({ error: `Invalid status. Must be one of: ${VALID_STATUSES.join(", ")}` }, { status: 400 });
   }
+  if (body.itemCount != null && (!Number.isInteger(body.itemCount) || body.itemCount < 0)) {
+    return NextResponse.json({ error: "itemCount must be a non-negative integer" }, { status: 400 });
+  }
 
   try {
     const service = new OrderService(getSupabaseAdmin());
-    const result = await service.updateStatus(params.code.trim().toUpperCase(), newStatus, body.note ?? null);
+    const result = await service.updateStatus(params.code.trim().toUpperCase(), newStatus, body.note ?? null, {
+      itemCount: body.itemCount,
+      weight: body.weight,
+    });
     if (result.unchanged) return NextResponse.json({ message: "Status unchanged" });
 
     enqueueStatusUpdate({

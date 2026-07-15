@@ -30,6 +30,11 @@ export interface StatusEvent {
   label: string;
   time: string;
   note?: string;
+  // Recorded on the "picked_up" event = items received from the customer;
+  // recorded on the "delivered" event = items actually returned. Comparing
+  // the two (see lib/itemTracking.ts) is how staff catch a lost item before
+  // the customer has to notice it themselves.
+  itemCount?: number;
 }
 
 export type NewOrder = Omit<Order, "id" | "created_at" | "updated_at">;
@@ -136,7 +141,12 @@ export class OrderRepository {
     return data as Order;
   }
 
-  async updateStatus(id: string, status: string, note?: string): Promise<void> {
+  async updateStatus(
+    id: string,
+    status: string,
+    note?: string,
+    extra?: { itemCount?: number; weight?: string }
+  ): Promise<void> {
     // Fetch current status_history
     const { data: current } = await this.db.from("orders").select("status_history").eq("id", id).single();
     const history: StatusEvent[] = current?.status_history ?? [];
@@ -145,11 +155,14 @@ export class OrderRepository {
       label: STATUS_LABELS[status] ?? status,
       time: new Date().toISOString(),
       ...(note ? { note } : {}),
+      ...(extra?.itemCount != null ? { itemCount: extra.itemCount } : {}),
     };
-    const { error } = await this.db
-      .from("orders")
-      .update({ status, status_history: [...history, newEvent], updated_at: new Date().toISOString(), is_new: false })
-      .eq("id", id);
+    const updatePayload: Record<string, unknown> = {
+      status, status_history: [...history, newEvent], updated_at: new Date().toISOString(), is_new: false,
+    };
+    // Weight is recorded on pickup, when staff actually has the bag on the scale.
+    if (extra?.weight) updatePayload.weight = extra.weight;
+    const { error } = await this.db.from("orders").update(updatePayload).eq("id", id);
     if (error) throw error;
   }
 
