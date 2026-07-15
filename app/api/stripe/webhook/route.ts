@@ -35,13 +35,18 @@ export async function POST(req: NextRequest) {
         event.type === "payment_intent.succeeded"
           ? "Payment pre-authorized"
           : `Payment failed: ${intent.last_payment_error?.message ?? "unknown reason"}`;
+      // Record the payment outcome as a status_history event without changing
+      // the order's actual status — a failed pre-auth shouldn't silently move
+      // an order to a different fulfillment state, that's a human decision.
       const supabaseAdmin = getSupabaseAdmin();
-      await supabaseAdmin.from("order_status_events").insert({
-        order_id: orderId,
-        status: "scheduled",
-        note,
-        created_by: "stripe_webhook",
-      });
+      const { data: order } = await supabaseAdmin.from("orders").select("status, status_history").eq("id", orderId).single();
+      if (order) {
+        const history = order.status_history ?? [];
+        await supabaseAdmin
+          .from("orders")
+          .update({ status_history: [...history, { status: order.status, note, time: new Date().toISOString() }] })
+          .eq("id", orderId);
+      }
     }
   }
 
