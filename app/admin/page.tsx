@@ -82,7 +82,7 @@ export default async function AdminDashboardPage({
           .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, status_history, created_at")
           .in("status", ["delivered", "cancelled"])
           .order("created_at", { ascending: false })
-          .limit(40)
+          .limit(20)
       : Promise.resolve({ data: null }),
     tab === "contacts"
       ? db.from("contact_submissions").select("*").order("created_at", { ascending: false }).limit(100)
@@ -235,14 +235,14 @@ export default async function AdminDashboardPage({
 
             {(pastOrders?.length ?? 0) > 0 && !q && (
               <>
-                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#A1A1AA", marginBottom: 12 }}>Past Orders</p>
-                <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, overflow: "hidden" }}>
+                <p className="font-heading font-bold text-[0.85rem] text-[#A1A1AA] mb-3">Past Orders</p>
+                <div className="bg-white border border-[#EAEAEA] rounded-2xl overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
-                      <thead style={{ background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }}>
+                      <thead className="bg-[#FAFAFA] border-b border-[#F0F0F0]">
                         <tr>
                           {["Order", "Customer", "Service", "Date", "Status", "Update"].map(h => (
-                            <th key={h} className="text-left px-4 py-3" style={{ color: "#A1A1AA", fontFamily: "Poppins, sans-serif", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>{h}</th>
+                            <th key={h} className="text-left px-4 py-3 font-heading font-semibold text-[0.7rem] tracking-wide uppercase text-[#A1A1AA]">{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -250,18 +250,18 @@ export default async function AdminDashboardPage({
                         {pastOrders!.map((o: any) => {
                           const { missing } = getItemTracking(o.status_history);
                           return (
-                          <tr key={o.id} style={{ borderBottom: "1px solid #F4F4F5", opacity: 0.8 }}>
-                            <td className="px-4 py-3 font-mono text-xs" style={{ color: "#A1A1AA" }}>
+                          <tr key={o.id} className="border-b border-[#F4F4F5] opacity-80">
+                            <td className="px-4 py-3 font-mono text-xs text-[#A1A1AA]">
                               {o.code}
                               {missing ? (
-                                <span title={`${missing} item${missing !== 1 ? "s" : ""} missing`} style={{ display: "inline-flex", alignItems: "center", marginLeft: 6 }}>
+                                <span title={`${missing} item${missing !== 1 ? "s" : ""} missing`} className="inline-flex items-center ml-1.5">
                                   <AlertTriangle size={11} color="#DC2626" />
                                 </span>
                               ) : null}
                             </td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#6B6B6B" }}>{o.customer_name ?? "—"}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#8C8C8C" }}>{o.service_title ?? o.service}</td>
-                            <td className="px-4 py-3 text-xs" style={{ color: "#8C8C8C" }}>{o.date}</td>
+                            <td className="px-4 py-3 text-xs text-[#6B6B6B]">{o.customer_name ?? "—"}</td>
+                            <td className="px-4 py-3 text-xs text-[#8C8C8C]">{o.service_title ?? o.service}</td>
+                            <td className="px-4 py-3 text-xs text-[#8C8C8C]">{o.date}</td>
                             <td className="px-4 py-3">
                               <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[o.status] ?? "bg-gray-100 text-gray-600"}`}>
                                 {STATUS_LABELS[o.status] ?? o.status}
@@ -270,7 +270,7 @@ export default async function AdminDashboardPage({
                             <td className="px-4 py-3">
                               {!["delivered","cancelled"].includes(o.status)
                                 ? <StatusUpdater orderCode={o.code} currentStatus={o.status} />
-                                : <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#A1A1AA" }}>Final</span>
+                                : <span className="font-body text-xs text-[#A1A1AA]">Final</span>
                               }
                             </td>
                           </tr>
