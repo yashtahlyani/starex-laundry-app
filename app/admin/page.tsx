@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { requireAdmin } from "@/lib/adminAuth";
 import StatusUpdater from "@/components/StatusUpdater";
@@ -7,7 +8,7 @@ import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersC
 import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
 import { getItemTracking } from "@/lib/itemTracking";
-import { Bell, AlertTriangle } from "lucide-react";
+import { Bell, AlertTriangle, X } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -43,18 +44,25 @@ function fmtDate(d: string) {
 export default async function AdminDashboardPage({
   searchParams,
 }: {
-  searchParams: { tab?: string; q?: string };
+  searchParams: { tab?: string; q?: string; filter?: string };
 }) {
   await requireAdmin();
-  const db  = getSupabaseAdmin();
-  const tab = searchParams.tab ?? "orders";
-  const q   = searchParams.q?.toLowerCase() ?? "";
+  const db     = getSupabaseAdmin();
+  const tab    = searchParams.tab ?? "orders";
+  const q      = searchParams.q?.toLowerCase() ?? "";
+  const filter = searchParams.filter ?? "";
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery"];
 
+  // activeOrders drives the header bell + the Incoming section, both of which
+  // render above the tabs on every tab — so it's always needed. pastOrders
+  // and the full contacts payload are only needed on their own tab: fetching
+  // them regardless of which tab is open was the real cause of the console
+  // feeling slow when switching to Messages (a 100-row contacts fetch with
+  // full message text on every navigation, even Orders/Analytics).
   const [
     { data: activeOrders },
     { data: pastOrders },
@@ -69,15 +77,16 @@ export default async function AdminDashboardPage({
       .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, notes, weight, price, rating, status_history, created_at")
       .in("status", ACTIVE_STATUSES)
       .order("created_at", { ascending: false }),
-    db.from("orders")
-      .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, created_at")
-      .in("status", ["delivered", "cancelled"])
-      .order("created_at", { ascending: false })
-      .limit(40),
-    db.from("contact_submissions")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(100),
+    tab === "orders"
+      ? db.from("orders")
+          .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, status_history, created_at")
+          .in("status", ["delivered", "cancelled"])
+          .order("created_at", { ascending: false })
+          .limit(40)
+      : Promise.resolve({ data: null }),
+    tab === "contacts"
+      ? db.from("contact_submissions").select("*").order("created_at", { ascending: false }).limit(100)
+      : Promise.resolve({ data: null }),
     db.from("orders").select("*", { count: "exact", head: true }),
     db.from("orders").select("*", { count: "exact", head: true }).in("status", ACTIVE_STATUSES),
     db.from("contact_submissions").select("*", { count: "exact", head: true }).eq("status", "new"),
@@ -87,23 +96,35 @@ export default async function AdminDashboardPage({
 
   const newOrders    = (activeOrders ?? []).filter((o: any) => o.status === "placed");
   const inProgressOrders = (activeOrders ?? []).filter((o: any) => o.status !== "placed");
+  const todaysActiveOrders = (activeOrders ?? []).filter((o: any) => new Date(o.created_at) >= today);
+
+  // KPI cards double as filters onto the Active Orders list below — click one
+  // to see just that slice, click it again (or "Total orders") to clear it.
+  const FILTERS: Record<string, any[]> = {
+    new:         newOrders,
+    in_progress: inProgressOrders,
+    today:       todaysActiveOrders,
+  };
+  const filterBase = FILTERS[filter] ?? (activeOrders ?? []);
 
   const filteredActive = q
-    ? (activeOrders ?? []).filter((o: any) =>
+    ? filterBase.filter((o: any) =>
         o.code?.toLowerCase().includes(q) ||
         o.customer_name?.toLowerCase().includes(q) ||
         o.email?.toLowerCase().includes(q) ||
         o.address?.toLowerCase().includes(q)
       )
-    : (activeOrders ?? []);
+    : filterBase;
+
+  const FILTER_LABELS: Record<string, string> = { new: "New orders", in_progress: "In progress", today: "Orders today" };
 
   const kpis = [
-    { label: "New orders",   value: newOrders.length, accent: newOrders.length > 0 },
-    { label: "In progress",  value: inProgressOrders.length, accent: false },
-    { label: "Orders today", value: todayOrders ?? 0, accent: false },
-    { label: "Total orders", value: totalOrders ?? 0, accent: false },
-    { label: "Customers",    value: totalCustomers ?? 0, accent: false },
-    { label: "Messages",     value: newContacts ?? 0, accent: false },
+    { label: "New orders",   value: newOrders.length, accent: newOrders.length > 0, filterKey: "new", href: "/admin?tab=orders&filter=new" },
+    { label: "In progress",  value: inProgressOrders.length, accent: false, filterKey: "in_progress", href: "/admin?tab=orders&filter=in_progress" },
+    { label: "Orders today", value: todayOrders ?? 0, accent: false, filterKey: "today", href: "/admin?tab=orders&filter=today" },
+    { label: "Total orders", value: totalOrders ?? 0, accent: false, filterKey: null, href: "/admin?tab=orders" },
+    { label: "Customers",    value: totalCustomers ?? 0, accent: false, filterKey: null, href: null },
+    { label: "Messages",     value: newContacts ?? 0, accent: false, filterKey: null, href: "/admin?tab=contacts" },
   ];
 
   return (
@@ -138,18 +159,40 @@ export default async function AdminDashboardPage({
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 24px 80px" }}>
 
-        {/* KPIs */}
+        {/* KPIs — click one to filter the Active Orders list to that slice */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12, marginBottom: 28 }} className="admin-kpis">
-          {kpis.map(k => (
-            <div key={k.label} style={{
-              background: k.accent ? "linear-gradient(135deg,#C85770,#B8324F)" : "#fff",
-              border: "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
-            }}>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#161616", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
-              <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#FFFFFF" : "#8C8C8C", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
-            </div>
-          ))}
+          {kpis.map(k => {
+            const isActive = k.filterKey && filter === k.filterKey && tab === "orders";
+            const card = (
+              <div style={{
+                background: k.accent ? "linear-gradient(135deg,#C85770,#B8324F)" : "#fff",
+                border: isActive ? "1.5px solid #B8324F" : "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
+                boxShadow: isActive ? "0 0 0 3px rgba(184,50,79,0.12)" : "none",
+                transition: "box-shadow 0.15s, border-color 0.15s",
+                cursor: k.href ? "pointer" : "default", height: "100%",
+              }}>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#161616", letterSpacing: "-0.02em", marginBottom: 4 }}>{k.value}</p>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: k.accent ? "#FFFFFF" : "#8C8C8C", fontWeight: k.accent ? 600 : 400 }}>{k.label}</p>
+              </div>
+            );
+            return k.href ? (
+              <Link key={k.label} href={k.href} style={{ textDecoration: "none", display: "block" }} className="admin-kpi-link">{card}</Link>
+            ) : (
+              <div key={k.label}>{card}</div>
+            );
+          })}
         </div>
+
+        {tab === "orders" && filter && FILTER_LABELS[filter] && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(184,50,79,0.1)", color: "#8F2740", borderRadius: 999, padding: "5px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.78rem" }}>
+              Filtered: {FILTER_LABELS[filter]}
+              <Link href={q ? `/admin?tab=orders&q=${encodeURIComponent(searchParams.q ?? "")}` : "/admin?tab=orders"} style={{ display: "inline-flex", color: "#8F2740" }}>
+                <X size={13} />
+              </Link>
+            </span>
+          </div>
+        )}
 
         {/* Incoming new orders */}
         <AdminIncomingSection orders={newOrders as any} />
@@ -162,19 +205,26 @@ export default async function AdminDashboardPage({
           <div>
             <form method="GET" className="mb-5 flex gap-2">
               <input type="hidden" name="tab" value="orders" />
+              {filter && <input type="hidden" name="filter" value={filter} />}
               <input name="q" defaultValue={searchParams.q ?? ""} placeholder="Search code, customer name, address…" className="flex-1 input-field" />
               <button type="submit" className="btn-primary px-5 py-2.5 text-sm">Search</button>
-              {searchParams.q && <a href="/admin?tab=orders" className="btn-ghost px-5 py-2.5 text-sm">Clear</a>}
+              {searchParams.q && (
+                <a href={filter ? `/admin?tab=orders&filter=${filter}` : "/admin?tab=orders"} className="btn-ghost px-5 py-2.5 text-sm">Clear</a>
+              )}
             </form>
 
             <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 12 }}>
-              Active Orders {q ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
+              Active Orders {(q || filter) ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
             </p>
 
             {filteredActive.length === 0 ? (
               <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "48px", textAlign: "center", marginBottom: 32 }}>
                 <p style={{ fontFamily: "Kodchasan, sans-serif", color: "#A1A1AA" }}>
-                  {q ? `No orders matching "${searchParams.q}"` : "No active orders right now."}
+                  {q
+                    ? `No orders matching "${searchParams.q}"`
+                    : filter
+                      ? `No orders in "${FILTER_LABELS[filter]}" right now.`
+                      : "No active orders right now."}
                 </p>
               </div>
             ) : (
