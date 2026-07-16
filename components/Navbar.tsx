@@ -222,7 +222,7 @@ export default function Navbar() {
             transition={{ duration: 0.22 }}
             style={{ position: "fixed", inset: 0, zIndex: 490, background: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
           >
-            <nav style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <nav style={{ display: "flex", flexDirection: "column" }}>
               {links.map((link, i) => (
                 <motion.div
                   key={link.href}
@@ -230,13 +230,28 @@ export default function Navbar() {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: 15, opacity: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
+                  style={{ borderBottom: i < links.length - 1 ? "1px solid rgba(20,20,20,0.08)" : "none" }}
                 >
-                  <a href={link.href} onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", display: "block", fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 600, color: "#161616", letterSpacing: "-0.025em", lineHeight: 1.2 }}>
+                  <a
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="mobile-nav-link"
+                    style={{
+                      textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "space-between",
+                      padding: "18px 4px", fontSize: "1.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 600,
+                      color: "#161616", letterSpacing: "-0.02em", lineHeight: 1.2, borderRadius: 10,
+                    }}
+                  >
                     {link.label}
+                    <ArrowRight size={20} color="#B8324F" style={{ flexShrink: 0 }} />
                   </a>
                 </motion.div>
               ))}
             </nav>
+            <style>{`
+              .mobile-nav-link { -webkit-tap-highlight-color: transparent; transition: background-color 0.12s ease; }
+              .mobile-nav-link:active { background-color: rgba(184,50,79,0.08); }
+            `}</style>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ delay: 0.35 }}
               style={{ marginTop: "40px", display: "flex", flexDirection: "column", gap: 12 }}>
               {user ? (
