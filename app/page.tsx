@@ -423,19 +423,19 @@ export default function Home() {
             <AnimatedContent delay={0.15}>
               <div style={{ background: "#ffffff", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(20,20,20,0.06)" }}>
                 {/* Header row */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(20,20,20,0.03)", borderBottom: "1px solid rgba(20,20,20,0.06)" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(20,20,20,0.03)", borderBottom: "1px solid rgba(20,20,20,0.06)" }} className="comparison-row">
                   <span />
                   <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(20,20,20,0.35)", textAlign: "center" }}>Traditional</span>
                   <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#B8324F", textAlign: "center" }}>StareX</span>
                 </div>
                 {comparisons.map((row, i) => (
-                  <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none", alignItems: "center", gap: 8 }}>
+                  <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none", alignItems: "center", gap: 8 }} className="comparison-row">
                     <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "0.8125rem", color: "#161616" }}>{row.feature}</span>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }} className="comparison-cell">
                       <XCircle size={13} color="rgba(20,20,20,0.3)" strokeWidth={2} />
                       <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "rgba(20,20,20,0.45)", textAlign: "center" }}>{row.them}</span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }} className="comparison-cell">
                       <CheckCircle size={13} color="#B8324F" strokeWidth={2.5} />
                       <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#161616", fontWeight: 600, textAlign: "center" }}>{row.us}</span>
                     </div>
@@ -630,6 +630,10 @@ export default function Home() {
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
           .trust-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 420px) {
+          .comparison-row  { padding-left: 14px !important; padding-right: 14px !important; gap: 4px !important; }
+          .comparison-cell { flex-direction: column !important; gap: 2px !important; }
         }
       `}</style>
     </div>

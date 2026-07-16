@@ -86,7 +86,7 @@ export default function DashboardPage() {
               <p style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{today}</p>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", textDecoration: "none" }}>
               <Plus size={16} /> Schedule pickup
             </a>

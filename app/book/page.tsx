@@ -250,7 +250,7 @@ export default function BookPage() {
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: 12 }}>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
                   <button onClick={goNext} disabled={!canNext} className="btn-primary"
                     style={{ opacity: canNext ? 1 : 0.4, cursor: canNext ? "pointer" : "not-allowed", display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -300,7 +300,7 @@ export default function BookPage() {
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: 12 }}>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
                   <button onClick={goNext} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                     Review Order <ArrowRight size={16} />
@@ -343,7 +343,7 @@ export default function BookPage() {
                   </div>
                 )}
 
-                <div style={{ display: "flex", gap: 12 }}>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
                   <button onClick={handleSubmit} disabled={submitting} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: submitting ? 0.7 : 1 }}>
                     {submitting ? (
