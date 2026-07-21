@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { SITE_ORIGIN } from "@/lib/site";
 
-const BASE = "https://starex-laundry-app-v2.vercel.app";
+const BASE = SITE_ORIGIN;
 const now = new Date();
 
 export default function sitemap(): MetadataRoute.Sitemap {

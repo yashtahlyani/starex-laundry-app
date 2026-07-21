@@ -39,7 +39,7 @@ export default function About() {
       <section style={{
         paddingTop: 120, paddingBottom: 88, position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/folded-towels-sprig.png)",
+        backgroundImage: "url(/images/starex/folded-towels-sprig.webp)",
         backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 560,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />

@@ -1,14 +1,15 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 import { redirect } from "next/navigation";
+import { OWNER_EMAIL } from "@/lib/owner";
 
 const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
 
 // Hardcoded fallback so admin access never silently breaks if ADMIN_EMAILS
 // isn't set (or is set to something unexpected) in a given deployment
 // environment — this is the same address the rest of the app (Navbar,
-// Footer) already treats as the owner account.
-const FALLBACK_ADMIN_EMAILS = ["owner@starex.ca"];
+// auth, dashboard — see lib/owner.ts) already treats as the owner account.
+const FALLBACK_ADMIN_EMAILS = [OWNER_EMAIL];
 
 const ADMIN_EMAILS = Array.from(new Set([
   ...FALLBACK_ADMIN_EMAILS,

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
+import { isOwnerUser } from "@/lib/owner";
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { BUSINESS_NAME } from "@/lib/pricing";
 import Logo from "@/components/Logo";
@@ -44,7 +45,7 @@ export default function AuthPage() {
       } else if (mode === "signin") {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        const isOwner = data.user?.email === "owner@starex.ca" || data.user?.user_metadata?.is_admin === true;
+        const isOwner = isOwnerUser(data.user);
         window.location.href = isOwner ? "/admin" : "/dashboard";
       } else if (mode === "reset") {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {

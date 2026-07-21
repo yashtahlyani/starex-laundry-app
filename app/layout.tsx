@@ -5,7 +5,9 @@ import PageLoader from "@/components/PageLoader";
 import ScrollProgress from "@/components/ScrollProgress";
 import LayoutShell from "@/components/LayoutShell";
 
-const PROD_URL = "https://starex-laundry-app-v2.vercel.app";
+import { SITE_ORIGIN } from "@/lib/site";
+
+const PROD_URL = SITE_ORIGIN;
 
 export const metadata: Metadata = {
   metadataBase: new URL(PROD_URL),
@@ -22,13 +24,13 @@ export const metadata: Metadata = {
     description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Serving Brampton & Mississauga with 24–48h turnaround.",
     url: PROD_URL,
     locale: "en_CA",
-    images: [{ url: "/images/starex-hero-banner.png", width: 1717, height: 916, alt: BUSINESS_NAME }],
+    images: [{ url: "/images/starex-hero-banner.jpg", width: 1600, height: 854, alt: BUSINESS_NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
     description: "Laundry at $2.29/lb with free pickup & delivery on 15 lbs+. Serving Brampton & Mississauga.",
-    images: ["/images/starex-hero-banner.png"],
+    images: ["/images/starex-hero-banner.jpg"],
   },
   robots: { index: true, follow: true },
 };

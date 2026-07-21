@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
+import { isOwnerUser } from "@/lib/owner";
 import { Package, LogOut, Plus, Clock, Star, Sparkles, ChevronRight, ArrowRight } from "lucide-react";
 import { StatusBadge, ProgressTrack, STATUS_META, fmtSlot } from "@/components/OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "@/components/AppOrderDrawer";
@@ -31,7 +32,7 @@ export default function DashboardPage() {
     const supabase = getSupabaseBrowser();
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { window.location.href = "/auth"; return; }
-      const isOwner = user.email === "owner@starex.ca" || user.user_metadata?.is_admin === true;
+      const isOwner = isOwnerUser(user);
       if (isOwner) { window.location.href = "/admin"; return; }
       setUser(user);
       const res = await fetch("/api/dashboard/orders");

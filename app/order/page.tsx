@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Package, Search, CheckCircle, Truck, Sparkles, Clock, MapPin, Layers } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import IssueReportForm from "@/components/IssueReportForm";
 
 type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
 type Order = {
@@ -194,6 +195,8 @@ function OrderTracker() {
                 </ul>
               </div>
             )}
+
+            <IssueReportForm orderCode={order.code} />
 
             <p className="text-center text-xs text-[#8C8C8C] font-body">
               Questions? Email us at{" "}

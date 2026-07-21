@@ -71,7 +71,7 @@ export default function HowItWorks() {
       <section style={{
         paddingTop: 120, paddingBottom: 80, position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/basket-plant.png)",
+        backgroundImage: "url(/images/starex/basket-plant.webp)",
         backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 560,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />

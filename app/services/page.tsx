@@ -31,7 +31,7 @@ export default function ServicesPage() {
       <section style={{
         paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/washer-plant.png)",
+        backgroundImage: "url(/images/starex/washer-plant.webp)",
         backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 540,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />

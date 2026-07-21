@@ -58,7 +58,7 @@ export default function PricingPage() {
       <section style={{
         paddingTop: 120, paddingBottom: 72, textAlign: "center", position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/stack-bag-plain.png)",
+        backgroundImage: "url(/images/starex/stack-bag-plain.webp)",
         backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 540,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
@@ -270,7 +270,7 @@ export default function PricingPage() {
             <div style={{
               borderRadius: 24, padding: "48px 40px", position: "relative", overflow: "hidden",
               backgroundColor: "var(--brand)",
-              backgroundImage: "url(/images/starex/washer-basket-2.png)",
+              backgroundImage: "url(/images/starex/washer-basket-2.webp)",
               backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
               minHeight: 320,
             }}>

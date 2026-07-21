@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings, ChevronLeft } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
+import { isOwnerUser } from "@/lib/owner";
 import Logo from "@/components/Logo";
 
 const links = [
@@ -34,11 +35,11 @@ export default function Navbar() {
     const supabase = getSupabaseBrowser();
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
-      setIsOwner(user?.email === "owner@starex.ca");
+      setIsOwner(isOwnerUser(user));
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
-      setIsOwner(session?.user?.email === "owner@starex.ca");
+      setIsOwner(isOwnerUser(session?.user));
     });
     return () => subscription.unsubscribe();
   }, []);

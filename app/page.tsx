@@ -246,7 +246,7 @@ export default function Home() {
             }}
           >
             <img
-              src="/images/starex-hero-banner.png"
+              src="/images/starex-hero-banner.jpg"
               alt="StareX premium laundry service — fresh laundry, delivered to your door"
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", display: "block" }}
             />
@@ -270,7 +270,7 @@ export default function Home() {
       <section style={{
         padding: "80px 0", position: "relative", minHeight: 480,
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/rack-clothes.png)",
+        backgroundImage: "url(/images/starex/rack-clothes.webp)",
         backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
