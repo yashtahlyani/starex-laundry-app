@@ -3,6 +3,8 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { Resend } from "resend";
 import { BUSINESS_NAME } from "@/lib/pricing";
 import { getAdminUser } from "@/lib/adminAuth";
+import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
+import { escapeHtml } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +14,9 @@ const ISSUE_TYPES = ["lost_item", "damage", "late_delivery", "billing", "quality
 const PRIORITIES = ["low", "normal", "high", "urgent"] as const;
 
 export async function POST(req: NextRequest) {
+  const allowed = await checkRateLimit(`rate:issue:${clientIp(req)}`, 5, 3600);
+  if (!allowed) return NextResponse.json({ error: "Too many reports — please try again later" }, { status: 429 });
+
   let body: {
     orderCode?: string;
     customerName: string;
@@ -36,13 +41,17 @@ export async function POST(req: NextRequest) {
   if (!ISSUE_TYPES.includes(issueType as typeof ISSUE_TYPES[number])) {
     return NextResponse.json({ error: "Invalid issue type" }, { status: 400 });
   }
+  if (customerName.length > 120 || customerEmail.length > 254 ||
+      description.length > 5000 || (orderCode?.length ?? 0) > 20) {
+    return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
+  }
 
   let orderId: string | null = null;
   if (orderCode) {
     const { data: order } = await supabaseAdmin
       .from("orders")
       .select("id")
-      .eq("order_code", orderCode.trim().toUpperCase())
+      .eq("code", orderCode.trim().toUpperCase())
       .maybeSingle();
     orderId = order?.id ?? null;
   }
@@ -77,13 +86,13 @@ export async function POST(req: NextRequest) {
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
           <h2 style="color:#DC2626;margin:0 0 16px">${isUrgent ? "Urgent" : "New"} Issue Reported</h2>
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
-            ${orderCode ? `<tr><td style="color:#6B7280;width:120px">Order</td><td><strong style="font-family:monospace">${orderCode}</strong></td></tr>` : ""}
-            <tr><td style="color:#6B7280">Customer</td><td>${customerName} — ${customerEmail}</td></tr>
+            ${orderCode ? `<tr><td style="color:#6B7280;width:120px">Order</td><td><strong style="font-family:monospace">${escapeHtml(orderCode)}</strong></td></tr>` : ""}
+            <tr><td style="color:#6B7280">Customer</td><td>${escapeHtml(customerName)} — ${escapeHtml(customerEmail)}</td></tr>
             <tr><td style="color:#6B7280">Type</td><td>${issueType.replace(/_/g, " ")}</td></tr>
             <tr><td style="color:#6B7280">Priority</td><td>${priority}</td></tr>
           </table>
           <div style="background:#fef2f2;border-left:3px solid #DC2626;padding:16px;margin:16px 0;border-radius:4px;">
-            <p style="margin:0;font-size:14px;color:#4A4A4A;">${description.replace(/\n/g, "<br>")}</p>
+            <p style="margin:0;font-size:14px;color:#4A4A4A;">${escapeHtml(description).replace(/\n/g, "<br>")}</p>
           </div>
           <p style="font-size:12px;color:#9CA3AF;">Issue ID: ${issue.id}</p>
         </div>

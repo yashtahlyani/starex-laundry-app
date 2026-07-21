@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { randomUUID } from "crypto";
+import { generateOrderCode } from "@/lib/orderCode";
 
 // Freshdrop orders schema
 export interface Order {
@@ -112,7 +113,15 @@ export class OrderRepository {
     timeSlot: string;
     notes?: string;
   }): Promise<Order> {
-    const code = `STX-${Math.floor(1000 + Math.random() * 9000)}`;
+    // orders.code has no unique constraint in the live schema, so verify the
+    // generated code is unused before inserting (6-digit space makes a clash
+    // rare; the loop covers the residual chance).
+    let code = generateOrderCode();
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const { data: clash } = await this.db.from("orders").select("id").eq("code", code).maybeSingle();
+      if (!clash) break;
+      code = generateOrderCode();
+    }
     const now = new Date().toISOString();
     const newOrder = {
       id: randomUUID(),

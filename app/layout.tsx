@@ -31,7 +31,6 @@ export const metadata: Metadata = {
     images: ["/images/starex-hero-banner.png"],
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: PROD_URL },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -10,6 +10,17 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 const FROM_EMAIL = `${BUSINESS_NAME} <bookings@starexlaundry.ca>`;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://starexlaundry.ca";
 
+// Customer-supplied text (names, addresses, messages) goes into HTML emails —
+// escape it so a crafted booking can't inject markup into the owner's inbox.
+export function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export type BookingNotificationPayload = {
   orderId: string;
   orderCode: string;
@@ -102,10 +113,10 @@ export async function notifyOwnerOfNewOrder(p: BookingNotificationPayload) {
           <h2 style="color:#B8324F;margin:0 0 16px">New Booking Received</h2>
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
             <tr><td style="color:#6B7280;width:120px">Order</td><td><strong style="font-family:monospace">${p.orderCode}</strong></td></tr>
-            <tr><td style="color:#6B7280">Customer</td><td>${p.customerName} — ${p.customerEmail} — ${p.customerPhone}</td></tr>
+            <tr><td style="color:#6B7280">Customer</td><td>${escapeHtml(p.customerName)} — ${escapeHtml(p.customerEmail)} — ${escapeHtml(p.customerPhone)}</td></tr>
             <tr><td style="color:#6B7280">Service</td><td>${formatService(p.serviceType)}</td></tr>
-            <tr><td style="color:#6B7280">Pickup</td><td>${formatDate(p.pickupDate)} · ${p.pickupTimeSlot}</td></tr>
-            <tr><td style="color:#6B7280">Address</td><td>${p.pickupAddress}</td></tr>
+            <tr><td style="color:#6B7280">Pickup</td><td>${formatDate(p.pickupDate)} · ${escapeHtml(p.pickupTimeSlot)}</td></tr>
+            <tr><td style="color:#6B7280">Address</td><td>${escapeHtml(p.pickupAddress)}</td></tr>
           </table>
           <a href="${SITE_URL}/admin" style="display:inline-block;margin-top:16px;color:#B8324F;">Open Admin Console →</a>
         </div>
@@ -128,11 +139,11 @@ export async function notifyOwnerOfNewContact(p: { name: string; email: string; 
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
           <h2 style="color:#B8324F;margin:0 0 16px">New Contact Message</h2>
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
-            <tr><td style="color:#6B7280;width:120px">From</td><td>${p.name} — ${p.email}</td></tr>
-            ${p.subject ? `<tr><td style="color:#6B7280">Subject</td><td>${p.subject}</td></tr>` : ""}
+            <tr><td style="color:#6B7280;width:120px">From</td><td>${escapeHtml(p.name)} — ${escapeHtml(p.email)}</td></tr>
+            ${p.subject ? `<tr><td style="color:#6B7280">Subject</td><td>${escapeHtml(p.subject)}</td></tr>` : ""}
           </table>
           <div style="background:#fdf2f4;border-left:3px solid #B8324F;padding:16px;margin:16px 0;border-radius:4px;">
-            <p style="margin:0;font-size:14px;color:#4A4A4A;">${p.message.replace(/\n/g, "<br>")}</p>
+            <p style="margin:0;font-size:14px;color:#4A4A4A;">${escapeHtml(p.message).replace(/\n/g, "<br>")}</p>
           </div>
           <a href="${SITE_URL}/admin?tab=contacts" style="display:inline-block;color:#B8324F;">Open Admin Console →</a>
         </div>
@@ -329,7 +340,7 @@ function buildBookingEmailHtml(p: BookingNotificationPayload) {
   const content = `
     <h2 style="margin:0 0 6px;color:#1a1a2e;font-size:20px;">Booking Confirmed!</h2>
     <p style="margin:0 0 24px;color:#555;font-size:15px;line-height:1.5;">
-      Hi ${p.customerName}, your pickup is all set. Here's everything you need to know:
+      Hi ${escapeHtml(p.customerName)}, your pickup is all set. Here's everything you need to know:
     </p>
 
     <div style="background:#FBEEF1;border-radius:10px;padding:20px 24px;margin:0 0 24px;">
@@ -344,11 +355,11 @@ function buildBookingEmailHtml(p: BookingNotificationPayload) {
         </tr>
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;border-top:1px solid rgba(0,0,0,0.06);vertical-align:top;">Pickup window</td>
-          <td style="padding:8px 0;text-align:right;font-weight:600;font-size:14px;border-top:1px solid rgba(0,0,0,0.06);">${formatDate(p.pickupDate)}<br><span style="font-weight:400;color:#888;">${p.pickupTimeSlot}</span></td>
+          <td style="padding:8px 0;text-align:right;font-weight:600;font-size:14px;border-top:1px solid rgba(0,0,0,0.06);">${formatDate(p.pickupDate)}<br><span style="font-weight:400;color:#888;">${escapeHtml(p.pickupTimeSlot)}</span></td>
         </tr>
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;border-top:1px solid rgba(0,0,0,0.06);">Address</td>
-          <td style="padding:8px 0;text-align:right;font-weight:600;font-size:14px;border-top:1px solid rgba(0,0,0,0.06);">${p.pickupAddress}</td>
+          <td style="padding:8px 0;text-align:right;font-weight:600;font-size:14px;border-top:1px solid rgba(0,0,0,0.06);">${escapeHtml(p.pickupAddress)}</td>
         </tr>
       </table>
     </div>
@@ -370,7 +381,7 @@ function buildBookingEmailHtml(p: BookingNotificationPayload) {
 
 function buildStatusEmailHtml(customerName: string, orderCode: string, bodyText: string) {
   const content = `
-    <p style="margin:0 0 16px;color:#555;font-size:15px;line-height:1.5;">Hi ${customerName},</p>
+    <p style="margin:0 0 16px;color:#555;font-size:15px;line-height:1.5;">Hi ${escapeHtml(customerName)},</p>
     <p style="margin:0 0 24px;color:#1a1a2e;font-size:16px;line-height:1.6;font-weight:500;">${bodyText}</p>
     <p style="margin:0 0 28px;color:#888;font-size:13px;">Order: <span style="font-family:monospace;font-weight:700;color:#B8324F;">${orderCode}</span></p>
     <a href="${SITE_URL}/order"

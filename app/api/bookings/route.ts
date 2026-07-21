@@ -6,6 +6,7 @@ import { BookingService } from "@/lib/services/booking.service";
 import { PLANS } from "@/lib/pricing";
 import { enqueueBookingConfirmation } from "@/lib/queue/notification.queue";
 import { notifyOwnerOfNewOrder } from "@/lib/notifications";
+import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,8 @@ type BookingRequest = {
 };
 
 export async function POST(req: NextRequest) {
+  const allowed = await checkRateLimit(`rate:book:${clientIp(req)}`, 10, 3600);
+  if (!allowed) return NextResponse.json({ error: "Too many bookings from this connection — please try again later" }, { status: 429 });
 
   const cookieStore = cookies();
   const supabase = createServerClient(
@@ -43,6 +46,10 @@ export async function POST(req: NextRequest) {
   }
   if (!PLANS.some((p) => p.id === service)) {
     return NextResponse.json({ error: "Unknown service" }, { status: 400 });
+  }
+  if (name.length > 120 || email.length > 254 || phone.length > 40 || address.length > 300 ||
+      date.length > 20 || timeSlot.length > 40 || (notes?.length ?? 0) > 1000) {
+    return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
   }
 
   try {

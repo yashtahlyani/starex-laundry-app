@@ -1,3 +1,9 @@
+-- ⚠️  READ FIRST: the customers / orders / order_status_events tables below are
+-- the original Phase-1 design and do NOT match the live database — the app
+-- actually runs against freshdrop/supabase/schema.sql (orders.code, profiles,
+-- RLS policies). Do not run those sections. The issues and contact_submissions
+-- sections at the bottom ARE the live definitions for those two tables.
+--
 -- Laundry booking platform — core schema (Phase 1)
 -- Run this in the Supabase SQL editor for a new project.
 
