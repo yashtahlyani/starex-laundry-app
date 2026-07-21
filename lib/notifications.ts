@@ -6,8 +6,14 @@ import { BUSINESS_NAME } from "./pricing";
 // same as the Twilio WhatsApp path below.
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-// The domain the email comes from. Update once you have a verified domain in Resend.
-const FROM_EMAIL = `${BUSINESS_NAME} <bookings@starexlaundry.ca>`;
+// The address emails are sent from. Set RESEND_FROM_EMAIL to an address on a
+// domain you've verified in Resend (e.g. bookings@starexlaundry.ca) to send to
+// real customers. Until then it falls back to Resend's shared test sender,
+// which can only deliver to the Resend account owner's own address — enough for
+// owner alerts, but customer confirmations will be rejected until a domain is
+// verified. Exported so every send site (here + the issues route) stays in sync.
+const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+export const FROM_EMAIL = `${BUSINESS_NAME} <${FROM_ADDRESS}>`;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://starexlaundry.ca";
 
 // Customer-supplied text (names, addresses, messages) goes into HTML emails —

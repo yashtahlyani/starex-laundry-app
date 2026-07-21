@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { Resend } from "resend";
-import { BUSINESS_NAME } from "@/lib/pricing";
 import { getAdminUser } from "@/lib/adminAuth";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
-import { escapeHtml } from "@/lib/notifications";
+import { escapeHtml, FROM_EMAIL } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -79,7 +78,7 @@ export async function POST(req: NextRequest) {
     const urgentTypes = ["lost_item", "damage"];
     const isUrgent = urgentTypes.includes(issueType);
     resend.emails.send({
-      from: `${BUSINESS_NAME} <bookings@starexlaundry.ca>`,
+      from: FROM_EMAIL,
       to: adminEmail,
       subject: `${isUrgent ? "🚨" : "⚠️"} Issue Reported${orderCode ? ` — Order ${orderCode}` : ""}: ${issueType.replace(/_/g, " ")}`,
       html: `
