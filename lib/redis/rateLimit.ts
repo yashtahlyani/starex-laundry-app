@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { getCacheRedis } from "./client";
+import { getRestRedis } from "./client";
 
 // Returns true if the request is within the limit, false if it should be blocked.
 // No-ops (always allows) when Redis is not configured — safe for local dev.
@@ -10,7 +10,7 @@ export async function checkRateLimit(
   maxRequests: number,
   windowSeconds: number
 ): Promise<boolean> {
-  const redis = getCacheRedis();
+  const redis = getRestRedis();
   if (!redis) return true;
   try {
     const count = await redis.incr(key);
