@@ -33,14 +33,16 @@ Set these in Vercel → Project → Settings → Environment Variables.
 | `ADMIN_EMAILS` | ✅ | Which accounts may open `/admin` (comma-separated) |
 | `RESEND_API_KEY` | ⚠️ strongly recommended | **No emails at all** — customers get no booking confirmation |
 | `ADMIN_NOTIFICATION_EMAIL` | ⚠️ strongly recommended | Owner gets no email when a booking/contact/issue arrives |
-| `REDIS_URL` | recommended | Rate limiting and the notification queue silently switch off |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | ✅ configured | Rate limiting + admin-stats cache switch off without them |
 | `TWILIO_*` | optional | WhatsApp updates are skipped |
 | `STRIPE_*` | not yet | Payments are dormant (see below) |
 
 ## One-time database task
 
-Run [supabase/2026-07-21-orders-code-unique.sql](supabase/2026-07-21-orders-code-unique.sql)
-once in Supabase → SQL Editor. It makes order codes database-enforced unique.
+✅ **Done** — the unique index on `orders.code`
+([supabase/2026-07-21-orders-code-unique.sql](supabase/2026-07-21-orders-code-unique.sql))
+has already been applied to the live database. Kept here for reference / fresh
+environments.
 
 The live database schema is **`freshdrop/supabase/schema.sql`**
 (plus the issues / contact_submissions sections at the bottom of
@@ -64,10 +66,11 @@ The live database schema is **`freshdrop/supabase/schema.sql`**
 - **Service-area postal code check** — `SERVICE_AREA_POSTAL_PREFIXES` in
   `lib/pricing.ts` is empty (all addresses accepted) until the serviceable
   prefixes are confirmed.
-- **Notification worker** — with `REDIS_URL` set, run
-  `npm run worker:notification` as a separate process for queued, retried
-  notification delivery. Without Redis, notifications send inline
-  (best-effort, no retries).
+- **Notification worker** — notifications currently send inline (best-effort,
+  no retries). For durable, retried delivery, add a native `REDIS_URL`
+  (`rediss://…` TCP endpoint) and run `npm run worker:notification` as a
+  separate process. Note: the Upstash **REST** credentials power rate limiting
+  and caching but can't drive BullMQ, which needs a TCP connection.
 
 ## Deploying
 
