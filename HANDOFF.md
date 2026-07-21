@@ -31,8 +31,9 @@ Set these in Vercel → Project → Settings → Environment Variables.
 | `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Bookings, admin console, tracking |
 | `NEXT_PUBLIC_SITE_URL` | ✅ | Links in emails; SEO domain (set to `https://` + your real domain) |
 | `ADMIN_EMAILS` | ✅ | Which accounts may open `/admin` (comma-separated) |
-| `RESEND_API_KEY` | ⚠️ strongly recommended | **No emails at all** — customers get no booking confirmation |
-| `ADMIN_NOTIFICATION_EMAIL` | ⚠️ strongly recommended | Owner gets no email when a booking/contact/issue arrives |
+| `RESEND_API_KEY` | ✅ configured | No emails send without it |
+| `RESEND_FROM_EMAIL` | ⚠️ see "Email" below | Sender address; must be a verified domain to reach customers |
+| `ADMIN_NOTIFICATION_EMAIL` | ✅ configured | Owner gets no alert on new booking/contact/issue |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | ✅ configured | Rate limiting + admin-stats cache switch off without them |
 | `TWILIO_*` | optional | WhatsApp updates are skipped |
 | `STRIPE_*` | not yet | Payments are dormant (see below) |
@@ -48,6 +49,25 @@ The live database schema is **`freshdrop/supabase/schema.sql`**
 (plus the issues / contact_submissions sections at the bottom of
 `supabase/schema.sql`). The orders/customers sections at the top of
 `supabase/schema.sql` are an old design draft — don't run them.
+
+## Email (Resend)
+
+**Working now:** owner alerts (new booking / contact message / issue report)
+are delivered via Resend to the address in `ADMIN_NOTIFICATION_EMAIL`.
+
+**Not yet — needs a verified domain:** customer-facing emails (booking
+confirmation, status updates). The Resend account is on the test tier, so it
+currently sends from `onboarding@resend.dev`, which can only deliver to the
+Resend account owner. To send to real customers:
+
+1. In Resend → **Domains**, add `starexlaundry.ca` (or a subdomain like
+   `mail.starexlaundry.ca`) and add the SPF/DKIM DNS records it gives you.
+2. Once it shows **Verified**, set `RESEND_FROM_EMAIL` in Vercel to an address
+   on that domain, e.g. `bookings@starexlaundry.ca`, and redeploy.
+3. Point `ADMIN_NOTIFICATION_EMAIL` at the real business inbox (it's currently
+   the developer's address for testing).
+
+No code change is needed — the sender is fully env-driven.
 
 ## Admin console
 
