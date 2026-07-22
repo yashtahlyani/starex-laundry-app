@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import { CATALOG, MINIMUM_ORDER, HST_LABEL } from "@/lib/pricing";
+import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -69,6 +70,8 @@ function BookPageInner() {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [savedCard, setSavedCard] = useState<SavedCard | null>(null);
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
@@ -121,6 +124,10 @@ function BookPageInner() {
           date: form.date,
           timeSlot: form.time,
           notes: form.notes || undefined,
+          stripeCustomerId: savedCard?.stripeCustomerId,
+          stripePaymentMethodId: savedCard?.stripePaymentMethodId,
+          cardBrand: savedCard?.cardBrand,
+          cardLast4: savedCard?.cardLast4,
         }),
       });
       const data = await res.json();
@@ -359,6 +366,13 @@ function BookPageInner() {
                   Price confirmed via SMS after weigh-in. Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies (${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing).
                 </p>
 
+                <StripeCardStep
+                  name={form.name}
+                  email={form.email}
+                  onSaved={setSavedCard}
+                  onConfigResolved={setPaymentsEnabled}
+                />
+
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 20, cursor: "pointer" }}>
                   <input
                     type="checkbox" checked={termsAccepted}
@@ -376,9 +390,17 @@ function BookPageInner() {
                   </div>
                 )}
 
+                {(() => {
+                  const needsCard = paymentsEnabled && !savedCard;
+                  const blocked = submitting || !termsAccepted || needsCard;
+                  return (
+                <>
+                {needsCard && (
+                  <p style={{ color: "#B45309", fontSize: "0.8125rem", marginBottom: 12, fontFamily: "Kodchasan, sans-serif" }}>Save a card above to continue.</p>
+                )}
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
-                  <button onClick={handleSubmit} disabled={submitting || !termsAccepted} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: (submitting || !termsAccepted) ? 0.5 : 1, cursor: (submitting || !termsAccepted) ? "not-allowed" : "pointer" }}>
+                  <button onClick={handleSubmit} disabled={blocked} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: blocked ? 0.5 : 1, cursor: blocked ? "not-allowed" : "pointer" }}>
                     {submitting ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                         <span style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(10,26,15,0.3)", borderTopColor: "#FFFFFF", animation: "spin 0.8s linear infinite", display: "inline-block" }} />
@@ -389,6 +411,9 @@ function BookPageInner() {
                     )}
                   </button>
                 </div>
+                </>
+                  );
+                })()}
               </motion.div>
             )}
           </AnimatePresence>

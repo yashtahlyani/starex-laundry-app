@@ -24,6 +24,11 @@ export interface Order {
   is_new: boolean;
   created_at: string;
   updated_at: string;
+  stripe_customer_id?: string | null;
+  stripe_payment_method_id?: string | null;
+  stripe_payment_intent_id?: string | null;
+  card_brand?: string | null;
+  card_last4?: string | null;
 }
 
 export interface StatusEvent {
@@ -112,6 +117,10 @@ export class OrderRepository {
     date: string;
     timeSlot: string;
     notes?: string;
+    stripeCustomerId?: string;
+    stripePaymentMethodId?: string;
+    cardBrand?: string;
+    cardLast4?: string;
   }): Promise<Order> {
     // orders.code has no unique constraint in the live schema, so verify the
     // generated code is unused before inserting (6-digit space makes a clash
@@ -144,6 +153,16 @@ export class OrderRepository {
       is_new: true,
       created_at: now,
       updated_at: now,
+      // Only included when a card was actually captured (Stripe configured +
+      // customer completed the card step) — omitted entirely otherwise, so a
+      // normal booking is byte-for-byte the same insert as before this field
+      // existed and never depends on the stripe_* columns being present.
+      ...(input.stripePaymentMethodId ? {
+        stripe_customer_id: input.stripeCustomerId ?? null,
+        stripe_payment_method_id: input.stripePaymentMethodId,
+        card_brand: input.cardBrand ?? null,
+        card_last4: input.cardLast4 ?? null,
+      } : {}),
     };
     const { data, error } = await this.db.from("orders").insert(newOrder).select().single();
     if (error) throw error;

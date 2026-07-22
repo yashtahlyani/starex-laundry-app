@@ -12,6 +12,10 @@ export interface BookingInput {
   date: string;
   timeSlot: string;
   notes?: string;
+  stripeCustomerId?: string;
+  stripePaymentMethodId?: string;
+  cardBrand?: string;
+  cardLast4?: string;
 }
 
 export interface BookingResult {
@@ -45,6 +49,10 @@ export class BookingService {
       date: input.date,
       timeSlot: input.timeSlot,
       notes: input.notes,
+      stripeCustomerId: input.stripeCustomerId,
+      stripePaymentMethodId: input.stripePaymentMethodId,
+      cardBrand: input.cardBrand,
+      cardLast4: input.cardLast4,
     });
 
     return { orderCode: order.code, orderId: order.id };

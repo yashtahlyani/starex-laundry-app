@@ -21,6 +21,10 @@ type BookingRequest = {
   date: string;
   timeSlot: string;
   notes?: string;
+  stripeCustomerId?: string;
+  stripePaymentMethodId?: string;
+  cardBrand?: string;
+  cardLast4?: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -40,7 +44,7 @@ export async function POST(req: NextRequest) {
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
-  const { service, name, email, phone, address, date, timeSlot, notes } = body;
+  const { service, name, email, phone, address, date, timeSlot, notes, stripeCustomerId, stripePaymentMethodId, cardBrand, cardLast4 } = body;
   if (!service || !name || !email || !phone || !address || !date || !timeSlot) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
@@ -64,6 +68,10 @@ export async function POST(req: NextRequest) {
       date,
       timeSlot,
       notes: notes?.trim(),
+      stripeCustomerId,
+      stripePaymentMethodId,
+      cardBrand,
+      cardLast4,
     });
 
     // Fire-and-forget: never let a notification failure block the booking response.

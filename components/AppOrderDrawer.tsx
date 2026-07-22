@@ -38,6 +38,9 @@ export type DrawerOrder = {
   email?: string;
   phone?: string;
   status_history?: { status: string; itemCount?: number }[];
+  stripe_payment_method_id?: string | null;
+  card_brand?: string | null;
+  card_last4?: string | null;
 };
 
 function Row({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: string | null }) {
@@ -71,11 +74,15 @@ export default function AppOrderDrawer({
   const [pendingCount, setPendingCount] = useState<string>("");
   const [pendingWeight, setPendingWeight] = useState<string>("");
   const [countError, setCountError] = useState<string | null>(null);
+  const [pendingPrice, setPendingPrice] = useState<string>("");
+  const [chargeError, setChargeError] = useState<string | null>(null);
+  const [charging, setCharging] = useState(false);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
   const nextStatusId = NEXT_STATUS[currentStatus] ?? null;
   const nextLabel = nextStatusId ? STATUS_META[nextStatusId]?.label : null;
   const needsCount = nextStatusId === "picked_up" || nextStatusId === "delivered";
+  const needsCharge = currentStatus === "payment_pending" && !!order?.stripe_payment_method_id;
 
   const tracking = order ? getItemTracking(order.status_history as any) : { received: null, returned: null, missing: null };
   const received = localTracking?.received ?? tracking.received;
@@ -90,6 +97,27 @@ export default function AppOrderDrawer({
       if (!pendingCount.trim()) { setCountError("Enter an item count"); return; }
       itemCount = parseInt(pendingCount, 10);
       if (isNaN(itemCount) || itemCount < 0) { setCountError("Enter a valid item count"); return; }
+    }
+
+    if (needsCharge) {
+      const amount = parseFloat(pendingPrice);
+      if (!pendingPrice.trim() || isNaN(amount) || amount <= 0) { setChargeError("Enter the confirmed order total"); return; }
+      setCharging(true);
+      setChargeError(null);
+      try {
+        const chargeRes = await fetch("/api/stripe/charge", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderCode: order.code, amountCad: amount }),
+        });
+        const chargeData = await chargeRes.json();
+        if (!chargeRes.ok) { setChargeError(chargeData.error ?? "Charge failed"); return; }
+      } catch {
+        setChargeError("Charge failed — check your connection and try again");
+        return;
+      } finally {
+        setCharging(false);
+      }
     }
 
     setAdvancing(true);
@@ -192,6 +220,21 @@ export default function AppOrderDrawer({
 
             {/* Footer */}
             <div style={{ padding: "20px 28px", borderTop: "1px solid #F4F4F5", display: "flex", flexDirection: "column", gap: 10 }}>
+              {admin && nextLabel && needsCharge && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B" }}>
+                    Card on file: {order?.card_brand?.toUpperCase() ?? "card"} ending in {order?.card_last4 ?? "····"}
+                  </p>
+                  <input
+                    type="number" min={0} step="0.01" inputMode="decimal"
+                    placeholder="Confirmed order total (CAD)"
+                    value={pendingPrice}
+                    onChange={e => setPendingPrice(e.target.value)}
+                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
+                  />
+                  {chargeError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{chargeError}</p>}
+                </div>
+              )}
               {admin && nextLabel && needsCount && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
                   <input
@@ -214,16 +257,16 @@ export default function AppOrderDrawer({
               )}
               {admin && nextLabel && (
                 <button
-                  onClick={handleAdvance} disabled={advancing}
+                  onClick={handleAdvance} disabled={advancing || charging}
                   style={{
-                    width: "100%", padding: "13px", background: advancing ? "#A1A1AA" : "#161616",
-                    color: "#fff", border: "none", borderRadius: 120, cursor: advancing ? "not-allowed" : "pointer",
+                    width: "100%", padding: "13px", background: (advancing || charging) ? "#A1A1AA" : "#161616",
+                    color: "#fff", border: "none", borderRadius: 120, cursor: (advancing || charging) ? "not-allowed" : "pointer",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem",
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   }}
                 >
-                  {advancing ? "Updating…" : currentStatus === "payment_pending"
-                    ? <>Complete Payment &amp; Mark Delivered <ArrowRight size={15} /></>
+                  {charging ? "Charging card…" : advancing ? "Updating…" : currentStatus === "payment_pending"
+                    ? <>{needsCharge ? "Charge Card & Mark Delivered" : "Complete Payment & Mark Delivered"} <ArrowRight size={15} /></>
                     : <>Mark as {nextLabel} <ArrowRight size={15} /></>}
                 </button>
               )}

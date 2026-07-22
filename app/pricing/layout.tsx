@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "Transparent, per-pound pricing with no hidden fees. Wash and Fold from $1.25/lb. View all StareX service plans.",
+  description: "Transparent pricing with no hidden fees. Wash & Fold at $2/lb, $40 minimum order value. View all StareX service plans, item prices, and the Monthly Plan.",
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
