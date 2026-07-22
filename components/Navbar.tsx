@@ -11,7 +11,8 @@ import { DRY_CLEAN_COMBO } from "@/lib/pricing";
 
 const links = [
   { href: "/services",     label: "Services" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/pricing",      label: "Pricing" },
+  { href: "/offer",        label: "Offer" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about",        label: "About" },
   { href: "/faq",          label: "FAQ" },
@@ -125,7 +126,7 @@ export default function Navbar() {
               </motion.div>
             </a>
             {/* Offer badge — 5-for-$50 dry clean combo */}
-            <a href="/pricing" className="hidden lg:inline-flex" style={{
+            <a href="/offer" className="hidden lg:inline-flex" style={{
               alignItems: "center", gap: 6, textDecoration: "none",
               background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
               padding: "5px 12px 5px 10px", borderRadius: 999,
@@ -239,7 +240,7 @@ export default function Navbar() {
             style={{ position: "fixed", inset: 0, zIndex: 490, background: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
           >
             <motion.a
-              href="/pricing" onClick={() => setMenuOpen(false)}
+              href="/offer" onClick={() => setMenuOpen(false)}
               initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }} transition={{ duration: 0.35 }}
               style={{
                 display: "flex", alignItems: "center", gap: 8, textDecoration: "none",

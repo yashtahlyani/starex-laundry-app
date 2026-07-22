@@ -100,29 +100,29 @@ export default function ServicesPage() {
       <section style={{ padding: "0 0 80px" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
-            <div style={{ background: "#161616", borderRadius: 28, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
+            <div style={{ background: "var(--brand)", borderRadius: 28, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 40, alignItems: "center" }} className="monthly-grid">
                 <div>
-                  <span className="eyebrow" style={{ color: "#C85770" }}>StareX Monthly Plan</span>
+                  <span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }}>StareX Monthly Plan</span>
                   <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 12, marginTop: 8 }}>
                     Laundry on <em style={{ fontStyle: "italic" }}>autopilot.</em>
                   </h2>
-                  <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.95rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>
+                  <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>
                     One flat monthly rate, regular pickups, no per-order thinking. Additional laundry beyond your plan billed at ${MEMBERSHIP.overagePerLbCad}/lb.
                   </p>
-                  <a href="/monthly" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <a href="/monthly" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", padding: "13px 28px", borderRadius: 120 }}>
                     Get Started <ArrowRight size={14} />
                   </a>
                 </div>
                 <div>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.5rem", color: "#ffffff", letterSpacing: "-0.025em", marginBottom: 16 }}>
-                    ${MEMBERSHIP.monthlyPriceCad}<span style={{ fontSize: "1rem", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>/mo {HST_LABEL}</span>
+                    ${MEMBERSHIP.monthlyPriceCad}<span style={{ fontSize: "1rem", fontWeight: 400, color: "rgba(255,255,255,0.7)" }}>/mo {HST_LABEL}</span>
                   </p>
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
                     {MEMBERSHIP.perks.slice(0, 4).map(p => (
                       <li key={p} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        <Star size={13} color="#C85770" style={{ flexShrink: 0, marginTop: 3 }} />
-                        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>{p}</span>
+                        <Star size={13} color="#ffffff" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>{p}</span>
                       </li>
                     ))}
                   </ul>

@@ -9,6 +9,7 @@ import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
 const pages = [
   { label: "Services",     href: "/services" },
   { label: "Pricing",      href: "/pricing" },
+  { label: "Offer",        href: "/offer" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "About",        href: "/about" },
   { label: "FAQ",          href: "/faq" },
