@@ -253,7 +253,7 @@ export default function Home() {
 
       {/* ══ STATS — brand red band with a clean text-free backdrop ══ */}
       <section style={{
-        padding: "80px 0", position: "relative", minHeight: 480,
+        padding: "64px 0", position: "relative",
         backgroundColor: "var(--brand)",
         backgroundImage: "url(/images/starex/rack-clothes.webp)",
         backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
