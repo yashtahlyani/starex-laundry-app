@@ -116,11 +116,11 @@ export class OrderRepository {
     // orders.code has no unique constraint in the live schema, so verify the
     // generated code is unused before inserting (6-digit space makes a clash
     // rare; the loop covers the residual chance).
-    let code = generateOrderCode();
+    let code = generateOrderCode(input.service);
     for (let attempt = 0; attempt < 3; attempt++) {
       const { data: clash } = await this.db.from("orders").select("id").eq("code", code).maybeSingle();
       if (!clash) break;
-      code = generateOrderCode();
+      code = generateOrderCode(input.service);
     }
     const now = new Date().toISOString();
     const newOrder = {

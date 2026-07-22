@@ -8,6 +8,7 @@ import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersC
 import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
 import { getItemTracking } from "@/lib/itemTracking";
+import { orderCodeColor } from "@/lib/orderCode";
 import { Bell, AlertTriangle, X } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -251,7 +252,7 @@ export default async function AdminDashboardPage({
                           const { missing } = getItemTracking(o.status_history);
                           return (
                           <tr key={o.id} className="border-b border-[#F4F4F5] opacity-80">
-                            <td className="px-4 py-3 font-mono text-xs text-[#A1A1AA]">
+                            <td className="px-4 py-3 font-mono text-xs" style={{ color: orderCodeColor(o.code).text }}>
                               {o.code}
                               {missing ? (
                                 <span title={`${missing} item${missing !== 1 ? "s" : ""} missing`} className="inline-flex items-center ml-1.5">

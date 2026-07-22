@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle } from "lucide-react";
 import { StatusBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
 import { getItemTracking } from "@/lib/itemTracking";
+import { orderCodeColor } from "@/lib/orderCode";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -145,7 +146,7 @@ export default function AppOrderDrawer({
               <div>
                 <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#161616" }}>
                   {order.service_title ?? SERVICE_LABELS[order.service] ?? order.service}
-                  <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {order.code}</span>
+                  <span style={{ color: orderCodeColor(order.code).text, fontWeight: 600 }}> · {order.code}</span>
                 </p>
                 <StatusBadge status={currentStatus} pulse={!["delivered","cancelled"].includes(currentStatus)} size="sm" />
               </div>

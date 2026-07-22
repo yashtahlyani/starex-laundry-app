@@ -7,6 +7,7 @@ import { isOwnerUser } from "@/lib/owner";
 import { Package, LogOut, Plus, Clock, Star, Sparkles, ChevronRight, ArrowRight } from "lucide-react";
 import { StatusBadge, ProgressTrack, STATUS_META, fmtSlot } from "@/components/OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "@/components/AppOrderDrawer";
+import { orderCodeColor } from "@/lib/orderCode";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -117,7 +118,7 @@ export default function DashboardPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#161616" }}>{activeOrder.code}</span>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: orderCodeColor(activeOrder.code).text }}>{activeOrder.code}</span>
                     <StatusBadge status={activeOrder.status} pulse />
                   </div>
                   <p style={{ color: "#8C8C8C", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", marginTop: 4 }}>
@@ -170,7 +171,7 @@ export default function DashboardPage() {
                   <div>
                     <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#161616" }}>
                       {o.service_title ?? o.service}
-                      <span style={{ color: "#A1A1AA", fontWeight: 400 }}> · {o.code}</span>
+                      <span style={{ color: orderCodeColor(o.code).text, fontWeight: 600 }}> · {o.code}</span>
                     </p>
                     <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#A1A1AA" }}>{o.date}</p>
                   </div>

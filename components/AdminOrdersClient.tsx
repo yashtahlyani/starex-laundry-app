@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Check } from "lucide-react";
 import { StatusBadge, fmtSlot } from "./OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "./AppOrderDrawer";
+import { orderCodeColor } from "@/lib/orderCode";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -50,7 +51,7 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
                 <motion.div key={o.id} layout initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   style={{ background: "#fff", border: "2px solid #B8324F", borderRadius: 16, padding: "20px", boxShadow: "0 6px 24px rgba(184,50,79,0.22)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#161616" }}>{o.code}</span>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: orderCodeColor(o.code).text }}>{o.code}</span>
                     <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA" }}>{o.date} · {o.time_slot}</span>
                   </div>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.85rem", color: "#6B6B6B", marginBottom: 2 }}>
@@ -98,7 +99,7 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
             cursor: "pointer", textAlign: "left",
           }} className="admin-tr">
             <div>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "#161616" }}>
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.88rem", color: orderCodeColor(o.code).text }}>
                 {o.code}
                 {o.status === "placed" && <span style={{ color: "#8F2740" }}> •</span>}
               </p>

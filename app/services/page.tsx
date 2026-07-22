@@ -2,10 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Shirt, Sparkles, Zap, Package, Home, Car, CheckCircle, ArrowRight, Star } from "lucide-react";
-import { MEMBERSHIP, HST_LABEL } from "@/lib/pricing";
+import { MEMBERSHIP, HST_LABEL, PICKUP_DELIVERY, DETAILING } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
-const pastelColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
   return (
@@ -16,12 +15,12 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const services = [
-  { id: "wash-fold", Icon: Shirt,    num: "01", title: "Wash & Fold",           tagline: "Everyday laundry, done right.",     price: "$2/lb",         min: "$40 minimum order value", features: ["Sorted by colour and fabric", "Washed, dried and folded neatly", "24–48hr turnaround", "$40 minimum order value", "Serving Brampton & Mississauga"], featured: true, badge: "POPULAR" },
+  { id: "wash-fold", Icon: Shirt,    num: "01", title: "Wash & Fold",           tagline: "Everyday laundry, done right.",     price: "$2/lb",         min: `$40 minimum order value (~${PICKUP_DELIVERY.minimumLbs} lbs)`, features: ["Sorted by colour and fabric", "Washed, dried and folded neatly", "24–48hr turnaround", "Serving Brampton & Mississauga"], featured: true, badge: "POPULAR" },
   { id: "express",   Icon: Zap,      num: "02", title: "Same-Day Express",      tagline: "Same-day. No excuses.",             price: "$3/lb",         min: "Wash & Fold only",           features: ["Back the same day", "Full wash, dry and fold", "Priority processing", "SMS tracking updates", "Book early to secure your slot"], featured: false },
   { id: "dry-clean", Icon: Sparkles, num: "03", title: "Dry Cleaning",          tagline: "Delicates deserve better.",         price: "From $6.99/item",  min: "$40 minimum order value",                                features: ["Suits, sarees, gowns and silks", "Leather jackets and winter coats", "Also covers household & bedding", "24–48hr turnaround", "Every price confirmed first"], featured: false },
   { id: "ironing",   Icon: Package,  num: "04", title: "Ironing & Press",       tagline: "Crisp. Sharp. Professional.",       price: "From $1.99/item",  min: "$40 minimum order value",                                features: ["Shirts, pants, jeans and skirts", "Complex dresses, saree and pleated", "Bedding and table cloths", "Steam-pressed to perfection", "24–48hr turnaround"], featured: false },
   { id: "household", Icon: Home,     num: "05", title: "Household & Bedding",   tagline: "Big loads, no problem.",            price: "From $9.99/item",  min: "$40 minimum order value",                                features: ["Duvets, comforters and quilts", "Blankets — single to king", "Curtains, sheer to lined", "Rugs, pillows and sleeping bags", "Fluffed, bagged and returned"], featured: false },
-  { id: "detailing", Icon: Car,      num: "06", title: "Car & Sofa Detailing",  tagline: "Fabric care, beyond the bag.",      price: "From $199",        min: "$199 minimum order value",                 features: ["Full interior detailing & shampoo", "Sofa deep clean, per-seat pricing", "Stain and odour treatment", "Final pricing upon inspection", "By appointment"], featured: true, badge: "NEW" },
+  { id: "detailing", Icon: Car,      num: "06", title: "Car & Sofa Detailing",  tagline: "Fabric care, beyond the bag.",      price: "From $199",        min: "$199 minimum order value",                 features: ["Full interior detailing & shampoo", `Sofa deep clean — $${DETAILING.sofaPerSeatCad}/seat`, "Stain and odour treatment", "Final pricing upon inspection", "By appointment"], featured: true, badge: "NEW" },
 ];
 
 export default function ServicesPage() {
@@ -63,13 +62,18 @@ export default function ServicesPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }} className="services-grid">
             {services.map((s, i) => (
               <AnimatedContent key={s.title} delay={i * 0.07}>
-                <div style={{ background: pastelColors[i], borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
+                <div style={{ background: "#FFFFFF", border: "1px solid rgba(184,50,79,0.14)", borderTop: "3px solid #B8324F", borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative", boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)" }}>
                   {s.featured && (
                     <span style={{ position: "absolute", top: 20, right: 20, background: "#B8324F", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
-                  <div style={{ fontSize: "2.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "rgba(9,9,11,0.1)", letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 12 }}>{s.num}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(184,50,79,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <s.Icon size={20} color="#8F2740" />
+                    </div>
+                    <span style={{ fontSize: "1.75rem", fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "rgba(9,9,11,0.1)", letterSpacing: "-0.03em", lineHeight: 1 }}>{s.num}</span>
+                  </div>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.2rem", color: "#161616", marginBottom: 4, letterSpacing: "-0.01em" }}>{s.title}</h3>
                   <p style={{ color: "#6B6B6B", fontSize: "0.9rem", marginBottom: 16, fontStyle: "italic", fontFamily: "Kodchasan, sans-serif" }}>{s.tagline}</p>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#161616", letterSpacing: "-0.02em", marginBottom: s.min ? 2 : 16 }}>{s.price}</p>

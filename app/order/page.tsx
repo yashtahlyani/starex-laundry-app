@@ -5,6 +5,7 @@ import { Package, Search, CheckCircle, Truck, Sparkles, Clock, MapPin, CreditCar
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import IssueReportForm from "@/components/IssueReportForm";
+import { orderCodeColor } from "@/lib/orderCode";
 
 type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
 type Order = {
@@ -106,7 +107,7 @@ function OrderTracker() {
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
                   <p className="text-xs text-[#8C8C8C] font-medium mb-1 font-body">Order</p>
-                  <p className="font-mono font-bold text-[#8F2740] text-xl">{order.code}</p>
+                  <p className="font-mono font-bold text-xl" style={{ color: orderCodeColor(order.code).text }}>{order.code}</p>
                 </div>
                 {meta && (
                   <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 bg-[#161616]/5 border border-[#161616]/10 text-xs font-semibold font-body"
