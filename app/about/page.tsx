@@ -63,7 +63,7 @@ export default function About() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.35 }}
             style={{ display: "flex", gap: 32, flexWrap: "wrap" }}
           >
-            {[["10,000+", "customers"], ["4.9★", "avg rating"], ["98%", "on-time"], ["2019", "founded"]].map(([n, l]) => (
+            {[["10,000+", "customers"], ["98%", "on-time"], ["24–48h", "turnaround"], ["2019", "founded"]].map(([n, l]) => (
               <div key={l}>
                 <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#ffffff", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{n}</p>
                 <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>

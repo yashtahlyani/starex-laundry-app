@@ -2,13 +2,13 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ArrowRight, Star, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
+import { ArrowRight, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
 import { HST_LABEL } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const marqueeItems = [
-  "★ 4.9 Rating", "$40 Minimum Order", "24–48h Turnaround", "$2 Per Pound",
+  "Fully Insured", "$40 Minimum Order", "24–48h Turnaround", "$2 Per Pound",
   "Same-Day Service Available", "Dry Cleaning & Ironing", "Car & Sofa Detailing", "No Hidden Fees",
 ];
 
@@ -23,7 +23,7 @@ const comparisons = [
   { feature: "Pricing",           them: "Coin-by-coin, adds up",       us: "$2/lb or $100/mo flat" },
 ];
 
-function Counter({ target, suffix = "", fixed = false }: { target: number; suffix?: string; fixed?: boolean }) {
+function Counter({ target, suffix = "", fixed = false, prefix = false }: { target: number; suffix?: string; fixed?: boolean; prefix?: boolean }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -40,7 +40,8 @@ function Counter({ target, suffix = "", fixed = false }: { target: number; suffi
     };
     requestAnimationFrame(raf);
   }, [inView, target, fixed]);
-  return <span ref={ref}>{fixed ? count.toFixed(1) : count.toLocaleString()}{suffix}</span>;
+  const num = fixed ? count.toFixed(1) : count.toLocaleString();
+  return <span ref={ref}>{prefix ? `${suffix}${num}` : `${num}${suffix}`}</span>;
 }
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
@@ -57,11 +58,11 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
   );
 }
 
-const stats = [
-  { value: 10000, suffix: "+", label: "Happy Customers", desc: "Across Brampton & Mississauga" },
-  { value: 4.9,   suffix: "",  label: "Average Rating",  desc: "★ Google & Yelp", fixed: true },
+const stats: { value: number; suffix: string; label: string; desc: string; fixed?: boolean; prefix?: boolean }[] = [
+  { value: 500,   suffix: "$", label: "Insured Per Item", desc: "Every garment covered", prefix: true },
+  { value: 40,    suffix: "$", label: "Minimum Order",    desc: "Flat, no surprises", prefix: true },
   { value: 98,    suffix: "%", label: "On-Time Delivery", desc: "Promised window kept" },
-  { value: 24,    suffix: "hr", label: "Turnaround",     desc: "24–48h, door to door" },
+  { value: 24,    suffix: "hr", label: "Turnaround",      desc: "24–48h, door to door" },
 ];
 
 const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
@@ -81,17 +82,10 @@ const steps = [
   { label: "Step 3", title: "Fresh Delivery",    desc: "Clean, folded and returned within 24 hours — or ironed and hung. Ready to wear, zero stress.", tags: ["24hr Return", "Insured"] },
 ];
 
-const testimonials = [
-  { name: "Sarah M.",  role: "Brampton, ON",     text: "I switched from my local laundromat and honestly never going back. Quality is incredible for the price.",  stars: 5 },
-  { name: "James K.",  role: "Mississauga, ON",  text: "Pickup at 8am, back by 6pm. Shirts perfectly pressed. This is the kind of service you tell everyone about.", stars: 5 },
-  { name: "Priya R.",  role: "Brampton, ON",     text: "My sarees came back better than new. They are incredibly careful with every single piece.",                  stars: 5 },
-  { name: "David L.",  role: "Mississauga, ON",  text: "We use StareX for our restaurant linens. Reliable, affordable, and always on time. Absolute lifesaver.",  stars: 5 },
-];
-
 const trust = [
   { Icon: Shield, title: "Fully Insured",  desc: "Every garment covered up to $500 against damage or loss." },
   { Icon: Leaf,   title: "Eco-Friendly",   desc: "Biodegradable detergents. Low-water wash cycles." },
-  { Icon: Star,   title: "4.9★ Rated",     desc: "Consistently top-rated across Google and Yelp." },
+  { Icon: CheckCircle, title: "No Hidden Fees", desc: "Every price confirmed with you before we start." },
   { Icon: Clock,  title: "Always On Time", desc: "98% of deliveries arrive within the promised window." },
 ];
 
@@ -211,31 +205,18 @@ export default function Home() {
               </a>
             </motion.div>
 
-            {/* Social proof */}
+            {/* Trust strip — factual claims only (insured, service area, turnaround).
+                No star ratings or customer counts here: those aren't backed by
+                real, verifiable numbers yet, and displaying them risks a Google
+                manual action for misleading content/reviews. Swap in real
+                Google Business Profile stats once they exist. */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.75, ease }}
-              style={{ display: "flex", alignItems: "center", gap: "14px", marginTop: "48px" }}>
-              <div style={{ display: "flex" }}>
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} style={{
-                    width: 30, height: 30, borderRadius: "50%", marginLeft: i === 0 ? 0 : -8,
-                    background: ["#B8324F","#4A4A4A","#B5233F","#8C8C8C","#161616"][i],
-                    border: "2px solid #FFFFFF",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "0.65rem", fontWeight: 700, color: "#FFFFFF",
-                    fontFamily: "Kodchasan, sans-serif",
-                  }}>
-                    {["SM","JK","PR","DL","AK"][i]}
-                  </div>
-                ))}
-              </div>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ display: "flex", gap: 2 }}>
-                  {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="var(--brand)" color="var(--brand)" />)}
-                </div>
-                <p style={{ color: "#6B6B6B", fontSize: "0.8rem", marginTop: 2, fontFamily: "Kodchasan, sans-serif" }}>
-                  Loved by <strong style={{ color: "#161616" }}>10,000+</strong> Canadians
-                </p>
-              </div>
+              style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "48px", flexWrap: "wrap" }}>
+              {["Fully insured", "Brampton & Mississauga", "24–48h turnaround"].map(item => (
+                <span key={item} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F2F2F2", borderRadius: 999, padding: "6px 14px", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif", fontWeight: 600, color: "#4A4A4A" }}>
+                  <CheckCircle size={12} color="#8F2740" /> {item}
+                </span>
+              ))}
             </motion.div>
           </div>
 
@@ -288,7 +269,7 @@ export default function Home() {
                   transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 >
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,3.5vw,2.8rem)", letterSpacing: "-0.02em", color: "#ffffff", lineHeight: 1, marginBottom: "8px" }}>
-                    <Counter target={s.value} suffix={s.suffix} fixed={s.fixed} />
+                    <Counter target={s.value} suffix={s.suffix} fixed={s.fixed} prefix={s.prefix} />
                   </p>
                   <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", marginBottom: "4px" }}>{s.label}</p>
                   <p style={{ color: "rgba(255,255,255,0.75)", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem" }}>{s.desc}</p>
@@ -518,61 +499,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ TESTIMONIALS — light ══ */}
-      <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
-          <AnimatedContent style={{ marginBottom: "48px" }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>What People Say</span>
-            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
-              Thousands of happy{" "}
-              <span className="display-accent" style={{ fontWeight: 600 }}>customers.</span>
-            </h2>
-          </AnimatedContent>
-
-          {/* Featured testimonial */}
-          <AnimatedContent style={{ marginBottom: "24px" }}>
-            <div style={{ background: "var(--brand)", borderRadius: 20, padding: "40px 48px", position: "relative", overflow: "hidden" }}>
-              <p aria-hidden="true" style={{ position: "absolute", top: -20, left: 20, fontSize: "12rem", lineHeight: 1, fontFamily: "Poppins, sans-serif", color: "rgba(255,255,255,0.08)", pointerEvents: "none", userSelect: "none" }}>&ldquo;</p>
-              <div style={{ display: "flex", gap: 3, marginBottom: 16, position: "relative" }}>
-                {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="#FFFFFF" color="#FFFFFF" />)}
-              </div>
-              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 500, fontSize: "clamp(1.1rem,2vw,1.375rem)", color: "#ffffff", lineHeight: 1.6, fontStyle: "italic", maxWidth: "72ch", marginBottom: 24, position: "relative" }}>
-                &ldquo;Switched to StareX six months ago and it&apos;s become the one subscription I&apos;d never cancel. My clothes come back cleaner than they&apos;ve ever been — pressed, folded, and always on time.&rdquo;
-              </p>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.2)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
-                  M
-                </div>
-                <div>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#ffffff" }}>Michael T.</p>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "rgba(255,255,255,0.75)" }}>Mississauga, ON · Monthly plan member</p>
-                </div>
-              </div>
-            </div>
-          </AnimatedContent>
-
-          {/* 2×2 grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "16px" }} className="testimonials-grid">
-            {testimonials.map((t, i) => (
-              <AnimatedContent key={t.name} delay={i * 0.06}>
-                <div className="card" style={{ padding: "28px 32px", height: "100%" }}>
-                  <div style={{ display: "flex", gap: 3, marginBottom: "16px" }}>
-                    {[...Array(t.stars)].map((_, j) => <Star key={j} size={14} fill="#B8324F" color="#B8324F" />)}
-                  </div>
-                  <p style={{ color: "#4A4A4A", fontSize: "1rem", lineHeight: 1.75, marginBottom: "24px", fontFamily: "Kodchasan, sans-serif", fontStyle: "italic" }}>
-                    &ldquo;{t.text}&rdquo;
-                  </p>
-                  <div style={{ borderTop: "1px solid rgba(20,20,20,0.06)", paddingTop: "16px" }}>
-                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616" }}>{t.name}</p>
-                    <p style={{ color: "rgba(20,20,20,0.4)", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>{t.role}</p>
-                  </div>
-                </div>
-              </AnimatedContent>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ══ TRUST BADGES — cream ══ */}
       <section style={{ background: "#FFFFFF", padding: "64px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
@@ -630,7 +556,6 @@ export default function Home() {
           .stats-grid           { grid-template-columns: repeat(2,1fr) !important; }
           .services-grid        { grid-template-columns: 1fr !important; }
           .pricing-preview-grid { grid-template-columns: 1fr !important; }
-          .testimonials-grid    { grid-template-columns: 1fr !important; }
           .trust-grid           { grid-template-columns: repeat(2,1fr) !important; }
           .comparison-layout    { grid-template-columns: 1fr !important; gap: 40px !important; }
         }
