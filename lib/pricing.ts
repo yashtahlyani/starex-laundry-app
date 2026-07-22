@@ -12,45 +12,78 @@ export const SITE_URL = "www.starexlaundry.ca";
 
 // The bookable service types (Step 1 of the booking flow)
 export const PLANS = [
-  { id: "wash-fold", label: "Wash & Fold",           unit: "per lb",   price: 2.29, turnaround: "24–48 hrs" },
-  { id: "express",   label: "Same-Day Express",      unit: "per lb",   price: 3.44, turnaround: "Same day" },
+  { id: "wash-fold", label: "Wash & Fold",           unit: "per lb",   price: 2.00, turnaround: "24–48 hrs" },
+  { id: "express",   label: "Same-Day Express",      unit: "per lb",   price: 3.00, turnaround: "Same day" },
   { id: "dry-clean", label: "Dry Clean / Premium",   unit: "per item", price: null, turnaround: "24–48 hrs" },
   { id: "ironing",   label: "Ironing & Press",       unit: "per item", price: null, turnaround: "24–48 hrs" },
   { id: "household", label: "Household Items",       unit: "per item", price: null, turnaround: "24–48 hrs" },
   { id: "detailing", label: "Car & Sofa Detailing",  unit: "on inspection", price: null, turnaround: "By appointment" },
 ] as const;
 
+// Same-Day Express is a rush option on Wash & Fold only — not available for
+// dry-clean, ironing, household, or detailing.
+export const EXPRESS_APPLIES_TO = "wash-fold";
+
 export const PICKUP_DELIVERY = {
-  perLbCad: 2.29,
-  freeOverLb: 15,               // free pickup & delivery on orders of 15 lbs or more
-  sameDaySurchargePct: 50,      // same-day service +50%, subject to availability
-  minimumChargeCad: 34.35,      // pre-auth floor ≈ 15 lb × $2.29
+  perLbCad: 2.00,
+  minimumLbs: 20,                // 20 lb minimum for a Wash & Fold order
 };
+
+// Minimum order value — charged regardless of actual weight/item count/size.
+// "5 services" = wash-fold, express, dry-clean, ironing, household.
+// "6th service" = Car & Sofa Detailing, which has its own higher minimum
+// (a single sofa seat still costs the $199 minimum, not the per-seat rate).
+export const MINIMUM_ORDER = {
+  standardCad: 40,
+  detailingCad: 199,
+  note: "Minimum order value applies no matter the weight, item count, or size.",
+};
+
+// Ontario HST — shown as "+HST" alongside prices rather than baked into the
+// displayed number, since the exact taxable total is confirmed at checkout.
+export const HST_RATE = 0.13;
+export const HST_LABEL = "+HST";
 
 export const MEMBERSHIP = {
   name: "StareX Monthly Plan",
   monthlyPriceCad: 100,
+  includedLbs: 50,
+  overagePerLbCad: 2, // additional laundry beyond the plan's included weight
   perks: [
     "No minimum laundry commitment",
     "2+1 pickups per month (up to 50 lbs)",
     "24–48h turnaround on all orders",
     "Free fabric softener, hot wash & bleach",
     "Exclusive discounts for commercial clients",
+    "Additional laundry beyond 50 lbs billed at $2/lb",
   ],
 };
 
 export const DETAILING = {
-  carFromCad: 199,   // car detailing / dry cleaning / shampoo — starting price
-  sofaPerSeatCad: 49, // sofa deep clean / shampoo — per seat
-  note: "Final pricing upon inspection",
+  carFromCad: 199,     // car detailing / dry cleaning / shampoo — starting price
+  sofaPerSeatCad: 49,  // sofa deep clean / shampoo — per seat, subject to the $199 minimum below
+  minimumCad: MINIMUM_ORDER.detailingCad,
+  note: "Final pricing upon inspection. $199 minimum order applies.",
+};
+
+// Dry-clean combo promo — advertised in the header offer banner and on the
+// Pricing / Services pages.
+export const DRY_CLEAN_COMBO = {
+  tagline: "5 for $50",
+  title: "Value for Money",
+  priceCad: 50,
+  itemCount: 5,
+  description: "Dry clean any 5 regular garments/pieces, including 1 blanket or quilt.",
+  exclusions: "Excludes wedding dresses and leather items.",
 };
 
 // Every laundry service is priced by weight or per item, so the real total isn't
 // known until staff weigh/count the order after pickup. We pre-authorize this
 // minimum-charge floor at booking time and capture the real (possibly higher)
 // amount from the admin dashboard once the order is weighed in.
-export function estimateOrderAmountCents(_serviceId: string): number {
-  return Math.round(PICKUP_DELIVERY.minimumChargeCad * 100);
+export function estimateOrderAmountCents(serviceId: string): number {
+  const minimum = serviceId === "detailing" ? MINIMUM_ORDER.detailingCad : MINIMUM_ORDER.standardCad;
+  return Math.round(minimum * 100);
 }
 
 export type CatalogItem = { name: string; price: number; from?: boolean };

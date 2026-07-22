@@ -1,20 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
+import { CATALOG, MINIMUM_ORDER, HST_LABEL } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const services = [
-  { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",      price: "$2.29/lb",    color: "#EDEDED" },
-  { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Subject to availability", price: "+50%",      color: "#F2F2F2" },
-  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",    price: "From $6.99",  color: "#EAEAEA" },
-  { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",         price: "From $1.99",  color: "#E5E5E5" },
-  { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs", price: "From $9.99", color: "#EDEDED" },
-  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",  price: "From $199",   color: "#F2F2F2" },
+  { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",         price: "$2/lb",       color: "#EDEDED" },
+  { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Wash & Fold only",          price: "$3/lb",       color: "#F2F2F2" },
+  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",        price: "From $6.99",  color: "#EAEAEA" },
+  { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",             price: "From $1.99",  color: "#E5E5E5" },
+  { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs",    price: "From $9.99",  color: "#EDEDED" },
+  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",     price: "From $199",   color: "#F2F2F2" },
 ];
+
+// Dry cleaning and household/bedding items overlap a lot (blankets, curtains,
+// rugs can go either way) — when a customer is looking at Dry Cleaning prices,
+// show the Household catalog right alongside it so they don't have to guess
+// or leave the booking flow to check.
+const CATALOG_FOR_SERVICE: Record<string, string[]> = {
+  "dry-clean": ["dry-clean", "household"],
+  "ironing":   ["ironing"],
+  "household": ["household", "dry-clean"],
+};
 
 const timeSlots = [
   "8:00 AM – 10:00 AM", "10:00 AM – 12:00 PM", "12:00 PM – 2:00 PM",
@@ -42,14 +54,21 @@ type FormState = {
   name: string; email: string; phone: string; address: string; notes: string;
 };
 
-export default function BookPage() {
-  const [step, setStep] = useState(0);
+function BookPageInner() {
+  const searchParams = useSearchParams();
+  const preselectedService = searchParams.get("service");
+  const validPreselect = services.some(s => s.id === preselectedService) ? preselectedService! : "";
+
+  // Arriving from a specific service's "Book this service" CTA — skip the
+  // service-selection step entirely since it's already chosen, straight to Schedule.
+  const [step, setStep] = useState(validPreselect ? 1 : 0);
   const [direction, setDirection] = useState(1);
-  const [form, setForm] = useState<FormState>({ service: "", date: "", time: "", name: "", email: "", phone: "", address: "", notes: "" });
+  const [form, setForm] = useState<FormState>({ service: validPreselect, date: "", time: "", name: "", email: "", phone: "", address: "", notes: "" });
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [submitting, setSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
@@ -208,6 +227,39 @@ export default function BookPage() {
                     );
                   })}
                 </div>
+
+                {/* Inline price list — shown right here so customers never have to
+                    leave the booking flow to check what dry-clean/ironing/household
+                    items cost. */}
+                {CATALOG_FOR_SERVICE[form.service] && (
+                  <div style={{ marginTop: 24, background: "#FAFAFA", borderRadius: 16, padding: "20px 22px" }}>
+                    {CATALOG_FOR_SERVICE[form.service].map(catId => {
+                      const tab = CATALOG.find(t => t.id === catId);
+                      if (!tab) return null;
+                      return (
+                        <div key={catId} style={{ marginBottom: 16 }}>
+                          <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.78rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#8F2740", marginBottom: 10 }}>
+                            {catId === form.service ? tab.label : `Also dry-cleanable: ${tab.label}`}
+                          </p>
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "4px 20px" }} className="book-catalog-grid">
+                            {tab.sections.flatMap(s => s.items).map(item => (
+                              <div key={item.name} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "5px 0", borderBottom: "1px solid #EFEFEF" }}>
+                                <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#4A4A4A" }}>{item.name}</span>
+                                <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8125rem", color: "#161616", whiteSpace: "nowrap" }}>
+                                  {item.from ? "From " : ""}${item.price.toFixed(2)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C", marginTop: 4 }}>
+                      Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies.
+                    </p>
+                  </div>
+                )}
+
                 <div style={{ marginTop: 28 }}>
                   <button onClick={goNext} disabled={!canNext} className="btn-primary"
                     style={{ opacity: canNext ? 1 : 0.4, cursor: canNext ? "pointer" : "not-allowed", display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -335,7 +387,20 @@ export default function BookPage() {
                   ))}
                 </div>
 
-                <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>By confirming, you agree to our terms. Price confirmed via SMS after weigh-in.</p>
+                <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>
+                  Price confirmed via SMS after weigh-in. Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies (${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing).
+                </p>
+
+                <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 20, cursor: "pointer" }}>
+                  <input
+                    type="checkbox" checked={termsAccepted}
+                    onChange={e => setTermsAccepted(e.target.checked)}
+                    style={{ marginTop: 3, width: 16, height: 16, accentColor: "#B8324F", flexShrink: 0, cursor: "pointer" }}
+                  />
+                  <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", lineHeight: 1.5 }}>
+                    I've read and accept StareX's <a href="/terms" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms &amp; Conditions</a>.
+                  </span>
+                </label>
 
                 {submitError && (
                   <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 16, color: "#EF4444", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>
@@ -345,7 +410,7 @@ export default function BookPage() {
 
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
-                  <button onClick={handleSubmit} disabled={submitting} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: submitting ? 0.7 : 1 }}>
+                  <button onClick={handleSubmit} disabled={submitting || !termsAccepted} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: (submitting || !termsAccepted) ? 0.5 : 1, cursor: (submitting || !termsAccepted) ? "not-allowed" : "pointer" }}>
                     {submitting ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                         <span style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(10,26,15,0.3)", borderTopColor: "#FFFFFF", animation: "spin 0.8s linear infinite", display: "inline-block" }} />
@@ -380,11 +445,15 @@ export default function BookPage() {
                     <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
                     <span style={{ color: "#B8324F", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
                   </div>
-                  <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in</p>
+                  <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in. Prices shown {HST_LABEL}.</p>
                 </div>
               </div>
               <div style={{ marginTop: 20, background: "#F2F2F2", borderRadius: 10, padding: "11px 14px" }}>
-                <p style={{ color: "#8F2740", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>Free pickup &amp; delivery on orders of 15 lbs or more</p>
+                <p style={{ color: "#8F2740", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>
+                  {form.service === "detailing"
+                    ? `$${MINIMUM_ORDER.detailingCad} minimum order value`
+                    : `$${MINIMUM_ORDER.standardCad} minimum order value`}
+                </p>
               </div>
             </div>
           </div>
@@ -393,8 +462,17 @@ export default function BookPage() {
 
       <style>{`
         @media (max-width: 768px) { .book-layout { grid-template-columns: 1fr !important; } }
+        @media (max-width: 480px) { .book-catalog-grid { grid-template-columns: 1fr !important; } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
     </div>
+  );
+}
+
+export default function BookPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#FFFFFF" }} />}>
+      <BookPageInner />
+    </Suspense>
   );
 }

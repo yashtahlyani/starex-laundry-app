@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shirt, Sparkles, Zap, Package, Home, Car, CheckCircle, ArrowRight } from "lucide-react";
+import { Shirt, Sparkles, Zap, Package, Home, Car, CheckCircle, ArrowRight, Star } from "lucide-react";
+import { MEMBERSHIP, HST_LABEL } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 const pastelColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
@@ -15,12 +16,12 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const services = [
-  { Icon: Shirt,    num: "01", title: "Wash & Fold",           tagline: "Everyday laundry, done right.",     price: "$2.29/lb",         min: "Free pickup & delivery on 15 lbs+", features: ["Sorted by colour and fabric", "Washed, dried and folded neatly", "24–48hr turnaround", "Free pickup & delivery over 15 lbs", "Serving Brampton & Mississauga"], featured: true, badge: "POPULAR" },
-  { Icon: Zap,      num: "02", title: "Same-Day Express",      tagline: "Same-day. No excuses.",             price: "+50%",             min: "Subject to availability",           features: ["Back the same day", "Full wash, dry and fold", "Priority processing", "SMS tracking updates", "Book early to secure your slot"], featured: false },
-  { Icon: Sparkles, num: "03", title: "Dry Cleaning",          tagline: "Delicates deserve better.",         price: "From $6.99/item",  min: null,                                features: ["Suits, sarees, gowns and silks", "Leather jackets and winter coats", "Wedding dress specialists", "24–48hr turnaround", "Every price confirmed first"], featured: false },
-  { Icon: Package,  num: "04", title: "Ironing & Press",       tagline: "Crisp. Sharp. Professional.",       price: "From $1.99/item",  min: null,                                features: ["Shirts, pants, jeans and skirts", "Complex dresses, saree and pleated", "Bedding and table cloths", "Steam-pressed to perfection", "24–48hr turnaround"], featured: false },
-  { Icon: Home,     num: "05", title: "Household & Bedding",   tagline: "Big loads, no problem.",            price: "From $9.99/item",  min: null,                                features: ["Duvets, comforters and quilts", "Blankets — single to king", "Curtains, sheer to lined", "Rugs, pillows and sleeping bags", "Fluffed, bagged and returned"], featured: false },
-  { Icon: Car,      num: "06", title: "Car & Sofa Detailing",  tagline: "Fabric care, beyond the bag.",      price: "From $199",        min: "Sofa $49 per seat",                 features: ["Full interior detailing & shampoo", "Sofa deep clean, per-seat pricing", "Stain and odour treatment", "Final pricing upon inspection", "By appointment"], featured: true, badge: "NEW" },
+  { id: "wash-fold", Icon: Shirt,    num: "01", title: "Wash & Fold",           tagline: "Everyday laundry, done right.",     price: "$2/lb",         min: "$40 minimum order value", features: ["Sorted by colour and fabric", "Washed, dried and folded neatly", "24–48hr turnaround", "$40 minimum order value", "Serving Brampton & Mississauga"], featured: true, badge: "POPULAR" },
+  { id: "express",   Icon: Zap,      num: "02", title: "Same-Day Express",      tagline: "Same-day. No excuses.",             price: "$3/lb",         min: "Wash & Fold only",           features: ["Back the same day", "Full wash, dry and fold", "Priority processing", "SMS tracking updates", "Book early to secure your slot"], featured: false },
+  { id: "dry-clean", Icon: Sparkles, num: "03", title: "Dry Cleaning",          tagline: "Delicates deserve better.",         price: "From $6.99/item",  min: "$40 minimum order value",                                features: ["Suits, sarees, gowns and silks", "Leather jackets and winter coats", "Also covers household & bedding", "24–48hr turnaround", "Every price confirmed first"], featured: false },
+  { id: "ironing",   Icon: Package,  num: "04", title: "Ironing & Press",       tagline: "Crisp. Sharp. Professional.",       price: "From $1.99/item",  min: "$40 minimum order value",                                features: ["Shirts, pants, jeans and skirts", "Complex dresses, saree and pleated", "Bedding and table cloths", "Steam-pressed to perfection", "24–48hr turnaround"], featured: false },
+  { id: "household", Icon: Home,     num: "05", title: "Household & Bedding",   tagline: "Big loads, no problem.",            price: "From $9.99/item",  min: "$40 minimum order value",                                features: ["Duvets, comforters and quilts", "Blankets — single to king", "Curtains, sheer to lined", "Rugs, pillows and sleeping bags", "Fluffed, bagged and returned"], featured: false },
+  { id: "detailing", Icon: Car,      num: "06", title: "Car & Sofa Detailing",  tagline: "Fabric care, beyond the bag.",      price: "From $199",        min: "$199 minimum order value",                 features: ["Full interior detailing & shampoo", "Sofa deep clean, per-seat pricing", "Stain and odour treatment", "Final pricing upon inspection", "By appointment"], featured: true, badge: "NEW" },
 ];
 
 export default function ServicesPage() {
@@ -81,13 +82,50 @@ export default function ServicesPage() {
                       </li>
                     ))}
                   </ul>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href={`/book?service=${s.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>
               </AnimatedContent>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Monthly Plan — its own dedicated journey, not the standard booking flow */}
+      <section style={{ padding: "0 0 80px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent>
+            <div style={{ background: "#161616", borderRadius: 28, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 40, alignItems: "center" }} className="monthly-grid">
+                <div>
+                  <span className="eyebrow" style={{ color: "#C85770" }}>StareX Monthly Plan</span>
+                  <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 12, marginTop: 8 }}>
+                    Laundry on <em style={{ fontStyle: "italic" }}>autopilot.</em>
+                  </h2>
+                  <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.95rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", marginBottom: 24 }}>
+                    One flat monthly rate, regular pickups, no per-order thinking. Additional laundry beyond your plan billed at ${MEMBERSHIP.overagePerLbCad}/lb.
+                  </p>
+                  <a href="/monthly" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    Get Started <ArrowRight size={14} />
+                  </a>
+                </div>
+                <div>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.5rem", color: "#ffffff", letterSpacing: "-0.025em", marginBottom: 16 }}>
+                    ${MEMBERSHIP.monthlyPriceCad}<span style={{ fontSize: "1rem", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>/mo {HST_LABEL}</span>
+                  </p>
+                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+                    {MEMBERSHIP.perks.slice(0, 4).map(p => (
+                      <li key={p} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                        <Star size={13} color="#C85770" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </AnimatedContent>
         </div>
       </section>
 
@@ -116,6 +154,7 @@ export default function ServicesPage() {
       <style>{`
         @media (max-width: 900px) {
           .services-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .monthly-grid  { grid-template-columns: 1fr !important; gap: 28px !important; }
         }
         @media (max-width: 560px) { .services-grid { grid-template-columns: 1fr !important; } }
       `}</style>

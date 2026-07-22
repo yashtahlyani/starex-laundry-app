@@ -16,7 +16,7 @@ const sections = [
   },
   {
     title: "Accounts and Registration",
-    body: `To book a pickup you must create an account with a valid email address. You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. You must be at least 18 years old to create an account and use the Service. Notify us immediately at hello@starexlaundry.ca if you suspect unauthorized use of your account.`,
+    body: `You may book a pickup as a guest with just your contact details, or create an account to track orders and access the Monthly Plan. If you create an account, you are responsible for maintaining the confidentiality of your credentials and for all activity that occurs under your account. You must be at least 18 years old to book with or use the Service. Notify us immediately at hello@starexlaundry.ca if you suspect unauthorized use of your account.`,
   },
   {
     title: "Booking, Cancellations, and Changes",
@@ -24,7 +24,7 @@ const sections = [
   },
   {
     title: "Pricing and Payment",
-    body: `Service pricing is calculated based on weight (for Wash & Fold, at $2.29 per pound) or per item (for Dry Cleaning, Ironing, and Household items). Car and sofa detailing is priced upon inspection. Pickup and delivery are free on orders of 15 lbs or more; same-day service carries a 50% surcharge and is subject to availability. The price shown at booking is an estimate; the final price is confirmed via SMS after your laundry is weighed or counted at our facility. Payment is collected upon delivery using the payment method on file. All prices are in Canadian Dollars (CAD) and are inclusive of applicable taxes where required by law.`,
+    body: `Service pricing is calculated based on weight (for Wash & Fold, at $2 per pound) or per item (for Dry Cleaning, Ironing, and Household items). Car and sofa detailing is priced upon inspection. A minimum order value of $40 applies to Wash & Fold, Same-Day Express, Dry Cleaning, Ironing, and Household Items; a minimum order value of $199 applies to Car & Sofa Detailing. Same-Day Express is available on Wash & Fold only, at a flat $3 per pound. All prices shown exclude HST, which is added at checkout. The price shown at booking is an estimate; the final price is confirmed via SMS after your laundry is weighed or counted at our facility. Payment is collected upon delivery using the payment method on file, once delivery is confirmed. All prices are in Canadian Dollars (CAD).`,
   },
   {
     title: "Care of Items",

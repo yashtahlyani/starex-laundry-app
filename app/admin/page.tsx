@@ -13,25 +13,25 @@ import { Bell, AlertTriangle, X } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 const STATUS_COLORS: Record<string, string> = {
-  placed:           "bg-blue-50 text-blue-700",
-  confirmed:        "bg-teal-50 text-teal-700",
-  picked_up:        "bg-yellow-100 text-yellow-800",
-  washing:          "bg-orange-50 text-orange-700",
-  folding:          "bg-purple-50 text-purple-700",
-  out_for_delivery: "bg-green-50 text-green-700",
-  delivered:        "bg-gray-100 text-gray-500",
-  cancelled:        "bg-red-50 text-red-700",
+  placed:              "bg-blue-50 text-blue-700",
+  confirmed:           "bg-teal-50 text-teal-700",
+  picked_up:           "bg-yellow-100 text-yellow-800",
+  in_process:          "bg-orange-50 text-orange-700",
+  ready_for_delivery:  "bg-green-50 text-green-700",
+  payment_pending:     "bg-amber-100 text-amber-800",
+  delivered:           "bg-gray-100 text-gray-500",
+  cancelled:           "bg-red-50 text-red-700",
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  placed:           "Placed",
-  confirmed:        "Confirmed",
-  picked_up:        "Picked Up",
-  washing:          "Cleaning",
-  folding:          "Folding",
-  out_for_delivery: "Out for Delivery",
-  delivered:        "Delivered",
-  cancelled:        "Cancelled",
+  placed:              "Placed",
+  confirmed:           "Confirmed",
+  picked_up:           "Picked Up",
+  in_process:          "In Process",
+  ready_for_delivery:  "Ready for Delivery",
+  payment_pending:     "Payment Pending",
+  delivered:           "Delivered",
+  cancelled:           "Cancelled",
 };
 
 function fmtDate(d: string) {
@@ -55,7 +55,7 @@ export default async function AdminDashboardPage({
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "washing", "folding", "out_for_delivery"];
+  const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "in_process", "ready_for_delivery", "payment_pending"];
 
   // activeOrders drives the header bell + the Incoming section, both of which
   // render above the tabs on every tab — so it's always needed. pastOrders

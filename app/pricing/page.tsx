@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Search } from "lucide-react";
-import { CATALOG, MEMBERSHIP, DETAILING } from "@/lib/pricing";
+import { CATALOG, MEMBERSHIP, DETAILING, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 const pastelColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
@@ -17,24 +17,24 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const payAsYouGo = [
-  { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2.29",      unit: "/lb",     min: "Free pickup & delivery on 15 lbs+", desc: "24–48h turnaround, washed, dried & folded" },
-  { Icon: Zap,      title: "Same-Day Express",            price: "+50%",       unit: "",        min: "Subject to availability",           desc: "Back the same day when you need it fast" },
-  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $6.99", unit: "/item",   min: null,                                desc: "Suits, dresses, delicates & formalwear" },
-  { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: null,                                desc: "Shirts, pants, sarees & complex dresses" },
-  { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: null,                                desc: "Duvets, blankets, curtains, rugs & more" },
-  { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $199",  unit: "",        min: "Sofa $49 per seat",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },
+  { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded" },
+  { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast" },
+  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $6.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear" },
+  { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses" },
+  { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Duvets, blankets, curtains, rugs & more" },
+  { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $199",  unit: "",        min: "$199 minimum order value",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },
 ];
 
 const planPPP = {
   name: "Pay-Per-Pound",
   tagline: "No commitment, pay as you go",
-  price: "$2.29",
+  price: "$2",
   suffix: "/lb",
   features: [
-    "Free pickup & delivery on 15 lbs or more",
+    "$40 minimum order value",
     "24–48h turnaround service",
     "Serving Brampton & Mississauga",
-    "Same-day service +50% (subject to availability)",
+    "Same-day Express available at $3/lb (Wash & Fold only)",
     "Wash preferences from $2.99",
   ],
 };
@@ -79,7 +79,7 @@ export default function PricingPage() {
             transition={{ duration: 0.6, delay: 0.18, ease }}
             style={{ color: "rgba(255,255,255,0.8)", fontSize: "1.0625rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif" }}
           >
-            No hidden fees, no surprises. Laundry at $2.29 per pound, or one flat monthly plan.
+            No hidden fees, no surprises. Laundry at $2 per pound, or one flat monthly plan.
             Every price confirmed before we begin.
           </motion.p>
         </div>
@@ -184,7 +184,7 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <a href="/book" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "transparent", border: "1.5px solid rgba(20,20,20,0.16)", color: "#161616", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                <a href="/book?service=wash-fold" style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 120, background: "transparent", border: "1.5px solid rgba(20,20,20,0.16)", color: "#161616", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                   Book a pickup
                 </a>
               </div>
@@ -210,7 +210,7 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <a href="/book" className="btn-primary" style={{ textAlign: "center", textDecoration: "none" }}>
+                <a href="/monthly" className="btn-primary" style={{ textAlign: "center", textDecoration: "none" }}>
                   Get started
                 </a>
               </div>
@@ -257,7 +257,7 @@ export default function PricingPage() {
 
           <AnimatedContent>
             <p style={{ color: "#8C8C8C", fontSize: "0.875rem", marginTop: 24, textAlign: "center", fontFamily: "Kodchasan, sans-serif" }}>
-              Free pickup and delivery on orders of 15 lbs or more. We weigh at pickup and confirm your price before washing.
+              Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value (${MINIMUM_ORDER.detailingCad} for Car &amp; Sofa Detailing). We weigh at pickup and confirm your price before washing.
             </p>
           </AnimatedContent>
         </div>
@@ -285,7 +285,7 @@ export default function PricingPage() {
                     Interior detailing, dry cleaning and shampoo for your vehicle and upholstery —
                     the same fabric care expertise, beyond the laundry bag. {DETAILING.note}.
                   </p>
-                  <a href="/book" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", padding: "13px 28px", borderRadius: 120 }}>
+                  <a href="/book?service=detailing" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", padding: "13px 28px", borderRadius: 120 }}>
                     Request an inspection <ArrowRight size={14} />
                   </a>
                 </div>
@@ -314,6 +314,29 @@ export default function PricingPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </AnimatedContent>
+        </div>
+      </section>
+
+      {/* Dry-clean combo — Value for Money */}
+      <section style={{ padding: "0 0 80px", background: "#FFFFFF" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent>
+            <div style={{ background: "#F2F2F2", borderRadius: 24, padding: "40px", textAlign: "center" }}>
+              <span className="eyebrow" style={{ color: "#8F2740" }}>{DRY_CLEAN_COMBO.title}</span>
+              <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,4vw,2.75rem)", letterSpacing: "-0.025em", color: "#161616", marginTop: 8, marginBottom: 12 }}>
+                {DRY_CLEAN_COMBO.tagline}
+              </h2>
+              <p style={{ color: "#4A4A4A", fontSize: "1rem", maxWidth: "48ch", margin: "0 auto 8px", fontFamily: "Kodchasan, sans-serif" }}>
+                {DRY_CLEAN_COMBO.description}
+              </p>
+              <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>
+                {DRY_CLEAN_COMBO.exclusions} Prices shown {HST_LABEL}.
+              </p>
+              <a href="/book?service=dry-clean" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+                Book This Combo <ArrowRight size={14} />
+              </a>
             </div>
           </AnimatedContent>
         </div>

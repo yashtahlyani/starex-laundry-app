@@ -15,7 +15,7 @@ const pages = [
   { label: "Contact",      href: "/contact" },
 ];
 
-const serviceList = ["Wash & Fold — $2.29/lb", "Dry Cleaning", "Same-Day Express", "Ironing & Press", "Household & Bedding", "Car & Sofa Detailing"];
+const serviceList = ["Wash & Fold — $2/lb", "Dry Cleaning", "Same-Day Express", "Ironing & Press", "Household & Bedding", "Car & Sofa Detailing"];
 
 const colHead: React.CSSProperties = {
   fontFamily: "Kodchasan, sans-serif",

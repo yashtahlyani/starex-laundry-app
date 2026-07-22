@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle } from "lucide-react";
 import { StatusBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
@@ -62,6 +63,7 @@ export default function AppOrderDrawer({
   onClose: () => void;
   admin?: boolean;
 }) {
+  const router = useRouter();
   const [advancing, setAdvancing] = useState(false);
   const [localStatus, setLocalStatus] = useState<string | null>(null);
   const [localTracking, setLocalTracking] = useState<{ received?: number; returned?: number } | null>(null);
@@ -109,6 +111,10 @@ export default function AppOrderDrawer({
             : { ...prev, returned: itemCount });
         }
         setPendingCount(""); setPendingWeight("");
+        // Without this, the order list/KPIs behind the drawer stay stale until
+        // a manual page reload — the drawer itself updates via local state,
+        // but nothing tells the server-rendered page underneath to refetch.
+        router.refresh();
       }
     } finally {
       setAdvancing(false);
@@ -215,7 +221,9 @@ export default function AppOrderDrawer({
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   }}
                 >
-                  {advancing ? "Updating…" : <>Mark as {nextLabel} <ArrowRight size={15} /></>}
+                  {advancing ? "Updating…" : currentStatus === "payment_pending"
+                    ? <>Complete Payment &amp; Mark Delivered <ArrowRight size={15} /></>
+                    : <>Mark as {nextLabel} <ArrowRight size={15} /></>}
                 </button>
               )}
               {!admin && !["delivered","cancelled"].includes(currentStatus) && (

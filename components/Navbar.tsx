@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings, ChevronLeft } from "lucide-react";
+import { Menu, X, ArrowRight, LogIn, LayoutDashboard, LogOut, Settings, ChevronLeft, Sparkles } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import { isOwnerUser } from "@/lib/owner";
 import Logo from "@/components/Logo";
+import { DRY_CLEAN_COMBO } from "@/lib/pricing";
 
 const links = [
   { href: "/services",     label: "Services" },
@@ -123,6 +124,17 @@ export default function Navbar() {
                 <Logo color="#161616" fontSize="1.3rem" />
               </motion.div>
             </a>
+            {/* Offer badge — 5-for-$50 dry clean combo */}
+            <a href="/pricing" className="hidden lg:inline-flex" style={{
+              alignItems: "center", gap: 6, textDecoration: "none",
+              background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
+              padding: "5px 12px 5px 10px", borderRadius: 999,
+              fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.72rem",
+              letterSpacing: "0.01em", whiteSpace: "nowrap",
+            }}>
+              <Sparkles size={11} />
+              {DRY_CLEAN_COMBO.tagline} Dry Clean — {DRY_CLEAN_COMBO.title}
+            </a>
           </div>
 
           {/* Desktop nav */}
@@ -226,6 +238,19 @@ export default function Navbar() {
             transition={{ duration: 0.22 }}
             style={{ position: "fixed", inset: 0, zIndex: 490, background: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}
           >
+            <motion.a
+              href="/pricing" onClick={() => setMenuOpen(false)}
+              initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }} transition={{ duration: 0.35 }}
+              style={{
+                display: "flex", alignItems: "center", gap: 8, textDecoration: "none",
+                background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
+                padding: "12px 16px", borderRadius: 14, marginBottom: 24,
+                fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8125rem",
+              }}
+            >
+              <Sparkles size={14} style={{ flexShrink: 0 }} />
+              {DRY_CLEAN_COMBO.tagline} Dry Clean — {DRY_CLEAN_COMBO.title}
+            </motion.a>
             <nav style={{ display: "flex", flexDirection: "column" }}>
               {links.map((link, i) => (
                 <motion.div

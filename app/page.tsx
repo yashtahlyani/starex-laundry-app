@@ -7,19 +7,19 @@ import { ArrowRight, Star, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const marqueeItems = [
-  "★ 4.9 Rating", "Free Pickup & Delivery on 15 lbs+", "24–48h Turnaround", "$2.29 Per Pound",
+  "★ 4.9 Rating", "$40 Minimum Order", "24–48h Turnaround", "$2 Per Pound",
   "Same-Day Service Available", "Dry Cleaning & Ironing", "Car & Sofa Detailing", "No Hidden Fees",
 ];
 
 const cities = ["Brampton", "Mississauga"];
 
 const comparisons = [
-  { feature: "Getting There",     them: "Drive yourself",              us: "Free pickup on 15 lbs+" },
+  { feature: "Getting There",     them: "Drive yourself",              us: "Free pickup & delivery" },
   { feature: "Time Required",     them: "1–2 hours waiting",           us: "60-second booking" },
   { feature: "Garment Sorting",   them: "You sort everything",         us: "We sort by colour & fabric" },
   { feature: "Cleaning Products", them: "Generic detergents",          us: "Premium, skin-safe products" },
   { feature: "Order Tracking",    them: "No updates — just wait",      us: "Real-time status updates" },
-  { feature: "Pricing",           them: "Coin-by-coin, adds up",       us: "$2.29/lb or $100/mo flat" },
+  { feature: "Pricing",           them: "Coin-by-coin, adds up",       us: "$2/lb or $100/mo flat" },
 ];
 
 function Counter({ target, suffix = "", fixed = false }: { target: number; suffix?: string; fixed?: boolean }) {
@@ -66,9 +66,9 @@ const stats = [
 const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
 
 const services = [
-  { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2.29/lb",        tags: ["Everyday", "Colour-sorted"] },
+  { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2/lb",        tags: ["Everyday", "Colour-sorted"] },
   { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $6.99",      tags: ["Delicates", "Formalwear"] },
-  { num: "03", title: "Same-Day Express",      desc: "Need it back today? Same-day service at a 50% surcharge, subject to availability.",                    price: "+50%",            tags: ["Same-day", "Rush"] },
+  { num: "03", title: "Same-Day Express",      desc: "Need it back today? Same-day rush service on Wash & Fold, subject to availability.",                    price: "$3/lb",            tags: ["Same-day", "Rush"] },
   { num: "04", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Sarees"] },
   { num: "05", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Curtains"] },
   { num: "06", title: "Car & Sofa Detailing",  desc: "Interior detailing, deep clean and shampoo for vehicles and sofas. Final pricing upon inspection.",    price: "From $199",       tags: ["New", "Detailing"] },
@@ -145,7 +145,7 @@ export default function Home() {
               }}
             >
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "#FFFFFF", margin: 0 }}>
-                🍁 Book your first pickup today — free pickup &amp; delivery on 15 lbs+.
+                🍁 Book your first pickup today — $40 minimum order value.
               </p>
               <a href="/book" style={{
                 fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8125rem",
@@ -192,7 +192,7 @@ export default function Home() {
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }}
               style={{ color: "#6B6B6B", fontSize: "1.0625rem", lineHeight: 1.75, maxWidth: "42ch", marginBottom: 40, fontFamily: "Kodchasan, sans-serif" }}>
               Schedule a pickup in 60 seconds. We wash, fold, and deliver — you relax.
-              Just $2.29/lb with free pickup &amp; delivery over 15 lbs.
+              Just $2/lb, $40 minimum order value.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55, ease }}
@@ -467,7 +467,7 @@ export default function Home() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "16px", maxWidth: 820, margin: "0 auto" }} className="pricing-preview-grid">
             {[
-              { name: "Pay-Per-Pound", price: "$2.29", period: "/lb", desc: "No commitment, pay as you go",       features: ["Free pickup & delivery on 15 lbs+", "24–48h turnaround", "Same-day service +50%"],                        popular: false },
+              { name: "Pay-Per-Pound", price: "$2", period: "/lb", desc: "No commitment, pay as you go",       features: ["$40 minimum order value", "24–48h turnaround", "Same-day Express at $3/lb"],                        popular: false },
               { name: "Monthly Plan",  price: "$100",  period: "/mo", desc: "Best value for regulars & business", features: ["2+1 pickups/month (up to 50 lbs)", "Free softener, hot wash & bleach", "Commercial discounts included"],  popular: true  },
             ].map((plan, i) => (
               <AnimatedContent key={plan.name} delay={i * 0.08}>
@@ -604,7 +604,7 @@ export default function Home() {
             Ready for fresh clothes?
           </h2>
           <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.0625rem", marginBottom: "40px", fontFamily: "Kodchasan, sans-serif" }}>
-            Book your first pickup today. Free pickup &amp; delivery on 15 lbs or more.
+            Book your first pickup today. $40 minimum order value.
           </p>
           <a href="/book" style={{
             display: "inline-flex", alignItems: "center", gap: 8,

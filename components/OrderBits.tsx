@@ -4,40 +4,40 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
 export const ORDER_STAGES = [
-  { id: "placed",           label: "Order placed" },
-  { id: "confirmed",        label: "Confirmed" },
-  { id: "picked_up",        label: "Picked up" },
-  { id: "washing",          label: "Cleaning" },
-  { id: "folding",          label: "Folding" },
-  { id: "out_for_delivery", label: "On the way" },
-  { id: "delivered",        label: "Delivered" },
+  { id: "placed",              label: "Order placed" },
+  { id: "confirmed",           label: "Confirmed" },
+  { id: "picked_up",           label: "Picked up" },
+  { id: "in_process",          label: "In process" },
+  { id: "ready_for_delivery",  label: "Ready for delivery" },
+  { id: "payment_pending",     label: "Payment pending" },
+  { id: "delivered",           label: "Delivered" },
 ];
 
 export const STAGE_INDEX: Record<string, number> = {
   placed: 0, confirmed: 1, picked_up: 2,
-  washing: 3, folding: 4, out_for_delivery: 5, delivered: 6, cancelled: -1,
+  in_process: 3, ready_for_delivery: 4, payment_pending: 5, delivered: 6, cancelled: -1,
 };
 
 export const NEXT_STATUS: Record<string, string | null> = {
-  placed:           "confirmed",
-  confirmed:        "picked_up",
-  picked_up:        "washing",
-  washing:          "folding",
-  folding:          "out_for_delivery",
-  out_for_delivery: "delivered",
-  delivered:        null,
-  cancelled:        null,
+  placed:              "confirmed",
+  confirmed:           "picked_up",
+  picked_up:           "in_process",
+  in_process:          "ready_for_delivery",
+  ready_for_delivery:  "payment_pending",
+  payment_pending:     "delivered",
+  delivered:           null,
+  cancelled:           null,
 };
 
 export const STATUS_META: Record<string, { label: string; bg: string; fg: string; dot: string }> = {
-  placed:           { label: "Order placed",     bg: "#E5E5E5", fg: "#4338CA", dot: "#6366F1" },
-  confirmed:        { label: "Confirmed",         bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
-  picked_up:        { label: "Picked up",         bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
-  washing:          { label: "Being cleaned",     bg: "#F2F2F2", fg: "#047857", dot: "#8F2740" },
-  folding:          { label: "Folding",           bg: "#FEF3C7", fg: "#92400E", dot: "#D97706" },
-  out_for_delivery: { label: "Out for delivery",  bg: "#F2F2F2", fg: "#065F46", dot: "#10B981" },
-  delivered:        { label: "Delivered",         bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
-  cancelled:        { label: "Cancelled",         bg: "#FEE2E2", fg: "#991B1B", dot: "#EF4444" },
+  placed:              { label: "Order placed",      bg: "#E5E5E5", fg: "#4338CA", dot: "#6366F1" },
+  confirmed:           { label: "Confirmed",          bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
+  picked_up:           { label: "Picked up",          bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
+  in_process:          { label: "In process",         bg: "#F2F2F2", fg: "#047857", dot: "#8F2740" },
+  ready_for_delivery:  { label: "Ready for delivery", bg: "#F2F2F2", fg: "#065F46", dot: "#10B981" },
+  payment_pending:     { label: "Payment pending",    bg: "#FEF3C7", fg: "#92400E", dot: "#D97706" },
+  delivered:           { label: "Delivered",          bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
+  cancelled:           { label: "Cancelled",          bg: "#FEE2E2", fg: "#991B1B", dot: "#EF4444" },
 };
 
 export function fmtSlot(val: string) {

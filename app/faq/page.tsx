@@ -14,14 +14,14 @@ const categories = [
       { q: "What areas do you serve?", a: "We currently serve Brampton and Mississauga, Ontario. Not sure if you're in our zone? Call or text us at 437-607-7251." },
       { q: "Do I need to be home for pickup?", a: "No! Just leave your bag at your door. Our driver will pick it up safely." },
       { q: "How do I schedule a pickup?", a: "Book online in under 2 minutes. Choose a time window, add your address, and we'll handle the rest." },
-      { q: "What if I need same-day service?", a: "Same-day service is available at a 50% surcharge, subject to availability. Book early in the day to secure your slot." },
+      { q: "What if I need same-day service?", a: "Same-Day Express is available on Wash & Fold at a flat $3/lb, subject to availability. Book early in the day to secure your slot." },
     ],
   },
   {
     name: "Pricing & Plans",
     faqs: [
-      { q: "How much does StareX cost?", a: "Wash & Fold is $2.29/lb with free pickup & delivery on orders of 15 lbs or more. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. No hidden fees — ever." },
-      { q: "Is there a minimum order?", a: "No strict minimum — but pickup & delivery is free on orders of 15 lbs or more." },
+      { q: "How much does StareX cost?", a: "Wash & Fold is $2/lb. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. All prices shown +HST. No hidden fees — ever." },
+      { q: "Is there a minimum order?", a: "Yes — $40 minimum order value for Wash & Fold, Same-Day Express, Dry Cleaning, Ironing, and Household Items. Car & Sofa Detailing has a $199 minimum." },
       { q: "Do you offer subscription plans?", a: "Yes! The StareX Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
       { q: "Are there any hidden fees?", a: "Never. Your price is confirmed before we touch your laundry. What you see is what you pay." },
       { q: "How does car & sofa detailing pricing work?", a: "Car detailing/shampoo starts from $199 per vehicle and sofa deep cleaning is $49 per seat. Final pricing is confirmed upon inspection." },
@@ -44,7 +44,7 @@ const categories = [
       { q: "How do I track my order?", a: "You'll receive real-time SMS and email updates at every stage — pickup, processing, and delivery." },
       { q: "What if I miss my delivery?", a: "We'll reattempt delivery the next available time slot at no extra charge." },
       { q: "Can I change my delivery address?", a: "Yes, contact us at least 2 hours before your scheduled delivery and we'll update your address." },
-      { q: "Is there a delivery fee?", a: "Pickup and delivery are free on orders of 15 lbs or more. For smaller orders, we'll confirm any fee with you before pickup." },
+      { q: "Is there a delivery fee?", a: "Pickup and delivery are free on every order that meets our $40 minimum order value ($199 for Car & Sofa Detailing)." },
     ],
   },
   {

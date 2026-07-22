@@ -53,9 +53,9 @@ const STATUS_LABELS: Record<string, string> = {
   placed: "Order Placed",
   confirmed: "Confirmed",
   picked_up: "Picked Up",
-  washing: "Being Cleaned",
-  folding: "Folding",
-  out_for_delivery: "Out for Delivery",
+  in_process: "In Process",
+  ready_for_delivery: "Ready for Delivery",
+  payment_pending: "Payment Pending",
   delivered: "Delivered",
   cancelled: "Cancelled",
 };

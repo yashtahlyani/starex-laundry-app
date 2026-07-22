@@ -2,22 +2,26 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { CustomerRepository } from "@/lib/repositories/customer.repository";
 
+// Simplified per client request: after pickup, orders move through a single
+// "In Process" stage (no separate washing/folding steps to manage), then
+// "Ready for Delivery", then "Payment Pending" (collected before the order
+// is marked Delivered), then Delivered.
 export const VALID_STATUSES = [
-  "placed", "confirmed", "picked_up", "washing",
-  "folding", "out_for_delivery", "delivered", "cancelled",
+  "placed", "confirmed", "picked_up", "in_process",
+  "ready_for_delivery", "payment_pending", "delivered", "cancelled",
 ] as const;
 
 export type OrderStatus = (typeof VALID_STATUSES)[number];
 
 const TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  placed:           ["confirmed", "cancelled"],
-  confirmed:        ["picked_up", "cancelled"],
-  picked_up:        ["washing", "cancelled"],
-  washing:          ["folding", "cancelled"],
-  folding:          ["out_for_delivery", "cancelled"],
-  out_for_delivery: ["delivered", "cancelled"],
-  delivered:        [],
-  cancelled:        [],
+  placed:              ["confirmed", "cancelled"],
+  confirmed:           ["picked_up", "cancelled"],
+  picked_up:           ["in_process", "cancelled"],
+  in_process:          ["ready_for_delivery", "cancelled"],
+  ready_for_delivery:  ["payment_pending", "cancelled"],
+  payment_pending:     ["delivered"],
+  delivered:           [],
+  cancelled:           [],
 };
 
 export class OrderService {
