@@ -85,8 +85,11 @@ export default function Navbar() {
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
           height: scrolled ? "64px" : "72px",
-          background: "rgba(255,255,255,0.96)",
-          backdropFilter: "blur(10px)",
+          // Solid white (was rgba 0.96 + blur(10px)); the blur forced the
+          // browser to re-composite the fixed header on every scroll frame,
+          // which was the main cause of scroll jank. Opaque bg looks identical
+          // over the white page and composites for free.
+          background: "#FFFFFF",
           borderBottom: "1px solid rgba(20,20,20,0.07)",
           transition: "height 0.3s ease",
         }}
