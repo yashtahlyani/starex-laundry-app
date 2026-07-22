@@ -17,7 +17,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 const services = [
   { id: "wash-fold", Icon: Shirt,    num: "01", title: "Wash & Fold",           tagline: "Everyday laundry, done right.",     price: "$2/lb",         min: `$40 minimum order value (~${PICKUP_DELIVERY.minimumLbs} lbs)`, features: ["Sorted by colour and fabric", "Washed, dried and folded neatly", "24–48hr turnaround", "Serving Brampton & Mississauga"], featured: true, badge: "POPULAR" },
   { id: "express",   Icon: Zap,      num: "02", title: "Same-Day Express",      tagline: "Same-day. No excuses.",             price: "$3/lb",         min: "Wash & Fold only",           features: ["Back the same day", "Full wash, dry and fold", "Priority processing", "SMS tracking updates", "Book early to secure your slot"], featured: false },
-  { id: "dry-clean", Icon: Sparkles, num: "03", title: "Dry Cleaning",          tagline: "Delicates deserve better.",         price: "From $6.99/item",  min: "$40 minimum order value",                                features: ["Suits, sarees, gowns and silks", "Leather jackets and winter coats", "Also covers household & bedding", "24–48hr turnaround", "Every price confirmed first"], featured: false },
+  { id: "dry-clean", Icon: Sparkles, num: "03", title: "Dry Cleaning",          tagline: "Delicates deserve better.",         price: "From $4.99/item",  min: "$40 minimum order value",                                features: ["Suits, sarees, gowns and silks", "Leather jackets and winter coats", "Also covers household & bedding", "24–48hr turnaround", "Every price confirmed first"], featured: false },
   { id: "ironing",   Icon: Package,  num: "04", title: "Ironing & Press",       tagline: "Crisp. Sharp. Professional.",       price: "From $1.99/item",  min: "$40 minimum order value",                                features: ["Shirts, pants, jeans and skirts", "Complex dresses, saree and pleated", "Bedding and table cloths", "Steam-pressed to perfection", "24–48hr turnaround"], featured: false },
   { id: "household", Icon: Home,     num: "05", title: "Household & Bedding",   tagline: "Big loads, no problem.",            price: "From $9.99/item",  min: "$40 minimum order value",                                features: ["Duvets, comforters and quilts", "Blankets — single to king", "Curtains, sheer to lined", "Rugs, pillows and sleeping bags", "Fluffed, bagged and returned"], featured: false },
   { id: "detailing", Icon: Car,      num: "06", title: "Car & Sofa Detailing",  tagline: "Fabric care, beyond the bag.",      price: "From $199",        min: "$199 minimum order value",                 features: ["Full interior detailing & shampoo", `Sofa deep clean — $${DETAILING.sofaPerSeatCad}/seat`, "Stain and odour treatment", "Final pricing upon inspection", "By appointment"], featured: true, badge: "NEW" },
@@ -93,6 +93,9 @@ export default function ServicesPage() {
               </AnimatedContent>
             ))}
           </div>
+          <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", textAlign: "center", marginTop: 28, fontFamily: "Kodchasan, sans-serif" }}>
+            Prices shown {HST_LABEL}. See the <a href="/pricing" style={{ color: "#8F2740", textDecoration: "underline" }}>full price list</a> for every item.
+          </p>
         </div>
       </section>
 

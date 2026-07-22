@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ArrowRight, Star, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
+import { HST_LABEL } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -67,7 +68,7 @@ const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2
 
 const services = [
   { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2/lb",        tags: ["Everyday", "Colour-sorted"] },
-  { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $6.99",      tags: ["Delicates", "Formalwear"] },
+  { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $4.99",      tags: ["Delicates", "Formalwear"] },
   { num: "03", title: "Same-Day Express",      desc: "Need it back today? Same-day rush service on Wash & Fold, subject to availability.",                    price: "$3/lb",            tags: ["Same-day", "Rush"] },
   { num: "04", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Sarees"] },
   { num: "05", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Curtains"] },
@@ -395,6 +396,9 @@ export default function Home() {
           </div>
 
           <AnimatedContent style={{ textAlign: "center", marginTop: "48px" }}>
+            <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>
+              Prices shown {HST_LABEL}.
+            </p>
             <a href="/services" className="btn-ghost">
               View all services <ArrowRight size={14} />
             </a>

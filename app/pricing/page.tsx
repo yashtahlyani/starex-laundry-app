@@ -19,7 +19,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 const payAsYouGo = [
   { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded" },
   { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast" },
-  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $6.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear" },
+  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear" },
   { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses" },
   { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Duvets, blankets, curtains, rugs & more" },
   { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $199",  unit: "",        min: "$199 minimum order value",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },

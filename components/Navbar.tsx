@@ -125,41 +125,41 @@ export default function Navbar() {
                 <Logo color="#161616" fontSize="1.3rem" />
               </motion.div>
             </a>
-            {/* Offer badge — 5-for-$50 dry clean combo */}
-            <a href="/offer" className="hidden lg:inline-flex" style={{
-              alignItems: "center", gap: 6, textDecoration: "none",
-              background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
-              padding: "5px 12px 5px 10px", borderRadius: 999,
-              fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.72rem",
-              letterSpacing: "0.01em", whiteSpace: "nowrap",
-            }}>
-              <Sparkles size={11} />
-              {DRY_CLEAN_COMBO.tagline} Dry Clean — {DRY_CLEAN_COMBO.title}
-            </a>
           </div>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex" style={{ alignItems: "center", gap: "4px" }}>
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                style={{
-                  textDecoration: "none",
-                  fontFamily: "Kodchasan, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "0.9rem",
-                  padding: "6px 14px",
-                  borderRadius: 8,
-                  color: "#4A4A4A",
-                  transition: "color 0.2s, background 0.2s",
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#B8324F"; (e.currentTarget as HTMLElement).style.background = "rgba(184,50,79,0.06)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#4A4A4A"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-              >
-                {link.label}
-              </a>
-            ))}
+            {links.map((link) =>
+              link.href === "/offer" ? (
+                <a key={link.href} href={link.href} style={{
+                  display: "inline-flex", alignItems: "center", gap: 5, textDecoration: "none",
+                  background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
+                  padding: "6px 13px", borderRadius: 999, marginRight: 2,
+                  fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem", whiteSpace: "nowrap",
+                }}>
+                  <Sparkles size={11} /> {link.label}
+                </a>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    textDecoration: "none",
+                    fontFamily: "Kodchasan, sans-serif",
+                    fontWeight: 500,
+                    fontSize: "0.9rem",
+                    padding: "6px 14px",
+                    borderRadius: 8,
+                    color: "#4A4A4A",
+                    transition: "color 0.2s, background 0.2s",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#B8324F"; (e.currentTarget as HTMLElement).style.background = "rgba(184,50,79,0.06)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#4A4A4A"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </nav>
 
           {/* Desktop right CTAs */}
