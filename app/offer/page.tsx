@@ -16,7 +16,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const eligible = [
-  "Suits, shirts, dresses & bottoms",
+  "Shirts, dresses & bottoms",
   "Sweaters, hoodies & silk blouses",
   "Coats, jackets & sarees",
   "1 blanket or quilt (can be one of your 5)",
@@ -26,9 +26,11 @@ const excluded = ["Wedding dresses", "Leather items"];
 
 // Real example priced off StareX's own per-item dry-clean & household rates
 // (lib/pricing.ts CATALOG) — an illustration of typical savings, not a
-// guarantee for every combination of 5 items.
+// guarantee for every combination of 5 items. Multi-piece garments (a 2-piece
+// suit, etc.) count as separate pieces toward the 5, so this example sticks
+// to 5 genuinely single pieces to keep the math unambiguous.
 const exampleItems = [
-  { name: "2 Pcs Suit",        price: 29.99, Icon: Shirt },
+  { name: "Shirt / T-Shirt",   price: 6.99,  Icon: Shirt },
   { name: "Dress Casual",      price: 22.99, Icon: Shirt },
   { name: "Coat / Jacket",     price: 22.99, Icon: Package },
   { name: "Sweater",           price: 12.99, Icon: Shirt },
@@ -45,6 +47,7 @@ const steps = [
 ];
 
 const faqs = [
+  { q: "Does a 2-piece suit count as 1 item or 2?", a: "2. Multi-piece garments count per piece, not per set — a 2-piece suit uses 2 of your 5, a 3-piece suit uses 3." },
   { q: "Do all 5 items need to be dropped off at once?", a: "Yes — the combo applies to 5 items in the same pickup so we can confirm the flat rate upfront." },
   { q: "Can I mix garment types?", a: "Yes. Any 5 regular garments or pieces qualify, including 1 blanket or quilt." },
   { q: "What if I only have 3 or 4 items?", a: "Standard per-item dry-clean pricing applies below 5 items — see the full price list." },
@@ -199,6 +202,9 @@ export default function OfferPage() {
                     </li>
                   ))}
                 </ul>
+                <p style={{ color: "#8C8C8C", fontSize: "0.8rem", marginTop: 18, fontFamily: "Kodchasan, sans-serif" }}>
+                  {DRY_CLEAN_COMBO.multiPieceNote}
+                </p>
               </div>
             </AnimatedContent>
 

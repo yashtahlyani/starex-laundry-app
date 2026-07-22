@@ -331,6 +331,9 @@ export default function PricingPage() {
               <p style={{ color: "#4A4A4A", fontSize: "1rem", maxWidth: "48ch", margin: "0 auto 8px", fontFamily: "Kodchasan, sans-serif" }}>
                 {DRY_CLEAN_COMBO.description}
               </p>
+              <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 4, fontFamily: "Kodchasan, sans-serif" }}>
+                {DRY_CLEAN_COMBO.multiPieceNote}
+              </p>
               <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>
                 {DRY_CLEAN_COMBO.exclusions} Prices shown {HST_LABEL}.
               </p>

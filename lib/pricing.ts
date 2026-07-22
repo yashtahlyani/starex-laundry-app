@@ -75,6 +75,9 @@ export const DRY_CLEAN_COMBO = {
   itemCount: 5,
   description: "Dry clean any 5 regular garments/pieces, including 1 blanket or quilt.",
   exclusions: "Excludes wedding dresses and leather items.",
+  // Multi-piece garments count per piece, not per set — a 2-piece suit uses
+  // 2 of the 5 slots, a 3-piece suit uses 3, etc.
+  multiPieceNote: "Multi-piece items (e.g. a 2-piece suit) count as separate pieces toward your 5.",
 };
 
 // Every laundry service is priced by weight or per item, so the real total isn't
