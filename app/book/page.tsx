@@ -228,38 +228,6 @@ function BookPageInner() {
                   })}
                 </div>
 
-                {/* Inline price list — shown right here so customers never have to
-                    leave the booking flow to check what dry-clean/ironing/household
-                    items cost. */}
-                {CATALOG_FOR_SERVICE[form.service] && (
-                  <div style={{ marginTop: 24, background: "#FAFAFA", borderRadius: 16, padding: "20px 22px" }}>
-                    {CATALOG_FOR_SERVICE[form.service].map(catId => {
-                      const tab = CATALOG.find(t => t.id === catId);
-                      if (!tab) return null;
-                      return (
-                        <div key={catId} style={{ marginBottom: 16 }}>
-                          <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.78rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#8F2740", marginBottom: 10 }}>
-                            {catId === form.service ? tab.label : `Also dry-cleanable: ${tab.label}`}
-                          </p>
-                          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "4px 20px" }} className="book-catalog-grid">
-                            {tab.sections.flatMap(s => s.items).map(item => (
-                              <div key={item.name} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "5px 0", borderBottom: "1px solid #EFEFEF" }}>
-                                <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#4A4A4A" }}>{item.name}</span>
-                                <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8125rem", color: "#161616", whiteSpace: "nowrap" }}>
-                                  {item.from ? "From " : ""}${item.price.toFixed(2)}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C", marginTop: 4 }}>
-                      Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies.
-                    </p>
-                  </div>
-                )}
-
                 <div style={{ marginTop: 28 }}>
                   <button onClick={goNext} disabled={!canNext} className="btn-primary"
                     style={{ opacity: canNext ? 1 : 0.4, cursor: canNext ? "pointer" : "not-allowed", display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -456,6 +424,41 @@ function BookPageInner() {
                 </p>
               </div>
             </div>
+
+            {/* Itemized price list — lives in the sidebar (not gated to Step 0)
+                so it's visible on every step, including when a "Book this
+                service" CTA pre-selects the service and skips straight to
+                Schedule. Customers can see exact prices and book without
+                ever leaving this screen. */}
+            {CATALOG_FOR_SERVICE[form.service] && (
+              <div style={{ marginTop: 16, background: "#ffffff", border: "1px solid rgba(20,20,20,0.08)", borderRadius: 20, padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", maxHeight: 420, overflowY: "auto" }}>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 16 }}>Item Prices</p>
+                {CATALOG_FOR_SERVICE[form.service].map(catId => {
+                  const tab = CATALOG.find(t => t.id === catId);
+                  if (!tab) return null;
+                  return (
+                    <div key={catId} style={{ marginBottom: 16 }}>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#8F2740", marginBottom: 8 }}>
+                        {catId === form.service ? tab.label : `Also dry-cleanable: ${tab.label}`}
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        {tab.sections.flatMap(s => s.items).map(item => (
+                          <div key={item.name} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "5px 0", borderBottom: "1px solid #EFEFEF" }}>
+                            <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#4A4A4A" }}>{item.name}</span>
+                            <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#161616", whiteSpace: "nowrap" }}>
+                              {item.from ? "From " : ""}${item.price.toFixed(2)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#8C8C8C" }}>
+                  Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
