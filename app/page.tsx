@@ -108,7 +108,10 @@ const LOCAL_BUSINESS_JSON_LD = {
     { "@type": "City", name: "Mississauga" },
   ],
   address: { "@type": "PostalAddress", addressLocality: "Brampton", addressRegion: "ON", addressCountry: "CA" },
-  aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "412" },
+  // NOTE: no aggregateRating here on purpose. Marking up a star rating that
+  // isn't backed by real, on-page reviews violates Google's structured-data
+  // policy and can earn a manual penalty. Add it back only once real reviews
+  // exist (e.g. pulled from Google Business Profile).
   openingHoursSpecification: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], opens: "07:00", closes: "20:00" },
 };
 

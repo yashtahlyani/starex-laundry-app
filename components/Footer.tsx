@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUp } from "lucide-react";
 import Logo from "@/components/Logo";
+import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
 
 const pages = [
   { label: "Services",     href: "/services" },
@@ -40,6 +41,26 @@ const linkStyle: React.CSSProperties = {
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function subscribe() {
+    const value = email.trim();
+    if (!value || submitting) return;
+    setSubmitting(true);
+    try {
+      // Fire-and-persist: store the address, but don't block the "You're in ✓"
+      // confirmation on a network hiccup — a newsletter signup should never
+      // feel like it failed.
+      await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: value }),
+      }).catch(() => {});
+      setSubscribed(true);
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <footer style={{ background: "#F2F2F2" }}>
@@ -60,14 +81,17 @@ export default function Footer() {
               ) : (
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(20,20,20,0.15)", paddingBottom: "10px", gap: 8 }}>
                   <input
+                    type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") subscribe(); }}
                     placeholder="your@email.com"
                     style={{ background: "none", border: "none", outline: "none", color: "#161616", fontSize: "0.875rem", flex: 1, fontFamily: "Kodchasan, sans-serif" }}
                   />
                   <button
-                    onClick={() => { if (email) setSubscribed(true); }}
-                    style={{ background: "none", border: "none", color: "#B8324F", cursor: "pointer", padding: "4px", display: "flex" }}
+                    onClick={subscribe}
+                    disabled={submitting}
+                    style={{ background: "none", border: "none", color: "#B8324F", cursor: submitting ? "default" : "pointer", padding: "4px", display: "flex", opacity: submitting ? 0.5 : 1 }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -98,25 +122,30 @@ export default function Footer() {
             {/* Contact */}
             <div>
               <span style={colHead}>Contact</span>
-              <a href="mailto:hello@starexlaundry.ca" style={linkStyle}>hello@starexlaundry.ca</a>
-              <a href="tel:+14376077251" style={linkStyle}>437-607-7251</a>
-              <p style={{ ...linkStyle, lineHeight: 1.65 }}>Brampton, ON<br />Mississauga, ON</p>
-              <p style={linkStyle}>www.starexlaundry.ca</p>
+              <a href={`mailto:${CONTACT.email}`} style={linkStyle}>{CONTACT.email}</a>
+              <a href={`tel:${CONTACT.phoneHref}`} style={linkStyle}>{CONTACT.phone}</a>
+              <p style={{ ...linkStyle, lineHeight: 1.65 }}>{CONTACT.cities[0]}<br />{CONTACT.cities[1]}</p>
               <div style={{ display: "flex", gap: "16px", marginTop: "24px" }}>
                 {[
-                  <svg key="ig" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>,
-                  <svg key="tw" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>,
-                  <svg key="fb" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>,
-                ].map((icon, i) => (
-                  <motion.a
-                    key={i} href="#"
-                    style={{ color: "#8C8C8C", textDecoration: "none", display: "flex" }}
-                    whileHover={{ color: "#B8324F", scale: 1.15 } as any}
-                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                  >
-                    {icon}
-                  </motion.a>
-                ))}
+                  { key: "ig", url: SOCIAL_LINKS.instagram, label: "Instagram", icon: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> },
+                  { key: "tw", url: SOCIAL_LINKS.twitter, label: "Twitter/X", icon: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg> },
+                  { key: "fb", url: SOCIAL_LINKS.facebook, label: "Facebook", icon: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> },
+                ].map(({ key, url, label, icon }) =>
+                  url ? (
+                    <motion.a
+                      key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}
+                      style={{ color: "#8C8C8C", textDecoration: "none", display: "flex" }}
+                      whileHover={{ color: "#B8324F", scale: 1.15 } as any}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    >
+                      {icon}
+                    </motion.a>
+                  ) : (
+                    // No profile URL configured yet — show the icon but don't
+                    // render a dead link that jumps the page to the top.
+                    <span key={key} aria-hidden="true" style={{ color: "#C4C4C4", display: "flex" }}>{icon}</span>
+                  )
+                )}
               </div>
             </div>
           </div>
