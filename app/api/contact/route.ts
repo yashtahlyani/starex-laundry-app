@@ -11,11 +11,14 @@ export async function POST(req: NextRequest) {
 
   try {
     const { name, email, subject, message } = await req.json();
-    if (!name || !email || !message) {
+    // subject is required — the contact_submissions table has a NOT NULL
+    // constraint on it, so validate here rather than letting a missing
+    // subject surface as a raw Postgres constraint-violation message.
+    if (!name || !email || !subject || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
     if (String(name).length > 120 || String(email).length > 254 ||
-        String(subject ?? "").length > 200 || String(message).length > 5000) {
+        String(subject).length > 200 || String(message).length > 5000) {
       return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
     }
 
@@ -23,7 +26,7 @@ export async function POST(req: NextRequest) {
     const { error } = await supabase.from("contact_submissions").insert({
       name,
       email,
-      subject: subject || null,
+      subject,
       message,
       status: "new",
     });
