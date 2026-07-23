@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
+import { OrderRepository } from "@/lib/repositories/order.repository";
+import { enqueueStatusUpdate } from "@/lib/queue/notification.queue";
 
 export const dynamic = "force-dynamic";
 
 // Admin-only: charges the card saved at booking time for the final,
-// staff-confirmed amount. Called from the admin console's "Complete
-// Payment" action on orders sitting at payment_pending — never runs
-// automatically, since the real total is only known once the order has
-// been weighed/counted after pickup.
+// staff-confirmed amount. Uses OrderRepository.markPaid, which also
+// auto-advances the order straight to Delivered if it's already Ready for
+// Delivery — the owner doesn't need a separate "mark delivered" click once
+// the charge succeeds.
 export async function POST(req: NextRequest) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -32,7 +34,7 @@ export async function POST(req: NextRequest) {
   const db = getSupabaseAdmin();
   const { data: order, error } = await db
     .from("orders")
-    .select("id, stripe_customer_id, stripe_payment_method_id, status_history")
+    .select("id, code, customer_name, email, phone, stripe_customer_id, stripe_payment_method_id")
     .eq("code", orderCode)
     .maybeSingle();
   if (error || !order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -51,14 +53,22 @@ export async function POST(req: NextRequest) {
       metadata: { order_id: order.id },
     });
 
-    const history = order.status_history ?? [];
-    await db.from("orders").update({
-      price: amountCad,
-      stripe_payment_intent_id: intent.id,
-      status_history: [...history, { status: "payment_pending", note: `Charged $${amountCad.toFixed(2)} CAD`, time: new Date().toISOString() }],
-    }).eq("id", order.id);
+    const orders = new OrderRepository(db);
+    const result = await orders.markPaid(order.id, `Charged $${amountCad.toFixed(2)} CAD (card ending in the customer's card on file)`, amountCad);
+    await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
 
-    return NextResponse.json({ success: true, paymentIntentId: intent.id, status: intent.status });
+    if (result.status === "delivered") {
+      enqueueStatusUpdate({
+        orderId: order.id,
+        orderCode: order.code,
+        customerName: order.customer_name,
+        customerEmail: order.email,
+        customerPhone: order.phone,
+        newStatus: "delivered",
+      }).catch(() => {});
+    }
+
+    return NextResponse.json({ success: true, paymentIntentId: intent.id, status: result.status });
   } catch (err: any) {
     // Card declines etc. land here — surface Stripe's message so the admin
     // knows to fall back to a manual payment method instead of retrying blind.

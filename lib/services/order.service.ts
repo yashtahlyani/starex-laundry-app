@@ -2,13 +2,16 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { CustomerRepository } from "@/lib/repositories/customer.repository";
 
-// Simplified per client request: after pickup, orders move through a single
-// "In Process" stage (no separate washing/folding steps to manage), then
-// "Ready for Delivery", then "Payment Pending" (collected before the order
-// is marked Delivered), then Delivered.
+// Simplified per client request (2026-07-23): "In Process" and "Payment
+// Pending" were dropped as separate manual stages the owner had to click
+// through — neither is a distinct physical checkpoint worth a click. Payment
+// is now tracked independently via orders.payment_status (see
+// OrderRepository.markPaid), not as a status in this pipeline, and an order
+// auto-advances to "delivered" the moment payment clears on an order that's
+// already Ready for Delivery.
 export const VALID_STATUSES = [
-  "placed", "confirmed", "picked_up", "in_process",
-  "ready_for_delivery", "payment_pending", "delivered", "cancelled",
+  "placed", "confirmed", "picked_up",
+  "ready_for_delivery", "delivered", "cancelled",
 ] as const;
 
 export type OrderStatus = (typeof VALID_STATUSES)[number];
@@ -16,10 +19,8 @@ export type OrderStatus = (typeof VALID_STATUSES)[number];
 const TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   placed:              ["confirmed", "cancelled"],
   confirmed:           ["picked_up", "cancelled"],
-  picked_up:           ["in_process", "cancelled"],
-  in_process:          ["ready_for_delivery", "cancelled"],
-  ready_for_delivery:  ["payment_pending", "cancelled"],
-  payment_pending:     ["delivered"],
+  picked_up:           ["ready_for_delivery", "cancelled"],
+  ready_for_delivery:  ["delivered", "cancelled"],
   delivered:           [],
   cancelled:           [],
 };

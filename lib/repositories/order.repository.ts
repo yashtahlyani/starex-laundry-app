@@ -29,11 +29,13 @@ export interface Order {
   stripe_payment_intent_id?: string | null;
   card_brand?: string | null;
   card_last4?: string | null;
+  payment_status?: "unpaid" | "paid";
+  paid_at?: string | null;
 }
 
 export interface StatusEvent {
   status: string;
-  label: string;
+  label?: string;
   time: string;
   note?: string;
   // Recorded on the "picked_up" event = items received from the customer;
@@ -58,9 +60,7 @@ const STATUS_LABELS: Record<string, string> = {
   placed: "Order Placed",
   confirmed: "Confirmed",
   picked_up: "Picked Up",
-  in_process: "In Process",
   ready_for_delivery: "Ready for Delivery",
-  payment_pending: "Payment Pending",
   delivered: "Delivered",
   cancelled: "Cancelled",
 };
@@ -192,6 +192,41 @@ export class OrderRepository {
     if (extra?.weight) updatePayload.weight = extra.weight;
     const { error } = await this.db.from("orders").update(updatePayload).eq("id", id);
     if (error) throw error;
+  }
+
+  // Marks an order paid (from a successful card charge or the owner tapping
+  // "Mark Paid" for a cash/e-transfer order) and, if the order is already
+  // Ready for Delivery, auto-advances it straight to Delivered in the same
+  // update — the owner never has to make a separate "mark delivered" click
+  // once payment has cleared. Returns the resulting status so callers (the
+  // charge route, the webhook, the manual mark-paid route) can report back
+  // whether the order auto-advanced.
+  async markPaid(id: string, note: string, amountCad?: number): Promise<{ status: string }> {
+    const { data: current } = await this.db.from("orders").select("status, status_history, price").eq("id", id).single();
+    if (!current) throw new Error("Order not found");
+
+    const history: StatusEvent[] = current.status_history ?? [];
+    const now = new Date().toISOString();
+    const events: StatusEvent[] = [{ status: current.status, note, time: now }];
+
+    const willAdvance = current.status === "ready_for_delivery";
+    if (willAdvance) {
+      events.push({ status: "delivered", label: STATUS_LABELS.delivered, time: now });
+    }
+
+    const updatePayload: Record<string, unknown> = {
+      payment_status: "paid",
+      paid_at: now,
+      status_history: [...history, ...events],
+      updated_at: now,
+    };
+    if (amountCad != null) updatePayload.price = amountCad;
+    if (willAdvance) { updatePayload.status = "delivered"; updatePayload.is_new = false; }
+
+    const { error } = await this.db.from("orders").update(updatePayload).eq("id", id);
+    if (error) throw error;
+
+    return { status: willAdvance ? "delivered" : current.status };
   }
 
   async updateRating(id: string, rating: number): Promise<void> {

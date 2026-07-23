@@ -52,20 +52,10 @@ const STATUS_MESSAGES: Partial<Record<string, { subject: string; body: string; w
     body: "Your laundry has been picked up and is on its way to us. We'll notify you when it's ready.",
     whatsapp: "We've picked up your laundry and are getting it cleaned. We'll message you when it's ready!",
   },
-  in_process: {
-    subject: "Your laundry is being processed!",
-    body: "Your items are being cleaned now — we'll let you know as soon as they're ready.",
-    whatsapp: "Your laundry is being processed right now. Hang tight!",
-  },
   ready_for_delivery: {
     subject: "Your laundry is ready for delivery!",
     body: "Great news — your laundry is ready. Our driver will be heading your way soon.",
     whatsapp: "Your laundry is ready for delivery! Our driver will be on the way to you shortly.",
-  },
-  payment_pending: {
-    subject: "Your order is ready — payment pending",
-    body: "Your laundry is ready for delivery. Please complete payment to finish your order.",
-    whatsapp: "Your laundry is ready for delivery! Please complete payment to finish your order.",
   },
   delivered: {
     subject: "Your laundry has been delivered!",

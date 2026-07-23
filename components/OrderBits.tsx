@@ -7,24 +7,20 @@ export const ORDER_STAGES = [
   { id: "placed",              label: "Order placed" },
   { id: "confirmed",           label: "Confirmed" },
   { id: "picked_up",           label: "Picked up" },
-  { id: "in_process",          label: "In process" },
   { id: "ready_for_delivery",  label: "Ready for delivery" },
-  { id: "payment_pending",     label: "Payment pending" },
   { id: "delivered",           label: "Delivered" },
 ];
 
 export const STAGE_INDEX: Record<string, number> = {
   placed: 0, confirmed: 1, picked_up: 2,
-  in_process: 3, ready_for_delivery: 4, payment_pending: 5, delivered: 6, cancelled: -1,
+  ready_for_delivery: 3, delivered: 4, cancelled: -1,
 };
 
 export const NEXT_STATUS: Record<string, string | null> = {
   placed:              "confirmed",
   confirmed:           "picked_up",
-  picked_up:           "in_process",
-  in_process:          "ready_for_delivery",
-  ready_for_delivery:  "payment_pending",
-  payment_pending:     "delivered",
+  picked_up:           "ready_for_delivery",
+  ready_for_delivery:  "delivered",
   delivered:           null,
   cancelled:           null,
 };
@@ -33,11 +29,17 @@ export const STATUS_META: Record<string, { label: string; bg: string; fg: string
   placed:              { label: "Order placed",      bg: "#E5E5E5", fg: "#4338CA", dot: "#6366F1" },
   confirmed:           { label: "Confirmed",          bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
   picked_up:           { label: "Picked up",          bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
-  in_process:          { label: "In process",         bg: "#F2F2F2", fg: "#047857", dot: "#8F2740" },
   ready_for_delivery:  { label: "Ready for delivery", bg: "#F2F2F2", fg: "#065F46", dot: "#10B981" },
-  payment_pending:     { label: "Payment pending",    bg: "#FEF3C7", fg: "#92400E", dot: "#D97706" },
   delivered:           { label: "Delivered",          bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
   cancelled:           { label: "Cancelled",          bg: "#FEE2E2", fg: "#991B1B", dot: "#EF4444" },
+};
+
+// Payment tracking is separate from fulfillment status — an order can sit at
+// any stage while unpaid, and turns "paid" the moment a card charge succeeds
+// or the owner taps "Mark Paid".
+export const PAYMENT_META: Record<"unpaid" | "paid", { label: string; bg: string; fg: string }> = {
+  unpaid: { label: "Unpaid", bg: "#FEF3C7", fg: "#92400E" },
+  paid:   { label: "Paid",   bg: "#DCFCE7", fg: "#15803D" },
 };
 
 export function fmtSlot(val: string) {
@@ -65,6 +67,20 @@ export function StatusBadge({ status, pulse = false, size = "md" }: { status: st
         transition={{ duration: 1.4, repeat: Infinity }}
         style={{ width: 7, height: 7, borderRadius: "50%", background: m.dot, flexShrink: 0 }}
       />
+      {m.label}
+    </span>
+  );
+}
+
+export function PaymentBadge({ status, size = "md" }: { status?: "unpaid" | "paid" | null; size?: "sm" | "md" }) {
+  const m = PAYMENT_META[status ?? "unpaid"];
+  const pad = size === "sm" ? "3px 10px" : "5px 13px";
+  const fs = size === "sm" ? "0.72rem" : "0.8rem";
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", background: m.bg, color: m.fg,
+      borderRadius: 999, padding: pad, fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: fs, whiteSpace: "nowrap",
+    }}>
       {m.label}
     </span>
   );

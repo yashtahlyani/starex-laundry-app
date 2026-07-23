@@ -17,9 +17,7 @@ const STATUS_COLORS: Record<string, string> = {
   placed:              "bg-blue-50 text-blue-700",
   confirmed:           "bg-teal-50 text-teal-700",
   picked_up:           "bg-yellow-100 text-yellow-800",
-  in_process:          "bg-orange-50 text-orange-700",
   ready_for_delivery:  "bg-green-50 text-green-700",
-  payment_pending:     "bg-amber-100 text-amber-800",
   delivered:           "bg-gray-100 text-gray-500",
   cancelled:           "bg-red-50 text-red-700",
 };
@@ -28,12 +26,18 @@ const STATUS_LABELS: Record<string, string> = {
   placed:              "Placed",
   confirmed:           "Confirmed",
   picked_up:           "Picked Up",
-  in_process:          "In Process",
   ready_for_delivery:  "Ready for Delivery",
-  payment_pending:     "Payment Pending",
   delivered:           "Delivered",
   cancelled:           "Cancelled",
 };
+
+const PAYMENT_BADGE: Record<string, string> = {
+  paid:   "bg-green-50 text-green-700",
+  unpaid: "bg-amber-100 text-amber-800",
+};
+
+const WASH_FAMILY = ["wash-fold", "express"];
+const DRY_FAMILY  = ["dry-clean", "ironing", "household", "detailing"];
 
 function fmtDate(d: string) {
   return new Date(d).toLocaleString("en-CA", {
@@ -45,18 +49,19 @@ function fmtDate(d: string) {
 export default async function AdminDashboardPage({
   searchParams,
 }: {
-  searchParams: { tab?: string; q?: string; filter?: string };
+  searchParams: { tab?: string; q?: string; filter?: string; fam?: string };
 }) {
   await requireAdmin();
   const db     = getSupabaseAdmin();
   const tab    = searchParams.tab ?? "orders";
   const q      = searchParams.q?.toLowerCase() ?? "";
   const filter = searchParams.filter ?? "";
+  const fam    = searchParams.fam ?? "";
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "in_process", "ready_for_delivery", "payment_pending"];
+  const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "ready_for_delivery"];
 
   // activeOrders drives the header bell + the Incoming section, both of which
   // render above the tabs on every tab — so it's always needed. pastOrders
@@ -64,6 +69,10 @@ export default async function AdminDashboardPage({
   // them regardless of which tab is open was the real cause of the console
   // feeling slow when switching to Messages (a 100-row contacts fetch with
   // full message text on every navigation, even Orders/Analytics).
+  //
+  // Both order queries use select("*") rather than an explicit column list —
+  // deliberately, so newly-added columns (like payment_status/paid_at) show
+  // up automatically without this file needing to track the DB schema.
   const [
     { data: activeOrders },
     { data: pastOrders },
@@ -75,12 +84,12 @@ export default async function AdminDashboardPage({
     { count: todayOrders },
   ] = await Promise.all([
     db.from("orders")
-      .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, notes, weight, price, rating, status_history, created_at")
+      .select("*")
       .in("status", ACTIVE_STATUSES)
       .order("created_at", { ascending: false }),
     tab === "orders"
       ? db.from("orders")
-          .select("id, code, customer_name, email, phone, service, service_title, status, address, date, time_slot, status_history, created_at")
+          .select("*")
           .in("status", ["delivered", "cancelled"])
           .order("created_at", { ascending: false })
           .limit(20)
@@ -108,14 +117,18 @@ export default async function AdminDashboardPage({
   };
   const filterBase = FILTERS[filter] ?? (activeOrders ?? []);
 
+  const famBase = fam
+    ? filterBase.filter((o: any) => (fam === "wash" ? WASH_FAMILY : DRY_FAMILY).includes(o.service))
+    : filterBase;
+
   const filteredActive = q
-    ? filterBase.filter((o: any) =>
+    ? famBase.filter((o: any) =>
         o.code?.toLowerCase().includes(q) ||
         o.customer_name?.toLowerCase().includes(q) ||
         o.email?.toLowerCase().includes(q) ||
         o.address?.toLowerCase().includes(q)
       )
-    : filterBase;
+    : famBase;
 
   const FILTER_LABELS: Record<string, string> = { new: "New orders", in_progress: "In progress", today: "Orders today" };
 
@@ -204,18 +217,43 @@ export default async function AdminDashboardPage({
         {/* ── Orders Tab ── */}
         {tab === "orders" && (
           <div>
+            {/* Wash & Fold / Dry Clean bifurcation — the two order families use
+                different STX/DTX codes, so let the owner work one queue at a
+                time instead of scanning a mixed list. */}
+            <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+              {[
+                { key: "",     label: "All Orders" },
+                { key: "wash", label: "Wash & Fold" },
+                { key: "dry",  label: "Dry Clean" },
+              ].map(f => {
+                const href = `/admin?tab=orders${filter ? `&filter=${filter}` : ""}${f.key ? `&fam=${f.key}` : ""}${searchParams.q ? `&q=${encodeURIComponent(searchParams.q)}` : ""}`;
+                const active = fam === f.key;
+                return (
+                  <Link key={f.key} href={href} style={{
+                    textDecoration: "none", padding: "7px 16px", borderRadius: 999,
+                    fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem",
+                    background: active ? "#161616" : "#fff", color: active ? "#fff" : "#6B6B6B",
+                    border: active ? "1px solid #161616" : "1px solid #EAEAEA",
+                  }}>
+                    {f.label}
+                  </Link>
+                );
+              })}
+            </div>
+
             <form method="GET" className="mb-5 flex gap-2">
               <input type="hidden" name="tab" value="orders" />
               {filter && <input type="hidden" name="filter" value={filter} />}
+              {fam && <input type="hidden" name="fam" value={fam} />}
               <input name="q" defaultValue={searchParams.q ?? ""} placeholder="Search code, customer name, address…" className="flex-1 input-field" />
               <button type="submit" className="btn-primary px-5 py-2.5 text-sm">Search</button>
               {searchParams.q && (
-                <a href={filter ? `/admin?tab=orders&filter=${filter}` : "/admin?tab=orders"} className="btn-ghost px-5 py-2.5 text-sm">Clear</a>
+                <a href={`/admin?tab=orders${filter ? `&filter=${filter}` : ""}${fam ? `&fam=${fam}` : ""}`} className="btn-ghost px-5 py-2.5 text-sm">Clear</a>
               )}
             </form>
 
             <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 12 }}>
-              Active Orders {(q || filter) ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
+              Active Orders {(q || filter || fam) ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}
             </p>
 
             {filteredActive.length === 0 ? (
@@ -234,7 +272,11 @@ export default async function AdminDashboardPage({
               </div>
             )}
 
-            {(pastOrders?.length ?? 0) > 0 && !q && (
+            {(() => {
+            const filteredPast = fam
+              ? (pastOrders ?? []).filter((o: any) => (fam === "wash" ? WASH_FAMILY : DRY_FAMILY).includes(o.service))
+              : (pastOrders ?? []);
+            return (filteredPast.length ?? 0) > 0 && !q && (
               <>
                 <p className="font-heading font-bold text-[0.85rem] text-[#A1A1AA] mb-3">Past Orders</p>
                 <div className="bg-white border border-[#EAEAEA] rounded-2xl overflow-hidden">
@@ -242,13 +284,13 @@ export default async function AdminDashboardPage({
                     <table className="w-full text-sm">
                       <thead className="bg-[#FAFAFA] border-b border-[#F0F0F0]">
                         <tr>
-                          {["Order", "Customer", "Service", "Date", "Status", "Update"].map(h => (
+                          {["Order", "Customer", "Service", "Date", "Status", "Payment", "Update"].map(h => (
                             <th key={h} className="text-left px-4 py-3 font-heading font-semibold text-[0.7rem] tracking-wide uppercase text-[#A1A1AA]">{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {pastOrders!.map((o: any) => {
+                        {filteredPast.map((o: any) => {
                           const { missing } = getItemTracking(o.status_history);
                           return (
                           <tr key={o.id} className="border-b border-[#F4F4F5] opacity-80">
@@ -269,6 +311,11 @@ export default async function AdminDashboardPage({
                               </span>
                             </td>
                             <td className="px-4 py-3">
+                              <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${PAYMENT_BADGE[o.payment_status ?? "unpaid"]}`}>
+                                {(o.payment_status ?? "unpaid") === "paid" ? "Paid" : "Unpaid"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
                               {!["delivered","cancelled"].includes(o.status)
                                 ? <StatusUpdater orderCode={o.code} currentStatus={o.status} />
                                 : <span className="font-body text-xs text-[#A1A1AA]">Final</span>
@@ -282,7 +329,8 @@ export default async function AdminDashboardPage({
                   </div>
                 </div>
               </>
-            )}
+            );
+            })()}
           </div>
         )}
 

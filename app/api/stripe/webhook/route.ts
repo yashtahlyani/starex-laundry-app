@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+import { OrderRepository } from "@/lib/repositories/order.repository";
 import Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
@@ -54,18 +55,26 @@ export async function POST(req: NextRequest) {
     const note = buildNote(obj);
 
     if (orderId && note) {
-      // Record the payment outcome as a status_history event without changing
-      // the order's actual fulfillment status — a failed charge or a refund
-      // shouldn't silently move an order to a different state, that's a
-      // human decision made from the admin console.
       const supabaseAdmin = getSupabaseAdmin();
-      const { data: order } = await supabaseAdmin.from("orders").select("status, status_history").eq("id", orderId).single();
+      const { data: order } = await supabaseAdmin.from("orders").select("status, status_history, payment_status").eq("id", orderId).single();
       if (order) {
-        const history = order.status_history ?? [];
-        await supabaseAdmin
-          .from("orders")
-          .update({ status_history: [...history, { status: order.status, note, time: new Date().toISOString() }] })
-          .eq("id", orderId);
+        // A successful charge that the admin charge route hasn't already
+        // recorded (payment_status still unpaid) marks the order paid here —
+        // covers any future async payment path. Auto-advances to Delivered
+        // if the order's already Ready for Delivery, same as the direct
+        // charge route. Everything else (failures, cancellations, refunds)
+        // is logged as a status_history note without touching fulfillment
+        // status — that stays a human decision from the admin console.
+        if (event.type === "payment_intent.succeeded" && order.payment_status !== "paid") {
+          const amount = (obj as Stripe.PaymentIntent).amount;
+          await new OrderRepository(supabaseAdmin).markPaid(orderId, note, amount != null ? amount / 100 : undefined);
+        } else {
+          const history = order.status_history ?? [];
+          await supabaseAdmin
+            .from("orders")
+            .update({ status_history: [...history, { status: order.status, note, time: new Date().toISOString() }] })
+            .eq("id", orderId);
+        }
       }
     }
   }

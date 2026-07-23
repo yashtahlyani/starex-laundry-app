@@ -7,9 +7,7 @@ const STATUSES = [
   { value: "placed",              label: "Placed" },
   { value: "confirmed",           label: "Confirmed" },
   { value: "picked_up",           label: "Picked Up" },
-  { value: "in_process",          label: "In Process" },
   { value: "ready_for_delivery",  label: "Ready for Delivery" },
-  { value: "payment_pending",     label: "Payment Pending" },
   { value: "delivered",           label: "Delivered" },
   { value: "cancelled",           label: "Cancelled" },
 ];
@@ -18,9 +16,7 @@ const STATUS_COLORS: Record<string, string> = {
   placed:              "bg-blue-50 text-blue-700",
   confirmed:           "bg-teal-50 text-teal-700",
   picked_up:           "bg-yellow-50 text-yellow-800",
-  in_process:          "bg-orange-50 text-orange-700",
   ready_for_delivery:  "bg-green-50 text-green-700",
-  payment_pending:     "bg-amber-100 text-amber-800",
   delivered:           "bg-gray-100 text-gray-500",
   cancelled:           "bg-red-50 text-red-700",
 };

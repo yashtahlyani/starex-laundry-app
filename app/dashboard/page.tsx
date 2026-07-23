@@ -12,7 +12,7 @@ import { orderCodeColor } from "@/lib/orderCode";
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const ACTIVE_PRIORITY: Record<string, number> = {
-  payment_pending: 0, ready_for_delivery: 0, in_process: 0, picked_up: 1, confirmed: 2, placed: 3,
+  ready_for_delivery: 0, picked_up: 1, confirmed: 2, placed: 3,
 };
 
 function greeting() {

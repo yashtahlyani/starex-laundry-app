@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Package, Search, CheckCircle, Truck, Sparkles, Clock, MapPin, CreditCard } from "lucide-react";
+import { Package, Search, CheckCircle, Truck, Clock, MapPin, CreditCard } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import IssueReportForm from "@/components/IssueReportForm";
@@ -19,17 +19,16 @@ type Order = {
   time_slot: string;
   created_at: string;
   status_history: StatusEvent[];
+  payment_status?: "unpaid" | "paid" | null;
 };
 
-const STAGES = ["placed", "confirmed", "picked_up", "in_process", "ready_for_delivery", "payment_pending", "delivered"];
+const STAGES = ["placed", "confirmed", "picked_up", "ready_for_delivery", "delivered"];
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
   placed:              { label: "Order placed",       desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#8F2740" },
   confirmed:           { label: "Confirmed",           desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#8F2740" },
-  picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry.",         icon: Truck,       color: "#C08A00" },
-  in_process:          { label: "In process",          desc: "Your laundry is being taken care of.",           icon: Sparkles,    color: "#C2650C" },
+  picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry — it's being cleaned now.", icon: Truck, color: "#C08A00" },
   ready_for_delivery:  { label: "Ready for delivery",  desc: "Your order is ready and heading your way.",      icon: Truck,       color: "#8F2740" },
-  payment_pending:     { label: "Payment pending",     desc: "Please complete payment to finish your order.",  icon: CreditCard,  color: "#B45309" },
   delivered:           { label: "Delivered",           desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#8F2740" },
   cancelled:           { label: "Cancelled",           desc: "This order has been cancelled.",                 icon: Package,     color: "#DC2626" },
 };
@@ -131,6 +130,14 @@ function OrderTracker() {
                   <p className="text-xs text-[#8C8C8C] mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
                   <p className="font-semibold text-[#161616] text-sm font-heading">{order.address}</p>
                 </div>
+                {order.status !== "cancelled" && (
+                  <div className="bg-[#161616]/4 rounded-xl p-3 border border-[#161616]/8 col-span-2 flex items-center gap-2">
+                    <CreditCard size={13} className={order.payment_status === "paid" ? "text-[#15803D]" : "text-[#B45309]"} />
+                    <p className="text-sm font-semibold font-heading" style={{ color: order.payment_status === "paid" ? "#15803D" : "#B45309" }}>
+                      {order.payment_status === "paid" ? "Payment received" : "Payment due"}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Progress timeline */}

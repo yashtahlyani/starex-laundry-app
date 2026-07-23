@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle } from "lucide-react";
-import { StatusBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
+import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
 
@@ -41,6 +41,7 @@ export type DrawerOrder = {
   stripe_payment_method_id?: string | null;
   card_brand?: string | null;
   card_last4?: string | null;
+  payment_status?: "unpaid" | "paid" | null;
 };
 
 function Row({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: string | null }) {
@@ -70,24 +71,58 @@ export default function AppOrderDrawer({
   const router = useRouter();
   const [advancing, setAdvancing] = useState(false);
   const [localStatus, setLocalStatus] = useState<string | null>(null);
+  const [localPaymentStatus, setLocalPaymentStatus] = useState<"unpaid" | "paid" | null>(null);
   const [localTracking, setLocalTracking] = useState<{ received?: number; returned?: number } | null>(null);
   const [pendingCount, setPendingCount] = useState<string>("");
   const [pendingWeight, setPendingWeight] = useState<string>("");
   const [countError, setCountError] = useState<string | null>(null);
   const [pendingPrice, setPendingPrice] = useState<string>("");
-  const [chargeError, setChargeError] = useState<string | null>(null);
-  const [charging, setCharging] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [payingWith, setPayingWith] = useState<"charge" | "manual" | null>(null);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
+  const paymentStatus = localPaymentStatus ?? order?.payment_status ?? "unpaid";
+  const isPaid = paymentStatus === "paid";
   const nextStatusId = NEXT_STATUS[currentStatus] ?? null;
   const nextLabel = nextStatusId ? STATUS_META[nextStatusId]?.label : null;
   const needsCount = nextStatusId === "picked_up" || nextStatusId === "delivered";
-  const needsCharge = currentStatus === "payment_pending" && !!order?.stripe_payment_method_id;
+  const hasCardOnFile = !!order?.stripe_payment_method_id;
+  const showPaymentPanel = admin && !isPaid && !["delivered", "cancelled"].includes(currentStatus);
 
   const tracking = order ? getItemTracking(order.status_history as any) : { received: null, returned: null, missing: null };
   const received = localTracking?.received ?? tracking.received;
   const returned = localTracking?.returned ?? tracking.returned;
   const missing = received != null && returned != null ? received - returned : null;
+
+  async function handlePayment(method: "charge" | "manual") {
+    if (!order) return;
+    const amount = parseFloat(pendingPrice);
+    if (!pendingPrice.trim() || isNaN(amount) || amount <= 0) { setPaymentError("Enter the confirmed order total"); return; }
+
+    setPayingWith(method);
+    setPaymentError(null);
+    try {
+      const res = await fetch(method === "charge" ? "/api/stripe/charge" : `/api/orders/${order.code}/mark-paid`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(method === "charge" ? { orderCode: order.code, amountCad: amount } : { amountCad: amount }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setPaymentError(data.error ?? "Payment failed"); return; }
+
+      // Both endpoints auto-advance to Delivered when the order was already
+      // Ready for Delivery — reflect that here so the owner doesn't need a
+      // separate "Mark as Delivered" click.
+      setLocalPaymentStatus("paid");
+      if (data.status) setLocalStatus(data.status);
+      setPendingPrice("");
+      router.refresh();
+    } catch {
+      setPaymentError("Payment failed — check your connection and try again");
+    } finally {
+      setPayingWith(null);
+    }
+  }
 
   async function handleAdvance() {
     if (!order || !nextStatusId) return;
@@ -97,27 +132,6 @@ export default function AppOrderDrawer({
       if (!pendingCount.trim()) { setCountError("Enter an item count"); return; }
       itemCount = parseInt(pendingCount, 10);
       if (isNaN(itemCount) || itemCount < 0) { setCountError("Enter a valid item count"); return; }
-    }
-
-    if (needsCharge) {
-      const amount = parseFloat(pendingPrice);
-      if (!pendingPrice.trim() || isNaN(amount) || amount <= 0) { setChargeError("Enter the confirmed order total"); return; }
-      setCharging(true);
-      setChargeError(null);
-      try {
-        const chargeRes = await fetch("/api/stripe/charge", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderCode: order.code, amountCad: amount }),
-        });
-        const chargeData = await chargeRes.json();
-        if (!chargeRes.ok) { setChargeError(chargeData.error ?? "Charge failed"); return; }
-      } catch {
-        setChargeError("Charge failed — check your connection and try again");
-        return;
-      } finally {
-        setCharging(false);
-      }
     }
 
     setAdvancing(true);
@@ -176,7 +190,10 @@ export default function AppOrderDrawer({
                   {order.service_title ?? SERVICE_LABELS[order.service] ?? order.service}
                   <span style={{ color: orderCodeColor(order.code).text, fontWeight: 600 }}> · {order.code}</span>
                 </p>
-                <StatusBadge status={currentStatus} pulse={!["delivered","cancelled"].includes(currentStatus)} size="sm" />
+                <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+                  <StatusBadge status={currentStatus} pulse={!["delivered","cancelled"].includes(currentStatus)} size="sm" />
+                  {admin && <PaymentBadge status={paymentStatus} size="sm" />}
+                </div>
               </div>
               <button onClick={onClose} style={{ background: "#F4F4F5", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <X size={16} color="#6B6B6B" />
@@ -220,19 +237,38 @@ export default function AppOrderDrawer({
 
             {/* Footer */}
             <div style={{ padding: "20px 28px", borderTop: "1px solid #F4F4F5", display: "flex", flexDirection: "column", gap: 10 }}>
-              {admin && nextLabel && needsCharge && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B" }}>
-                    Card on file: {order?.card_brand?.toUpperCase() ?? "card"} ending in {order?.card_last4 ?? "····"}
-                  </p>
+              {showPaymentPanel && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4, padding: "14px", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 12 }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#92400E" }}>Collect payment</p>
+                  {hasCardOnFile && (
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B" }}>
+                      Card on file: {order?.card_brand?.toUpperCase() ?? "card"} ending in {order?.card_last4 ?? "····"}
+                    </p>
+                  )}
                   <input
                     type="number" min={0} step="0.01" inputMode="decimal"
                     placeholder="Confirmed order total (CAD)"
                     value={pendingPrice}
                     onChange={e => setPendingPrice(e.target.value)}
-                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
+                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", background: "#fff" }}
                   />
-                  {chargeError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{chargeError}</p>}
+                  {paymentError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{paymentError}</p>}
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {hasCardOnFile && (
+                      <button
+                        onClick={() => handlePayment("charge")} disabled={payingWith !== null}
+                        style={{ flex: 1, padding: "10px", background: payingWith ? "#A1A1AA" : "#161616", color: "#fff", border: "none", borderRadius: 10, cursor: payingWith ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem" }}
+                      >
+                        {payingWith === "charge" ? "Charging…" : "Charge Card"}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handlePayment("manual")} disabled={payingWith !== null}
+                      style={{ flex: 1, padding: "10px", background: "#fff", color: "#161616", border: "1.5px solid #E5E7EB", borderRadius: 10, cursor: payingWith ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem" }}
+                    >
+                      {payingWith === "manual" ? "Saving…" : "Mark Paid (Cash/E-Transfer)"}
+                    </button>
+                  </div>
                 </div>
               )}
               {admin && nextLabel && needsCount && (
@@ -257,17 +293,15 @@ export default function AppOrderDrawer({
               )}
               {admin && nextLabel && (
                 <button
-                  onClick={handleAdvance} disabled={advancing || charging}
+                  onClick={handleAdvance} disabled={advancing || payingWith !== null}
                   style={{
-                    width: "100%", padding: "13px", background: (advancing || charging) ? "#A1A1AA" : "#161616",
-                    color: "#fff", border: "none", borderRadius: 120, cursor: (advancing || charging) ? "not-allowed" : "pointer",
+                    width: "100%", padding: "13px", background: (advancing || payingWith) ? "#A1A1AA" : "#161616",
+                    color: "#fff", border: "none", borderRadius: 120, cursor: (advancing || payingWith) ? "not-allowed" : "pointer",
                     fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem",
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   }}
                 >
-                  {charging ? "Charging card…" : advancing ? "Updating…" : currentStatus === "payment_pending"
-                    ? <>{needsCharge ? "Charge Card & Mark Delivered" : "Complete Payment & Mark Delivered"} <ArrowRight size={15} /></>
-                    : <>Mark as {nextLabel} <ArrowRight size={15} /></>}
+                  {advancing ? "Updating…" : <>Mark as {nextLabel} <ArrowRight size={15} /></>}
                 </button>
               )}
               {!admin && !["delivered","cancelled"].includes(currentStatus) && (

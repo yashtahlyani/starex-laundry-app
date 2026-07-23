@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Check } from "lucide-react";
-import { StatusBadge, fmtSlot } from "./OrderBits";
+import { StatusBadge, PaymentBadge, fmtSlot } from "./OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "./AppOrderDrawer";
 import { orderCodeColor } from "@/lib/orderCode";
 
@@ -81,8 +81,8 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
   return (
     <>
       <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 1fr auto", gap: 16, padding: "12px 22px", background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }} className="admin-th">
-          {["Order", "Customer", "Status", ""].map((h, i) => (
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 1fr 1fr auto", gap: 16, padding: "12px 22px", background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }} className="admin-th">
+          {["Order", "Customer", "Status", "Payment", ""].map((h, i) => (
             <span key={i} style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.7rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#A1A1AA" }}>{h}</span>
           ))}
         </div>
@@ -91,7 +91,7 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
         )}
         {orders.map((o, i) => (
           <button key={o.id} onClick={() => setSelected(o)} style={{
-            width: "100%", display: "grid", gridTemplateColumns: "1.4fr 1.2fr 1fr auto", gap: 16, alignItems: "center",
+            width: "100%", display: "grid", gridTemplateColumns: "1.4fr 1.2fr 1fr 1fr auto", gap: 16, alignItems: "center",
             padding: "16px 22px",
             borderBottom: i < orders.length - 1 ? "1px solid #F4F4F5" : "none",
             borderLeft: "none", borderRight: "none", borderTop: "none",
@@ -112,6 +112,7 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.76rem", color: "#A1A1AA" }}>{o.phone ?? o.email ?? ""}</p>
             </div>
             <StatusBadge status={o.status} size="sm" pulse={!["delivered","cancelled"].includes(o.status)} />
+            <PaymentBadge status={o.payment_status} size="sm" />
             <ChevronRight size={16} color="#C0C0C0" />
           </button>
         ))}
