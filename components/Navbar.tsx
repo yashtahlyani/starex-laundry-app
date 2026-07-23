@@ -253,7 +253,9 @@ export default function Navbar() {
               {DRY_CLEAN_COMBO.tagline} Dry Clean — {DRY_CLEAN_COMBO.title}
             </motion.a>
             <nav style={{ display: "flex", flexDirection: "column" }}>
-              {links.map((link, i) => (
+              {links.map((link, i) => {
+                const isOffer = link.href === "/offer";
+                return (
                 <motion.div
                   key={link.href}
                   initial={{ y: 30, opacity: 0 }}
@@ -268,15 +270,19 @@ export default function Navbar() {
                     className="mobile-nav-link"
                     style={{
                       textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "space-between",
-                      padding: "18px 4px", fontSize: "1.5rem", fontFamily: "Poppins, sans-serif", fontWeight: 600,
-                      color: "#161616", letterSpacing: "-0.02em", lineHeight: 1.2, borderRadius: 10,
+                      padding: "18px 4px", fontSize: "1.5rem", fontFamily: "Poppins, sans-serif", fontWeight: isOffer ? 700 : 600,
+                      color: isOffer ? "#B8324F" : "#161616", letterSpacing: "-0.02em", lineHeight: 1.2, borderRadius: 10,
                     }}
                   >
-                    {link.label}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      {isOffer && <Sparkles size={18} color="#B8324F" style={{ flexShrink: 0 }} />}
+                      {link.label}
+                    </span>
                     <ArrowRight size={20} color="#B8324F" style={{ flexShrink: 0 }} />
                   </a>
                 </motion.div>
-              ))}
+                );
+              })}
             </nav>
             <style>{`
               .mobile-nav-link { -webkit-tap-highlight-color: transparent; transition: background-color 0.12s ease; }
