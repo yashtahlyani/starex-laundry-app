@@ -9,14 +9,14 @@ import { isOwnerUser } from "@/lib/owner";
 import Logo from "@/components/Logo";
 import { DRY_CLEAN_COMBO } from "@/lib/pricing";
 
-// FAQ and Contact live in the footer (shown identically on every page, mobile
-// and desktop) rather than duplicated up here — keeps the header nav short.
+// About, FAQ, and Contact live in the footer (shown identically on every
+// page, mobile and desktop) rather than duplicated up here — keeps the
+// header nav short.
 const links = [
   { href: "/services",     label: "Services" },
   { href: "/pricing",      label: "Pricing" },
   { href: "/offer",        label: "Offer" },
   { href: "/how-it-works", label: "How It Works" },
-  { href: "/about",        label: "About" },
 ];
 
 export default function Navbar() {
