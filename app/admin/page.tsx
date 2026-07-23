@@ -9,7 +9,7 @@ import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
-import { Bell, AlertTriangle, X } from "lucide-react";
+import { Bell, AlertTriangle, X, Download } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -217,40 +217,55 @@ export default async function AdminDashboardPage({
         {/* ── Orders Tab ── */}
         {tab === "orders" && (
           <div>
-            {/* Wash & Fold / Dry Clean bifurcation — the two order families use
-                different STX/DTX codes, so let the owner work one queue at a
-                time instead of scanning a mixed list. */}
-            <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-              {[
-                { key: "",     label: "All Orders" },
-                { key: "wash", label: "Wash & Fold" },
-                { key: "dry",  label: "Dry Clean" },
-              ].map(f => {
-                const href = `/admin?tab=orders${filter ? `&filter=${filter}` : ""}${f.key ? `&fam=${f.key}` : ""}${searchParams.q ? `&q=${encodeURIComponent(searchParams.q)}` : ""}`;
-                const active = fam === f.key;
-                return (
-                  <Link key={f.key} href={href} style={{
-                    textDecoration: "none", padding: "7px 16px", borderRadius: 999,
-                    fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem",
-                    background: active ? "#161616" : "#fff", color: active ? "#fff" : "#6B6B6B",
-                    border: active ? "1px solid #161616" : "1px solid #EAEAEA",
-                  }}>
-                    {f.label}
-                  </Link>
-                );
-              })}
-            </div>
+            {/* One compact control row: Wash & Fold / Dry Clean bifurcation
+                (the two order families use different STX/DTX codes, so the
+                owner can work one queue at a time), search, and CSV export —
+                previously two stacked rows with generous padding that ate a
+                lot of vertical space for what it does. */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 6 }}>
+                {[
+                  { key: "",     label: "All Orders" },
+                  { key: "wash", label: "Wash & Fold" },
+                  { key: "dry",  label: "Dry Clean" },
+                ].map(f => {
+                  const href = `/admin?tab=orders${filter ? `&filter=${filter}` : ""}${f.key ? `&fam=${f.key}` : ""}${searchParams.q ? `&q=${encodeURIComponent(searchParams.q)}` : ""}`;
+                  const active = fam === f.key;
+                  return (
+                    <Link key={f.key} href={href} style={{
+                      textDecoration: "none", padding: "7px 14px", borderRadius: 999,
+                      fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.78rem", whiteSpace: "nowrap",
+                      background: active ? "#161616" : "#fff", color: active ? "#fff" : "#6B6B6B",
+                      border: active ? "1px solid #161616" : "1px solid #EAEAEA",
+                    }}>
+                      {f.label}
+                    </Link>
+                  );
+                })}
+              </div>
 
-            <form method="GET" className="mb-5 flex gap-2">
-              <input type="hidden" name="tab" value="orders" />
-              {filter && <input type="hidden" name="filter" value={filter} />}
-              {fam && <input type="hidden" name="fam" value={fam} />}
-              <input name="q" defaultValue={searchParams.q ?? ""} placeholder="Search code, customer name, address…" className="flex-1 input-field" />
-              <button type="submit" className="btn-primary px-5 py-2.5 text-sm">Search</button>
-              {searchParams.q && (
-                <a href={`/admin?tab=orders${filter ? `&filter=${filter}` : ""}${fam ? `&fam=${fam}` : ""}`} className="btn-ghost px-5 py-2.5 text-sm">Clear</a>
-              )}
-            </form>
+              <form method="GET" className="flex gap-2" style={{ flex: 1, minWidth: 220 }}>
+                <input type="hidden" name="tab" value="orders" />
+                {filter && <input type="hidden" name="filter" value={filter} />}
+                {fam && <input type="hidden" name="fam" value={fam} />}
+                <input name="q" defaultValue={searchParams.q ?? ""} placeholder="Search code, customer, address…" className="flex-1 input-field" style={{ padding: "8px 14px", fontSize: "0.85rem" }} />
+                <button type="submit" className="btn-primary px-4 py-2 text-sm">Search</button>
+                {searchParams.q && (
+                  <a href={`/admin?tab=orders${filter ? `&filter=${filter}` : ""}${fam ? `&fam=${fam}` : ""}`} className="btn-ghost px-4 py-2 text-sm">Clear</a>
+                )}
+              </form>
+
+              <a
+                href={`/api/admin/export${fam ? `?fam=${fam}` : ""}${searchParams.q ? `${fam ? "&" : "?"}q=${encodeURIComponent(searchParams.q)}` : ""}`}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none",
+                  padding: "8px 16px", borderRadius: 10, border: "1px solid #EAEAEA", background: "#fff",
+                  fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#161616", whiteSpace: "nowrap",
+                }}
+              >
+                <Download size={13} /> Export CSV
+              </a>
+            </div>
 
             <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 12 }}>
               Active Orders {(q || filter || fam) ? `— ${filteredActive.length} result(s)` : `(${activeOrders?.length ?? 0})`}

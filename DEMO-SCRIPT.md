@@ -2,7 +2,8 @@
 
 Live site: **https://starex-laundry-app-v2.vercel.app**
 
-Everything below is tested and working in production as of the handoff.
+Everything below is tested and working in production as of the last update
+(2026-07-23).
 
 ---
 
@@ -19,19 +20,25 @@ Everything below is tested and working in production as of the handoff.
 
 ---
 
-## The walkthrough (~7 min)
+## The walkthrough (~10 min)
 
 ### 1. The customer experience (public site)
 Start on the **homepage**. Talking points:
 - "Premium, modern brand — built to convert visitors into bookings."
 - Scroll through: services, transparent pricing, how-it-works, the comparison
   table vs a laundromat. Point out it's **fast and fully mobile** (show phone).
+- Show the **Offer page** (`/offer`) — the "5 for $50" dry-clean combo with a
+  real savings example priced off the actual catalog, not made-up numbers.
 
 ### 2. Book a pickup — live (the core flow)
-Go to **Book** → walk the 4 steps: pick *Wash & Fold* → date & time → fill in
+Go to **Book** → walk the 4 steps: pick *Dry Cleaning* → date & time → fill in
 name / email / phone / address → **Confirm**.
 - "60-second booking, no account required — guests can book instantly."
-- On the confirmation screen, **copy the order code** (e.g. STX-XXXXXX).
+- Point out the **item price list sitting right in the sidebar** the whole
+  time — customers see exact prices without ever leaving the booking flow.
+- On the confirmation screen, **copy the order code**. Dry-clean orders get a
+  `DTX-` code, Wash & Fold gets `STX-` — different colors everywhere too, so
+  the two queues are easy to tell apart at a glance.
 
 ### 3. The wow moment — it's already in the system
 - Switch to your **Gmail**: the **owner alert email** for that booking is
@@ -44,14 +51,26 @@ Go to **Track Order**, paste the code. Show the live **status timeline** and
 activity log. "Customers always know exactly where their laundry is."
 - Point out **Report an issue** — built-in customer support / complaints.
 
-### 5. Run the operation (admin side)
+### 5. Run the operation (admin side) — this is the part that saves them time
 Back in **/admin**:
-- Show the **stats** (orders today/week/month, active orders, status breakdown).
-- Open an order, **advance its status** (e.g. Confirmed → Picked Up). Mention
-  the customer automatically gets an email/WhatsApp update at each step.
+- Show the **Wash & Fold / Dry Clean toggle** on the Orders tab — "you work
+  one queue at a time instead of scanning a mixed list."
+- Show the **search bar** and **Export CSV** button — "every order's full
+  history, one click, opens straight in Excel — for your own records or your
+  accountant."
+- Open an order, **advance its status**: Confirmed → Picked Up → Ready for
+  Delivery → Delivered. Mention it's now a **4-click pipeline** (down from 6)
+  — no more separate "In Process" or "Payment Pending" clicks eating time.
+- Show **payment tracking**: the Paid/Unpaid badge on every order, and the
+  three ways to collect — Charge a saved card, Mark Paid for cash/e-transfer,
+  or **save the amount and let the customer pay online themselves** from
+  their tracking page. "Whichever way payment comes in, it shows up here
+  automatically — you don't have to update anything by hand."
+- Show the **stats** (orders today/week/month, active orders, status
+  breakdown).
 - Show the **Issues** and **Contact messages** tabs.
-- Mention **item-count reconciliation** (count in at pickup vs out at delivery)
-  — "catches a lost sock before the customer even notices."
+- Mention **item-count reconciliation** (count in at pickup vs out at
+  delivery) — "catches a lost sock before the customer even notices."
 
 ---
 
@@ -62,8 +81,11 @@ Back in **/admin**:
 - **Fast:** images and payloads optimized; pages load near-instantly.
 - **Secure:** rate-limited APIs, protected admin, security headers, and
   database-level access rules — built to handle real traffic and abuse.
-- **Ready to grow:** payments (Stripe), WhatsApp updates, and a smart-locker
-  phase are already scaffolded — flip them on when the business needs them.
+- **Payments built the way real laundry apps do it** (CleanCloud, Turns, etc.)
+  — card saved at booking, charged after the order is weighed, or the
+  customer pays themselves online. Fully built and wired to Stripe; **just
+  needs a real Stripe account connected** to go live (currently dormant with
+  test/empty keys, so nothing charges by accident before that's done).
 
 ---
 
@@ -74,14 +96,21 @@ Back in **/admin**:
 - **A customer confirmation email doesn't arrive:** expected — customer emails
   need the domain verified in Resend (a 10-min DNS step, see HANDOFF.md). Owner
   alerts already work. Don't promise customer emails live until that's done.
+- **The online payment section doesn't show up:** expected — it only appears
+  once real Stripe keys are connected. Everything else (Charge Card / Mark
+  Paid from the admin side) still works without it.
 - **Rate-limit message ("too many requests"):** only appears after ~30 rapid
   repeats — just wait a minute. Won't happen at normal demo pace.
 
 ---
 
-## One thing to do before the demo for the full effect
+## Two things to do before the demo for the full effect
 
-Verify the sending domain in Resend so **customer** confirmation emails work
-live too (right now only owner alerts do). Steps are in **HANDOFF.md → Email**.
-Not required to impress — the owner-alert flow is already the wow moment — but
-it makes the customer side complete.
+1. Verify the sending domain in Resend so **customer** confirmation emails
+   work live too (right now only owner alerts do). Steps are in
+   **HANDOFF.md → Email**. Not required to impress — the owner-alert flow is
+   already the wow moment — but it makes the customer side complete.
+2. If you want to demo **real online payment end-to-end**, connect a Stripe
+   account and drop the keys into `.env.local` beforehand — otherwise skip
+   that part of the payment demo and just describe it (still true and still
+   impressive, just not clickable yet).

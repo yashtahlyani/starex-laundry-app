@@ -95,7 +95,7 @@ function OrderTracker() {
         <div className="bg-white rounded-2xl border border-[#161616]/8 shadow-sm p-2 flex gap-2 mb-8">
           <input
             className="flex-1 px-4 py-2.5 text-sm bg-transparent outline-none text-[#161616] placeholder:text-[#8C8C8C] font-body"
-            placeholder="Order code — e.g. STX-482913"
+            placeholder="Order code — e.g. STX-482913 or DTX-482913"
             value={code}
             onChange={e => setCode(e.target.value)}
             onKeyDown={e => e.key === "Enter" && fetchOrder(code)}
