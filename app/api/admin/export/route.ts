@@ -29,10 +29,14 @@ export async function GET(req: NextRequest) {
   const fam = searchParams.get("fam") ?? "";
   const q   = (searchParams.get("q") ?? "").toLowerCase();
 
+  // select("*") rather than an explicit column list — payment_status/paid_at
+  // may not exist yet depending on whether the payment-tracking migration
+  // has been run; "*" returns whatever columns are actually there instead of
+  // erroring on ones that aren't.
   const db = getSupabaseAdmin();
   const { data: orders, error } = await db
     .from("orders")
-    .select("code, status, payment_status, customer_name, email, phone, service, service_title, price, weight, date, time_slot, address, notes, created_at, updated_at")
+    .select("*")
     .order("created_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
