@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle } from "lucide-react";
@@ -82,6 +82,27 @@ export default function AppOrderDrawer({
   const [savingPrice, setSavingPrice] = useState(false);
   const [priceSaved, setPriceSaved] = useState(false);
 
+  // The drawer is a single component instance reused across every order
+  // (AdminOrderTable/AdminIncomingSection just swap the `order` prop) — its
+  // hooks never remounted, so without this, closing order A after advancing
+  // its status/payment and opening order B would show A's leftover local
+  // state (stale status, stale "Saved" banner, stale item-count fields).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setAdvancing(false);
+    setLocalStatus(null);
+    setLocalPaymentStatus(null);
+    setLocalTracking(null);
+    setPendingCount("");
+    setPendingWeight("");
+    setCountError(null);
+    setPendingPrice("");
+    setPaymentError(null);
+    setPayingWith(null);
+    setSavingPrice(false);
+    setPriceSaved(false);
+  }, [order?.id]);
+
   const currentStatus = localStatus ?? order?.status ?? "placed";
   const paymentStatus = localPaymentStatus ?? order?.payment_status ?? "unpaid";
   const isPaid = paymentStatus === "paid";
@@ -89,7 +110,10 @@ export default function AppOrderDrawer({
   const nextLabel = nextStatusId ? STATUS_META[nextStatusId]?.label : null;
   const needsCount = nextStatusId === "picked_up" || nextStatusId === "delivered";
   const hasCardOnFile = !!order?.stripe_payment_method_id;
-  const showPaymentPanel = admin && !isPaid && !["delivered", "cancelled"].includes(currentStatus);
+  // Only once the order's actually been picked up — collecting payment or
+  // setting a total before that doesn't make sense, since the final
+  // weight/item count isn't known yet.
+  const showPaymentPanel = admin && !isPaid && ["picked_up", "ready_for_delivery"].includes(currentStatus);
 
   const tracking = order ? getItemTracking(order.status_history as any) : { received: null, returned: null, missing: null };
   const received = localTracking?.received ?? tracking.received;
@@ -275,7 +299,7 @@ export default function AppOrderDrawer({
                     type="number" min={0} step="0.01" inputMode="decimal"
                     placeholder="Confirmed order total (CAD)"
                     value={pendingPrice}
-                    onChange={e => setPendingPrice(e.target.value)}
+                    onChange={e => { setPendingPrice(e.target.value); setPriceSaved(false); }}
                     style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", background: "#fff" }}
                   />
                   {paymentError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{paymentError}</p>}

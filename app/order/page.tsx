@@ -145,11 +145,11 @@ function OrderTracker() {
                   <p className="text-xs text-[#8C8C8C] mb-1 flex items-center gap-1 font-body"><MapPin size={11} /> Address</p>
                   <p className="font-semibold text-[#161616] text-sm font-heading">{order.address}</p>
                 </div>
-                {order.status !== "cancelled" && (
+                {order.status !== "cancelled" && order.price != null && order.price > 0 && (
                   <div className="bg-[#161616]/4 rounded-xl p-3 border border-[#161616]/8 col-span-2 flex items-center gap-2">
                     <CreditCard size={13} className={order.payment_status === "paid" ? "text-[#15803D]" : "text-[#B45309]"} />
                     <p className="text-sm font-semibold font-heading" style={{ color: order.payment_status === "paid" ? "#15803D" : "#B45309" }}>
-                      {order.payment_status === "paid" ? "Payment received" : "Payment due"}
+                      {order.payment_status === "paid" ? "Payment received" : `Payment due — $${Number(order.price).toFixed(2)}`}
                     </p>
                   </div>
                 )}

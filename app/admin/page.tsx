@@ -62,6 +62,7 @@ export default async function AdminDashboardPage({
   today.setHours(0, 0, 0, 0);
 
   const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "ready_for_delivery"];
+  const FINAL_STATUSES = ["delivered", "cancelled"];
 
   // activeOrders drives the header bell + the Incoming section, both of which
   // render above the tabs on every tab — so it's always needed. pastOrders
@@ -73,6 +74,15 @@ export default async function AdminDashboardPage({
   // Both order queries use select("*") rather than an explicit column list —
   // deliberately, so newly-added columns (like payment_status/paid_at) show
   // up automatically without this file needing to track the DB schema.
+  //
+  // "Active" is defined as NOT final (.not(...in...)) rather than
+  // .in(ACTIVE_STATUSES) — an order.status value outside the current known
+  // set (a leftover from a prior pipeline, a bad import, anything) must
+  // still show up *somewhere* rather than silently vanishing from both this
+  // query and the "past" one below. This was a real bug found in review:
+  // 8 of 24 live orders had legacy status values ("washing", "folding",
+  // "out_for_delivery", "payment_pending" from before the pipeline was
+  // simplified) and were invisible in both Active and Past Orders.
   const [
     { data: activeOrders },
     { data: pastOrders },
@@ -85,12 +95,12 @@ export default async function AdminDashboardPage({
   ] = await Promise.all([
     db.from("orders")
       .select("*")
-      .in("status", ACTIVE_STATUSES)
+      .not("status", "in", `(${FINAL_STATUSES.join(",")})`)
       .order("created_at", { ascending: false }),
     tab === "orders"
       ? db.from("orders")
           .select("*")
-          .in("status", ["delivered", "cancelled"])
+          .in("status", FINAL_STATUSES)
           .order("created_at", { ascending: false })
           .limit(20)
       : Promise.resolve({ data: null }),
@@ -98,7 +108,7 @@ export default async function AdminDashboardPage({
       ? db.from("contact_submissions").select("*").order("created_at", { ascending: false }).limit(100)
       : Promise.resolve({ data: null }),
     db.from("orders").select("*", { count: "exact", head: true }),
-    db.from("orders").select("*", { count: "exact", head: true }).in("status", ACTIVE_STATUSES),
+    db.from("orders").select("*", { count: "exact", head: true }).not("status", "in", `(${FINAL_STATUSES.join(",")})`),
     db.from("contact_submissions").select("*", { count: "exact", head: true }).eq("status", "new"),
     db.from("profiles").select("*", { count: "exact", head: true }),
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),

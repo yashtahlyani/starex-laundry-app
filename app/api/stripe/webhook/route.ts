@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { OrderRepository } from "@/lib/repositories/order.repository";
+import { enqueueStatusUpdate } from "@/lib/queue/notification.queue";
 import Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
 
     if (orderId && note) {
       const supabaseAdmin = getSupabaseAdmin();
-      const { data: order } = await supabaseAdmin.from("orders").select("status, status_history, payment_status").eq("id", orderId).single();
+      const { data: order } = await supabaseAdmin.from("orders").select("code, status, status_history, payment_status, customer_name, email, phone").eq("id", orderId).single();
       if (order) {
         // A successful charge that the admin charge route hasn't already
         // recorded (payment_status still unpaid) marks the order paid here —
@@ -67,7 +68,13 @@ export async function POST(req: NextRequest) {
         // status — that stays a human decision from the admin console.
         if (event.type === "payment_intent.succeeded" && order.payment_status !== "paid") {
           const amount = (obj as Stripe.PaymentIntent).amount;
-          await new OrderRepository(supabaseAdmin).markPaid(orderId, note, amount != null ? amount / 100 : undefined);
+          const result = await new OrderRepository(supabaseAdmin).markPaid(orderId, note, amount != null ? amount / 100 : undefined);
+          if (result.status === "delivered") {
+            enqueueStatusUpdate({
+              orderId, orderCode: order.code, customerName: order.customer_name,
+              customerEmail: order.email, customerPhone: order.phone, newStatus: "delivered",
+            }).catch(() => {});
+          }
         } else {
           const history = order.status_history ?? [];
           await supabaseAdmin
