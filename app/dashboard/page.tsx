@@ -4,9 +4,10 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import { isOwnerUser } from "@/lib/owner";
-import { Package, LogOut, Plus, Clock, Star, Sparkles, ChevronRight, ArrowRight } from "lucide-react";
-import { StatusBadge, ProgressTrack, STATUS_META, fmtSlot } from "@/components/OrderBits";
+import { Package, LogOut, Plus, Clock, Star, Sparkles, ChevronRight, ArrowRight, CreditCard } from "lucide-react";
+import { StatusBadge, PaymentBadge, ProgressTrack, STATUS_META, fmtSlot } from "@/components/OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "@/components/AppOrderDrawer";
+import PayNowCard from "@/components/PayNowCard";
 import { orderCodeColor } from "@/lib/orderCode";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
@@ -53,6 +54,12 @@ export default function DashboardPage() {
   , [active]);
   const recent = orders.slice(0, 5);
 
+  // Any order with a confirmed total that isn't paid yet — not just the
+  // active one, since a delivered order can still be waiting on payment.
+  const unpaidOrders = useMemo(() =>
+    orders.filter(o => o.payment_status !== "paid" && o.price != null && o.price > 0 && o.status !== "cancelled")
+  , [orders]);
+
   const firstName = user?.user_metadata?.full_name?.split(" ")[0]
     ?? user?.user_metadata?.name?.split(" ")[0]
     ?? user?.email?.split("@")[0] ?? "there";
@@ -98,6 +105,30 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
+        {unpaidOrders.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03, duration: 0.4, ease }}
+            style={{ marginBottom: 28 }}>
+            <p className="eyebrow" style={{ marginBottom: 12, color: "#B45309" }}>
+              {unpaidOrders.length === 1 ? "Payment due" : `${unpaidOrders.length} payments due`}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {unpaidOrders.map(o => (
+                <div key={o.id} style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 20, padding: "20px 24px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginBottom: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <CreditCard size={16} color="#B45309" />
+                      <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.95rem", color: orderCodeColor(o.code).text }}>{o.code}</span>
+                      <span style={{ color: "#8C8C8C", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{o.service_title ?? o.service}</span>
+                    </div>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#92400E" }}>${Number(o.price).toFixed(2)} CAD</span>
+                  </div>
+                  <PayNowCard orderCode={o.code} amountCad={Number(o.price)} />
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 32 }} className="dash-stats">
           {statCards.map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease }}
@@ -120,6 +151,7 @@ export default function DashboardPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: orderCodeColor(activeOrder.code).text }}>{activeOrder.code}</span>
                     <StatusBadge status={activeOrder.status} pulse />
+                    {activeOrder.price != null && <PaymentBadge status={activeOrder.payment_status} size="sm" />}
                   </div>
                   <p style={{ color: "#8C8C8C", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", marginTop: 4 }}>
                     {activeOrder.service_title ?? activeOrder.service} · {activeOrder.date}
@@ -163,7 +195,7 @@ export default function DashboardPage() {
             <div style={{ background: "#fff", border: "1px solid #EDEDED", borderRadius: 16, overflow: "hidden" }}>
               {recent.map((o, i) => (
                 <button key={o.id} onClick={() => setSelected(o)} style={{
-                  width: "100%", display: "grid", gridTemplateColumns: "1fr auto auto", gap: 16, alignItems: "center",
+                  width: "100%", display: "grid", gridTemplateColumns: "1fr auto auto auto", gap: 12, alignItems: "center",
                   padding: "16px 22px", borderBottom: i < recent.length - 1 ? "1px solid #F4F4F5" : "none",
                   borderLeft: "none", borderRight: "none", borderTop: "none",
                   background: "none", cursor: "pointer", textAlign: "left",
@@ -175,6 +207,7 @@ export default function DashboardPage() {
                     </p>
                     <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#A1A1AA" }}>{o.date}</p>
                   </div>
+                  {o.price != null && <PaymentBadge status={o.payment_status} size="sm" />}
                   <StatusBadge status={o.status} size="sm" pulse={!["delivered","cancelled"].includes(o.status)} />
                   <ChevronRight size={15} color="#C0C0C0" />
                 </button>

@@ -105,6 +105,10 @@ export default async function AdminDashboardPage({
   ]);
 
   const newOrders    = (activeOrders ?? []).filter((o: any) => o.status === "placed");
+  // Family-scoped for the Incoming section only — the header bell/KPI counts
+  // deliberately stay global (they're notifications, not tied to whichever
+  // queue happens to be selected).
+  const newOrdersInView = fam ? newOrders.filter((o: any) => (fam === "wash" ? WASH_FAMILY : DRY_FAMILY).includes(o.service)) : newOrders;
   const inProgressOrders = (activeOrders ?? []).filter((o: any) => o.status !== "placed");
   const todaysActiveOrders = (activeOrders ?? []).filter((o: any) => new Date(o.created_at) >= today);
 
@@ -208,8 +212,10 @@ export default async function AdminDashboardPage({
           </div>
         )}
 
-        {/* Incoming new orders */}
-        <AdminIncomingSection orders={newOrders as any} />
+        {/* Incoming new orders — respects the Wash & Fold / Dry Clean toggle
+            so the two queues stay genuinely separate everywhere, not just in
+            the table below. */}
+        <AdminIncomingSection orders={newOrdersInView as any} />
 
         {/* Tabs */}
         <AdminTabs activeTab={tab} newContacts={newContacts ?? 0} />

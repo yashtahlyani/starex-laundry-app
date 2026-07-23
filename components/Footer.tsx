@@ -18,6 +18,13 @@ const pages = [
 
 const serviceList = ["Wash & Fold — $2/lb", "Dry Cleaning", "Same-Day Express", "Ironing & Press", "Household & Bedding", "Car & Sofa Detailing"];
 
+const serviceAreas = [
+  { label: "Dry Cleaning in Brampton",       href: "/dry-cleaning-brampton" },
+  { label: "Laundry Service in Brampton",    href: "/laundry-service-brampton" },
+  { label: "Dry Cleaning in Mississauga",    href: "/dry-cleaning-mississauga" },
+  { label: "Laundry Service in Mississauga", href: "/laundry-service-mississauga" },
+];
+
 const colHead: React.CSSProperties = {
   fontFamily: "Kodchasan, sans-serif",
   fontWeight: 600,
@@ -117,6 +124,17 @@ export default function Footer() {
               <span style={colHead}>Services</span>
               {serviceList.map(s => (
                 <p key={s} style={linkStyle}>{s}</p>
+              ))}
+            </div>
+
+            {/* Service Areas */}
+            <div>
+              <span style={colHead}>Service Areas</span>
+              {serviceAreas.map(a => (
+                <a key={a.href} href={a.href} style={linkStyle}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#B8324F"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#4A4A4A"}
+                >{a.label}</a>
               ))}
             </div>
 
