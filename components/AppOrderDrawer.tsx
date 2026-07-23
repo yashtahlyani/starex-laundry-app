@@ -79,6 +79,8 @@ export default function AppOrderDrawer({
   const [pendingPrice, setPendingPrice] = useState<string>("");
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [payingWith, setPayingWith] = useState<"charge" | "manual" | null>(null);
+  const [savingPrice, setSavingPrice] = useState(false);
+  const [priceSaved, setPriceSaved] = useState(false);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
   const paymentStatus = localPaymentStatus ?? order?.payment_status ?? "unpaid";
@@ -121,6 +123,30 @@ export default function AppOrderDrawer({
       setPaymentError("Payment failed — check your connection and try again");
     } finally {
       setPayingWith(null);
+    }
+  }
+
+  async function handleSavePrice() {
+    if (!order) return;
+    const amount = parseFloat(pendingPrice);
+    if (!pendingPrice.trim() || isNaN(amount) || amount <= 0) { setPaymentError("Enter the confirmed order total"); return; }
+
+    setSavingPrice(true);
+    setPaymentError(null);
+    try {
+      const res = await fetch(`/api/orders/${order.code}/set-price`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amountCad: amount }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setPaymentError(data.error ?? "Could not save order total"); return; }
+      setPriceSaved(true);
+      router.refresh();
+    } catch {
+      setPaymentError("Could not save order total — check your connection and try again");
+    } finally {
+      setSavingPrice(false);
     }
   }
 
@@ -268,6 +294,20 @@ export default function AppOrderDrawer({
                     >
                       {payingWith === "manual" ? "Saving…" : "Mark Paid (Cash/E-Transfer)"}
                     </button>
+                  </div>
+                  <div style={{ borderTop: "1px solid #FDE68A", paddingTop: 8, marginTop: 2 }}>
+                    {priceSaved ? (
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#166534", fontWeight: 600 }}>
+                        Saved — the customer can now pay online from their tracking page.
+                      </p>
+                    ) : (
+                      <button
+                        onClick={handleSavePrice} disabled={savingPrice}
+                        style={{ width: "100%", padding: "9px", background: "transparent", color: "#8F2740", border: "1.5px dashed rgba(184,50,79,0.4)", borderRadius: 10, cursor: savingPrice ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
+                      >
+                        {savingPrice ? "Saving…" : "Save Amount — Let Customer Pay Online"}
+                      </button>
+                    )}
                   </div>
                 </div>
               )}

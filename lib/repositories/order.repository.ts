@@ -194,6 +194,21 @@ export class OrderRepository {
     if (error) throw error;
   }
 
+  // Records the staff-confirmed order total without touching payment status —
+  // this is what makes "Pay Now" appear on the customer's tracking page (see
+  // app/order/page.tsx), so the customer can pay it themselves online instead
+  // of the owner having to charge or collect it.
+  async setPrice(id: string, amountCad: number): Promise<void> {
+    const { data: current } = await this.db.from("orders").select("status, status_history").eq("id", id).single();
+    const history: StatusEvent[] = current?.status_history ?? [];
+    const { error } = await this.db.from("orders").update({
+      price: amountCad,
+      status_history: [...history, { status: current?.status ?? "placed", note: `Order total confirmed — $${amountCad.toFixed(2)} CAD`, time: new Date().toISOString() }],
+      updated_at: new Date().toISOString(),
+    }).eq("id", id);
+    if (error) throw error;
+  }
+
   // Marks an order paid (from a successful card charge or the owner tapping
   // "Mark Paid" for a cash/e-transfer order) and, if the order is already
   // Ready for Delivery, auto-advances it straight to Delivered in the same

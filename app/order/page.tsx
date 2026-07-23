@@ -5,6 +5,7 @@ import { Package, Search, CheckCircle, Truck, Clock, MapPin, CreditCard } from "
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import IssueReportForm from "@/components/IssueReportForm";
+import PayNowCard from "@/components/PayNowCard";
 import { orderCodeColor } from "@/lib/orderCode";
 
 type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
@@ -20,6 +21,7 @@ type Order = {
   created_at: string;
   status_history: StatusEvent[];
   payment_status?: "unpaid" | "paid" | null;
+  price?: number | null;
 };
 
 const STAGES = ["placed", "confirmed", "picked_up", "ready_for_delivery", "delivered"];
@@ -39,6 +41,7 @@ function OrderTracker() {
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState<string | null>(null);
   const [order,   setOrder]   = useState<Order | null>(null);
+  const [justPaid, setJustPaid] = useState(false);
 
   useEffect(() => {
     const c = searchParams.get("code");
@@ -59,6 +62,18 @@ function OrderTracker() {
     } finally {
       setLoading(false);
     }
+  }
+
+  // Used right after a payment succeeds — merges the fresh status/payment
+  // fields into state without clearing `order` first, so PayNowCard's own
+  // "Payment received" success card stays visible instead of flickering out
+  // while the rest of the page (status badge, timeline) catches up.
+  async function refreshOrderSilently(trackCode: string) {
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(trackCode.trim().toUpperCase())}`);
+      const data = await res.json();
+      if (res.ok) setOrder(data.order);
+    } catch {}
   }
 
   const currentStageIndex = order ? STAGES.indexOf(order.status) : -1;
@@ -174,6 +189,14 @@ function OrderTracker() {
                 </div>
               )}
             </div>
+
+            {order.status !== "cancelled" && (order.payment_status !== "paid" || justPaid) && order.price != null && order.price > 0 && (
+              <PayNowCard
+                orderCode={order.code}
+                amountCad={order.price}
+                onPaid={() => { setJustPaid(true); refreshOrderSilently(order.code); }}
+              />
+            )}
 
             {/* Event history from status_history jsonb */}
             {events.length > 0 && (
