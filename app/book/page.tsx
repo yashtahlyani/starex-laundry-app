@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
-import { CATALOG, MINIMUM_ORDER, HST_LABEL } from "@/lib/pricing";
+import { CATALOG, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
@@ -59,6 +59,7 @@ function BookPageInner() {
   const searchParams = useSearchParams();
   const preselectedService = searchParams.get("service");
   const validPreselect = services.some(s => s.id === preselectedService) ? preselectedService! : "";
+  const comboParam = searchParams.get("combo") === "1";
 
   // Arriving from a specific service's "Book this service" CTA — skip the
   // service-selection step entirely since it's already chosen, straight to Schedule.
@@ -66,6 +67,13 @@ function BookPageInner() {
   const [direction, setDirection] = useState(1);
   const [form, setForm] = useState<FormState>({ service: validPreselect, date: "", time: "", name: "", email: "", phone: "", address: "", notes: "" });
   const [errors, setErrors] = useState<Partial<FormState>>({});
+  // Arrived from the Offer page / pricing combo CTA — surface this through
+  // the whole flow (sidebar, review, confirmation) so the customer never
+  // loses track of "am I actually getting the combo?" once they leave /offer.
+  // Tied to the live selected service, not just the initial URL param, so if
+  // the customer goes back and picks a different service the combo styling
+  // correctly disappears rather than sticking around inaccurately.
+  const isCombo = comboParam && form.service === "dry-clean";
   const [submitting, setSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -112,6 +120,13 @@ function BookPageInner() {
     setSubmitting(true);
     setSubmitError(null);
     try {
+      // Combo context has to travel with the order itself, not just live on
+      // this page — otherwise the admin has no way to know this dry-clean
+      // order should be $50 flat instead of itemized. Prepending it to notes
+      // means it shows up in the admin drawer, the CSV export, and the
+      // customer's own status history.
+      const comboNote = `Booked via ${DRY_CLEAN_COMBO.tagline} combo offer (5 items, $${DRY_CLEAN_COMBO.priceCad} flat).`;
+      const combinedNotes = isCombo ? [comboNote, form.notes.trim()].filter(Boolean).join(" — ") : form.notes;
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,7 +138,7 @@ function BookPageInner() {
           address: form.address,
           date: form.date,
           timeSlot: form.time,
-          notes: form.notes || undefined,
+          notes: combinedNotes || undefined,
           stripeCustomerId: savedCard?.stripeCustomerId,
           stripePaymentMethodId: savedCard?.stripePaymentMethodId,
           cardBrand: savedCard?.cardBrand,
@@ -167,10 +182,20 @@ function BookPageInner() {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F2F2F2", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
             <span style={{ color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
           </div>
+          {isCombo && (
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF", borderRadius: 999, padding: "6px 16px", marginBottom: 16, marginLeft: 8 }}>
+              <Sparkles size={13} />
+              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem" }}>{DRY_CLEAN_COMBO.tagline} combo confirmed</span>
+            </div>
+          )}
           <p style={{ color: "#6B6B6B", fontSize: "1.0625rem", maxWidth: "44ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
             We&apos;ll send a confirmation to <strong style={{ color: "#161616" }}>{form.email}</strong>. See you on {form.date}!
           </p>
-          <p style={{ color: "#8C8C8C", fontSize: "0.875rem", marginBottom: 36, fontFamily: "Kodchasan, sans-serif" }}>Final price is confirmed after we weigh your laundry at pickup.</p>
+          <p style={{ color: "#8C8C8C", fontSize: "0.875rem", marginBottom: 36, fontFamily: "Kodchasan, sans-serif" }}>
+            {isCombo
+              ? `Bring your 5 items — flat $${DRY_CLEAN_COMBO.priceCad}, confirmed at pickup.`
+              : "Final price is confirmed after we weigh your laundry at pickup."}
+          </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href={`/order?code=${orderId}`} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               Track my order <ArrowRight size={16} />
@@ -202,6 +227,18 @@ function BookPageInner() {
       </div>
 
       <section style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px" }}>
+        {isCombo && (
+          <div style={{
+            display: "flex", alignItems: "center", gap: 10, marginBottom: 24,
+            background: "linear-gradient(135deg,#C85770,#B8324F)", borderRadius: 14,
+            padding: "13px 18px", color: "#FFFFFF",
+          }}>
+            <Sparkles size={16} style={{ flexShrink: 0 }} />
+            <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.875rem" }}>
+              {DRY_CLEAN_COMBO.tagline} Combo — you&apos;re booking 5 items for a flat ${DRY_CLEAN_COMBO.priceCad}, not itemized pricing.
+            </span>
+          </div>
+        )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 32, alignItems: "start" }} className="book-layout">
 
           <AnimatePresence mode="wait" custom={direction}>
@@ -347,6 +384,7 @@ function BookPageInner() {
                 <div style={{ background: "#F2F2F2", borderRadius: 16, padding: "24px", marginBottom: 24, display: "flex", flexDirection: "column", gap: 14 }}>
                   {([
                     { label: "Service", value: selectedService?.title },
+                    isCombo ? { label: "Offer", value: `${DRY_CLEAN_COMBO.tagline} combo — $${DRY_CLEAN_COMBO.priceCad} flat for 5 items` } : null,
                     { label: "Date",    value: form.date },
                     { label: "Time",    value: form.time },
                     { label: "Name",    value: form.name },
@@ -363,7 +401,9 @@ function BookPageInner() {
                 </div>
 
                 <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>
-                  Price confirmed via SMS after weigh-in. Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies (${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing).
+                  {isCombo
+                    ? `Flat $${DRY_CLEAN_COMBO.priceCad} for your 5 combo items, ${HST_LABEL}. We'll confirm at pickup that your items qualify.`
+                    : `Price confirmed via SMS after weigh-in. Prices shown ${HST_LABEL}. $${MINIMUM_ORDER.standardCad} minimum order value applies ($${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing).`}
                 </p>
 
                 <StripeCardStep
@@ -435,17 +475,23 @@ function BookPageInner() {
                 ))}
                 <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)", paddingTop: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>Starting from</span>
-                    <span style={{ color: "#B8324F", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>{selectedService?.price || "—"}</span>
+                    <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{isCombo ? "Combo price" : "Starting from"}</span>
+                    <span style={{ color: "#B8324F", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>
+                      {isCombo ? `$${DRY_CLEAN_COMBO.priceCad} flat` : (selectedService?.price || "—")}
+                    </span>
                   </div>
-                  <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Final price confirmed via SMS after weigh-in. Prices shown {HST_LABEL}.</p>
+                  <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>
+                    {isCombo ? `5 items, one flat price. Prices shown ${HST_LABEL}.` : `Final price confirmed via SMS after weigh-in. Prices shown ${HST_LABEL}.`}
+                  </p>
                 </div>
               </div>
               <div style={{ marginTop: 20, background: "#F2F2F2", borderRadius: 10, padding: "11px 14px" }}>
                 <p style={{ color: "#8F2740", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>
-                  {form.service === "detailing"
-                    ? `$${MINIMUM_ORDER.detailingCad} minimum order value`
-                    : `$${MINIMUM_ORDER.standardCad} minimum order value`}
+                  {isCombo
+                    ? `${DRY_CLEAN_COMBO.tagline} combo — minimum order already met`
+                    : form.service === "detailing"
+                      ? `$${MINIMUM_ORDER.detailingCad} minimum order value`
+                      : `$${MINIMUM_ORDER.standardCad} minimum order value`}
                 </p>
               </div>
             </div>

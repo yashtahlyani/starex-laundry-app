@@ -337,7 +337,7 @@ export default function PricingPage() {
               <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>
                 {DRY_CLEAN_COMBO.exclusions} Prices shown {HST_LABEL}.
               </p>
-              <a href="/book?service=dry-clean" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+              <a href="/book?service=dry-clean&combo=1" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
                 Book This Combo <ArrowRight size={14} />
               </a>
             </div>

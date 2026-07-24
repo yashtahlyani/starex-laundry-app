@@ -64,7 +64,11 @@ export default function OfferPage() {
   }, []);
 
   return (
-    <div style={{ background: "#FFFFFF" }}>
+    // Bottom padding reserves space for the sticky CTA bar once it's shown,
+    // so it never overlaps the price-callout section's own "Book This Combo"
+    // button — on short mobile viewports the two were colliding since the
+    // fixed bar sat directly on top of that in-page button.
+    <div style={{ background: "#FFFFFF", paddingBottom: showSticky ? 84 : 0, transition: "padding-bottom 0.2s ease" }}>
 
       {/* Hero */}
       <section style={{
@@ -110,7 +114,7 @@ export default function OfferPage() {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.34 }}
             style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}
           >
-            <a href="/book?service=dry-clean" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "16px 36px", textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, borderRadius: 120, boxShadow: "0 12px 32px rgba(0,0,0,0.2)" }}>
+            <a href="/book?service=dry-clean&combo=1" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "16px 36px", textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, borderRadius: 120, boxShadow: "0 12px 32px rgba(0,0,0,0.2)" }}>
               Book This Combo <ArrowRight size={16} />
             </a>
             <a href="#savings" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "16px 28px", textDecoration: "none", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.3)", color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 600, borderRadius: 120 }}>
@@ -269,7 +273,7 @@ export default function OfferPage() {
               <p style={{ color: "rgba(255,255,255,0.85)", fontFamily: "Kodchasan, sans-serif", marginBottom: 28 }}>
                 {DRY_CLEAN_COMBO.exclusions}
               </p>
-              <a href="/book?service=dry-clean" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", padding: "13px 28px", borderRadius: 120 }}>
+              <a href="/book?service=dry-clean&combo=1" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "#FFFFFF", color: "var(--brand)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", padding: "13px 28px", borderRadius: 120 }}>
                 Book This Combo <ArrowRight size={14} />
               </a>
             </div>
@@ -320,8 +324,8 @@ export default function OfferPage() {
             <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", color: "#161616" }}>
               {DRY_CLEAN_COMBO.tagline} <span style={{ color: "#8C8C8C", fontWeight: 500 }}>— dry cleaning combo</span>
             </span>
-            <a href="/book?service=dry-clean" className="btn-primary" style={{ padding: "10px 22px", fontSize: "0.875rem", whiteSpace: "nowrap" }}>
-              Book Now <ArrowRight size={14} />
+            <a href="/book?service=dry-clean&combo=1" className="btn-primary" style={{ padding: "10px 22px", fontSize: "0.875rem", whiteSpace: "nowrap" }}>
+              Book Combo <ArrowRight size={14} />
             </a>
           </motion.div>
         )}
