@@ -81,6 +81,10 @@ export default function AppOrderDrawer({
   const [payingWith, setPayingWith] = useState<"charge" | "manual" | null>(null);
   const [savingPrice, setSavingPrice] = useState(false);
   const [priceSaved, setPriceSaved] = useState(false);
+  const [noteMessage, setNoteMessage] = useState("");
+  const [sendingNote, setSendingNote] = useState(false);
+  const [noteSent, setNoteSent] = useState(false);
+  const [noteError, setNoteError] = useState<string | null>(null);
 
   // The drawer is a single component instance reused across every order
   // (AdminOrderTable/AdminIncomingSection just swap the `order` prop) — its
@@ -101,6 +105,10 @@ export default function AppOrderDrawer({
     setPayingWith(null);
     setSavingPrice(false);
     setPriceSaved(false);
+    setNoteMessage("");
+    setSendingNote(false);
+    setNoteSent(false);
+    setNoteError(null);
   }, [order?.id]);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
@@ -171,6 +179,31 @@ export default function AppOrderDrawer({
       setPaymentError("Could not save order total — check your connection and try again");
     } finally {
       setSavingPrice(false);
+    }
+  }
+
+  async function handleSendNote() {
+    if (!order) return;
+    const message = noteMessage.trim();
+    if (!message) { setNoteError("Enter a message"); return; }
+
+    setSendingNote(true);
+    setNoteError(null);
+    try {
+      const res = await fetch(`/api/orders/${order.code}/notify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setNoteError(data.error ?? "Could not send note"); return; }
+      setNoteSent(true);
+      setNoteMessage("");
+      router.refresh();
+    } catch {
+      setNoteError("Could not send note — check your connection and try again");
+    } finally {
+      setSendingNote(false);
     }
   }
 
@@ -281,6 +314,38 @@ export default function AppOrderDrawer({
                     Received: <strong style={{ color: "#161616" }}>{received ?? "—"}</strong>
                     {" · "}Returned: <strong style={{ color: "#161616" }}>{returned ?? "—"}</strong>
                   </p>
+                </div>
+              )}
+
+              {/* Notify customer — for garment discrepancies or anything staff
+                  need to flag (a stain that won't come out, returning an item
+                  unprocessed, etc.). Independent of status: doesn't require a
+                  status change, and works no matter what stage the order is
+                  at. Logged into status_history so it shows in the Activity
+                  Log on both this drawer and the customer's tracking page. */}
+              {admin && (
+                <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 12, background: "#F4F4F5" }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#161616", marginBottom: 8 }}>
+                    Notify customer
+                  </p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C", marginBottom: 10 }}>
+                    E.g. a garment discrepancy — a stain that won&apos;t fully remove, or an item being returned unprocessed.
+                  </p>
+                  <textarea
+                    rows={3}
+                    value={noteMessage}
+                    onChange={e => { setNoteMessage(e.target.value); setNoteSent(false); }}
+                    placeholder="We noticed a stain on your blue shirt that couldn't be fully removed…"
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", background: "#fff", resize: "vertical", boxSizing: "border-box" }}
+                  />
+                  {noteError && <p style={{ color: "#DC2626", fontSize: "0.8rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>{noteError}</p>}
+                  {noteSent && <p style={{ color: "#16A34A", fontSize: "0.8rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>Sent to the customer by email/WhatsApp.</p>}
+                  <button
+                    onClick={handleSendNote} disabled={sendingNote || !noteMessage.trim()}
+                    style={{ marginTop: 10, padding: "9px 18px", background: (sendingNote || !noteMessage.trim()) ? "#A1A1AA" : "#161616", color: "#fff", border: "none", borderRadius: 10, cursor: (sendingNote || !noteMessage.trim()) ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem" }}
+                  >
+                    {sendingNote ? "Sending…" : "Send Note"}
+                  </button>
                 </div>
               )}
             </div>

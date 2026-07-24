@@ -90,6 +90,55 @@ export async function sendStatusNotification(
   ]);
 }
 
+// Ad-hoc note to a specific customer about their order — e.g. a garment
+// discrepancy staff spotted before processing ("this stain won't fully
+// remove", "returning unprocessed — fabric too damaged to clean safely").
+// Independent of the status pipeline: doesn't require a status change, just
+// a message the customer needs to see. Called from the admin console's
+// order drawer.
+export async function sendCustomerNote(
+  orderId: string,
+  orderCode: string,
+  customerName: string,
+  customerEmail: string,
+  customerPhone: string,
+  message: string
+) {
+  await Promise.allSettled([
+    sendCustomerNoteEmail(orderId, orderCode, customerName, customerEmail, message),
+    dispatchWhatsApp(
+      orderId,
+      customerPhone,
+      `Hi ${customerName}, a note about your order *${orderCode}*:\n\n${message}\n\nTrack: ${SITE_URL}/order\n\nQuestions? Just reply to this message.`,
+      "custom_note"
+    ),
+  ]);
+}
+
+async function sendCustomerNoteEmail(
+  orderId: string,
+  orderCode: string,
+  customerName: string,
+  customerEmail: string,
+  message: string
+) {
+  if (!resend) {
+    await logNotification(orderId, "email", "custom_note", "skipped");
+    return;
+  }
+  try {
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: customerEmail,
+      subject: `A note about your order — ${orderCode}`,
+      html: buildStatusEmailHtml(customerName, orderCode, escapeHtml(message).replace(/\n/g, "<br>")),
+    });
+    await logNotification(orderId, "email", "custom_note", error ? "failed" : "sent", data?.id);
+  } catch {
+    await logNotification(orderId, "email", "custom_note", "failed");
+  }
+}
+
 // ─── Owner notifications ────────────────────────────────────────────────────
 // Alerts the owner's inbox on new activity, so they don't have to keep
 // refreshing /admin to notice a new booking or message. Set
