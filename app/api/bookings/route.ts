@@ -55,6 +55,25 @@ export async function POST(req: NextRequest) {
       date.length > 20 || timeSlot.length > 40 || (notes?.length ?? 0) > 1000) {
     return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
   }
+  // Mirrors the client-side checks in app/book/page.tsx — the UI form can't be
+  // trusted alone since this endpoint is reachable directly (curl, bots), and a
+  // garbage email/phone/date here means a driver gets dispatched for nothing.
+  if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email.trim())) {
+    return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
+  }
+  if (phone.replace(/\D/g, "").length < 10) {
+    return NextResponse.json({ error: "Enter a valid phone number" }, { status: 400 });
+  }
+  if (address.trim().length < 8) {
+    return NextResponse.json({ error: "Enter a full pickup address" }, { status: 400 });
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(new Date(date).getTime())) {
+    return NextResponse.json({ error: "Invalid pickup date" }, { status: 400 });
+  }
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  if (new Date(`${date}T00:00:00`) < today) {
+    return NextResponse.json({ error: "Pickup date can't be in the past" }, { status: 400 });
+  }
 
   try {
     const bookingService = new BookingService(getSupabaseAdmin());

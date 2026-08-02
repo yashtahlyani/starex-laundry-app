@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { getSupabaseAdmin } from "./supabaseAdmin";
 import { BUSINESS_NAME } from "./pricing";
+import { SITE_ORIGIN } from "./site";
 
 // Undefined until RESEND_API_KEY is set — email sends are skipped gracefully until then,
 // same as the Twilio WhatsApp path below.
@@ -14,7 +15,10 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 // verified. Exported so every send site (here + the issues route) stays in sync.
 const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 export const FROM_EMAIL = `${BUSINESS_NAME} <${FROM_ADDRESS}>`;
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://starexlaundry.ca";
+// Reuses the same https-only guard as SEO surfaces — a stray
+// NEXT_PUBLIC_SITE_URL=http://localhost in the deploy environment must never
+// leak into a real customer's email as their "Track My Order" link.
+const SITE_URL = SITE_ORIGIN;
 
 // Customer-supplied text (names, addresses, messages) goes into HTML emails —
 // escape it so a crafted booking can't inject markup into the owner's inbox.
