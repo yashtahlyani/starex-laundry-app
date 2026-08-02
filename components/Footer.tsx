@@ -202,7 +202,7 @@ export default function Footer() {
 
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", position: "relative" }}>
           <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
-            &copy; {new Date().getFullYear()} StareX Inc. Made in Canada 🍁
+            &copy; {new Date().getFullYear()} Royal Art Treasure Inc., operating as StareX. Made in Canada 🍁
           </p>
           <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
             <a href="/terms" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Terms</a>

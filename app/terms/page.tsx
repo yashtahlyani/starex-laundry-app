@@ -9,16 +9,16 @@ export const metadata: Metadata = {
 const EFFECTIVE = "August 2, 2026";
 
 // Business address is disclosed on request rather than printed here — we
-// don't have a verified registered address to publish. Same for the legal
-// entity name below: "Starex" is used as both trade and legal name until
-// confirmed otherwise.
+// don't have a verified registered address to publish.
 const ADDRESS_LINE = "Business address available on request — email hello@starexlaundry.ca or call 437-607-7251";
+const LEGAL_NAME = "Royal Art Treasure Inc.";
 
 const sections: LegalSection[] = [
   {
     title: "Definitions",
     blocks: [{
       type: "ul", items: [
+        { label: '"Starex", "we", "us", "our"', text: `means ${LEGAL_NAME}, operating as Starex.` },
         { label: '"Order"', text: "means a single scheduled pickup and the items submitted under it." },
         { label: '"Services"', text: "— pickup, wash & fold, dry cleaning, ironing & press, household/bedding cleaning, same-day express, and car & sofa detailing offered by Starex." },
         { label: '"Consumer Agreement"', text: "has the meaning given in the CPA — an agreement between a supplier and an individual acting for personal, family, or household purposes." },
@@ -32,6 +32,7 @@ const sections: LegalSection[] = [
     blocks: [
       { type: "p", text: "As required for internet and remote agreements under the CPA, here is who you are contracting with:" },
       { type: "ul", items: [
+        { label: "Legal name:", text: LEGAL_NAME },
         { label: "Business (operating) name:", text: "Starex" },
         { label: "Business address:", text: ADDRESS_LINE },
         { label: "Phone:", text: "437-607-7251" },
@@ -224,7 +225,7 @@ export default function TermsPage() {
       eyebrow="Legal"
       title="Terms & Conditions"
       effectiveDate={EFFECTIVE}
-      intro={'These Terms & Conditions are a consumer agreement between Starex and the individual booking or using our services for personal, family, or household purposes. Because most bookings are made through our website or app while you and Starex are not together, this Agreement is generally an internet agreement or remote agreement as those terms are defined in Ontario\'s Consumer Protection Act, 2002 ("CPA"). Where the CPA applies to your Order, its protections apply to you despite anything else in these Terms, and nothing in these Terms limits any right or remedy you have at law. By creating an account, booking a pickup, or otherwise using our website, mobile application, or services, you agree to be bound by these Terms.'}
+      intro={'These Terms & Conditions are a consumer agreement between Royal Art Treasure Inc., operating as Starex ("Starex", "we", "us", "our"), and the individual booking or using our services for personal, family, or household purposes. Because most bookings are made through our website or app while you and Starex are not together, this Agreement is generally an internet agreement or remote agreement as those terms are defined in Ontario\'s Consumer Protection Act, 2002 ("CPA"). Where the CPA applies to your Order, its protections apply to you despite anything else in these Terms, and nothing in these Terms limits any right or remedy you have at law. By creating an account, booking a pickup, or otherwise using our website, mobile application, or services, you agree to be bound by these Terms.'}
       sections={sections}
       seeAlso={[{ label: "Privacy Policy", href: "/privacy" }, { label: "Refund, Cancellation & Damage Policy", href: "/refund-policy" }]}
     />

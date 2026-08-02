@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 
 const EFFECTIVE = "August 2, 2026";
 const ADDRESS_LINE = "Business address available on request — email hello@starexlaundry.ca or call 437-607-7251";
+const LEGAL_NAME = "Royal Art Treasure Inc.";
 
 const sections: LegalSection[] = [
   {
@@ -25,8 +26,9 @@ const sections: LegalSection[] = [
   {
     title: "Accountability — Our Privacy Officer",
     blocks: [
-      { type: "p", text: "Starex is accountable for the personal information under its control. In accordance with PIPEDA's Accountability principle, we have designated a Privacy Officer responsible for our compliance with this Policy and with Canadian privacy law:" },
+      { type: "p", text: "Starex (legal name: Royal Art Treasure Inc., operating as Starex) is accountable for the personal information under its control. In accordance with PIPEDA's Accountability principle, we have designated a Privacy Officer responsible for our compliance with this Policy and with Canadian privacy law:" },
       { type: "ul", items: [
+        { label: "Legal entity:", text: LEGAL_NAME },
         { label: "Title:", text: "Privacy Officer, Starex" },
         { label: "Email:", text: "hello@starexlaundry.ca" },
         { label: "Phone:", text: "437-607-7251" },
@@ -246,7 +248,7 @@ export default function PrivacyPage() {
       eyebrow="Legal"
       title="Privacy Policy"
       effectiveDate={EFFECTIVE}
-      intro={'This Privacy Policy applies to Starex, a laundry and dry cleaning pickup-and-delivery business operating in Brampton and Mississauga, Ontario. It explains how we collect, use, disclose, retain, and protect personal information in connection with our website, mobile application, and services, and describes the rights available to you under Canadian privacy law. This Policy is written to comply with the Personal Information Protection and Electronic Documents Act ("PIPEDA"), its 10 fair information principles set out in Schedule 1, the PIPEDA Breach of Security Safeguards Regulations, and Canada\'s Anti-Spam Legislation ("CASL"). By using the Services, you acknowledge that you have read and understood this Policy.'}
+      intro={'This Privacy Policy applies to Starex (legal name: Royal Art Treasure Inc., operating as Starex), a laundry and dry cleaning pickup-and-delivery business operating in Brampton and Mississauga, Ontario. It explains how we collect, use, disclose, retain, and protect personal information in connection with our website, mobile application, and services, and describes the rights available to you under Canadian privacy law. This Policy is written to comply with the Personal Information Protection and Electronic Documents Act ("PIPEDA"), its 10 fair information principles set out in Schedule 1, the PIPEDA Breach of Security Safeguards Regulations, and Canada\'s Anti-Spam Legislation ("CASL"). By using the Services, you acknowledge that you have read and understood this Policy.'}
       sections={sections}
       seeAlso={[{ label: "Terms & Conditions", href: "/terms" }, { label: "Refund, Cancellation & Damage Policy", href: "/refund-policy" }]}
     />

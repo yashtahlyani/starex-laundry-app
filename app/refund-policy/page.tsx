@@ -1,6 +1,7 @@
 import LegalDoc, { type LegalSection } from "@/components/LegalDoc";
 
 const EFFECTIVE = "August 2, 2026";
+const LEGAL_NAME = "Royal Art Treasure Inc.";
 
 const sections: LegalSection[] = [
   {
@@ -17,6 +18,7 @@ const sections: LegalSection[] = [
   {
     title: "Definitions",
     blocks: [{ type: "ul", items: [
+      { label: '"Starex", "we", "us", "our"', text: `means ${LEGAL_NAME}, operating as Starex.` },
       { label: '"Business Day"', text: "means a day other than a Saturday, Sunday, or statutory holiday in Ontario." },
       { label: '"Fair Replacement Value"', text: "means the depreciated value of an item at the time of loss or damage, calculated using the methodology in Section 9." },
       { label: '"Inherent Vice"', text: "means a pre-existing weakness, defect, or quality in an item (such as a defective dye lot, weak seam, or fabric that is not fit for standard cleaning) that causes damage regardless of the care used in cleaning it." },
