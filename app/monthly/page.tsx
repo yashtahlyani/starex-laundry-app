@@ -31,6 +31,7 @@ export default function MonthlyPlanPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(v.trim());
   const validatePhone = (v: string) => v.replace(/\D/g, "").length >= 10;
@@ -56,6 +57,10 @@ export default function MonthlyPlanPage() {
   const canNext = [true, form.startDate !== "", true, true][step] ?? true;
 
   const handleSubmit = async () => {
+    if (!agreedToTerms) {
+      setSubmitError("Please agree to the Terms & Conditions, Privacy Policy, and Refund Policy to continue.");
+      return;
+    }
     setSubmitting(true);
     setSubmitError(null);
     try {
@@ -240,6 +245,20 @@ export default function MonthlyPlanPage() {
               <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 20, fontFamily: "Kodchasan, sans-serif" }}>
                 This submits a plan request — we&apos;ll call or email you within 1 business hour to confirm your start date and arrange payment. Nothing is charged yet.
               </p>
+
+              <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 20, cursor: "pointer" }}>
+                <input
+                  type="checkbox" checked={agreedToTerms}
+                  onChange={e => { setAgreedToTerms(e.target.checked); if (e.target.checked) setSubmitError(null); }}
+                  style={{ marginTop: 3, width: 15, height: 15, flexShrink: 0, accentColor: "#B8324F", cursor: "pointer" }}
+                />
+                <span style={{ color: "#4A4A4A", fontSize: "0.8125rem", lineHeight: 1.6, fontFamily: "Kodchasan, sans-serif" }}>
+                  I agree to the{" "}
+                  <a href="/terms" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
+                  <a href="/privacy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
+                  <a href="/refund-policy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Refund Policy</a>, including the Monthly Plan&apos;s recurring payment terms.
+                </span>
+              </label>
 
               {submitError && (
                 <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: "12px 16px", marginBottom: 16, color: "#EF4444", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>

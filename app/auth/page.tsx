@@ -18,6 +18,8 @@ export default function AuthPage() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -35,10 +37,20 @@ export default function AuthPage() {
     const supabase = getSupabaseBrowser();
     try {
       if (mode === "signup") {
+        if (!agreedToTerms) throw new Error("Please accept the Terms & Conditions and Privacy Policy to continue.");
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: name } },
+          options: {
+            data: {
+              full_name: name,
+              // Recorded per CASL's evidentiary requirement to be able to show
+              // how and when marketing consent was (or wasn't) obtained.
+              terms_accepted_at: new Date().toISOString(),
+              marketing_consent: marketingConsent,
+              marketing_consent_at: marketingConsent ? new Date().toISOString() : null,
+            },
+          },
         });
         if (error) throw error;
         setMode("check-email");
@@ -282,13 +294,42 @@ export default function AuthPage() {
                 </div>
               )}
 
+              {mode === "signup" && (
+                <div className="flex flex-col gap-3">
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox" checked={agreedToTerms}
+                      onChange={e => setAgreedToTerms(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-mint"
+                      required
+                    />
+                    <span className="text-sm text-[#4A4A4A] font-body leading-snug">
+                      I agree to StareX's{" "}
+                      <a href="/terms" target="_blank" className="text-mint underline">Terms &amp; Conditions</a>,{" "}
+                      <a href="/privacy" target="_blank" className="text-mint underline">Privacy Policy</a>, and{" "}
+                      <a href="/refund-policy" target="_blank" className="text-mint underline">Refund, Cancellation &amp; Damage Policy</a>.
+                    </span>
+                  </label>
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox" checked={marketingConsent}
+                      onChange={e => setMarketingConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-mint"
+                    />
+                    <span className="text-sm text-[#8C8C8C] font-body leading-snug">
+                      Send me occasional promotions and updates by email. You can unsubscribe anytime — optional, not required to create an account.
+                    </span>
+                  </label>
+                </div>
+              )}
+
               {error && (
                 <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-700 font-body">
                   {error}
                 </div>
               )}
 
-              <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
+              <button type="submit" className="btn-primary w-full mt-2" disabled={loading || (mode === "signup" && !agreedToTerms)}>
                 {loading ? (
                   <span className="flex items-center gap-2">
                     <span className="h-4 w-4 rounded-full border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] animate-spin" />
@@ -325,11 +366,14 @@ export default function AuthPage() {
               </div>
             )}
 
-            <p className="mt-4 text-center text-xs text-[#A1A1AA] font-body">
-              By continuing, you agree to our{" "}
-              <a href="/terms" className="text-mint hover:underline">Terms</a> and{" "}
-              <a href="/privacy" className="text-mint hover:underline">Privacy Policy</a>.
-            </p>
+            {mode !== "signup" && (
+              <p className="mt-4 text-center text-xs text-[#A1A1AA] font-body">
+                By continuing, you agree to our{" "}
+                <a href="/terms" className="text-mint hover:underline">Terms</a>,{" "}
+                <a href="/privacy" className="text-mint hover:underline">Privacy Policy</a>, and{" "}
+                <a href="/refund-policy" className="text-mint hover:underline">Refund Policy</a>.
+              </p>
+            )}
           </div>
 
           <p className="mt-6 text-center text-xs text-white/30 font-body">

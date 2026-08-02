@@ -420,7 +420,9 @@ function BookPageInner() {
                     style={{ marginTop: 3, width: 16, height: 16, accentColor: "#B8324F", flexShrink: 0, cursor: "pointer" }}
                   />
                   <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", lineHeight: 1.5 }}>
-                    I've read and accept StareX's <a href="/terms" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms &amp; Conditions</a>.
+                    I've read and agree to StareX's <a href="/terms" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
+                    <a href="/privacy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
+                    <a href="/refund-policy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Refund, Cancellation &amp; Damage Policy</a>.
                   </span>
                 </label>
 

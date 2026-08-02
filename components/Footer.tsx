@@ -48,12 +48,16 @@ const linkStyle: React.CSSProperties = {
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [consentError, setConsentError] = useState(false);
 
   async function subscribe() {
     const value = email.trim();
     if (!value || submitting) return;
+    if (!consent) { setConsentError(true); return; }
+    setConsentError(false);
     setSubmitting(true);
     try {
       // Fire-and-persist: store the address, but don't block the "You're in ✓"
@@ -87,7 +91,8 @@ export default function Footer() {
               {subscribed ? (
                 <p style={{ color: "#8F2740", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
-                <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(20,20,20,0.15)", paddingBottom: "10px", gap: 8 }}>
+                <div>
+                <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(20,20,20,0.15)", paddingBottom: "10px", gap: 8, marginBottom: 10 }}>
                   <input
                     type="email"
                     value={email}
@@ -104,6 +109,18 @@ export default function Footer() {
                   >
                     <ArrowRight size={15} />
                   </button>
+                </div>
+                <label style={{ display: "flex", alignItems: "flex-start", gap: 6, cursor: "pointer" }}>
+                  <input
+                    type="checkbox" checked={consent}
+                    onChange={e => { setConsent(e.target.checked); setConsentError(false); }}
+                    style={{ marginTop: 2, width: 13, height: 13, flexShrink: 0, accentColor: "#B8324F", cursor: "pointer" }}
+                  />
+                  <span style={{ color: consentError ? "#DC2626" : "#8C8C8C", fontSize: "0.7rem", lineHeight: 1.5, fontFamily: "Kodchasan, sans-serif" }}>
+                    I agree to receive marketing emails from StareX. See our{" "}
+                    <a href="/privacy" style={{ color: "inherit", textDecoration: "underline" }}>Privacy Policy</a>. Unsubscribe anytime.
+                  </span>
+                </label>
                 </div>
               )}
             </div>
@@ -187,9 +204,10 @@ export default function Footer() {
           <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
             &copy; {new Date().getFullYear()} StareX Inc. Made in Canada 🍁
           </p>
-          <div style={{ display: "flex", gap: "20px" }}>
+          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
             <a href="/terms" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Terms</a>
             <a href="/privacy" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Privacy</a>
+            <a href="/refund-policy" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Refund Policy</a>
           </div>
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
