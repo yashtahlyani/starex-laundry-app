@@ -21,6 +21,9 @@ export async function POST(req: NextRequest) {
         String(subject).length > 200 || String(message).length > 5000) {
       return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
     }
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(String(email).trim())) {
+      return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
+    }
 
     const supabase = getSupabaseAdmin();
     const { error } = await supabase.from("contact_submissions").insert({

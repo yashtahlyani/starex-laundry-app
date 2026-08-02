@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { notifyOwnerOfNewContact } from "@/lib/notifications";
+import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
 
 export const dynamic = "force-dynamic";
 
@@ -11,10 +12,22 @@ export const dynamic = "force-dynamic";
 // contact_submissions table + owner notification pipeline) so staff follow up
 // to confirm the start date and arrange payment.
 export async function POST(req: NextRequest) {
+  const allowed = await checkRateLimit(`rate:monthly:${clientIp(req)}`, 5, 3600);
+  if (!allowed) return NextResponse.json({ error: "Too many requests — please try again later" }, { status: 429 });
+
   try {
     const { name, email, phone, address, startDate } = await req.json();
     if (!name || !email || !phone || !address || !startDate) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+    if (String(name).length > 120 || String(email).length > 254 || String(phone).length > 40 || String(address).length > 300) {
+      return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(String(email).trim())) {
+      return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
+    }
+    if (String(phone).replace(/\D/g, "").length < 10) {
+      return NextResponse.json({ error: "Enter a valid phone number" }, { status: 400 });
     }
 
     const message =
