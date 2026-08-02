@@ -96,7 +96,7 @@ const LOCAL_BUSINESS_JSON_LD = {
   description: "Laundry pickup & delivery, dry cleaning, ironing, household items, and car & sofa detailing serving Brampton and Mississauga, Ontario.",
   url: "https://starex-laundry-app-v2.vercel.app",
   telephone: "+1-437-607-7251",
-  email: "hello@starexlaundry.ca",
+  email: "hello@starexlaundrydryclean.ca",
   priceRange: "$$",
   areaServed: [
     { "@type": "City", name: "Brampton" },

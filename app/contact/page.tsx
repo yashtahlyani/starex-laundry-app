@@ -16,7 +16,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 
 const info = [
   { Icon: Phone, title: "Phone", value: "437-607-7251", sub: "Call or text, 7 days a week", color: "#EDEDED" },
-  { Icon: Mail, title: "Email", value: "hello@starexlaundry.ca", sub: "We reply within 1 business hour", color: "#F2F2F2" },
+  { Icon: Mail, title: "Email", value: "hello@starexlaundrydryclean.ca", sub: "We reply within 1 business hour", color: "#F2F2F2" },
   { Icon: MapPin, title: "Service Area", value: "Brampton & Mississauga", sub: "Ontario, Canada", color: "#EAEAEA" },
   { Icon: Clock, title: "Hours", value: "7 days a week", sub: "Pickups: 7 AM – 8 PM EST", color: "#E5E5E5" },
 ];

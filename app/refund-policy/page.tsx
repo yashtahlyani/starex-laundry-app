@@ -73,7 +73,7 @@ const sections: LegalSection[] = [
     blocks: [
       { type: "p", text: "To submit a claim:" },
       { type: "ol", items: [
-        "Contact us at hello@starexlaundry.ca or 437-607-7251, including your Order number.",
+        "Contact us at hello@starexlaundrydryclean.ca or 437-607-7251, including your Order number.",
         "Provide clear photographs of the affected item(s) and, where relevant, the original garment tag or care label.",
         "Describe the issue (e.g., staining, tear, shrinkage, missing item) as specifically as possible.",
         "Our team will review the claim — including comparing intake photos/notes taken at pickup where available — and respond within 5 Business Days with a proposed resolution.",
@@ -191,10 +191,10 @@ const sections: LegalSection[] = [
     title: "How to Reach Us",
     blocks: [
       { type: "ul", items: [
-        { label: "Email:", text: "hello@starexlaundry.ca" },
+        { label: "Email:", text: "hello@starexlaundrydryclean.ca" },
         { label: "Phone:", text: "437-607-7251" },
         { label: "Hours:", text: "7 days a week, 7:00 AM – 8:00 PM EST" },
-        { label: "Mailing Address:", text: "Available on request — email hello@starexlaundry.ca or call 437-607-7251, Brampton, ON" },
+        { label: "Mailing Address:", text: "Available on request — email hello@starexlaundrydryclean.ca or call 437-607-7251, Brampton, ON" },
       ]},
       { type: "note", text: "This document was prepared with reference to Ontario's Consumer Protection Act, 2002, common-law bailment principles (including the presumption of negligence and the reasonable-notice rule for exclusion clauses), the Limitations Act, 2002, the Fair Claims Guide published by the Drycleaning & Laundry Institute, and common practice among Canadian laundry and dry cleaning pickup-and-delivery providers. It is not legal advice." },
     ],

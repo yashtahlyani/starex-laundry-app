@@ -14,7 +14,7 @@ export const SITE_ORIGIN =
 // the profiles — the footer renders the icon but doesn't link anywhere while a
 // URL is blank, so there are no dead "#" links that jump the page to the top.
 export const CONTACT = {
-  email: "hello@starexlaundry.ca",
+  email: "hello@starexlaundrydryclean.ca",
   phone: "437-607-7251",
   phoneHref: "+14376077251",
   cities: ["Brampton, ON", "Mississauga, ON"],

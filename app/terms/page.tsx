@@ -10,7 +10,7 @@ const EFFECTIVE = "August 2, 2026";
 
 // Business address is disclosed on request rather than printed here — we
 // don't have a verified registered address to publish.
-const ADDRESS_LINE = "Business address available on request — email hello@starexlaundry.ca or call 437-607-7251";
+const ADDRESS_LINE = "Business address available on request — email hello@starexlaundrydryclean.ca or call 437-607-7251";
 const LEGAL_NAME = "Royal Art Treasure Inc.";
 
 const sections: LegalSection[] = [
@@ -36,7 +36,7 @@ const sections: LegalSection[] = [
         { label: "Business (operating) name:", text: "Starex" },
         { label: "Business address:", text: ADDRESS_LINE },
         { label: "Phone:", text: "437-607-7251" },
-        { label: "Email:", text: "hello@starexlaundry.ca" },
+        { label: "Email:", text: "hello@starexlaundrydryclean.ca" },
       ]},
     ],
   },
@@ -208,7 +208,7 @@ const sections: LegalSection[] = [
     blocks: [
       { type: "p", text: "Questions about these Terms, or requests to exercise a cancellation right described in Section 7, can be directed to:" },
       { type: "ul", items: [
-        { label: "Email:", text: "hello@starexlaundry.ca" },
+        { label: "Email:", text: "hello@starexlaundrydryclean.ca" },
         { label: "Phone:", text: "437-607-7251" },
         { label: "Mailing Address:", text: ADDRESS_LINE },
         { label: "Service Area:", text: "Brampton, ON & Mississauga, ON" },

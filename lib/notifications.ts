@@ -8,7 +8,7 @@ import { SITE_ORIGIN } from "./site";
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 // The address emails are sent from. Set RESEND_FROM_EMAIL to an address on a
-// domain you've verified in Resend (e.g. bookings@starexlaundry.ca) to send to
+// domain you've verified in Resend (e.g. bookings@starexlaundrydryclean.ca) to send to
 // real customers. Until then it falls back to Resend's shared test sender,
 // which can only deliver to the Resend account owner's own address — enough for
 // owner alerts, but customer confirmations will be rejected until a domain is

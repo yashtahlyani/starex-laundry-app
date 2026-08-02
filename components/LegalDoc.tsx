@@ -109,7 +109,7 @@ export default function LegalDoc({
               </span>
             ))}
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundry.ca" style={{ color: "#8F2740", textDecoration: "underline" }}>hello@starexlaundry.ca</a>.
+            <a href="mailto:hello@starexlaundrydryclean.ca" style={{ color: "#8F2740", textDecoration: "underline" }}>hello@starexlaundrydryclean.ca</a>.
           </p>
         </div>
       </div>

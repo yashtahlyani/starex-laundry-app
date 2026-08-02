@@ -8,7 +8,7 @@ export const BUSINESS_NAME = "StareX";
 export const PHONE = "437-607-7251";
 export const PHONE_HREF = "tel:+14376077251";
 export const SERVICE_AREA = "Brampton & Mississauga";
-export const SITE_URL = "www.starexlaundry.ca";
+export const SITE_URL = "www.starexlaundrydryclean.ca";
 
 // The bookable service types (Step 1 of the booking flow)
 export const PLANS = [
