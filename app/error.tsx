@@ -15,7 +15,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <div style={{ background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 24px" }}>
       <div style={{ textAlign: "center", maxWidth: 440 }}>
-        <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: "#8F2740" }}>Something went wrong</span>
+        <span className="eyebrow" style={{ display: "block", marginBottom: 16, color: "#B30F14" }}>Something went wrong</span>
         <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,4vw,2.5rem)", letterSpacing: "-0.02em", lineHeight: 1.15, color: "#161616", marginBottom: 16 }}>
           We hit a snag.
         </h1>

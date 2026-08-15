@@ -62,15 +62,15 @@ export default function ServicesPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }} className="services-grid">
             {services.map((s, i) => (
               <AnimatedContent key={s.title} delay={i * 0.07}>
-                <div style={{ background: "#FFFFFF", border: "1px solid rgba(184,50,79,0.14)", borderTop: "3px solid #B8324F", borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative", boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)" }}>
+                <div style={{ background: "#FFFFFF", border: "1px solid rgba(184,50,79,0.14)", borderTop: "3px solid #ED1D24", borderRadius: 20, padding: "32px", height: "100%", display: "flex", flexDirection: "column", position: "relative", boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)" }}>
                   {s.featured && (
-                    <span style={{ position: "absolute", top: 20, right: 20, background: "#B8324F", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
+                    <span style={{ position: "absolute", top: 20, right: 20, background: "#ED1D24", color: "#FFFFFF", fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, letterSpacing: "0.08em", fontFamily: "Kodchasan, sans-serif" }}>
                       {s.badge}
                     </span>
                   )}
                   <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
                     <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(184,50,79,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <s.Icon size={20} color="#8F2740" />
+                      <s.Icon size={20} color="#B30F14" />
                     </div>
                     <span style={{ fontSize: "1.75rem", fontFamily: "Poppins, sans-serif", fontWeight: 700, color: "rgba(9,9,11,0.1)", letterSpacing: "-0.03em", lineHeight: 1 }}>{s.num}</span>
                   </div>
@@ -81,12 +81,12 @@ export default function ServicesPage() {
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24, flex: 1 }}>
                     {s.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                        <CheckCircle size={14} color="#8F2740" style={{ flexShrink: 0, marginTop: 3 }} />
+                        <CheckCircle size={14} color="#B30F14" style={{ flexShrink: 0, marginTop: 3 }} />
                         <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <a href={`/book?service=${s.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
+                  <a href={`/book?service=${s.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#B30F14", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", textDecoration: "none", marginTop: "auto" }}>
                     Book this service <ArrowRight size={14} />
                   </a>
                 </div>
@@ -94,7 +94,7 @@ export default function ServicesPage() {
             ))}
           </div>
           <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", textAlign: "center", marginTop: 28, fontFamily: "Kodchasan, sans-serif" }}>
-            Prices shown {HST_LABEL}. See the <a href="/pricing" style={{ color: "#8F2740", textDecoration: "underline" }}>full price list</a> for every item.
+            Prices shown {HST_LABEL}. See the <a href="/pricing" style={{ color: "#B30F14", textDecoration: "underline" }}>full price list</a> for every item.
           </p>
         </div>
       </section>

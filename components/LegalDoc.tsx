@@ -104,12 +104,12 @@ export default function LegalDoc({
             See also{" "}
             {seeAlso.map((s, i) => (
               <span key={s.href}>
-                <a href={s.href} style={{ color: "#8F2740", textDecoration: "underline" }}>{s.label}</a>
+                <a href={s.href} style={{ color: "#B30F14", textDecoration: "underline" }}>{s.label}</a>
                 {i < seeAlso.length - 1 ? " and " : ". "}
               </span>
             ))}
             For questions, email{" "}
-            <a href="mailto:hello@starexlaundrydryclean.ca" style={{ color: "#8F2740", textDecoration: "underline" }}>hello@starexlaundrydryclean.ca</a>.
+            <a href="mailto:hello@starexlaundrydryclean.ca" style={{ color: "#B30F14", textDecoration: "underline" }}>hello@starexlaundrydryclean.ca</a>.
           </p>
         </div>
       </div>

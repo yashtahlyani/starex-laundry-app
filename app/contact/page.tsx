@@ -193,7 +193,7 @@ export default function Contact() {
       <section style={{ padding: "0 0 96px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent>
-            <p className="eyebrow" style={{ color: "#8F2740", marginBottom: 12, textAlign: "center" }}>Where We Operate</p>
+            <p className="eyebrow" style={{ color: "#B30F14", marginBottom: 12, textAlign: "center" }}>Where We Operate</p>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2rem)", color: "#161616", marginBottom: 28, letterSpacing: "-0.022em", textAlign: "center" }}>
               Serving Brampton &amp; Mississauga
             </h2>
@@ -207,11 +207,11 @@ export default function Contact() {
                 background: "#F2F2F2", boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
               }}
             >
-              <MapPin size={20} color="#8F2740" />
+              <MapPin size={20} color="#B30F14" />
               <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616" }}>
                 View our service area on Google Maps
               </span>
-              <ArrowRight size={16} color="#8F2740" />
+              <ArrowRight size={16} color="#B30F14" />
             </a>
           </AnimatedContent>
         </div>

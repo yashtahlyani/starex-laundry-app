@@ -214,7 +214,7 @@ export default function Home() {
               style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "48px", flexWrap: "wrap" }}>
               {["Fully insured", "Brampton & Mississauga", "24–48h turnaround"].map(item => (
                 <span key={item} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F2F2F2", borderRadius: 999, padding: "6px 14px", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif", fontWeight: 600, color: "#4A4A4A" }}>
-                  <CheckCircle size={12} color="#8F2740" /> {item}
+                  <CheckCircle size={12} color="#B30F14" /> {item}
                 </span>
               ))}
             </motion.div>
@@ -327,7 +327,7 @@ export default function Home() {
             {steps.map((step, i) => (
               <AnimatedContent key={step.label} delay={i * 0.1}>
                 <div style={{ position: "relative", marginBottom: i < steps.length - 1 ? "64px" : 0 }}>
-                  <div style={{ position: "absolute", left: "-43px", top: "6px", width: 16, height: 16, borderRadius: "50%", background: "#B8324F", flexShrink: 0, boxShadow: "0 0 0 3px #FFFFFF, 0 0 0 5px rgba(184,50,79,0.22)" }} />
+                  <div style={{ position: "absolute", left: "-43px", top: "6px", width: 16, height: 16, borderRadius: "50%", background: "#ED1D24", flexShrink: 0, boxShadow: "0 0 0 3px #FFFFFF, 0 0 0 5px rgba(184,50,79,0.22)" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                     <span className="step-pill">{step.label}</span>
                   </div>
@@ -414,7 +414,7 @@ export default function Home() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(20,20,20,0.03)", borderBottom: "1px solid rgba(20,20,20,0.06)" }} className="comparison-row">
                   <span />
                   <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(20,20,20,0.35)", textAlign: "center" }}>Traditional</span>
-                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#B8324F", textAlign: "center" }}>StareX</span>
+                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#ED1D24", textAlign: "center" }}>StareX</span>
                 </div>
                 {comparisons.map((row, i) => (
                   <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none", alignItems: "center", gap: 8 }} className="comparison-row">
@@ -424,7 +424,7 @@ export default function Home() {
                       <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "rgba(20,20,20,0.45)", textAlign: "center" }}>{row.them}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }} className="comparison-cell">
-                      <CheckCircle size={13} color="#B8324F" strokeWidth={2.5} />
+                      <CheckCircle size={13} color="#ED1D24" strokeWidth={2.5} />
                       <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#161616", fontWeight: 600, textAlign: "center" }}>{row.us}</span>
                     </div>
                   </div>
@@ -440,7 +440,7 @@ export default function Home() {
       <section style={{ background: "#F2F2F2", padding: "96px 0" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: "56px" }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>Simple Pricing</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Simple Pricing</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: "12px" }}>
               Pricing that{" "}
               <span className="display-accent" style={{ fontWeight: 600 }}>works for you.</span>
@@ -477,7 +477,7 @@ export default function Home() {
                   <ul style={{ listStyle: "none", marginBottom: "28px", display: "flex", flexDirection: "column", gap: "10px" }}>
                     {plan.features.map(f => (
                       <li key={f} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                        <CheckCircle size={15} color="#B8324F" strokeWidth={2.5} />
+                        <CheckCircle size={15} color="#ED1D24" strokeWidth={2.5} />
                         <span style={{ color: "#4A4A4A", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{f}</span>
                       </li>
                     ))}
@@ -507,7 +507,7 @@ export default function Home() {
               <AnimatedContent key={t.title} delay={i * 0.07}>
                 <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
                   <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(184,50,79,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                    <t.Icon size={20} color="#B8324F" />
+                    <t.Icon size={20} color="#ED1D24" />
                   </div>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1rem", color: "#161616", marginBottom: "8px" }}>{t.title}</p>
                   <p style={{ color: "#6B6B6B", fontSize: "0.875rem", lineHeight: 1.65, fontFamily: "Kodchasan, sans-serif" }}>{t.desc}</p>

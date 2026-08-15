@@ -156,7 +156,7 @@ export default function FAQ() {
                     display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: 10,
                     background: activeCategory === c.name ? "rgba(184,50,79,0.1)" : "none",
                     border: "none", cursor: "pointer", marginBottom: 4,
-                    color: activeCategory === c.name ? "#8F2740" : "#6B6B6B",
+                    color: activeCategory === c.name ? "#B30F14" : "#6B6B6B",
                     fontFamily: "Poppins, sans-serif", fontWeight: activeCategory === c.name ? 600 : 400,
                     fontSize: "0.9rem",
                   }}
@@ -180,7 +180,7 @@ export default function FAQ() {
               {filtered.length === 0 ? (
                 <div style={{ padding: "48px 0", textAlign: "center" }}>
                   <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif" }}>No results found. Try a different search term.</p>
-                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
+                  <a href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, color: "#B30F14", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9rem", textDecoration: "none" }}>
                     Contact us <ArrowRight size={14} />
                   </a>
                 </div>

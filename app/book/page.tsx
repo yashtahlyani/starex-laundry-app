@@ -176,14 +176,14 @@ function BookPageInner() {
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
             style={{ width: 80, height: 80, background: "#F2F2F2", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
-            <CheckCircle size={40} color="#8F2740" />
+            <CheckCircle size={40} color="#B30F14" />
           </motion.div>
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#161616", marginBottom: 12, letterSpacing: "-0.025em" }}>Pickup confirmed!</h2>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F2F2F2", borderRadius: 999, padding: "7px 16px", marginBottom: 16 }}>
-            <span style={{ color: "#8F2740", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
+            <span style={{ color: "#B30F14", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem" }}>Order {orderId}</span>
           </div>
           {isCombo && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF", borderRadius: 999, padding: "6px 16px", marginBottom: 16, marginLeft: 8 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#F4524D,#ED1D24)", color: "#FFFFFF", borderRadius: 999, padding: "6px 16px", marginBottom: 16, marginLeft: 8 }}>
               <Sparkles size={13} />
               <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem" }}>{DRY_CLEAN_COMBO.tagline} combo confirmed</span>
             </div>
@@ -230,7 +230,7 @@ function BookPageInner() {
         {isCombo && (
           <div style={{
             display: "flex", alignItems: "center", gap: 10, marginBottom: 24,
-            background: "linear-gradient(135deg,#C85770,#B8324F)", borderRadius: 14,
+            background: "linear-gradient(135deg,#F4524D,#ED1D24)", borderRadius: 14,
             padding: "13px 18px", color: "#FFFFFF",
           }}>
             <Sparkles size={16} style={{ flexShrink: 0 }} />
@@ -256,13 +256,13 @@ function BookPageInner() {
                     const selected = form.service === s.id;
                     return (
                       <button key={s.id} onClick={() => setForm(p => ({ ...p, service: s.id }))} style={{
-                        padding: 20, border: `2px solid ${selected ? "#B8324F" : "transparent"}`,
+                        padding: 20, border: `2px solid ${selected ? "#ED1D24" : "transparent"}`,
                         borderRadius: 16, background: selected ? s.color : "#ffffff",
                         cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
                         boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
                       }}>
                         <div style={{ width: 36, height: 36, background: selected ? "rgba(0,0,0,0.1)" : "#F4F4F5", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                          <Icon size={17} color={selected ? "#8F2740" : "#6B6B6B"} />
+                          <Icon size={17} color={selected ? "#B30F14" : "#6B6B6B"} />
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 2 }}>{s.title}</p>
                         <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 6, fontFamily: "Kodchasan, sans-serif" }}>{s.desc}</p>
@@ -294,7 +294,7 @@ function BookPageInner() {
                   <input type="date" value={form.date} min={new Date().toISOString().split("T")[0]}
                     onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
                     style={inputStyle}
-                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#B8324F"}
+                    onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#ED1D24"}
                     onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"}
                   />
                 </div>
@@ -304,9 +304,9 @@ function BookPageInner() {
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
                     {timeSlots.map(t => (
                       <button key={t} onClick={() => setForm(p => ({ ...p, time: t }))} style={{
-                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#B8324F" : "#E4E4E7"}`,
+                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#ED1D24" : "#E4E4E7"}`,
                         borderRadius: 10, background: form.time === t ? "#F2F2F2" : "#ffffff",
-                        color: form.time === t ? "#8F2740" : "#6B6B6B",
+                        color: form.time === t ? "#B30F14" : "#6B6B6B",
                         fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === t ? 700 : 500, fontSize: "0.8125rem",
                         cursor: "pointer", transition: "all 0.15s",
                       }}>{t}</button>
@@ -347,7 +347,7 @@ function BookPageInner() {
                       <input type={type} value={form[key]} onChange={e => { setForm(p => ({ ...p, [key]: e.target.value })); setErrors(p => ({ ...p, [key]: "" })); }}
                         placeholder={placeholder}
                         style={{ ...inputStyle, borderColor: errors[key] ? "#F87171" : "#E4E4E7", boxShadow: errors[key] ? "0 0 0 3px rgba(248,113,113,0.12)" : "none" }}
-                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#B8324F"; }}
+                        onFocus={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#ED1D24"; }}
                         onBlur={e => { if (!errors[key]) (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"; }}
                       />
                       {errors[key] && <p style={{ color: "#EF4444", fontSize: "0.8rem", marginTop: 5, fontFamily: "Kodchasan, sans-serif" }}>{errors[key]}</p>}
@@ -358,7 +358,7 @@ function BookPageInner() {
                     <textarea rows={3} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
                       placeholder="Buzzer code, fragile items, special requests…"
                       style={{ ...inputStyle, resize: "vertical" }}
-                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#B8324F"}
+                      onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = "#ED1D24"}
                       onBlur={e => (e.target as HTMLTextAreaElement).style.borderColor = "#E4E4E7"}
                     />
                   </div>
@@ -417,12 +417,12 @@ function BookPageInner() {
                   <input
                     type="checkbox" checked={termsAccepted}
                     onChange={e => setTermsAccepted(e.target.checked)}
-                    style={{ marginTop: 3, width: 16, height: 16, accentColor: "#B8324F", flexShrink: 0, cursor: "pointer" }}
+                    style={{ marginTop: 3, width: 16, height: 16, accentColor: "#ED1D24", flexShrink: 0, cursor: "pointer" }}
                   />
                   <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", lineHeight: 1.5 }}>
-                    I've read and agree to StareX's <a href="/terms" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
-                    <a href="/privacy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
-                    <a href="/refund-policy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Refund, Cancellation &amp; Damage Policy</a>.
+                    I've read and agree to StareX's <a href="/terms" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
+                    <a href="/privacy" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
+                    <a href="/refund-policy" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Refund, Cancellation &amp; Damage Policy</a>.
                   </span>
                 </label>
 
@@ -478,7 +478,7 @@ function BookPageInner() {
                 <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)", paddingTop: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{isCombo ? "Combo price" : "Starting from"}</span>
-                    <span style={{ color: "#B8324F", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>
+                    <span style={{ color: "#ED1D24", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>
                       {isCombo ? `$${DRY_CLEAN_COMBO.priceCad} flat` : (selectedService?.price || "—")}
                     </span>
                   </div>
@@ -488,7 +488,7 @@ function BookPageInner() {
                 </div>
               </div>
               <div style={{ marginTop: 20, background: "#F2F2F2", borderRadius: 10, padding: "11px 14px" }}>
-                <p style={{ color: "#8F2740", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>
+                <p style={{ color: "#B30F14", fontSize: "0.8125rem", fontWeight: 700, fontFamily: "Kodchasan, sans-serif" }}>
                   {isCombo
                     ? `${DRY_CLEAN_COMBO.tagline} combo — minimum order already met`
                     : form.service === "detailing"
@@ -511,7 +511,7 @@ function BookPageInner() {
                   if (!tab) return null;
                   return (
                     <div key={catId} style={{ marginBottom: 16 }}>
-                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#8F2740", marginBottom: 8 }}>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#B30F14", marginBottom: 8 }}>
                         {catId === form.service ? tab.label : `Also dry-cleanable: ${tab.label}`}
                       </p>
                       <div style={{ display: "flex", flexDirection: "column" }}>

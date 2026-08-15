@@ -77,7 +77,7 @@ export default function About() {
       <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>Our Values</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Our Values</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               What we stand <em className="display-accent" style={{ display: "inline" }}>for.</em>
             </h2>
@@ -103,7 +103,7 @@ export default function About() {
       <section style={{ padding: "80px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: 56 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>Our Story</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Our Story</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Five years of <em className="display-accent" style={{ display: "inline" }}>growth.</em>
             </h2>
@@ -112,7 +112,7 @@ export default function About() {
           <div ref={timelineRef} style={{ position: "relative", paddingLeft: 40 }}>
             <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#E5E5E5" }}>
               <motion.div
-                style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #C85770, #B8324F)" }}
+                style={{ position: "absolute", top: 0, left: 0, right: 0, background: "linear-gradient(to bottom, #F4524D, #ED1D24)" }}
                 animate={{ height: inView ? "100%" : "0%" }}
                 transition={{ duration: 1.5, ease }}
               />
@@ -120,8 +120,8 @@ export default function About() {
             {milestones.map((m, i) => (
               <AnimatedContent key={m.year} delay={i * 0.12} style={{ marginBottom: i < milestones.length - 1 ? 40 : 0 }}>
                 <div style={{ position: "relative", paddingLeft: 24 }}>
-                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#B8324F", border: "2px solid #F2F2F2" }} />
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#8F2740", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
+                  <div style={{ position: "absolute", left: -46, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#ED1D24", border: "2px solid #F2F2F2" }} />
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#B30F14", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>{m.year}</p>
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", color: "#161616", marginBottom: 6, letterSpacing: "-0.01em" }}>{m.title}</h3>
                   <p style={{ color: "#6B6B6B", fontSize: "0.9375rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif" }}>{m.desc}</p>
                 </div>

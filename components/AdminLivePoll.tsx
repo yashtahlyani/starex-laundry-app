@@ -41,7 +41,7 @@ export default function AdminLivePoll({ initialCount }: { initialCount: number }
       title="Live — checking for new orders every 20s"
       style={{
         display: "inline-flex", alignItems: "center", gap: 4,
-        color: pulsing ? "#B8324F" : "rgba(255,255,255,0.4)",
+        color: pulsing ? "#ED1D24" : "rgba(255,255,255,0.4)",
         transition: "color 0.3s",
       }}
     >

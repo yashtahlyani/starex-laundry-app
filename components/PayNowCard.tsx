@@ -108,7 +108,7 @@ export default function PayNowCard({ orderCode, amountCad, onPaid }: { orderCode
   return (
     <div className="card rounded-2xl p-5">
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-        <CreditCard size={16} color="#8F2740" />
+        <CreditCard size={16} color="#B30F14" />
         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", color: "#161616" }}>Payment due</p>
       </div>
       <p style={{ color: "#6B6B6B", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>

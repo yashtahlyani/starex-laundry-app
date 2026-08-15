@@ -96,14 +96,14 @@ export function ProgressTrack({ status }: { status: string }) {
         return (
           <div key={s.id} style={{ display: "flex", alignItems: "center", flex: i < ORDER_STAGES.length - 1 ? 1 : undefined }}>
             <motion.div
-              animate={{ background: done ? "#8F2740" : "#E4E4E7", scale: active ? 1.15 : 1 }}
+              animate={{ background: done ? "#B30F14" : "#E4E4E7", scale: active ? 1.15 : 1 }}
               transition={{ duration: 0.3 }}
               style={{ width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
             >
               {done && <Check size={10} color="#fff" strokeWidth={3} />}
             </motion.div>
             {i < ORDER_STAGES.length - 1 && (
-              <div style={{ flex: 1, height: 2, background: done && i < current ? "#8F2740" : "#E4E4E7", margin: "0 2px", transition: "background 0.3s" }} />
+              <div style={{ flex: 1, height: 2, background: done && i < current ? "#B30F14" : "#E4E4E7", margin: "0 2px", transition: "background 0.3s" }} />
             )}
           </div>
         );

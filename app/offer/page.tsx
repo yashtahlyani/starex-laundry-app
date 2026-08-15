@@ -128,7 +128,7 @@ export default function OfferPage() {
       <section id="savings" style={{ padding: "88px 0", background: "#F2F2F2", scrollMarginTop: 80 }}>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>A Real Example</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>A Real Example</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 8 }}>
               Priced separately, this would cost{" "}
               <em className="display-accent" style={{ display: "inline" }}>${exampleTotal.toFixed(2)}.</em>
@@ -149,7 +149,7 @@ export default function OfferPage() {
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(184,50,79,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <item.Icon size={15} color="#8F2740" />
+                      <item.Icon size={15} color="#B30F14" />
                     </div>
                     <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9375rem", color: "#161616", fontWeight: 500 }}>{item.name}</span>
                   </div>
@@ -165,11 +165,11 @@ export default function OfferPage() {
               </span>
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 4px" }}>
-              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#8F2740" }}>With the {DRY_CLEAN_COMBO.tagline} combo</span>
-              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.75rem", color: "#8F2740" }}>${DRY_CLEAN_COMBO.priceCad}.00</span>
+              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#B30F14" }}>With the {DRY_CLEAN_COMBO.tagline} combo</span>
+              <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.75rem", color: "#B30F14" }}>${DRY_CLEAN_COMBO.priceCad}.00</span>
             </div>
 
-            <div style={{ marginTop: 20, background: "linear-gradient(135deg,#C85770,#B8324F)", borderRadius: 14, padding: "16px 22px", textAlign: "center" }}>
+            <div style={{ marginTop: 20, background: "linear-gradient(135deg,#F4524D,#ED1D24)", borderRadius: 14, padding: "16px 22px", textAlign: "center" }}>
               <p style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.0625rem" }}>
                 You save ${exampleSavings.toFixed(2)} on this example
               </p>
@@ -182,7 +182,7 @@ export default function OfferPage() {
       <section style={{ padding: "88px 0" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>The Fine Print — Kept Short</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>The Fine Print — Kept Short</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 8 }}>
               Any {DRY_CLEAN_COMBO.itemCount} pieces, <em className="display-accent" style={{ display: "inline" }}>one flat price.</em>
             </h2>
@@ -195,13 +195,13 @@ export default function OfferPage() {
             <AnimatedContent>
               <div style={{ background: "#F2F2F2", borderRadius: 20, padding: "32px", height: "100%" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-                  <CheckCircle size={20} color="#8F2740" />
+                  <CheckCircle size={20} color="#B30F14" />
                   <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.05rem", color: "#161616" }}>What&apos;s included</h3>
                 </div>
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                   {eligible.map(e => (
                     <li key={e} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <CheckCircle size={14} color="#8F2740" style={{ flexShrink: 0, marginTop: 3 }} />
+                      <CheckCircle size={14} color="#B30F14" style={{ flexShrink: 0, marginTop: 3 }} />
                       <span style={{ color: "#4A4A4A", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{e}</span>
                     </li>
                   ))}
@@ -227,7 +227,7 @@ export default function OfferPage() {
                   ))}
                 </ul>
                 <p style={{ color: "#8C8C8C", fontSize: "0.8rem", marginTop: 18, fontFamily: "Kodchasan, sans-serif" }}>
-                  Priced separately at standard dry-clean rates — see the <a href="/pricing" style={{ color: "#8F2740", textDecoration: "underline" }}>full price list</a>.
+                  Priced separately at standard dry-clean rates — see the <a href="/pricing" style={{ color: "#B30F14", textDecoration: "underline" }}>full price list</a>.
                 </p>
               </div>
             </AnimatedContent>
@@ -239,7 +239,7 @@ export default function OfferPage() {
       <section style={{ padding: "88px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>How It Works</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>How It Works</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               From pickup to <em className="display-accent" style={{ display: "inline" }}>pressed.</em>
             </h2>
@@ -285,7 +285,7 @@ export default function OfferPage() {
       <section style={{ padding: "0 0 100px" }}>
         <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>Quick Questions</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Quick Questions</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               About the combo.
             </h2>
@@ -302,7 +302,7 @@ export default function OfferPage() {
           </div>
           <AnimatedContent style={{ textAlign: "center", marginTop: 28 }}>
             <p style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>
-              More questions? <a href="/faq" style={{ color: "#8F2740", textDecoration: "underline" }}>Read the full FAQ</a> or <a href="/contact" style={{ color: "#8F2740", textDecoration: "underline" }}>contact us</a>.
+              More questions? <a href="/faq" style={{ color: "#B30F14", textDecoration: "underline" }}>Read the full FAQ</a> or <a href="/contact" style={{ color: "#B30F14", textDecoration: "underline" }}>contact us</a>.
             </p>
           </AnimatedContent>
         </div>

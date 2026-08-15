@@ -27,11 +27,11 @@ type Order = {
 const STAGES = ["placed", "confirmed", "picked_up", "ready_for_delivery", "delivered"];
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
-  placed:              { label: "Order placed",       desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#8F2740" },
-  confirmed:           { label: "Confirmed",           desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#8F2740" },
+  placed:              { label: "Order placed",       desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#B30F14" },
+  confirmed:           { label: "Confirmed",           desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#B30F14" },
   picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry — it's being cleaned now.", icon: Truck, color: "#C08A00" },
-  ready_for_delivery:  { label: "Ready for delivery",  desc: "Your order is ready and heading your way.",      icon: Truck,       color: "#8F2740" },
-  delivered:           { label: "Delivered",           desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#8F2740" },
+  ready_for_delivery:  { label: "Ready for delivery",  desc: "Your order is ready and heading your way.",      icon: Truck,       color: "#B30F14" },
+  delivered:           { label: "Delivered",           desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#B30F14" },
   cancelled:           { label: "Cancelled",           desc: "This order has been cancelled.",                 icon: Package,     color: "#DC2626" },
 };
 
@@ -85,7 +85,7 @@ function OrderTracker() {
       <div className="mx-auto max-w-2xl px-4 sm:px-6 py-14">
         <div className="text-center mb-10">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/10 mb-4">
-            <Package size={26} className="text-[#8F2740]" />
+            <Package size={26} className="text-[#B30F14]" />
           </div>
           <h1 className="text-3xl font-bold text-[#161616] font-heading">Track Your Order</h1>
           <p className="text-[#6B6B6B] mt-2 text-sm font-body">Enter your order code from your confirmation.</p>
@@ -178,7 +178,7 @@ function OrderTracker() {
                           )}
                         </div>
                         <div className="pb-6 flex-1">
-                          <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-[#8F2740]" : "text-[#161616]/60") : "text-[#161616]/25"}`}>
+                          <p className={`text-sm font-semibold font-heading ${done ? (active ? "text-[#B30F14]" : "text-[#161616]/60") : "text-[#161616]/25"}`}>
                             {sm?.label ?? stage}
                           </p>
                           {active && <p className="text-xs text-[#8C8C8C] mt-0.5 font-body">{sm?.desc}</p>}
@@ -206,7 +206,7 @@ function OrderTracker() {
                   {[...events].reverse().map((ev, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <div className="h-6 w-6 rounded-full bg-mint/10 flex items-center justify-center mt-0.5 shrink-0">
-                        <CheckCircle size={12} className="text-[#8F2740]" />
+                        <CheckCircle size={12} className="text-[#B30F14]" />
                       </div>
                       <div>
                         <p className="text-sm font-medium text-[#161616] font-heading">
@@ -231,7 +231,7 @@ function OrderTracker() {
 
             <p className="text-center text-xs text-[#8C8C8C] font-body">
               Questions? Email us at{" "}
-              <a href="mailto:hello@starexlaundrydryclean.ca" className="text-[#8F2740] underline">hello@starexlaundrydryclean.ca</a>
+              <a href="mailto:hello@starexlaundrydryclean.ca" className="text-[#B30F14] underline">hello@starexlaundrydryclean.ca</a>
             </p>
           </div>
         )}

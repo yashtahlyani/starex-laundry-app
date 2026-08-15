@@ -75,7 +75,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
       <section style={{ padding: "80px 0" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>{serviceLabel} Pricing in {city}</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>{serviceLabel} Pricing in {city}</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Transparent, no surprises.
             </h2>
@@ -84,7 +84,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
             {priceHighlights.map((p, i) => (
               <AnimatedContent key={p.label} delay={i * 0.06}>
                 <div style={{ background: "#F2F2F2", borderRadius: 20, padding: "28px", height: "100%" }}>
-                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.75rem", color: "#8F2740", letterSpacing: "-0.02em", marginBottom: 6 }}>{p.price}</p>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.75rem", color: "#B30F14", letterSpacing: "-0.02em", marginBottom: 6 }}>{p.price}</p>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 6 }}>{p.label}</p>
                   <p style={{ color: "#6B6B6B", fontSize: "0.825rem", lineHeight: 1.6, fontFamily: "Kodchasan, sans-serif" }}>{p.desc}</p>
                 </div>
@@ -92,7 +92,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
             ))}
           </div>
           <p style={{ textAlign: "center", color: "#8C8C8C", fontSize: "0.8125rem", marginTop: 24, fontFamily: "Kodchasan, sans-serif" }}>
-            Prices shown {HST_LABEL}. See the <a href="/pricing" style={{ color: "#8F2740", textDecoration: "underline" }}>full price list</a>.
+            Prices shown {HST_LABEL}. See the <a href="/pricing" style={{ color: "#B30F14", textDecoration: "underline" }}>full price list</a>.
           </p>
         </div>
       </section>
@@ -101,7 +101,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
       <section style={{ padding: "80px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>Why {city} Chooses StareX</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Why {city} Chooses StareX</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Built for your neighbourhood.
             </h2>
@@ -110,7 +110,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
             {features.map((f, i) => (
               <AnimatedContent key={f} delay={i * 0.05}>
                 <div style={{ display: "flex", gap: 12, alignItems: "flex-start", background: "#ffffff", borderRadius: 16, padding: "18px 20px" }}>
-                  <CheckCircle size={18} color="#8F2740" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <CheckCircle size={18} color="#B30F14" style={{ flexShrink: 0, marginTop: 2 }} />
                   <span style={{ color: "#4A4A4A", fontSize: "0.9375rem", fontFamily: "Kodchasan, sans-serif", lineHeight: 1.6 }}>{f}</span>
                 </div>
               </AnimatedContent>
@@ -123,7 +123,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
       <section style={{ padding: "80px 0" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <AnimatedContent>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>Service Area</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Service Area</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 24 }}>
               Proudly serving all of {city}.
             </h2>
@@ -140,7 +140,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
       <section style={{ padding: "0 0 96px", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="eyebrow" style={{ color: "#8F2740" }}>FAQ</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>FAQ</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               {serviceLabel} in {city} — common questions.
             </h2>

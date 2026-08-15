@@ -159,7 +159,7 @@ export async function notifyOwnerOfNewOrder(p: BookingNotificationPayload) {
       subject: `New booking — Order ${p.orderCode} (${formatService(p.serviceType)})`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
-          <h2 style="color:#B8324F;margin:0 0 16px">New Booking Received</h2>
+          <h2 style="color:#ED1D24;margin:0 0 16px">New Booking Received</h2>
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
             <tr><td style="color:#6B7280;width:120px">Order</td><td><strong style="font-family:monospace">${p.orderCode}</strong></td></tr>
             <tr><td style="color:#6B7280">Customer</td><td>${escapeHtml(p.customerName)} — ${escapeHtml(p.customerEmail)} — ${escapeHtml(p.customerPhone)}</td></tr>
@@ -167,7 +167,7 @@ export async function notifyOwnerOfNewOrder(p: BookingNotificationPayload) {
             <tr><td style="color:#6B7280">Pickup</td><td>${formatDate(p.pickupDate)} · ${escapeHtml(p.pickupTimeSlot)}</td></tr>
             <tr><td style="color:#6B7280">Address</td><td>${escapeHtml(p.pickupAddress)}</td></tr>
           </table>
-          <a href="${SITE_URL}/admin" style="display:inline-block;margin-top:16px;color:#B8324F;">Open Admin Console →</a>
+          <a href="${SITE_URL}/admin" style="display:inline-block;margin-top:16px;color:#ED1D24;">Open Admin Console →</a>
         </div>
       `,
     });
@@ -186,15 +186,15 @@ export async function notifyOwnerOfNewContact(p: { name: string; email: string; 
       subject: `New contact message${p.subject ? `: ${p.subject}` : ""}`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
-          <h2 style="color:#B8324F;margin:0 0 16px">New Contact Message</h2>
+          <h2 style="color:#ED1D24;margin:0 0 16px">New Contact Message</h2>
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
             <tr><td style="color:#6B7280;width:120px">From</td><td>${escapeHtml(p.name)} — ${escapeHtml(p.email)}</td></tr>
             ${p.subject ? `<tr><td style="color:#6B7280">Subject</td><td>${escapeHtml(p.subject)}</td></tr>` : ""}
           </table>
-          <div style="background:#fdf2f4;border-left:3px solid #B8324F;padding:16px;margin:16px 0;border-radius:4px;">
+          <div style="background:#fdf2f4;border-left:3px solid #ED1D24;padding:16px;margin:16px 0;border-radius:4px;">
             <p style="margin:0;font-size:14px;color:#4A4A4A;">${escapeHtml(p.message).replace(/\n/g, "<br>")}</p>
           </div>
-          <a href="${SITE_URL}/admin?tab=contacts" style="display:inline-block;color:#B8324F;">Open Admin Console →</a>
+          <a href="${SITE_URL}/admin?tab=contacts" style="display:inline-block;color:#ED1D24;">Open Admin Console →</a>
         </div>
       `,
     });
@@ -366,7 +366,7 @@ function emailShell(content: string) {
     <tr><td align="center">
       <table width="560" cellpadding="0" cellspacing="0" role="presentation" style="max-width:560px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
         <tr>
-          <td style="background:#B8324F;padding:28px 40px;text-align:center;">
+          <td style="background:#ED1D24;padding:28px 40px;text-align:center;">
             <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">${BUSINESS_NAME}</h1>
             <p style="margin:6px 0 0;color:rgba(255,255,255,0.75);font-size:13px;">Laundry &amp; Dry Cleaning · Canada</p>
           </td>
@@ -396,7 +396,7 @@ function buildBookingEmailHtml(p: BookingNotificationPayload) {
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;vertical-align:top;">Order ID</td>
-          <td style="padding:8px 0;text-align:right;font-family:monospace;font-size:16px;font-weight:700;color:#B8324F;">${p.orderCode}</td>
+          <td style="padding:8px 0;text-align:right;font-family:monospace;font-size:16px;font-weight:700;color:#ED1D24;">${p.orderCode}</td>
         </tr>
         <tr>
           <td style="padding:8px 0;color:#666;font-size:13px;border-top:1px solid rgba(0,0,0,0.06);">Service</td>
@@ -421,7 +421,7 @@ function buildBookingEmailHtml(p: BookingNotificationPayload) {
     </div>
 
     <a href="${SITE_URL}/order"
-       style="display:block;background:#B8324F;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
+       style="display:block;background:#ED1D24;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
       Track My Order →
     </a>`;
 
@@ -432,9 +432,9 @@ function buildStatusEmailHtml(customerName: string, orderCode: string, bodyText:
   const content = `
     <p style="margin:0 0 16px;color:#555;font-size:15px;line-height:1.5;">Hi ${escapeHtml(customerName)},</p>
     <p style="margin:0 0 24px;color:#1a1a2e;font-size:16px;line-height:1.6;font-weight:500;">${bodyText}</p>
-    <p style="margin:0 0 28px;color:#888;font-size:13px;">Order: <span style="font-family:monospace;font-weight:700;color:#B8324F;">${orderCode}</span></p>
+    <p style="margin:0 0 28px;color:#888;font-size:13px;">Order: <span style="font-family:monospace;font-weight:700;color:#ED1D24;">${orderCode}</span></p>
     <a href="${SITE_URL}/order"
-       style="display:block;background:#B8324F;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
+       style="display:block;background:#ED1D24;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
       Track My Order →
     </a>`;
 

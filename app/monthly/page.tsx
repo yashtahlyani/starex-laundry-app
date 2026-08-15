@@ -91,7 +91,7 @@ export default function MonthlyPlanPage() {
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
             style={{ width: 80, height: 80, background: "#F2F2F2", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
-            <CheckCircle size={40} color="#8F2740" />
+            <CheckCircle size={40} color="#B30F14" />
           </motion.div>
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.25rem", color: "#161616", marginBottom: 12, letterSpacing: "-0.025em" }}>Request received!</h2>
           <p style={{ color: "#6B6B6B", fontSize: "1.0625rem", maxWidth: "48ch", margin: "0 auto 12px", fontFamily: "Kodchasan, sans-serif" }}>
@@ -133,7 +133,7 @@ export default function MonthlyPlanPage() {
           {/* Step 0: Plan overview */}
           {step === 0 && (
             <motion.div key="step0" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
-              <span className="eyebrow" style={{ color: "#8F2740" }}>StareX Monthly Plan</span>
+              <span className="eyebrow" style={{ color: "#B30F14" }}>StareX Monthly Plan</span>
               <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em", marginTop: 8 }}>
                 Laundry on <em className="display-accent" style={{ display: "inline" }}>autopilot.</em>
               </h2>
@@ -147,7 +147,7 @@ export default function MonthlyPlanPage() {
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
                   {MEMBERSHIP.perks.map(p => (
                     <li key={p} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <Star size={14} color="#B8324F" style={{ flexShrink: 0, marginTop: 3 }} />
+                      <Star size={14} color="#ED1D24" style={{ flexShrink: 0, marginTop: 3 }} />
                       <span style={{ color: "#4A4A4A", fontSize: "0.9rem", fontFamily: "Kodchasan, sans-serif" }}>{p}</span>
                     </li>
                   ))}
@@ -250,13 +250,13 @@ export default function MonthlyPlanPage() {
                 <input
                   type="checkbox" checked={agreedToTerms}
                   onChange={e => { setAgreedToTerms(e.target.checked); if (e.target.checked) setSubmitError(null); }}
-                  style={{ marginTop: 3, width: 15, height: 15, flexShrink: 0, accentColor: "#B8324F", cursor: "pointer" }}
+                  style={{ marginTop: 3, width: 15, height: 15, flexShrink: 0, accentColor: "#ED1D24", cursor: "pointer" }}
                 />
                 <span style={{ color: "#4A4A4A", fontSize: "0.8125rem", lineHeight: 1.6, fontFamily: "Kodchasan, sans-serif" }}>
                   I agree to the{" "}
-                  <a href="/terms" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
-                  <a href="/privacy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
-                  <a href="/refund-policy" target="_blank" style={{ color: "#8F2740", textDecoration: "underline" }}>Refund Policy</a>, including the Monthly Plan&apos;s recurring payment terms.
+                  <a href="/terms" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
+                  <a href="/privacy" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
+                  <a href="/refund-policy" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Refund Policy</a>, including the Monthly Plan&apos;s recurring payment terms.
                 </span>
               </label>
 

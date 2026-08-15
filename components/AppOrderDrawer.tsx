@@ -392,7 +392,7 @@ export default function AppOrderDrawer({
                     ) : (
                       <button
                         onClick={handleSavePrice} disabled={savingPrice}
-                        style={{ width: "100%", padding: "9px", background: "transparent", color: "#8F2740", border: "1.5px dashed rgba(184,50,79,0.4)", borderRadius: 10, cursor: savingPrice ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
+                        style={{ width: "100%", padding: "9px", background: "transparent", color: "#B30F14", border: "1.5px dashed rgba(184,50,79,0.4)", borderRadius: 10, cursor: savingPrice ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
                       >
                         {savingPrice ? "Saving…" : "Save Amount — Let Customer Pay Online"}
                       </button>

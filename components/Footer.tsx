@@ -89,7 +89,7 @@ export default function Footer() {
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.
               </p>
               {subscribed ? (
-                <p style={{ color: "#8F2740", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
+                <p style={{ color: "#B30F14", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>You&apos;re in ✓</p>
               ) : (
                 <div>
                 <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(20,20,20,0.15)", paddingBottom: "10px", gap: 8, marginBottom: 10 }}>
@@ -104,7 +104,7 @@ export default function Footer() {
                   <button
                     onClick={subscribe}
                     disabled={submitting}
-                    style={{ background: "none", border: "none", color: "#B8324F", cursor: submitting ? "default" : "pointer", padding: "4px", display: "flex", opacity: submitting ? 0.5 : 1 }}
+                    style={{ background: "none", border: "none", color: "#ED1D24", cursor: submitting ? "default" : "pointer", padding: "4px", display: "flex", opacity: submitting ? 0.5 : 1 }}
                     aria-label="Subscribe"
                   >
                     <ArrowRight size={15} />
@@ -114,7 +114,7 @@ export default function Footer() {
                   <input
                     type="checkbox" checked={consent}
                     onChange={e => { setConsent(e.target.checked); setConsentError(false); }}
-                    style={{ marginTop: 2, width: 13, height: 13, flexShrink: 0, accentColor: "#B8324F", cursor: "pointer" }}
+                    style={{ marginTop: 2, width: 13, height: 13, flexShrink: 0, accentColor: "#ED1D24", cursor: "pointer" }}
                   />
                   <span style={{ color: consentError ? "#DC2626" : "#8C8C8C", fontSize: "0.7rem", lineHeight: 1.5, fontFamily: "Kodchasan, sans-serif" }}>
                     I agree to receive marketing emails from StareX. See our{" "}
@@ -130,7 +130,7 @@ export default function Footer() {
               <span style={colHead}>Pages</span>
               {pages.map(p => (
                 <a key={p.href} href={p.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#B8324F"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#ED1D24"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#4A4A4A"}
                 >{p.label}</a>
               ))}
@@ -149,7 +149,7 @@ export default function Footer() {
               <span style={colHead}>Service Areas</span>
               {serviceAreas.map(a => (
                 <a key={a.href} href={a.href} style={linkStyle}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#B8324F"}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#ED1D24"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#4A4A4A"}
                 >{a.label}</a>
               ))}
@@ -171,7 +171,7 @@ export default function Footer() {
                     <motion.a
                       key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}
                       style={{ color: "#8C8C8C", textDecoration: "none", display: "flex" }}
-                      whileHover={{ color: "#B8324F", scale: 1.15 } as any}
+                      whileHover={{ color: "#ED1D24", scale: 1.15 } as any}
                       transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     >
                       {icon}

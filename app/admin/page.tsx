@@ -164,10 +164,10 @@ export default async function AdminDashboardPage({
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <Logo color="#FFFFFF" fontSize="1.15rem" />
             <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
-            <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#C85770", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>Owner console</p>
+            <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#F4524D", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>Owner console</p>
             <AdminLivePoll initialCount={newOrders.length} />
             {newOrders.length > 0 && (
-              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#B8324F", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#ED1D24", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                 <Bell size={12} /> {newOrders.length} new
               </span>
             )}
@@ -193,8 +193,8 @@ export default async function AdminDashboardPage({
             const isActive = k.filterKey && filter === k.filterKey && tab === "orders";
             const card = (
               <div style={{
-                background: k.accent ? "linear-gradient(135deg,#C85770,#B8324F)" : "#fff",
-                border: isActive ? "1.5px solid #B8324F" : "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
+                background: k.accent ? "linear-gradient(135deg,#F4524D,#ED1D24)" : "#fff",
+                border: isActive ? "1.5px solid #ED1D24" : "1px solid #EAEAEA", borderRadius: 14, padding: "16px 18px",
                 boxShadow: isActive ? "0 0 0 3px rgba(184,50,79,0.12)" : "none",
                 transition: "box-shadow 0.15s, border-color 0.15s",
                 cursor: k.href ? "pointer" : "default", height: "100%",
@@ -213,9 +213,9 @@ export default async function AdminDashboardPage({
 
         {tab === "orders" && filter && FILTER_LABELS[filter] && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(184,50,79,0.1)", color: "#8F2740", borderRadius: 999, padding: "5px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.78rem" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(184,50,79,0.1)", color: "#B30F14", borderRadius: 999, padding: "5px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.78rem" }}>
               Filtered: {FILTER_LABELS[filter]}
-              <Link href={q ? `/admin?tab=orders&q=${encodeURIComponent(searchParams.q ?? "")}` : "/admin?tab=orders"} style={{ display: "inline-flex", color: "#8F2740" }}>
+              <Link href={q ? `/admin?tab=orders&q=${encodeURIComponent(searchParams.q ?? "")}` : "/admin?tab=orders"} style={{ display: "inline-flex", color: "#B30F14" }}>
                 <X size={13} />
               </Link>
             </span>
@@ -378,17 +378,17 @@ export default async function AdminDashboardPage({
             ) : (
               <div className="space-y-3">
                 {contacts!.map((c: any) => (
-                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#B8324F" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
+                  <div key={c.id} style={{ background: "#fff", border: `1.5px solid ${c.status === "new" ? "#ED1D24" : "#EDEDED"}`, borderRadius: 16, padding: "20px 22px" }}>
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-                          {c.status === "new" && <span style={{ background: "#B8324F", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
+                          {c.status === "new" && <span style={{ background: "#ED1D24", color: "#FFFFFF", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 700, fontFamily: "Poppins, sans-serif" }}>New</span>}
                           {c.status === "replied" && <span style={{ background: "rgba(184,50,79,0.12)", color: "#431E2C", borderRadius: 999, padding: "2px 10px", fontSize: "0.72rem", fontWeight: 600, fontFamily: "Poppins, sans-serif" }}>Replied</span>}
                           {c.subject && <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#6B6B6B" }}>{c.subject}</span>}
                         </div>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#161616", marginBottom: 2 }}>{c.name}</p>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#8C8C8C", marginBottom: 12 }}>
-                          <a href={`mailto:${c.email}`} style={{ color: "#8F2740" }}>{c.email}</a>
+                          <a href={`mailto:${c.email}`} style={{ color: "#B30F14" }}>{c.email}</a>
                           {c.phone && ` · ${c.phone}`}
                         </p>
                         <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6B6B6B", lineHeight: 1.7 }}>{c.message}</p>
@@ -438,7 +438,7 @@ export default async function AdminDashboardPage({
                         {STATUS_LABELS[status] ?? status}
                       </span>
                       <div style={{ flex: 1, background: "#F4F4F5", borderRadius: 999, height: 8, overflow: "hidden" }}>
-                        <div style={{ height: 8, background: "#B8324F", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
+                        <div style={{ height: 8, background: "#ED1D24", borderRadius: 999, width: `${Math.min(100, ((count as number) / (activeOrders!.length)) * 100)}%` }} />
                       </div>
                       <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#161616", minWidth: 24, textAlign: "right" }}>{count as number}</span>
                     </div>

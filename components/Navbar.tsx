@@ -133,7 +133,7 @@ export default function Navbar() {
               link.href === "/offer" ? (
                 <a key={link.href} href={link.href} style={{
                   display: "inline-flex", alignItems: "center", gap: 5, textDecoration: "none",
-                  background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
+                  background: "linear-gradient(135deg,#F4524D,#ED1D24)", color: "#FFFFFF",
                   padding: "6px 13px", borderRadius: 999, marginRight: 2,
                   fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem", whiteSpace: "nowrap",
                 }}>
@@ -153,7 +153,7 @@ export default function Navbar() {
                     color: "#4A4A4A",
                     transition: "color 0.2s, background 0.2s",
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#B8324F"; (e.currentTarget as HTMLElement).style.background = "rgba(184,50,79,0.06)"; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#ED1D24"; (e.currentTarget as HTMLElement).style.background = "rgba(184,50,79,0.06)"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#4A4A4A"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
                 >
                   {link.label}
@@ -166,7 +166,7 @@ export default function Navbar() {
           <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
             {isOwner ? (
               <>
-                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#8F2740", textDecoration: "none", border: "1px solid rgba(168,47,75,0.3)", borderRadius: 8 }}>
+                <a href="/admin" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 16px", color: "#B30F14", textDecoration: "none", border: "1px solid rgba(168,47,75,0.3)", borderRadius: 8 }}>
                   <Settings size={13} /> Console
                 </a>
                 <button onClick={handleSignOut} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "8px 12px", color: "#8C8C8C", background: "none", border: "none", cursor: "pointer" }}>
@@ -176,7 +176,7 @@ export default function Navbar() {
             ) : user ? (
               <div ref={acctRef} style={{ position: "relative" }}>
                 <button onClick={() => setAcctOpen(o => !o)} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", padding: "6px 8px 6px 6px", color: "#161616", background: "rgba(20,20,20,0.05)", border: "1px solid rgba(20,20,20,0.1)", borderRadius: 999, cursor: "pointer" }}>
-                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+                  <span style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg,#F4524D,#ED1D24)", color: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
                     {initials}
                   </span>
                   {firstName}
@@ -193,7 +193,7 @@ export default function Navbar() {
                           onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(20,20,20,0.05)"}
                           onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}
                         >
-                          <item.icon size={15} color="#B8324F" /> {item.label}
+                          <item.icon size={15} color="#ED1D24" /> {item.label}
                         </a>
                       ))}
                       <div style={{ height: 1, background: "rgba(20,20,20,0.08)", margin: "4px 0" }} />
@@ -244,7 +244,7 @@ export default function Navbar() {
               initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }} transition={{ duration: 0.35 }}
               style={{
                 display: "flex", alignItems: "center", gap: 8, textDecoration: "none",
-                background: "linear-gradient(135deg,#C85770,#B8324F)", color: "#FFFFFF",
+                background: "linear-gradient(135deg,#F4524D,#ED1D24)", color: "#FFFFFF",
                 padding: "12px 16px", borderRadius: 14, marginBottom: 24,
                 fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8125rem",
               }}
@@ -271,14 +271,14 @@ export default function Navbar() {
                     style={{
                       textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "space-between",
                       padding: "18px 4px", fontSize: "1.5rem", fontFamily: "Poppins, sans-serif", fontWeight: isOffer ? 700 : 600,
-                      color: isOffer ? "#B8324F" : "#161616", letterSpacing: "-0.02em", lineHeight: 1.2, borderRadius: 10,
+                      color: isOffer ? "#ED1D24" : "#161616", letterSpacing: "-0.02em", lineHeight: 1.2, borderRadius: 10,
                     }}
                   >
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                      {isOffer && <Sparkles size={18} color="#B8324F" style={{ flexShrink: 0 }} />}
+                      {isOffer && <Sparkles size={18} color="#ED1D24" style={{ flexShrink: 0 }} />}
                       {link.label}
                     </span>
-                    <ArrowRight size={20} color="#B8324F" style={{ flexShrink: 0 }} />
+                    <ArrowRight size={20} color="#ED1D24" style={{ flexShrink: 0 }} />
                   </a>
                 </motion.div>
                 );

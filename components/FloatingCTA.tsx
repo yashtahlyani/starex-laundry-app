@@ -32,7 +32,7 @@ export default function FloatingCTA() {
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            background: "linear-gradient(180deg,#C85770 0%,#B8324F 100%)",
+            background: "linear-gradient(180deg,#F4524D 0%,#ED1D24 100%)",
             color: "#FFFFFF",
             fontFamily: "Poppins, sans-serif",
             fontWeight: 600,

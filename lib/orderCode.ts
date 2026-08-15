@@ -17,7 +17,7 @@ export function generateOrderCode(serviceId: string = "wash-fold"): string {
 // Colour coding for order codes across admin/tracker UI — keeps the two
 // families bifurcated visually wherever a code chip is rendered.
 export const ORDER_CODE_COLORS: Record<"STX" | "DTX", { text: string; bg: string; border: string }> = {
-  STX: { text: "#8F2740", bg: "rgba(143,39,64,0.08)",  border: "rgba(143,39,64,0.25)" },  // brand red — wash & fold
+  STX: { text: "#B30F14", bg: "rgba(143,39,64,0.08)",  border: "rgba(143,39,64,0.25)" },  // brand red — wash & fold
   DTX: { text: "#946200", bg: "rgba(148,98,0,0.10)",   border: "rgba(148,98,0,0.28)" },   // amber/gold — dry clean family
 };
 

@@ -6,11 +6,11 @@
 
 @layer base {
   :root {
-    /* ── StareX design tokens — premium garnet & warm white ── */
-    --brand:        #B8324F;  /* primary — CTAs, accents, sparingly */
-    --brand-dark:   #8F2740;  /* hover / pressed / accents on light */
-    --brand-soft:   #C85770;  /* gradient light end */
-    --brand-rose:   #E08FA0;  /* accent text/icons on dark surfaces */
+    /* ── StareX design tokens — matches the StareX Dry Cleaners (India) brand red ── */
+    --brand:        #ED1D24;  /* primary — CTAs, accents, sparingly */
+    --brand-dark:   #B30F14;  /* hover / pressed / accents on light */
+    --brand-soft:   #F4524D;  /* gradient light end / coral accent */
+    --brand-rose:   #FA9EA1;  /* accent text/icons on dark surfaces */
     --bg:           #FFFFFF;
     --bg-warm:      #FFFFFF;  /* soft warm white page bg */
     --surface:      #F2F2F2;  /* warm ivory */
