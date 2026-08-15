@@ -4,6 +4,7 @@ import LegalDoc, { type LegalSection } from "@/components/LegalDoc";
 export const metadata: Metadata = {
   title: "Privacy Policy — Starex",
   description: "How Starex collects, uses, discloses, and protects your personal information under PIPEDA and Canada's Anti-Spam Legislation.",
+  alternates: { canonical: "/privacy" },
 };
 
 const EFFECTIVE = "August 2, 2026";

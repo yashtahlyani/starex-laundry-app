@@ -4,6 +4,7 @@ import LegalDoc, { type LegalSection } from "@/components/LegalDoc";
 export const metadata: Metadata = {
   title: "Terms & Conditions — Starex",
   description: "The consumer agreement governing your use of Starex laundry & dry cleaning pickup and delivery services in Brampton and Mississauga, Ontario.",
+  alternates: { canonical: "/terms" },
 };
 
 const EFFECTIVE = "August 2, 2026";

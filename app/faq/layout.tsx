@@ -2,6 +2,7 @@
 export const metadata: Metadata = {
   title: "FAQ",
   description: "Answers to the most common questions about StareX laundry and dry cleaning pickup and delivery service.",
+  alternates: { canonical: "/faq" },
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
