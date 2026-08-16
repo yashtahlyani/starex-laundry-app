@@ -160,24 +160,24 @@ export default async function AdminDashboardPage({
 
       {/* Admin header */}
       <header style={{ background: "#161616", position: "sticky", top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div className="admin-header-inner" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0 }}>
             <Logo color="#FFFFFF" fontSize="1.15rem" />
-            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
-            <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#F4524D", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>Owner console</p>
+            <div className="admin-header-label" style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
+            <p className="admin-header-label" style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#F4524D", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600, whiteSpace: "nowrap" }}>Owner console</p>
             <AdminLivePoll initialCount={newOrders.length} />
             {newOrders.length > 0 && (
-              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#ED1D24", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem" }}>
+              <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#ED1D24", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem", whiteSpace: "nowrap" }}>
                 <Bell size={12} /> {newOrders.length} new
               </span>
             )}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <a href="/" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <a href="/" className="admin-header-label" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8, whiteSpace: "nowrap" }}>
               View site
             </a>
             <form action="/api/auth/signout" method="POST" style={{ display: "inline" }}>
-              <button type="submit" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", border: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8, cursor: "pointer" }}>
+              <button type="submit" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)", border: "none", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", padding: "8px 14px", borderRadius: 8, cursor: "pointer", whiteSpace: "nowrap" }}>
                 Sign out
               </button>
             </form>
@@ -453,6 +453,7 @@ export default async function AdminDashboardPage({
       <style>{`
         @media (max-width: 900px) { .admin-kpis { grid-template-columns: repeat(3,1fr) !important; } }
         @media (max-width: 560px) { .admin-kpis { grid-template-columns: repeat(2,1fr) !important; } .admin-th { display: none !important; } }
+        @media (max-width: 480px) { .admin-header-inner { padding: 0 14px !important; } .admin-header-label { display: none !important; } }
       `}</style>
     </div>
   );
