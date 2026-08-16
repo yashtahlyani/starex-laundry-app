@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
           const amount = (obj as Stripe.PaymentIntent).amount;
           const result = await new OrderRepository(supabaseAdmin).markPaid(orderId, note, amount != null ? amount / 100 : undefined);
           if (result.status === "delivered") {
-            enqueueStatusUpdate({
+            await enqueueStatusUpdate({
               orderId, orderCode: order.code, customerName: order.customer_name,
               customerEmail: order.email, customerPhone: order.phone, newStatus: "delivered",
             }).catch(() => {});

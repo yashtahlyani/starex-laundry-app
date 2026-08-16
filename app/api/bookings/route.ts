@@ -93,7 +93,12 @@ export async function POST(req: NextRequest) {
       cardLast4,
     });
 
-    // Fire-and-forget: never let a notification failure block the booking response.
+    // Awaited (not fire-and-forget): on Vercel, the function's execution
+    // environment can freeze the instant the response is sent, killing any
+    // still-in-flight promise — an un-awaited notification here would send
+    // *sometimes*, depending on how fast Resend happened to respond. A
+    // notification failure still can't fail the booking itself, so each
+    // call is wrapped so it can never throw past this point.
     const notificationPayload = {
       orderId: result.orderId,
       orderCode: result.orderCode,
@@ -105,8 +110,10 @@ export async function POST(req: NextRequest) {
       pickupTimeSlot: timeSlot,
       pickupAddress: address.trim(),
     };
-    enqueueBookingConfirmation(notificationPayload).catch(() => {});
-    notifyOwnerOfNewOrder(notificationPayload).catch(() => {});
+    await Promise.allSettled([
+      enqueueBookingConfirmation(notificationPayload),
+      notifyOwnerOfNewOrder(notificationPayload),
+    ]);
 
     return NextResponse.json(result, { status: 201 });
   } catch (err: any) {

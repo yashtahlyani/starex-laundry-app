@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
   if (adminEmail && resend) {
     const urgentTypes = ["lost_item", "damage"];
     const isUrgent = urgentTypes.includes(issueType);
-    resend.emails.send({
+    await resend.emails.send({
       from: FROM_EMAIL,
       to: adminEmail,
       subject: `${isUrgent ? "🚨" : "⚠️"} Issue Reported${orderCode ? ` — Order ${orderCode}` : ""}: ${issueType.replace(/_/g, " ")}`,

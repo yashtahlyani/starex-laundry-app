@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     const result = await new OrderRepository(db).markPaid(order.id, "Paid online by customer", intent.amount / 100);
 
     if (result.status === "delivered") {
-      enqueueStatusUpdate({
+      await enqueueStatusUpdate({
         orderId: order.id,
         orderCode: order.code,
         customerName: order.customer_name,

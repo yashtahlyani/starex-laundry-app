@@ -38,7 +38,7 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
     const result = await orders.markPaid(order.id, note, amountCad);
 
     if (result.status === "delivered") {
-      enqueueStatusUpdate({
+      await enqueueStatusUpdate({
         orderId: order.id,
         orderCode: order.code,
         customerName: order.customer_name,

@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
 
     if (result.status === "delivered") {
-      enqueueStatusUpdate({
+      await enqueueStatusUpdate({
         orderId: order.id,
         orderCode: order.code,
         customerName: order.customer_name,

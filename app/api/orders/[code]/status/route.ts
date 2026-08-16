@@ -30,7 +30,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { code: stri
     });
     if (result.unchanged) return NextResponse.json({ message: "Status unchanged" });
 
-    enqueueStatusUpdate({
+    // Awaited — an un-awaited call here risks Vercel freezing the function
+    // before the notification actually goes out (see app/api/bookings).
+    await enqueueStatusUpdate({
       orderId: result.orderId,
       orderCode: result.orderCode,
       customerName: result.customerName,

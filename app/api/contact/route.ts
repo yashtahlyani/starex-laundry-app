@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error;
 
-    notifyOwnerOfNewContact({ name, email, subject, message }).catch(() => {});
+    await notifyOwnerOfNewContact({ name, email, subject, message }).catch(() => {});
 
     return NextResponse.json({ ok: true });
   } catch (err: any) {

@@ -38,7 +38,9 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
       updated_at: now,
     }).eq("id", order.id);
 
-    sendCustomerNote(order.id, order.code, order.customer_name, order.email, order.phone, message).catch(() => {});
+    // Awaited — un-awaited risks Vercel freezing the function before the
+    // send completes (see app/api/bookings for the full explanation).
+    await sendCustomerNote(order.id, order.code, order.customer_name, order.email, order.phone, message).catch(() => {});
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
