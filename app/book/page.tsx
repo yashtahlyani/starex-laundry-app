@@ -29,9 +29,10 @@ const CATALOG_FOR_SERVICE: Record<string, string[]> = {
   "household": ["household", "dry-clean"],
 };
 
+// 3-hour pickup windows (per client request, matching the Laundry Lady site).
 const timeSlots = [
-  "8:00 AM – 10:00 AM", "10:00 AM – 12:00 PM", "12:00 PM – 2:00 PM",
-  "2:00 PM – 4:00 PM",  "4:00 PM – 6:00 PM",   "6:00 PM – 8:00 PM",
+  "8:00 AM – 11:00 AM", "11:00 AM – 2:00 PM",
+  "2:00 PM – 5:00 PM",  "5:00 PM – 8:00 PM",
 ];
 
 const stepLabels = ["Service", "Schedule", "Details", "Confirm"];
@@ -255,12 +256,21 @@ function BookPageInner() {
                     const Icon = s.icon;
                     const selected = form.service === s.id;
                     return (
-                      <button key={s.id} onClick={() => setForm(p => ({ ...p, service: s.id }))} style={{
-                        padding: 20, border: `2px solid ${selected ? "#ED1D24" : "transparent"}`,
-                        borderRadius: 16, background: selected ? s.color : "#ffffff",
-                        cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
-                        boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
-                      }}>
+                      <button
+                        key={s.id}
+                        onClick={() => {
+                          // Selecting a service is the confirmation — advance
+                          // straight to Schedule instead of making the
+                          // customer select, then separately tap Continue.
+                          setForm(p => ({ ...p, service: s.id }));
+                          setTimeout(goNext, 220);
+                        }}
+                        style={{
+                          padding: 20, border: `2px solid ${selected ? "#ED1D24" : "transparent"}`,
+                          borderRadius: 16, background: selected ? s.color : "#ffffff",
+                          cursor: "pointer", textAlign: "left", transition: "all 0.2s ease",
+                          boxShadow: selected ? "none" : "0 1px 3px rgba(0,0,0,0.06)",
+                        }}>
                         <div style={{ width: 36, height: 36, background: selected ? "rgba(0,0,0,0.1)" : "#F4F4F5", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
                           <Icon size={17} color={selected ? "#B30F14" : "#6B6B6B"} />
                         </div>
@@ -270,13 +280,6 @@ function BookPageInner() {
                       </button>
                     );
                   })}
-                </div>
-
-                <div style={{ marginTop: 28 }}>
-                  <button onClick={goNext} disabled={!canNext} className="btn-primary"
-                    style={{ opacity: canNext ? 1 : 0.4, cursor: canNext ? "pointer" : "not-allowed", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                    Continue <ArrowRight size={16} />
-                  </button>
                 </div>
               </motion.div>
             )}
