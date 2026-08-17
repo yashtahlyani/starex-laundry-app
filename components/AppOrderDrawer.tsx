@@ -85,6 +85,7 @@ export default function AppOrderDrawer({
   const [sendingNote, setSendingNote] = useState(false);
   const [noteSent, setNoteSent] = useState(false);
   const [noteError, setNoteError] = useState<string | null>(null);
+  const [pendingDiscrepancy, setPendingDiscrepancy] = useState("");
 
   // The drawer is a single component instance reused across every order
   // (AdminOrderTable/AdminIncomingSection just swap the `order` prop) — its
@@ -109,6 +110,7 @@ export default function AppOrderDrawer({
     setSendingNote(false);
     setNoteSent(false);
     setNoteError(null);
+    setPendingDiscrepancy("");
   }, [order?.id]);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
@@ -224,7 +226,8 @@ export default function AppOrderDrawer({
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          status: nextStatusId, note: null,
+          status: nextStatusId,
+          note: nextStatusId === "confirmed" ? (pendingDiscrepancy.trim() || null) : null,
           itemCount,
           weight: nextStatusId === "picked_up" ? (pendingWeight.trim() || undefined) : undefined,
         }),
@@ -236,7 +239,7 @@ export default function AppOrderDrawer({
             ? { ...prev, received: itemCount }
             : { ...prev, returned: itemCount });
         }
-        setPendingCount(""); setPendingWeight("");
+        setPendingCount(""); setPendingWeight(""); setPendingDiscrepancy("");
         // Without this, the order list/KPIs behind the drawer stay stale until
         // a manual page reload — the drawer itself updates via local state,
         // but nothing tells the server-rendered page underneath to refetch.
@@ -329,7 +332,7 @@ export default function AppOrderDrawer({
                     Notify customer
                   </p>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C", marginBottom: 10 }}>
-                    E.g. a garment discrepancy — a stain that won&apos;t fully remove, or an item being returned unprocessed.
+                    For anything outside a status change — general updates, questions, follow-ups. If it's a discrepancy at check-in, use the note field when marking Confirmed instead, so the customer gets one email, not two.
                   </p>
                   <textarea
                     rows={3}
@@ -418,6 +421,22 @@ export default function AppOrderDrawer({
                     />
                   )}
                   {countError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{countError}</p>}
+                </div>
+              )}
+              {admin && nextStatusId === "confirmed" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 4 }}>
+                  <textarea
+                    rows={2}
+                    placeholder="Any discrepancy to flag? (optional) — e.g. a stain that won't fully remove"
+                    value={pendingDiscrepancy}
+                    onChange={e => setPendingDiscrepancy(e.target.value)}
+                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", resize: "vertical", boxSizing: "border-box" }}
+                  />
+                  {pendingDiscrepancy.trim() && (
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#8C8C8C" }}>
+                      Sent to the customer in the same &quot;Confirmed&quot; email — no need to also use Notify customer below.
+                    </p>
+                  )}
                 </div>
               )}
               {admin && nextLabel && (

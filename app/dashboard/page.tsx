@@ -12,8 +12,10 @@ import { orderCodeColor } from "@/lib/orderCode";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
+// Lower number = closer to done = shown first. Matches the reordered
+// pipeline: placed -> picked_up -> confirmed -> ready_for_delivery -> delivered.
 const ACTIVE_PRIORITY: Record<string, number> = {
-  ready_for_delivery: 0, picked_up: 1, confirmed: 2, placed: 3,
+  ready_for_delivery: 0, confirmed: 1, picked_up: 2, placed: 3,
 };
 
 function greeting() {

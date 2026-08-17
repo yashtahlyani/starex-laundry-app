@@ -15,8 +15,8 @@ export const dynamic = "force-dynamic";
 
 const STATUS_COLORS: Record<string, string> = {
   placed:              "bg-blue-50 text-blue-700",
-  confirmed:           "bg-teal-50 text-teal-700",
   picked_up:           "bg-yellow-100 text-yellow-800",
+  confirmed:           "bg-teal-50 text-teal-700",
   ready_for_delivery:  "bg-green-50 text-green-700",
   delivered:           "bg-gray-100 text-gray-500",
   cancelled:           "bg-red-50 text-red-700",
@@ -24,8 +24,8 @@ const STATUS_COLORS: Record<string, string> = {
 
 const STATUS_LABELS: Record<string, string> = {
   placed:              "Placed",
-  confirmed:           "Confirmed",
   picked_up:           "Picked Up",
+  confirmed:           "Confirmed",
   ready_for_delivery:  "Ready for Delivery",
   delivered:           "Delivered",
   cancelled:           "Cancelled",
@@ -61,7 +61,7 @@ export default async function AdminDashboardPage({
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const ACTIVE_STATUSES = ["placed", "confirmed", "picked_up", "ready_for_delivery"];
+  const ACTIVE_STATUSES = ["placed", "picked_up", "confirmed", "ready_for_delivery"];
   const FINAL_STATUSES = ["delivered", "cancelled"];
 
   // activeOrders drives the header bell + the Incoming section, both of which

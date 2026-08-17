@@ -9,17 +9,23 @@ import { CustomerRepository } from "@/lib/repositories/customer.repository";
 // OrderRepository.markPaid), not as a status in this pipeline, and an order
 // auto-advances to "delivered" the moment payment clears on an order that's
 // already Ready for Delivery.
+//
+// Reordered per client request (2026-08-16): "Confirmed" now happens AFTER
+// pickup, not before — it represents staff checking in the items and
+// flagging any discrepancy (stain, damage, missing item), which can only be
+// done once the order is physically in hand. "Picked Up" is purely the
+// courier-collected-it checkpoint.
 export const VALID_STATUSES = [
-  "placed", "confirmed", "picked_up",
+  "placed", "picked_up", "confirmed",
   "ready_for_delivery", "delivered", "cancelled",
 ] as const;
 
 export type OrderStatus = (typeof VALID_STATUSES)[number];
 
 const TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  placed:              ["confirmed", "cancelled"],
-  confirmed:           ["picked_up", "cancelled"],
-  picked_up:           ["ready_for_delivery", "cancelled"],
+  placed:              ["picked_up", "cancelled"],
+  picked_up:           ["confirmed", "cancelled"],
+  confirmed:           ["ready_for_delivery", "cancelled"],
   ready_for_delivery:  ["delivered", "cancelled"],
   delivered:           [],
   cancelled:           [],

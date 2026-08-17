@@ -24,13 +24,16 @@ type Order = {
   price?: number | null;
 };
 
-const STAGES = ["placed", "confirmed", "picked_up", "ready_for_delivery", "delivered"];
+// Reordered per client request (2026-08-16): Confirmed now happens after
+// Picked Up — it's the quality-check step, done once the order is actually
+// in hand, not a pre-pickup formality.
+const STAGES = ["placed", "picked_up", "confirmed", "ready_for_delivery", "delivered"];
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
-  placed:              { label: "Order placed",       desc: "Your order is placed and awaiting confirmation.", icon: Clock,       color: "#B30F14" },
-  confirmed:           { label: "Confirmed",           desc: "We've confirmed your pickup — see you soon!",    icon: CheckCircle, color: "#B30F14" },
-  picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry — it's being cleaned now.", icon: Truck, color: "#C08A00" },
-  ready_for_delivery:  { label: "Ready for delivery",  desc: "Your order is ready and heading your way.",      icon: Truck,       color: "#B30F14" },
+  placed:              { label: "Order placed",       desc: "Your order is placed — we'll see you at pickup.", icon: Clock,       color: "#B30F14" },
+  picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry — it's being checked in now.", icon: Truck, color: "#C08A00" },
+  confirmed:           { label: "Confirmed",           desc: "We've checked in your items and everything's set — cleaning is underway.", icon: CheckCircle, color: "#B30F14" },
+  ready_for_delivery:  { label: "Ready for delivery",  desc: "Your order is ready! Please complete payment so we can schedule delivery.", icon: Truck,       color: "#B30F14" },
   delivered:           { label: "Delivered",           desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#B30F14" },
   cancelled:           { label: "Cancelled",           desc: "This order has been cancelled.",                 icon: Package,     color: "#DC2626" },
 };

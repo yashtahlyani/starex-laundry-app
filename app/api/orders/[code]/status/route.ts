@@ -39,6 +39,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { code: stri
       customerEmail: result.customerEmail,
       customerPhone: result.customerPhone,
       newStatus: result.status,
+      note: body.note,
     }).catch(() => {});
 
     return NextResponse.json({ success: true, ...result });

@@ -13,6 +13,7 @@ export type StatusNotificationPayload = {
   customerEmail: string;
   customerPhone: string;
   newStatus: string;
+  note?: string | null;
 };
 
 export type NotificationJobData =
@@ -60,7 +61,8 @@ export async function enqueueStatusUpdate(payload: StatusNotificationPayload): P
       payload.customerName,
       payload.customerEmail,
       payload.customerPhone,
-      payload.newStatus
+      payload.newStatus,
+      payload.note
     ).catch(() => {});
   }
 }

@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 
 const STATUSES = [
   { value: "placed",              label: "Placed" },
-  { value: "confirmed",           label: "Confirmed" },
   { value: "picked_up",           label: "Picked Up" },
+  { value: "confirmed",           label: "Confirmed" },
   { value: "ready_for_delivery",  label: "Ready for Delivery" },
   { value: "delivered",           label: "Delivered" },
   { value: "cancelled",           label: "Cancelled" },

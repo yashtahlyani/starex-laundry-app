@@ -3,23 +3,26 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
+// Reordered per client request (2026-08-16): Confirmed now happens after
+// Picked Up — it's staff checking in the items and flagging any
+// discrepancy, which can only happen once the order is physically in hand.
 export const ORDER_STAGES = [
   { id: "placed",              label: "Order placed" },
-  { id: "confirmed",           label: "Confirmed" },
   { id: "picked_up",           label: "Picked up" },
+  { id: "confirmed",           label: "Confirmed" },
   { id: "ready_for_delivery",  label: "Ready for delivery" },
   { id: "delivered",           label: "Delivered" },
 ];
 
 export const STAGE_INDEX: Record<string, number> = {
-  placed: 0, confirmed: 1, picked_up: 2,
+  placed: 0, picked_up: 1, confirmed: 2,
   ready_for_delivery: 3, delivered: 4, cancelled: -1,
 };
 
 export const NEXT_STATUS: Record<string, string | null> = {
-  placed:              "confirmed",
-  confirmed:           "picked_up",
-  picked_up:           "ready_for_delivery",
+  placed:              "picked_up",
+  picked_up:           "confirmed",
+  confirmed:           "ready_for_delivery",
   ready_for_delivery:  "delivered",
   delivered:           null,
   cancelled:           null,
@@ -27,8 +30,8 @@ export const NEXT_STATUS: Record<string, string | null> = {
 
 export const STATUS_META: Record<string, { label: string; bg: string; fg: string; dot: string }> = {
   placed:              { label: "Order placed",      bg: "#E5E5E5", fg: "#4338CA", dot: "#6366F1" },
-  confirmed:           { label: "Confirmed",          bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
   picked_up:           { label: "Picked up",          bg: "#EDE9FE", fg: "#6D28D9", dot: "#8B5CF6" },
+  confirmed:           { label: "Confirmed",          bg: "#EAEAEA", fg: "#B45309", dot: "#F59E0B" },
   ready_for_delivery:  { label: "Ready for delivery", bg: "#F2F2F2", fg: "#065F46", dot: "#10B981" },
   delivered:           { label: "Delivered",          bg: "#DCFCE7", fg: "#15803D", dot: "#22C55E" },
   cancelled:           { label: "Cancelled",          bg: "#FEE2E2", fg: "#991B1B", dot: "#EF4444" },

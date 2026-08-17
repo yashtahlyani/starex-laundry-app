@@ -45,21 +45,27 @@ export type BookingNotificationPayload = {
 
 // Status change messages sent to the customer. Keys must match VALID_STATUSES
 // in lib/services/order.service.ts, not an arbitrary label.
+//
+// Reordered per client request (2026-08-16): Confirmed now happens AFTER
+// Picked Up — it's the quality-check step, so its copy talks about items
+// being checked in, not pickup being scheduled. Ready for Delivery now
+// prompts payment instead of just saying the driver is on the way, since
+// delivery isn't dispatched until payment clears.
 const STATUS_MESSAGES: Partial<Record<string, { subject: string; body: string; whatsapp: string }>> = {
-  confirmed: {
-    subject: "Your booking is confirmed!",
-    body: "We've confirmed your pickup and locked in your slot.",
-    whatsapp: "Your booking is confirmed! We'll see you at pickup.",
-  },
   picked_up: {
     subject: "We've picked up your laundry!",
-    body: "Your laundry has been picked up and is on its way to us. We'll notify you when it's ready.",
-    whatsapp: "We've picked up your laundry and are getting it cleaned. We'll message you when it's ready!",
+    body: "Your laundry has been picked up and is on its way to us. We'll notify you once we've checked everything in.",
+    whatsapp: "We've picked up your laundry and are bringing it in for check-in. We'll message you shortly!",
+  },
+  confirmed: {
+    subject: "Your order has been checked in!",
+    body: "We've checked in your items and everything's set — cleaning is now underway.",
+    whatsapp: "We've checked in your items and cleaning is underway. We'll message you when it's ready!",
   },
   ready_for_delivery: {
-    subject: "Your laundry is ready for delivery!",
-    body: "Great news — your laundry is ready. Our driver will be heading your way soon.",
-    whatsapp: "Your laundry is ready for delivery! Our driver will be on the way to you shortly.",
+    subject: "Your order is ready — please complete payment",
+    body: "Your laundry is cleaned and ready! Please complete payment now so we can schedule your delivery.",
+    whatsapp: "Your laundry is ready! Please complete payment now so we can schedule your delivery.",
   },
   delivered: {
     subject: "Your laundry has been delivered!",
@@ -76,21 +82,26 @@ export async function sendBookingConfirmation(payload: BookingNotificationPayloa
   ]);
 }
 
-// Called when staff updates order status
+// Called when staff updates order status. `note` is an optional discrepancy
+// or flag (e.g. "one shirt has a stain that won't fully lift") staff can
+// attach to the transition — it's folded into this same email/WhatsApp send
+// rather than requiring a second "Notify customer" message, so the customer
+// gets one combined update instead of two separate ones for the same event.
 export async function sendStatusNotification(
   orderId: string,
   orderCode: string,
   customerName: string,
   customerEmail: string,
   customerPhone: string,
-  newStatus: string
+  newStatus: string,
+  note?: string | null
 ) {
   const msg = STATUS_MESSAGES[newStatus];
   if (!msg) return; // not all status changes warrant a customer notification
 
   await Promise.allSettled([
-    sendStatusEmail(orderId, orderCode, customerName, customerEmail, newStatus, msg),
-    sendStatusWhatsApp(orderId, orderCode, customerName, customerPhone, newStatus, msg),
+    sendStatusEmail(orderId, orderCode, customerName, customerEmail, newStatus, msg, note),
+    sendStatusWhatsApp(orderId, orderCode, customerName, customerPhone, newStatus, msg, note),
   ]);
 }
 
@@ -229,18 +240,22 @@ async function sendStatusEmail(
   customerName: string,
   customerEmail: string,
   status: string,
-  msg: { subject: string; body: string }
+  msg: { subject: string; body: string },
+  note?: string | null
 ) {
   if (!resend) {
     await logNotification(orderId, "email", status, "skipped");
     return;
   }
+  const body = note?.trim()
+    ? `${msg.body}<br><br><strong>A note about your order:</strong><br>${escapeHtml(note.trim()).replace(/\n/g, "<br>")}`
+    : msg.body;
   try {
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: customerEmail,
       subject: `${msg.subject} — Order ${orderCode}`,
-      html: buildStatusEmailHtml(customerName, orderCode, msg.body),
+      html: buildStatusEmailHtml(customerName, orderCode, body),
     });
     await logNotification(orderId, "email", status, error ? "failed" : "sent", data?.id);
   } catch {
@@ -269,10 +284,12 @@ async function sendStatusWhatsApp(
   customerName: string,
   customerPhone: string,
   status: string,
-  msg: { whatsapp: string }
+  msg: { whatsapp: string },
+  note?: string | null
 ) {
+  const noteLine = note?.trim() ? `\n\nA note about your order:\n${note.trim()}` : "";
   const body =
-    `Hi ${customerName}! ${msg.whatsapp}\n\n` +
+    `Hi ${customerName}! ${msg.whatsapp}${noteLine}\n\n` +
     `Order: *${orderCode}*\n` +
     `Track: ${SITE_URL}/order`;
 
