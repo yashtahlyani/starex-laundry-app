@@ -1,7 +1,9 @@
 // StareX wordmark — matches the StareX Dry Cleaners (India) mark exactly:
 // "ST" + a star-shaped "A" (traced from their actual logo.png, not a
 // generic star) + "REX", star always in the logo's signature red
-// regardless of the wordmark's own color.
+// regardless of the wordmark's own color. Font is Baloo 2 (800) — verified
+// by side-by-side comparison against their logo.png; Poppins' straight-leg
+// "R" and sharper corners didn't match their rounded, curved-leg "R".
 const LOGO_RED = "#E73338";
 
 // Traced via pixel-scanline analysis of the real logo.png (90 scanlines,
@@ -24,7 +26,7 @@ export default function Logo({ color = "#FFFFFF", fontSize = "1.2rem" }: LogoPro
       style={{
         display: "inline-flex",
         alignItems: "center",
-        fontFamily: "Poppins, sans-serif",
+        fontFamily: "'Baloo 2', sans-serif",
         fontWeight: 800,
         letterSpacing: "0.01em",
         fontSize,

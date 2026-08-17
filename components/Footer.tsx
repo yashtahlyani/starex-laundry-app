@@ -193,8 +193,8 @@ export default function Footer() {
         {/* Ghost watermark */}
         <div style={{
           position: "absolute", bottom: "-12px", left: "50%", transform: "translateX(-50%)",
-          fontFamily: "Poppins, sans-serif", fontWeight: 700,
-          fontSize: "clamp(3rem,10vw,6rem)", letterSpacing: "-0.04em",
+          fontFamily: "'Baloo 2', sans-serif", fontWeight: 800,
+          fontSize: "clamp(3rem,10vw,6rem)", letterSpacing: "-0.02em",
           color: "rgba(20,20,20,0.04)", whiteSpace: "nowrap", userSelect: "none", pointerEvents: "none",
         }}>
           STAREX
