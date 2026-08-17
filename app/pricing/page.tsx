@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Search } from "lucide-react";
 import { CATALOG, MEMBERSHIP, DETAILING, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
+import PriceCalculator from "@/components/PriceCalculator";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 const pastelColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
@@ -150,6 +151,24 @@ export default function PricingPage() {
               </div>
             </motion.div>
           </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Estimate calculator — add what you're sending and see a running total */}
+      <section style={{ padding: "0 0 80px", background: "#FFFFFF" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent style={{ textAlign: "center", marginBottom: 36 }}>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Estimate Calculator</span>
+            <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 8 }}>
+              What&apos;s your <em className="display-accent" style={{ display: "inline" }}>estimate?</em>
+            </h2>
+            <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
+              Add a rough weight or item counts below to see a live running total. Final price is always confirmed with you at pickup.
+            </p>
+          </AnimatedContent>
+          <AnimatedContent>
+            <PriceCalculator />
+          </AnimatedContent>
         </div>
       </section>
 
