@@ -45,8 +45,13 @@ export async function enqueueBookingConfirmation(payload: BookingNotificationPay
   if (queue) {
     await queue.add("booking_confirmed", { type: "booking_confirmed", payload } satisfies NotificationJobData);
   } else {
-    // Dev fallback: call directly (no retry, but works without Redis)
-    sendBookingConfirmation(payload).catch(() => {});
+    // Dev/no-Redis fallback: call directly. Must be awaited here, not just by
+    // the caller — an un-awaited call inside this function resolves the
+    // outer promise before the send actually finishes, which let Vercel
+    // freeze the function mid-send (confirmed live: status-update emails
+    // were silently dropped even though the API route already awaited
+    // enqueueStatusUpdate(), because this inner call wasn't awaited).
+    await sendBookingConfirmation(payload).catch(() => {});
   }
 }
 
@@ -55,7 +60,7 @@ export async function enqueueStatusUpdate(payload: StatusNotificationPayload): P
   if (queue) {
     await queue.add("status_update", { type: "status_update", payload } satisfies NotificationJobData);
   } else {
-    sendStatusNotification(
+    await sendStatusNotification(
       payload.orderId,
       payload.orderCode,
       payload.customerName,
