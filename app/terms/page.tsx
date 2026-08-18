@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LegalDoc, { type LegalSection } from "@/components/LegalDoc";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions — Starex",
+  title: "Terms & Conditions",
   description: "The consumer agreement governing your use of Starex laundry & dry cleaning pickup and delivery services in Brampton and Mississauga, Ontario.",
   alternates: { canonical: "/terms" },
 };

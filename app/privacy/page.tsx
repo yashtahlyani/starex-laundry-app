@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LegalDoc, { type LegalSection } from "@/components/LegalDoc";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Starex",
+  title: "Privacy Policy",
   description: "How Starex collects, uses, discloses, and protects your personal information under PIPEDA and Canada's Anti-Spam Legislation.",
   alternates: { canonical: "/privacy" },
 };
