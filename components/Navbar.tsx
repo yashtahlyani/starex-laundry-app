@@ -122,7 +122,7 @@ export default function Navbar() {
             </AnimatePresence>
             <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               <motion.div whileHover={{ scale: 1.04 }} transition={{ type: "spring", stiffness: 320, damping: 20 }} style={{ display: "flex", alignItems: "center" }}>
-                <Logo color="#161616" fontSize="1.3rem" />
+                <Logo color="#161616" fontSize="3rem" />
               </motion.div>
             </a>
           </div>

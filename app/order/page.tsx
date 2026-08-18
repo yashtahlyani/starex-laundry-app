@@ -31,8 +31,8 @@ const STAGES = ["placed", "picked_up", "confirmed", "ready_for_delivery", "deliv
 
 const STAGE_META: Record<string, { label: string; desc: string; icon: React.ElementType; color: string }> = {
   placed:              { label: "Order placed",       desc: "Your order is placed — we'll see you at pickup.", icon: Clock,       color: "#B30F14" },
-  picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry — it's being checked in now.", icon: Truck, color: "#C08A00" },
-  confirmed:           { label: "Confirmed",           desc: "We've checked in your items and everything's set — cleaning is underway.", icon: CheckCircle, color: "#B30F14" },
+  picked_up:           { label: "Picked up",           desc: "Our driver has collected your laundry. Not yet verified — we'll confirm once it's received.", icon: Truck, color: "#C08A00" },
+  confirmed:           { label: "Confirmed",           desc: "We've received and verified your order — cleaning is underway.", icon: CheckCircle, color: "#B30F14" },
   ready_for_delivery:  { label: "Ready for delivery",  desc: "Your order is ready! Please complete payment so we can schedule delivery.", icon: Truck,       color: "#B30F14" },
   delivered:           { label: "Delivered",           desc: "Your laundry has been delivered. Enjoy!",        icon: CheckCircle, color: "#B30F14" },
   cancelled:           { label: "Cancelled",           desc: "This order has been cancelled.",                 icon: Package,     color: "#DC2626" },

@@ -171,7 +171,7 @@ export default function AuthPage() {
       {/* Left brand panel — flat brand red, echoes the homepage hero split */}
       <div className="hidden lg:flex lg:w-5/12 bg-[#ED1D24] flex-col justify-between p-12 relative overflow-hidden">
         <a href="/" className="relative flex items-center">
-          <Logo color="#FFFFFF" fontSize="1.35rem" />
+          <Logo color="#FFFFFF" fontSize="2.75rem" />
         </a>
 
         <div className="relative space-y-8">
@@ -213,7 +213,7 @@ export default function AuthPage() {
           <div className="card rounded-3xl p-8 sm:p-10">
             <div className="mb-8">
               <a href="/" className="lg:hidden flex items-center mb-6">
-                <Logo color="#ED1D24" fontSize="1.2rem" />
+                <Logo color="#ED1D24" fontSize="2.25rem" />
               </a>
               <h1 className="text-2xl font-bold text-[#161616] font-heading">
                 {mode === "signin" && "Welcome back"}

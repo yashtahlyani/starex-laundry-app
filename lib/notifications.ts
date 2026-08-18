@@ -47,20 +47,24 @@ export type BookingNotificationPayload = {
 // in lib/services/order.service.ts, not an arbitrary label.
 //
 // Reordered per client request (2026-08-16): Confirmed now happens AFTER
-// Picked Up — it's the quality-check step, so its copy talks about items
-// being checked in, not pickup being scheduled. Ready for Delivery now
-// prompts payment instead of just saying the driver is on the way, since
-// delivery isn't dispatched until payment clears.
+// Picked Up. Picked Up fires the moment the courier collects the order —
+// it's explicitly NOT a verification, so its copy says so directly.
+// Confirmed only fires once staff have received, verified, weighed, and
+// priced the order (see the AppOrderDrawer payment panel, gated to appear
+// starting at Confirmed) — refined again 2026-08-18 per client to drop the
+// "checked in" phrasing and make clear Picked Up isn't yet verified. Ready
+// for Delivery prompts payment instead of just saying the driver is on the
+// way, since delivery isn't dispatched until payment clears.
 const STATUS_MESSAGES: Partial<Record<string, { subject: string; body: string; whatsapp: string }>> = {
   picked_up: {
     subject: "We've picked up your laundry!",
-    body: "Your laundry has been picked up and is on its way to us. We'll notify you once we've checked everything in.",
-    whatsapp: "We've picked up your laundry and are bringing it in for check-in. We'll message you shortly!",
+    body: "Your laundry has been picked up from your door. It hasn't been verified yet — we'll notify you again once we've received and confirmed it at our facility.",
+    whatsapp: "We've picked up your laundry from your door. It hasn't been verified yet — we'll message you again once we've received and confirmed it.",
   },
   confirmed: {
-    subject: "Your order has been checked in!",
-    body: "We've checked in your items and everything's set — cleaning is now underway.",
-    whatsapp: "We've checked in your items and cleaning is underway. We'll message you when it's ready!",
+    subject: "Your order has been verified!",
+    body: "We've received and verified your order — cleaning is now underway.",
+    whatsapp: "We've received and verified your order — cleaning is now underway. We'll message you when it's ready!",
   },
   ready_for_delivery: {
     subject: "Your order is ready — please complete payment",

@@ -188,7 +188,8 @@ export class OrderRepository {
     const updatePayload: Record<string, unknown> = {
       status, status_history: [...history, newEvent], updated_at: new Date().toISOString(), is_new: false,
     };
-    // Weight is recorded on pickup, when staff actually has the bag on the scale.
+    // Weight is recorded at Confirmed, once staff have verified and weighed
+    // the order at the facility — not at Picked Up, before that's happened.
     if (extra?.weight) updatePayload.weight = extra.weight;
     const { error } = await this.db.from("orders").update(updatePayload).eq("id", id);
     if (error) throw error;

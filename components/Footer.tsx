@@ -83,7 +83,7 @@ export default function Footer() {
             {/* Brand + newsletter */}
             <div>
               <a href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", marginBottom: 16 }}>
-                <Logo color="#161616" fontSize="1.25rem" />
+                <Logo color="#161616" fontSize="2.75rem" />
               </a>
               <p style={{ color: "#6B6B6B", fontSize: "0.875rem", lineHeight: 1.7, marginBottom: "28px", maxWidth: "220px", fontFamily: "Kodchasan, sans-serif" }}>
                 Canada&apos;s premium laundry service. Pickup, clean, deliver — repeat.

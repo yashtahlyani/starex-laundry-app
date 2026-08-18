@@ -162,7 +162,7 @@ export default async function AdminDashboardPage({
       <header style={{ background: "#161616", position: "sticky", top: 0, zIndex: 100 }}>
         <div className="admin-header-inner" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0 }}>
-            <Logo color="#FFFFFF" fontSize="1.15rem" />
+            <Logo color="#FFFFFF" fontSize="2.25rem" />
             <div className="admin-header-label" style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
             <p className="admin-header-label" style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#F4524D", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600, whiteSpace: "nowrap" }}>Owner console</p>
             <AdminLivePoll initialCount={newOrders.length} />

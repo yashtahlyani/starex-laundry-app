@@ -21,11 +21,13 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled:           "bg-red-50 text-red-700",
 };
 
-// These two transitions are when item-count reconciliation actually happens:
-// count what's received at pickup, count what's handed back at delivery.
-const NEEDS_ITEM_COUNT: Record<string, { itemLabel: string; askWeight: boolean }> = {
-  picked_up: { itemLabel: "Items received from customer", askWeight: true },
-  delivered: { itemLabel: "Items returned to customer", askWeight: false },
+// Item-count reconciliation happens at pickup and delivery; weighing happens
+// at Confirmed (once staff have actually verified the order at the facility,
+// not at the courier's doorstep pickup — per client, 2026-08-18).
+const NEEDS_EXTRA: Record<string, { itemLabel?: string; askWeight: boolean }> = {
+  picked_up:  { itemLabel: "Items received from customer", askWeight: false },
+  confirmed:  { askWeight: true },
+  delivered:  { itemLabel: "Items returned to customer", askWeight: false },
 };
 
 export default function StatusUpdater({ orderCode, currentStatus }: { orderCode: string; currentStatus: string }) {
@@ -63,7 +65,7 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
 
   function handleSelect(newStatus: string) {
     if (newStatus === status) return;
-    if (NEEDS_ITEM_COUNT[newStatus]) {
+    if (NEEDS_EXTRA[newStatus]) {
       setError(null);
       setPending({ status: newStatus, itemCount: "", weight: "" });
     } else {
@@ -73,9 +75,14 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
 
   function confirmPending() {
     if (!pending) return;
+    const meta = NEEDS_EXTRA[pending.status];
     const itemCount = pending.itemCount.trim() ? parseInt(pending.itemCount, 10) : undefined;
     if (pending.itemCount.trim() && (itemCount === undefined || isNaN(itemCount) || itemCount < 0)) {
       setError("Enter a valid item count");
+      return;
+    }
+    if (meta?.askWeight && !pending.weight.trim()) {
+      setError("Enter the verified weight");
       return;
     }
     commitUpdate(pending.status, {
@@ -85,22 +92,24 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
   }
 
   if (pending) {
-    const meta = NEEDS_ITEM_COUNT[pending.status];
+    const meta = NEEDS_EXTRA[pending.status];
     return (
       <div className="flex flex-col gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2.5" style={{ minWidth: 220 }}>
         <p className="text-xs font-semibold text-gray-700">{STATUSES.find(s => s.value === pending.status)?.label}</p>
-        <label className="text-xs text-gray-500">
-          {meta.itemLabel}
-          <input
-            type="number" min={0} inputMode="numeric" placeholder="e.g. 15"
-            className="mt-0.5 w-full text-xs border rounded px-2 py-1 bg-white"
-            value={pending.itemCount}
-            onChange={e => setPending({ ...pending, itemCount: e.target.value })}
-          />
-        </label>
+        {meta.itemLabel && (
+          <label className="text-xs text-gray-500">
+            {meta.itemLabel}
+            <input
+              type="number" min={0} inputMode="numeric" placeholder="e.g. 15"
+              className="mt-0.5 w-full text-xs border rounded px-2 py-1 bg-white"
+              value={pending.itemCount}
+              onChange={e => setPending({ ...pending, itemCount: e.target.value })}
+            />
+          </label>
+        )}
         {meta.askWeight && (
           <label className="text-xs text-gray-500">
-            Weight (optional)
+            Weight
             <input
               type="text" placeholder="e.g. 8.2 lbs"
               className="mt-0.5 w-full text-xs border rounded px-2 py-1 bg-white"

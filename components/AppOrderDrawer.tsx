@@ -86,6 +86,7 @@ export default function AppOrderDrawer({
   const [noteSent, setNoteSent] = useState(false);
   const [noteError, setNoteError] = useState<string | null>(null);
   const [pendingDiscrepancy, setPendingDiscrepancy] = useState("");
+  const [weightError, setWeightError] = useState<string | null>(null);
 
   // The drawer is a single component instance reused across every order
   // (AdminOrderTable/AdminIncomingSection just swap the `order` prop) — its
@@ -111,6 +112,7 @@ export default function AppOrderDrawer({
     setNoteSent(false);
     setNoteError(null);
     setPendingDiscrepancy("");
+    setWeightError(null);
   }, [order?.id]);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
@@ -119,11 +121,15 @@ export default function AppOrderDrawer({
   const nextStatusId = NEXT_STATUS[currentStatus] ?? null;
   const nextLabel = nextStatusId ? STATUS_META[nextStatusId]?.label : null;
   const needsCount = nextStatusId === "picked_up" || nextStatusId === "delivered";
+  // Weighing happens at Confirmed, not Picked Up — Picked Up is just the
+  // courier collecting the bag, before anything's been verified at the
+  // facility (per client, 2026-08-18).
+  const needsWeight = nextStatusId === "confirmed";
   const hasCardOnFile = !!order?.stripe_payment_method_id;
-  // Only once the order's actually been picked up — collecting payment or
-  // setting a total before that doesn't make sense, since the final
-  // weight/item count isn't known yet.
-  const showPaymentPanel = admin && !isPaid && ["picked_up", "ready_for_delivery"].includes(currentStatus);
+  // Only from Confirmed onward — that's when staff have actually verified,
+  // weighed, and can price the order. Setting a total before that (e.g. at
+  // Picked Up, before verification) doesn't make sense.
+  const showPaymentPanel = admin && !isPaid && ["confirmed", "ready_for_delivery"].includes(currentStatus);
 
   const tracking = order ? getItemTracking(order.status_history as any) : { received: null, returned: null, missing: null };
   const received = localTracking?.received ?? tracking.received;
@@ -218,9 +224,14 @@ export default function AppOrderDrawer({
       itemCount = parseInt(pendingCount, 10);
       if (isNaN(itemCount) || itemCount < 0) { setCountError("Enter a valid item count"); return; }
     }
+    if (needsWeight && !pendingWeight.trim()) {
+      setWeightError("Enter the verified weight");
+      return;
+    }
 
     setAdvancing(true);
     setCountError(null);
+    setWeightError(null);
     try {
       const res = await fetch(`/api/orders/${order.code}/status`, {
         method: "PATCH",
@@ -229,7 +240,7 @@ export default function AppOrderDrawer({
           status: nextStatusId,
           note: nextStatusId === "confirmed" ? (pendingDiscrepancy.trim() || null) : null,
           itemCount,
-          weight: nextStatusId === "picked_up" ? (pendingWeight.trim() || undefined) : undefined,
+          weight: nextStatusId === "confirmed" ? (pendingWeight.trim() || undefined) : undefined,
         }),
       });
       if (res.ok) {
@@ -412,19 +423,18 @@ export default function AppOrderDrawer({
                     onChange={e => setPendingCount(e.target.value)}
                     style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
                   />
-                  {nextStatusId === "picked_up" && (
-                    <input
-                      type="text" placeholder="Weight (optional, e.g. 8.2 lbs)"
-                      value={pendingWeight}
-                      onChange={e => setPendingWeight(e.target.value)}
-                      style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
-                    />
-                  )}
                   {countError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{countError}</p>}
                 </div>
               )}
               {admin && nextStatusId === "confirmed" && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 4 }}>
+                  <input
+                    type="text" placeholder="Weight (e.g. 8.2 lbs)"
+                    value={pendingWeight}
+                    onChange={e => { setPendingWeight(e.target.value); setWeightError(null); }}
+                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
+                  />
+                  {weightError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{weightError}</p>}
                   <textarea
                     rows={2}
                     placeholder="Any discrepancy to flag? (optional) — e.g. a stain that won't fully remove"
