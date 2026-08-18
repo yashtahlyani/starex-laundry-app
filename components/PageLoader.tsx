@@ -36,7 +36,7 @@ export default function PageLoader() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
           >
-            <Logo color="#161616" fontSize="2.75rem" />
+            <Logo color="#161616" fontSize="6.5rem" />
           </motion.div>
         </motion.div>
       )}
