@@ -84,8 +84,11 @@ function BookPageInner() {
 
   // Hide pickup windows that have already started when booking for today —
   // otherwise someone booking this evening could still pick this morning's slot.
-  const todayStr = new Date().toISOString().split("T")[0];
-  const currentHour = new Date().getHours() + new Date().getMinutes() / 60;
+  // Uses the browser's local date/time (not UTC) to match the <input type="date">
+  // value, which is itself always local.
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const currentHour = now.getHours() + now.getMinutes() / 60;
   const availableTimeSlots = form.date === todayStr
     ? timeSlots.filter(s => s.startHour > currentHour)
     : timeSlots;

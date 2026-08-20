@@ -12,6 +12,22 @@ export const dynamic = "force-dynamic";
 
 const stripBOM = (s: string) => s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
 
+// Vercel functions run in UTC, but pickup dates/windows are always meant in
+// Eastern time (the service area is Brampton & Mississauga) — comparing
+// against the server's raw UTC clock would reject or allow the wrong slots
+// by several hours depending on time of year.
+function nowInToronto(): { dateStr: string; hour: number } {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Toronto", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+  }).formatToParts(new Date());
+  const get = (t: string) => parts.find(p => p.type === t)!.value;
+  return {
+    dateStr: `${get("year")}-${get("month")}-${get("day")}`,
+    hour: Number(get("hour")) + Number(get("minute")) / 60,
+  };
+}
+
 type BookingRequest = {
   service: string;
   name: string;
@@ -75,12 +91,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Pickup date can't be in the past" }, { status: 400 });
   }
   // Same-day bookings can't select a pickup window that's already started —
-  // mirrors the slot filtering in app/book/page.tsx.
-  const isToday = new Date().toISOString().split("T")[0] === date;
-  if (isToday) {
+  // mirrors the slot filtering in app/book/page.tsx (Eastern time, matching
+  // the service area, not the server's UTC clock).
+  const nowET = nowInToronto();
+  if (nowET.dateStr === date) {
     const slotStartHour = { "8:00 AM": 8, "11:00 AM": 11, "2:00 PM": 14, "5:00 PM": 17 }[timeSlot.split(" – ")[0]];
-    const currentHour = new Date().getHours() + new Date().getMinutes() / 60;
-    if (slotStartHour != null && slotStartHour <= currentHour) {
+    if (slotStartHour != null && slotStartHour <= nowET.hour) {
       return NextResponse.json({ error: "That pickup window has already started today — please choose a later window or another date" }, { status: 400 });
     }
   }
