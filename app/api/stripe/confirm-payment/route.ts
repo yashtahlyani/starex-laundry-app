@@ -3,7 +3,6 @@ import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
-import { enqueueStatusUpdate } from "@/lib/queue/notification.queue";
 
 export const dynamic = "force-dynamic";
 
@@ -55,20 +54,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Payment not completed (${intent.status})` }, { status: 400 });
     }
 
-    const result = await new OrderRepository(db).markPaid(order.id, "Paid online by customer", intent.amount / 100);
+    await new OrderRepository(db).markPaid(order.id, "Paid online by customer", intent.amount / 100);
 
-    if (result.status === "delivered") {
-      await enqueueStatusUpdate({
-        orderId: order.id,
-        orderCode: order.code,
-        customerName: order.customer_name,
-        customerEmail: order.email,
-        customerPhone: order.phone,
-        newStatus: "delivered",
-      }).catch(() => {});
-    }
-
-    return NextResponse.json({ success: true, status: result.status });
+    return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? "Could not confirm payment" }, { status: 500 });
   }

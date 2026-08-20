@@ -61,9 +61,73 @@ function PayForm({ orderCode, amountCad, onPaid }: { orderCode: string; amountCa
   );
 }
 
+function QuickPayButton({
+  stripePromise, clientSecret, amountCad, savedCard, onUseDifferentCard, onPaid, orderCode,
+}: {
+  stripePromise: Promise<Stripe | null>; clientSecret: string; amountCad: number;
+  savedCard: { brand: string | null; last4: string | null }; onUseDifferentCard: () => void;
+  onPaid: (status: string) => void; orderCode: string;
+}) {
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // The card is already attached to this PaymentIntent server-side, so
+  // confirming just needs the raw Stripe instance — no Elements/PaymentElement
+  // form required, which is what lets this be a true one-click "Pay" instead
+  // of making the customer re-type the card they already saved at booking.
+  async function handlePay() {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error("Payments aren't available right now");
+      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret);
+      if (confirmError) throw new Error(confirmError.message ?? "Payment failed");
+      if (!paymentIntent || paymentIntent.status !== "succeeded") {
+        throw new Error("Payment could not be confirmed — please try again");
+      }
+      const res = await fetch("/api/stripe/confirm-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderCode, paymentIntentId: paymentIntent.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Payment succeeded but couldn't be recorded — contact us");
+      onPaid(data.status);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div>
+      <button
+        onClick={handlePay}
+        disabled={submitting}
+        className="btn-primary"
+        style={{ width: "100%", justifyContent: "center", opacity: submitting ? 0.6 : 1, cursor: submitting ? "not-allowed" : "pointer" }}
+      >
+        {submitting ? "Processing…" : <><Lock size={14} /> Pay ${amountCad.toFixed(2)} CAD — {savedCard.brand?.toUpperCase() ?? "card"} ending in {savedCard.last4 ?? "····"}</>}
+      </button>
+      {error && <p style={{ color: "#EF4444", fontSize: "0.8rem", marginTop: 12, fontFamily: "Kodchasan, sans-serif" }}>{error}</p>}
+      <button
+        onClick={onUseDifferentCard}
+        disabled={submitting}
+        style={{ background: "none", border: "none", padding: 0, marginTop: 10, color: "#6B6B6B", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "underline", cursor: "pointer" }}
+      >
+        Use a different card
+      </button>
+    </div>
+  );
+}
+
 export default function PayNowCard({ orderCode, amountCad, onPaid }: { orderCode: string; amountCad: number; onPaid?: (status: string) => void }) {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [savedCard, setSavedCard] = useState<{ brand: string | null; last4: string | null } | null>(null);
+  const [useNewCard, setUseNewCard] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "unavailable" | "error">("loading");
   const [paid, setPaid] = useState<"delivered" | "paid" | null>(null);
 
@@ -81,6 +145,7 @@ export default function PayNowCard({ orderCode, amountCad, onPaid }: { orderCode
         const data = await res.json();
         if (!res.ok) { setStatus("error"); return; }
         setClientSecret(data.clientSecret);
+        setSavedCard(data.savedCard ?? null);
         setStatus("ready");
       })
       .catch(() => setStatus("unavailable"));
@@ -119,7 +184,18 @@ export default function PayNowCard({ orderCode, amountCad, onPaid }: { orderCode
           Couldn&apos;t start the payment. Please refresh, or contact us to pay another way.
         </p>
       )}
-      {status === "ready" && clientSecret && stripePromise && (
+      {status === "ready" && clientSecret && stripePromise && savedCard && !useNewCard && (
+        <QuickPayButton
+          stripePromise={stripePromise}
+          clientSecret={clientSecret}
+          amountCad={amountCad}
+          savedCard={savedCard}
+          orderCode={orderCode}
+          onUseDifferentCard={() => setUseNewCard(true)}
+          onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }}
+        />
+      )}
+      {status === "ready" && clientSecret && stripePromise && (!savedCard || useNewCard) && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <PayForm orderCode={orderCode} amountCad={amountCad} onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }} />
         </Elements>

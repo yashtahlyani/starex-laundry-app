@@ -74,6 +74,16 @@ export async function POST(req: NextRequest) {
   if (new Date(`${date}T00:00:00`) < today) {
     return NextResponse.json({ error: "Pickup date can't be in the past" }, { status: 400 });
   }
+  // Same-day bookings can't select a pickup window that's already started —
+  // mirrors the slot filtering in app/book/page.tsx.
+  const isToday = new Date().toISOString().split("T")[0] === date;
+  if (isToday) {
+    const slotStartHour = { "8:00 AM": 8, "11:00 AM": 11, "2:00 PM": 14, "5:00 PM": 17 }[timeSlot.split(" – ")[0]];
+    const currentHour = new Date().getHours() + new Date().getMinutes() / 60;
+    if (slotStartHour != null && slotStartHour <= currentHour) {
+      return NextResponse.json({ error: "That pickup window has already started today — please choose a later window or another date" }, { status: 400 });
+    }
+  }
 
   try {
     const bookingService = new BookingService(getSupabaseAdmin());

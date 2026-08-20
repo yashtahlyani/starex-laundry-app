@@ -3,15 +3,13 @@ import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
-import { enqueueStatusUpdate } from "@/lib/queue/notification.queue";
 
 export const dynamic = "force-dynamic";
 
 // Admin-only: charges the card saved at booking time for the final,
-// staff-confirmed amount. Uses OrderRepository.markPaid, which also
-// auto-advances the order straight to Delivered if it's already Ready for
-// Delivery — the owner doesn't need a separate "mark delivered" click once
-// the charge succeeds.
+// staff-confirmed amount. Uses OrderRepository.markPaid, which only records
+// payment — delivery is a separate action staff take explicitly once the
+// order is actually handed over.
 export async function POST(req: NextRequest) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -54,21 +52,10 @@ export async function POST(req: NextRequest) {
     });
 
     const orders = new OrderRepository(db);
-    const result = await orders.markPaid(order.id, `Charged $${amountCad.toFixed(2)} CAD (card ending in the customer's card on file)`, amountCad);
+    await orders.markPaid(order.id, `Charged $${amountCad.toFixed(2)} CAD (card ending in the customer's card on file)`, amountCad);
     await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
 
-    if (result.status === "delivered") {
-      await enqueueStatusUpdate({
-        orderId: order.id,
-        orderCode: order.code,
-        customerName: order.customer_name,
-        customerEmail: order.email,
-        customerPhone: order.phone,
-        newStatus: "delivered",
-      }).catch(() => {});
-    }
-
-    return NextResponse.json({ success: true, paymentIntentId: intent.id, status: result.status });
+    return NextResponse.json({ success: true, paymentIntentId: intent.id, status: "paid" });
   } catch (err: any) {
     // Card declines etc. land here — surface Stripe's message so the admin
     // knows to fall back to a manual payment method instead of retrying blind.

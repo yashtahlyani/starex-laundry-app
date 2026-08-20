@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const db = getSupabaseAdmin();
   const { data: order } = await db
     .from("orders")
-    .select("id, price, payment_status, email, stripe_customer_id, status")
+    .select("id, price, payment_status, email, stripe_customer_id, stripe_payment_method_id, card_brand, card_last4, status")
     .eq("code", orderCode)
     .maybeSingle();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -37,19 +37,27 @@ export async function POST(req: NextRequest) {
   if (order.price == null || order.price <= 0) return NextResponse.json({ error: "This order doesn't have a confirmed total yet" }, { status: 400 });
 
   try {
-    // Reuse the Stripe Customer from booking if one exists (keeps everything
-    // under one Stripe customer record); otherwise Stripe creates an
-    // anonymous one for this PaymentIntent.
+    // If a card was already saved at booking time, attach it here so the
+    // customer can pay with one click instead of re-typing their card —
+    // stripe.confirmCardPayment() on the client just confirms whatever
+    // payment_method is already on the intent. They can still choose "use a
+    // different card" client-side, which falls back to a fresh PaymentElement.
+    const hasSavedCard = Boolean(order.stripe_customer_id && order.stripe_payment_method_id);
     const intent = await stripe!.paymentIntents.create({
       amount: Math.round(order.price * 100),
       currency: "cad",
       ...(order.stripe_customer_id ? { customer: order.stripe_customer_id } : {}),
+      ...(hasSavedCard ? { payment_method: order.stripe_payment_method_id! } : {}),
       receipt_email: order.email || undefined,
       metadata: { order_id: order.id, order_code: orderCode },
       automatic_payment_methods: { enabled: true },
     });
 
-    return NextResponse.json({ clientSecret: intent.client_secret, amountCad: order.price });
+    return NextResponse.json({
+      clientSecret: intent.client_secret,
+      amountCad: order.price,
+      savedCard: hasSavedCard ? { brand: order.card_brand, last4: order.card_last4 } : null,
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err.message ?? "Could not start payment" }, { status: 500 });
   }

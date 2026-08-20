@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
+import { MINIMUM_ORDER } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -23,8 +24,13 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
   }
 
   const db = getSupabaseAdmin();
-  const { data: order } = await db.from("orders").select("id").eq("code", params.code.trim().toUpperCase()).maybeSingle();
+  const { data: order } = await db.from("orders").select("id, service").eq("code", params.code.trim().toUpperCase()).maybeSingle();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
+
+  const minimum = order.service === "detailing" ? MINIMUM_ORDER.detailingCad : MINIMUM_ORDER.standardCad;
+  if (amountCad < minimum) {
+    return NextResponse.json({ error: `Order total can't be below the $${minimum} minimum order value` }, { status: 400 });
+  }
 
   try {
     await new OrderRepository(db).setPrice(order.id, amountCad);

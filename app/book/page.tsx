@@ -30,9 +30,14 @@ const CATALOG_FOR_SERVICE: Record<string, string[]> = {
 };
 
 // 3-hour pickup windows (per client request, matching the Laundry Lady site).
+// startHour is used to hide windows that have already begun when the
+// customer is booking for today — otherwise someone booking at 6 PM could
+// still pick the 8–11 AM slot from earlier that same day.
 const timeSlots = [
-  "8:00 AM – 11:00 AM", "11:00 AM – 2:00 PM",
-  "2:00 PM – 5:00 PM",  "5:00 PM – 8:00 PM",
+  { label: "8:00 AM – 11:00 AM", startHour: 8 },
+  { label: "11:00 AM – 2:00 PM", startHour: 11 },
+  { label: "2:00 PM – 5:00 PM",  startHour: 14 },
+  { label: "5:00 PM – 8:00 PM",  startHour: 17 },
 ];
 
 const stepLabels = ["Service", "Schedule", "Details", "Confirm"];
@@ -76,6 +81,21 @@ function BookPageInner() {
   // correctly disappears rather than sticking around inaccurately.
   const isCombo = comboParam && form.service === "dry-clean";
   const [submitting, setSubmitting] = useState(false);
+
+  // Hide pickup windows that have already started when booking for today —
+  // otherwise someone booking this evening could still pick this morning's slot.
+  const todayStr = new Date().toISOString().split("T")[0];
+  const currentHour = new Date().getHours() + new Date().getMinutes() / 60;
+  const availableTimeSlots = form.date === todayStr
+    ? timeSlots.filter(s => s.startHour > currentHour)
+    : timeSlots;
+
+  useEffect(() => {
+    if (form.time && !availableTimeSlots.some(s => s.label === form.time)) {
+      setForm(p => ({ ...p, time: "" }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.date]);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -304,17 +324,23 @@ function BookPageInner() {
 
                 <div style={{ marginBottom: 28 }}>
                   <label style={labelStyle}><Clock size={13} style={{ display: "inline", marginRight: 6 }} />Time Window</label>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
-                    {timeSlots.map(t => (
-                      <button key={t} onClick={() => setForm(p => ({ ...p, time: t }))} style={{
-                        padding: "10px 12px", border: `1.5px solid ${form.time === t ? "#ED1D24" : "#E4E4E7"}`,
-                        borderRadius: 10, background: form.time === t ? "#F2F2F2" : "#ffffff",
-                        color: form.time === t ? "#B30F14" : "#6B6B6B",
-                        fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === t ? 700 : 500, fontSize: "0.8125rem",
-                        cursor: "pointer", transition: "all 0.15s",
-                      }}>{t}</button>
-                    ))}
-                  </div>
+                  {availableTimeSlots.length === 0 ? (
+                    <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>
+                      No pickup windows left for today — please choose another date.
+                    </p>
+                  ) : (
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
+                      {availableTimeSlots.map(s => (
+                        <button key={s.label} onClick={() => setForm(p => ({ ...p, time: s.label }))} style={{
+                          padding: "10px 12px", border: `1.5px solid ${form.time === s.label ? "#ED1D24" : "#E4E4E7"}`,
+                          borderRadius: 10, background: form.time === s.label ? "#F2F2F2" : "#ffffff",
+                          color: form.time === s.label ? "#B30F14" : "#6B6B6B",
+                          fontFamily: "Kodchasan, sans-serif", fontWeight: form.time === s.label ? 700 : 500, fontSize: "0.8125rem",
+                          cursor: "pointer", transition: "all 0.15s",
+                        }}>{s.label}</button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
