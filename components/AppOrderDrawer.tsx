@@ -152,9 +152,6 @@ export default function AppOrderDrawer({
       const data = await res.json();
       if (!res.ok) { setPaymentError(data.error ?? "Payment failed"); return; }
 
-      // Both endpoints auto-advance to Delivered when the order was already
-      // Ready for Delivery — reflect that here so the owner doesn't need a
-      // separate "Mark as Delivered" click.
       setLocalPaymentStatus("paid");
       if (data.status) setLocalStatus(data.status);
       setPendingPrice("");

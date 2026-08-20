@@ -6,9 +6,9 @@ import { CustomerRepository } from "@/lib/repositories/customer.repository";
 // Pending" were dropped as separate manual stages the owner had to click
 // through — neither is a distinct physical checkpoint worth a click. Payment
 // is now tracked independently via orders.payment_status (see
-// OrderRepository.markPaid), not as a status in this pipeline, and an order
-// auto-advances to "delivered" the moment payment clears on an order that's
-// already Ready for Delivery.
+// OrderRepository.markPaid) and never changes this pipeline status —
+// delivery is always a separate, explicit step staff take once the order is
+// actually handed over (per client feedback, 2026-08-20).
 //
 // Reordered per client request (2026-08-16): "Confirmed" now happens AFTER
 // pickup, not before — it represents staff checking in the items and
