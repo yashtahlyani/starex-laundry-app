@@ -302,10 +302,14 @@ async function sendStatusWhatsApp(
 
 async function dispatchWhatsApp(orderId: string, phone: string, body: string, eventType: string) {
   const sid = process.env.TWILIO_ACCOUNT_SID;
-  const token = process.env.TWILIO_AUTH_TOKEN;
   const from = process.env.TWILIO_WHATSAPP_NUMBER;
+  // Auth can be Account SID + Auth Token (classic), or Account SID + a
+  // scoped API Key SID/Secret — Twilio accepts either as HTTP Basic Auth
+  // against the same endpoint. Prefer the API Key if both are set.
+  const authUser = process.env.TWILIO_API_KEY_SID || sid;
+  const authPass = process.env.TWILIO_API_KEY_SECRET || process.env.TWILIO_AUTH_TOKEN;
 
-  if (!sid || !token || !from) {
+  if (!sid || !authUser || !authPass || !from) {
     // WhatsApp not configured yet — skip silently
     await logNotification(orderId, "whatsapp", eventType, "skipped");
     return;
@@ -320,7 +324,7 @@ async function dispatchWhatsApp(orderId: string, phone: string, body: string, ev
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${Buffer.from(`${sid}:${token}`).toString("base64")}`,
+          Authorization: `Basic ${Buffer.from(`${authUser}:${authPass}`).toString("base64")}`,
         },
         body: new URLSearchParams({ From: from, To: to, Body: body }).toString(),
       }
