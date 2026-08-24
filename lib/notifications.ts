@@ -269,6 +269,16 @@ async function sendStatusEmail(
 
 // ─── WhatsApp helpers (Twilio REST API — no SDK needed) ──────────────────────
 
+// Customers type their phone as a plain 10-digit number ("4165551234", not
+// "+14165551234") — the service area is entirely Ontario, Canada. Just
+// stripping non-digits and prepending "+" drops the required NANP "1"
+// country code, producing an invalid number that Twilio can't deliver to.
+function toE164(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length === 10) return `+1${digits}`;
+  return `+${digits}`;
+}
+
 async function sendBookingWhatsApp(p: BookingNotificationPayload) {
   const body =
     `Hi ${p.customerName}! Your ${BUSINESS_NAME} booking is confirmed.\n\n` +
@@ -315,7 +325,7 @@ async function dispatchWhatsApp(orderId: string, phone: string, body: string, ev
     return;
   }
 
-  const to = phone.startsWith("whatsapp:") ? phone : `whatsapp:+${phone.replace(/\D/g, "")}`;
+  const to = phone.startsWith("whatsapp:") ? phone : `whatsapp:${toE164(phone)}`;
 
   try {
     const res = await fetch(
