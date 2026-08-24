@@ -157,9 +157,22 @@ function OrderTracker() {
                   </div>
                 )}
               </div>
+            </div>
 
-              {/* Progress timeline */}
-              {order.status !== "cancelled" && (
+            {/* Pay Now sits right after the status summary, before the stage
+                timeline — a customer with money due shouldn't have to scroll
+                past the whole 5-stage progress list to find the pay button. */}
+            {order.status !== "cancelled" && (order.payment_status !== "paid" || justPaid) && order.price != null && order.price > 0 && (
+              <PayNowCard
+                orderCode={order.code}
+                amountCad={order.price}
+                onPaid={() => { setJustPaid(true); refreshOrderSilently(order.code); }}
+              />
+            )}
+
+            {/* Progress timeline */}
+            {order.status !== "cancelled" && (
+              <div className="card rounded-3xl p-6">
                 <div className="space-y-1">
                   {STAGES.map((stage, i) => {
                     const done   = i <= currentStageIndex;
@@ -190,15 +203,7 @@ function OrderTracker() {
                     );
                   })}
                 </div>
-              )}
-            </div>
-
-            {order.status !== "cancelled" && (order.payment_status !== "paid" || justPaid) && order.price != null && order.price > 0 && (
-              <PayNowCard
-                orderCode={order.code}
-                amountCad={order.price}
-                onPaid={() => { setJustPaid(true); refreshOrderSilently(order.code); }}
-              />
+              </div>
             )}
 
             {/* Event history from status_history jsonb */}

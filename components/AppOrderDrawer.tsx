@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle } from "lucide-react";
+import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle, CheckCircle } from "lucide-react";
 import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
@@ -363,6 +363,14 @@ export default function AppOrderDrawer({
 
             {/* Footer */}
             <div style={{ padding: "20px 28px", borderTop: "1px solid #F4F4F5", display: "flex", flexDirection: "column", gap: 10 }}>
+              {admin && isPaid && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F0FDF4", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, marginBottom: 4 }}>
+                  <CheckCircle size={15} color="#16A34A" style={{ flexShrink: 0 }} />
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#166534", fontWeight: 600 }}>
+                    Payment received{order?.price != null ? ` — $${order.price.toFixed(2)} CAD` : ""}
+                  </p>
+                </div>
+              )}
               {showPaymentPanel && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4, padding: "14px", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 12 }}>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#92400E" }}>Collect payment</p>

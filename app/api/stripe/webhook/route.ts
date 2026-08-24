@@ -39,9 +39,9 @@ export async function POST(req: NextRequest) {
   }
 
   const PAYMENT_NOTES: Partial<Record<Stripe.Event["type"], (obj: any) => string | null>> = {
-    "payment_intent.succeeded":      () => "Payment pre-authorized",
+    "payment_intent.succeeded":      () => "Payment confirmed by Stripe",
     "payment_intent.payment_failed": (intent: Stripe.PaymentIntent) => `Payment failed: ${intent.last_payment_error?.message ?? "unknown reason"}`,
-    "payment_intent.canceled":       () => "Payment authorization canceled",
+    "payment_intent.canceled":       () => "Payment attempt canceled",
     "charge.refunded":               (charge: Stripe.Charge) => `Refunded ${(charge.amount_refunded / 100).toFixed(2)} ${charge.currency.toUpperCase()}`,
   };
 
