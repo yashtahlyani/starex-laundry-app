@@ -105,7 +105,7 @@ export async function sendStatusNotification(
 
   await Promise.allSettled([
     sendStatusEmail(orderId, orderCode, customerName, customerEmail, newStatus, msg, note),
-    sendStatusWhatsApp(orderId, orderCode, customerName, customerPhone, newStatus, msg, note),
+    sendStatusWhatsApp(orderId, orderCode, customerName, customerPhone, newStatus),
   ]);
 }
 
@@ -125,12 +125,11 @@ export async function sendCustomerNote(
 ) {
   await Promise.allSettled([
     sendCustomerNoteEmail(orderId, orderCode, customerName, customerEmail, message),
-    dispatchWhatsApp(
-      orderId,
-      customerPhone,
-      `Hi ${customerName}, a note about your order *${orderCode}*:\n\n${message}\n\nTrack: ${SITE_URL}/order\n\nQuestions? Just reply to this message.`,
-      "custom_note"
-    ),
+    dispatchWhatsApp(orderId, customerPhone, "custom_note", {
+      "1": customerName,
+      "2": orderCode,
+      "3": message,
+    }),
   ]);
 }
 
@@ -279,17 +278,28 @@ function toE164(phone: string): string {
   return `+${digits}`;
 }
 
-async function sendBookingWhatsApp(p: BookingNotificationPayload) {
-  const body =
-    `Hi ${p.customerName}! Your ${BUSINESS_NAME} booking is confirmed.\n\n` +
-    `Order ID: *${p.orderCode}*\n` +
-    `Service: ${formatService(p.serviceType)}\n` +
-    `Pickup window: ${formatDate(p.pickupDate)} · ${p.pickupTimeSlot}\n` +
-    `Address: ${p.pickupAddress}\n\n` +
-    `Track your order: ${SITE_URL}/order\n\n` +
-    `Questions? Just reply to this message.`;
+// WhatsApp Business requires every business-initiated message (the customer
+// never messages us first) to use a pre-approved Content Template — a
+// freeform Body is rejected outright (Twilio error 63016). Each status maps
+// to a Content SID from an approved template (see supabase/whatsapp-templates
+// for the exact wording submitted); set once Meta approves each one.
+const WHATSAPP_TEMPLATES: Record<string, string | undefined> = {
+  booking_confirmed:  process.env.TWILIO_TEMPLATE_BOOKING_CONFIRMED,
+  picked_up:          process.env.TWILIO_TEMPLATE_PICKED_UP,
+  confirmed:          process.env.TWILIO_TEMPLATE_CONFIRMED,
+  ready_for_delivery: process.env.TWILIO_TEMPLATE_READY_FOR_DELIVERY,
+  delivered:          process.env.TWILIO_TEMPLATE_DELIVERED,
+  custom_note:        process.env.TWILIO_TEMPLATE_CUSTOM_NOTE,
+};
 
-  await dispatchWhatsApp(p.orderId, p.customerPhone, body, "booking_confirmed");
+async function sendBookingWhatsApp(p: BookingNotificationPayload) {
+  await dispatchWhatsApp(p.orderId, p.customerPhone, "booking_confirmed", {
+    "1": p.customerName,
+    "2": p.orderCode,
+    "3": formatService(p.serviceType),
+    "4": `${formatDate(p.pickupDate)} · ${p.pickupTimeSlot}`,
+    "5": p.pickupAddress,
+  });
 }
 
 async function sendStatusWhatsApp(
@@ -297,30 +307,29 @@ async function sendStatusWhatsApp(
   orderCode: string,
   customerName: string,
   customerPhone: string,
-  status: string,
-  msg: { whatsapp: string },
-  note?: string | null
+  status: string
 ) {
-  const noteLine = note?.trim() ? `\n\nA note about your order:\n${note.trim()}` : "";
-  const body =
-    `Hi ${customerName}! ${msg.whatsapp}${noteLine}\n\n` +
-    `Order: *${orderCode}*\n` +
-    `Track: ${SITE_URL}/order`;
-
-  await dispatchWhatsApp(orderId, customerPhone, body, status);
+  // The optional discrepancy note (e.g. a stain that won't remove) doesn't
+  // fit a fixed-slot approved template — it still goes out over email, which
+  // has no such restriction.
+  await dispatchWhatsApp(orderId, customerPhone, status, {
+    "1": customerName,
+    "2": orderCode,
+  });
 }
 
-async function dispatchWhatsApp(orderId: string, phone: string, body: string, eventType: string) {
+async function dispatchWhatsApp(orderId: string, phone: string, eventType: string, variables: Record<string, string>) {
   const sid = process.env.TWILIO_ACCOUNT_SID;
   const from = process.env.TWILIO_WHATSAPP_NUMBER;
+  const contentSid = WHATSAPP_TEMPLATES[eventType];
   // Auth can be Account SID + Auth Token (classic), or Account SID + a
   // scoped API Key SID/Secret — Twilio accepts either as HTTP Basic Auth
   // against the same endpoint. Prefer the API Key if both are set.
   const authUser = process.env.TWILIO_API_KEY_SID || sid;
   const authPass = process.env.TWILIO_API_KEY_SECRET || process.env.TWILIO_AUTH_TOKEN;
 
-  if (!sid || !authUser || !authPass || !from) {
-    // WhatsApp not configured yet — skip silently
+  if (!sid || !authUser || !authPass || !from || !contentSid) {
+    // WhatsApp not configured yet, or this event's template isn't approved yet — skip silently
     await logNotification(orderId, "whatsapp", eventType, "skipped");
     return;
   }
@@ -336,7 +345,7 @@ async function dispatchWhatsApp(orderId: string, phone: string, body: string, ev
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${Buffer.from(`${authUser}:${authPass}`).toString("base64")}`,
         },
-        body: new URLSearchParams({ From: from, To: to, Body: body }).toString(),
+        body: new URLSearchParams({ From: from, To: to, ContentSid: contentSid, ContentVariables: JSON.stringify(variables) }).toString(),
       }
     );
     const data = await res.json();
