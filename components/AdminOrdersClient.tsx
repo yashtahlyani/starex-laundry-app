@@ -20,11 +20,8 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
   if (orders.length === 0) return null;
 
   async function accept(o: AdminOrder) {
-    await fetch(`/api/orders/${encodeURIComponent(o.code)}/status`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "confirmed" }),
-    });
+    const res = await fetch(`/api/orders/${encodeURIComponent(o.code)}/acknowledge`, { method: "POST" });
+    if (!res.ok) return; // leave it in the list so staff can retry rather than losing it silently
     setAcknowledged(prev => new Set([...prev, o.id]));
     router.refresh();
   }

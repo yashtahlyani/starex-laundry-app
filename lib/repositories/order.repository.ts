@@ -242,8 +242,15 @@ export class OrderRepository {
     if (error) throw error;
   }
 
+  // Staff acknowledging a brand-new order off the urgent "needs your
+  // confirmation" list — distinct from the pipeline status, which only
+  // advances once the order is actually picked up. Must not touch `status`:
+  // "confirmed" isn't a valid transition from "placed" (Confirmed now comes
+  // after Picked Up in the pipeline, not right after Placed), so forcing it
+  // here used to fail the update entirely and leave the order stuck showing
+  // as new every time the page reloaded.
   async acknowledgeOrder(id: string): Promise<void> {
-    const { error } = await this.db.from("orders").update({ is_new: false, status: "confirmed", updated_at: new Date().toISOString() }).eq("id", id);
+    const { error } = await this.db.from("orders").update({ is_new: false, updated_at: new Date().toISOString() }).eq("id", id);
     if (error) throw error;
   }
 }

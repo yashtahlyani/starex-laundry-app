@@ -114,7 +114,7 @@ export default async function AdminDashboardPage({
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
   ]);
 
-  const newOrders    = (activeOrders ?? []).filter((o: any) => o.status === "placed");
+  const newOrders    = (activeOrders ?? []).filter((o: any) => o.is_new);
   // Family-scoped for the Incoming section only — the header bell/KPI counts
   // deliberately stay global (they're notifications, not tied to whichever
   // queue happens to be selected).

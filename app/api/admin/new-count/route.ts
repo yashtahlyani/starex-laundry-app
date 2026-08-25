@@ -15,7 +15,7 @@ export async function GET() {
   const { count } = await getSupabaseAdmin()
     .from("orders")
     .select("*", { count: "exact", head: true })
-    .eq("status", "placed");
+    .eq("is_new", true);
 
   return NextResponse.json({ count: count ?? 0 });
 }
