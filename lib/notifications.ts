@@ -250,6 +250,27 @@ export async function notifyOwnerOfNewContact(p: { name: string; email: string; 
   }
 }
 
+export async function notifyOwnerOfLowRating(orderCode: string, rating: number) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!adminEmail || !resend) return;
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: adminEmail,
+      subject: `${rating}★ rating on order ${orderCode} — worth a follow-up`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
+          <h2 style="color:#ED1D24;margin:0 0 16px">Low Rating Received</h2>
+          <p style="font-size:14px;color:#4A4A4A;">Order <strong style="font-family:monospace">${escapeHtml(orderCode)}</strong> was rated <strong>${rating} out of 5</strong> by the customer. Might be worth reaching out.</p>
+          <a href="${SITE_URL}/admin?tab=orders&q=${encodeURIComponent(orderCode)}" style="display:inline-block;margin-top:12px;color:#ED1D24;">Open Admin Console →</a>
+        </div>
+      `,
+    });
+  } catch {
+    // Best-effort — never block the rating submission on a notification failure.
+  }
+}
+
 // ─── Email helpers ────────────────────────────────────────────────────────────
 
 async function sendBookingEmail(p: BookingNotificationPayload) {

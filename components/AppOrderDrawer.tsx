@@ -284,9 +284,14 @@ export default function AppOrderDrawer({
                   {order.service_title ?? SERVICE_LABELS[order.service] ?? order.service}
                   <span style={{ color: orderCodeColor(order.code).text, fontWeight: 600 }}> · {order.code}</span>
                 </p>
-                <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
                   <StatusBadge status={currentStatus} pulse={!["delivered","cancelled"].includes(currentStatus)} size="sm" />
                   {admin && <PaymentBadge status={paymentStatus} size="sm" />}
+                  {order.rating != null && (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", fontWeight: 600, color: order.rating <= 2 ? "#DC2626" : "#B45309" }}>
+                      {order.rating}★
+                    </span>
+                  )}
                 </div>
               </div>
               <button onClick={onClose} style={{ background: "#F4F4F5", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>

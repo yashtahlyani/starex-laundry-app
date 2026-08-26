@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import IssueReportForm from "@/components/IssueReportForm";
 import PayNowCard from "@/components/PayNowCard";
+import RatingCard from "@/components/RatingCard";
 import { orderCodeColor } from "@/lib/orderCode";
 
 type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
@@ -22,6 +23,7 @@ type Order = {
   status_history: StatusEvent[];
   payment_status?: "unpaid" | "paid" | null;
   price?: number | null;
+  rating?: number | null;
 };
 
 // Reordered per client request (2026-08-16): Confirmed now happens after
@@ -204,6 +206,14 @@ function OrderTracker() {
                   })}
                 </div>
               </div>
+            )}
+
+            {order.status === "delivered" && (
+              <RatingCard
+                orderCode={order.code}
+                currentRating={order.rating ?? null}
+                onRated={(rating) => setOrder(prev => prev ? { ...prev, rating } : prev)}
+              />
             )}
 
             {/* Event history from status_history jsonb */}
