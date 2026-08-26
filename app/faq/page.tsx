@@ -22,6 +22,7 @@ const categories = [
     faqs: [
       { q: "How much does StareX cost?", a: "Wash & Fold is $2/lb. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. All prices shown +HST. No hidden fees — ever." },
       { q: "Is there a minimum order?", a: "Yes — $40 minimum order value for Wash & Fold, Same-Day Express, Dry Cleaning, Ironing, and Household Items. Car & Sofa Detailing has a $199 minimum." },
+      { q: "I don't have a scale — how do I estimate my laundry's weight?", a: "No scale, no problem. Weigh yourself on a bathroom scale, then weigh yourself again while holding your laundry bag. Subtract your own weight from that second number — the difference is roughly how much your laundry weighs. Don't worry about getting it exact either way — we always confirm the final weight (and price) once your order is picked up." },
       { q: "Do you offer subscription plans?", a: "Yes! The StareX Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
       { q: "Are there any hidden fees?", a: "Never. Your price is confirmed before we touch your laundry. What you see is what you pay." },
       { q: "How does car & sofa detailing pricing work?", a: "Car detailing/shampoo starts from $199 per vehicle and sofa deep cleaning is $49 per seat. Final pricing is confirmed upon inspection." },
