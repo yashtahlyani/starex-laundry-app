@@ -76,6 +76,11 @@ const STATUS_MESSAGES: Partial<Record<string, { subject: string; body: string; w
     body: "Your order has been delivered. Thank you for choosing Starex — we hope to see you again soon!",
     whatsapp: "Your laundry has been delivered! Thanks for choosing Starex. See you next time!",
   },
+  cancelled: {
+    subject: "Your order has been cancelled",
+    body: "Your order has been cancelled. If this wasn't expected or you have any questions, just reply to this email and we'll sort it out.",
+    whatsapp: "Your order has been cancelled. If this wasn't expected or you have any questions, just reply to this message and we'll sort it out.",
+  },
 };
 
 // Called right after a booking is created
@@ -106,6 +111,34 @@ export async function sendStatusNotification(
   await Promise.allSettled([
     sendStatusEmail(orderId, orderCode, customerName, customerEmail, newStatus, msg, note),
     sendStatusWhatsApp(orderId, orderCode, customerName, customerPhone, newStatus),
+  ]);
+}
+
+// Confirms a successful charge — distinct from the pipeline status
+// messages, since payment can clear at any point from Confirmed through
+// Ready for Delivery and isn't itself a status change. Called from all
+// three payment-success paths: the admin's "Charge Card", "Mark Paid"
+// (manual), and the customer's own "Pay Now".
+const PAYMENT_RECEIVED_MSG = {
+  subject: "Payment received — thank you!",
+  body: "We've received your payment. Thank you for choosing StareX — we'll notify you once your order is out for delivery.",
+};
+
+export async function sendPaymentReceived(
+  orderId: string,
+  orderCode: string,
+  customerName: string,
+  customerEmail: string,
+  customerPhone: string,
+  amountCad: number
+) {
+  await Promise.allSettled([
+    sendStatusEmail(orderId, orderCode, customerName, customerEmail, "payment_received", PAYMENT_RECEIVED_MSG),
+    dispatchWhatsApp(orderId, customerPhone, "payment_received", {
+      "1": customerName,
+      "2": orderCode,
+      "3": amountCad.toFixed(2),
+    }),
   ]);
 }
 
@@ -289,7 +322,9 @@ const WHATSAPP_TEMPLATES: Record<string, string | undefined> = {
   confirmed:          process.env.TWILIO_TEMPLATE_CONFIRMED,
   ready_for_delivery: process.env.TWILIO_TEMPLATE_READY_FOR_DELIVERY,
   delivered:          process.env.TWILIO_TEMPLATE_DELIVERED,
+  cancelled:          process.env.TWILIO_TEMPLATE_CANCELLED,
   custom_note:        process.env.TWILIO_TEMPLATE_CUSTOM_NOTE,
+  payment_received:   process.env.TWILIO_TEMPLATE_PAYMENT_RECEIVED,
 };
 
 async function sendBookingWhatsApp(p: BookingNotificationPayload) {

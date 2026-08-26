@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
+import { sendPaymentReceived } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,9 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
   try {
     const note = amountCad != null ? `Payment received (manual) — $${amountCad.toFixed(2)} CAD` : "Payment received (manual)";
     await orders.markPaid(order.id, note, amountCad);
+    if (amountCad != null) {
+      await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, amountCad).catch(() => {});
+    }
 
     return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {

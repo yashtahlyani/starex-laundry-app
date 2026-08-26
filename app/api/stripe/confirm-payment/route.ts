@@ -3,6 +3,7 @@ import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
+import { sendPaymentReceived } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,10 @@ export async function POST(req: NextRequest) {
     }
 
     await new OrderRepository(db).markPaid(order.id, "Paid online by customer", intent.amount / 100);
+    // Not duplicated in the webhook handler — that's a backstop for when this
+    // call never completes (tab closed mid-payment), and firing the
+    // confirmation from both paths risks sending it twice for the same charge.
+    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, intent.amount / 100).catch(() => {});
 
     return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {

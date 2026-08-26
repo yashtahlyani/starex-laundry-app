@@ -3,6 +3,7 @@ import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
+import { sendPaymentReceived } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +55,7 @@ export async function POST(req: NextRequest) {
     const orders = new OrderRepository(db);
     await orders.markPaid(order.id, `Charged $${amountCad.toFixed(2)} CAD (card ending in the customer's card on file)`, amountCad);
     await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
+    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, amountCad).catch(() => {});
 
     return NextResponse.json({ success: true, paymentIntentId: intent.id, status: "paid" });
   } catch (err: any) {
