@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
-import { MINIMUM_ORDER } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +9,12 @@ export const dynamic = "force-dynamic";
 // payment — this is what unlocks "Pay Now" on the customer's own tracking
 // page, so the customer can pay online themselves instead of the owner
 // having to charge or collect it in person.
+//
+// Deliberately does NOT enforce the $40/$199 minimum order value here (per
+// client, 2026-08-28) — that's a published pricing policy, not a hard system
+// rule, and staff need to be able to generate a payment link for any amount
+// (a partial charge, a goodwill adjustment, a below-minimum edge case) rather
+// than being blocked from billing the customer at all.
 export async function POST(req: NextRequest, { params }: { params: { code: string } }) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -24,13 +29,8 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
   }
 
   const db = getSupabaseAdmin();
-  const { data: order } = await db.from("orders").select("id, service").eq("code", params.code.trim().toUpperCase()).maybeSingle();
+  const { data: order } = await db.from("orders").select("id").eq("code", params.code.trim().toUpperCase()).maybeSingle();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
-
-  const minimum = order.service === "detailing" ? MINIMUM_ORDER.detailingCad : MINIMUM_ORDER.standardCad;
-  if (amountCad < minimum) {
-    return NextResponse.json({ error: `Order total can't be below the $${minimum} minimum order value` }, { status: 400 });
-  }
 
   try {
     await new OrderRepository(db).setPrice(order.id, amountCad);

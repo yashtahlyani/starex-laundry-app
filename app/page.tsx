@@ -59,7 +59,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const stats: { value: number; suffix: string; label: string; desc: string; fixed?: boolean; prefix?: boolean }[] = [
-  { value: 500,   suffix: "$", label: "Insured Per Item", desc: "Every garment covered", prefix: true },
+  { value: 2,     suffix: "$", label: "Per Pound",        desc: "Wash & Fold, no surprises", prefix: true },
   { value: 40,    suffix: "$", label: "Minimum Order",    desc: "Flat, no surprises", prefix: true },
   { value: 98,    suffix: "%", label: "On-Time Delivery", desc: "Promised window kept" },
   { value: 24,    suffix: "hr", label: "Turnaround",      desc: "24–48h, door to door" },
@@ -83,7 +83,7 @@ const steps = [
 ];
 
 const trust = [
-  { Icon: Shield, title: "Fully Insured",  desc: "Every garment covered up to $500 against damage or loss." },
+  { Icon: Shield, title: "Fully Insured",  desc: "Your garments are insured — see our claim policy in the Terms & Conditions." },
   { Icon: Leaf,   title: "Eco-Friendly",   desc: "Biodegradable detergents. Low-water wash cycles." },
   { Icon: CheckCircle, title: "No Hidden Fees", desc: "Every price confirmed with you before we start." },
   { Icon: Clock,  title: "Always On Time", desc: "98% of deliveries arrive within the promised window." },
