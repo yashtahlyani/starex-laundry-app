@@ -65,8 +65,11 @@ export async function POST(req: NextRequest) {
         // explicitly. Everything else (failures, cancellations, refunds) is
         // logged as a status_history note the same way.
         if (event.type === "payment_intent.succeeded" && order.payment_status !== "paid") {
-          const amount = (obj as Stripe.PaymentIntent).amount;
-          await new OrderRepository(supabaseAdmin).markPaid(orderId, note, amount != null ? amount / 100 : undefined);
+          // Not passing an amountCad — orders.price is always the pre-tax
+          // subtotal (see lib/pricing.ts calculateHst), and the PaymentIntent
+          // amount here is that subtotal plus HST; overwriting price with it
+          // would break that convention everywhere else in the app.
+          await new OrderRepository(supabaseAdmin).markPaid(orderId, note);
         } else {
           const history = order.status_history ?? [];
           await supabaseAdmin

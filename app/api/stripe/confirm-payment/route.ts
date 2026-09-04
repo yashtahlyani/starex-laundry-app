@@ -4,6 +4,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
 import { sendPaymentReceived } from "@/lib/notifications";
+import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
   const db = getSupabaseAdmin();
   const { data: order } = await db
     .from("orders")
-    .select("id, code, customer_name, email, phone, payment_status")
+    .select("id, code, customer_name, email, phone, payment_status, price")
     .eq("code", orderCode)
     .maybeSingle();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -55,11 +56,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Payment not completed (${intent.status})` }, { status: 400 });
     }
 
-    await new OrderRepository(db).markPaid(order.id, "Paid online by customer", intent.amount / 100);
+    // Deliberately not passing an amountCad here — order.price is already
+    // the pre-tax subtotal set at Confirmed, and intent.amount is that
+    // subtotal plus HST; overwriting price with the tax-inclusive figure
+    // would break the "price is always pre-tax" convention everywhere else.
+    await new OrderRepository(db).markPaid(order.id, "Paid online by customer");
     // Not duplicated in the webhook handler — that's a backstop for when this
     // call never completes (tab closed mid-payment), and firing the
     // confirmation from both paths risks sending it twice for the same charge.
-    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, intent.amount / 100).catch(() => {});
+    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, calculateHst(order.price ?? 0)).catch(() => {});
 
     return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {

@@ -8,6 +8,7 @@ import IssueReportForm from "@/components/IssueReportForm";
 import PayNowCard from "@/components/PayNowCard";
 import RatingCard from "@/components/RatingCard";
 import { orderCodeColor } from "@/lib/orderCode";
+import { calculateHst } from "@/lib/pricing";
 
 type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
 type Order = {
@@ -154,7 +155,7 @@ function OrderTracker() {
                   <div className="bg-[#161616]/4 rounded-xl p-3 border border-[#161616]/8 col-span-2 flex items-center gap-2">
                     <CreditCard size={13} className={order.payment_status === "paid" ? "text-[#15803D]" : "text-[#B45309]"} />
                     <p className="text-sm font-semibold font-heading" style={{ color: order.payment_status === "paid" ? "#15803D" : "#B45309" }}>
-                      {order.payment_status === "paid" ? "Payment received" : `Payment due — $${Number(order.price).toFixed(2)}`}
+                      {order.payment_status === "paid" ? "Payment received" : `Payment due — $${calculateHst(Number(order.price)).total.toFixed(2)} (incl. HST)`}
                     </p>
                   </div>
                 )}

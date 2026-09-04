@@ -118,11 +118,9 @@ export async function sendStatusNotification(
 // messages, since payment can clear at any point from Confirmed through
 // Ready for Delivery and isn't itself a status change. Called from all
 // three payment-success paths: the admin's "Charge Card", "Mark Paid"
-// (manual), and the customer's own "Pay Now".
-const PAYMENT_RECEIVED_MSG = {
-  subject: "Payment received — thank you!",
-  body: "We've received your payment. Thank you for choosing StareX — we'll notify you once your order is out for delivery.",
-};
+// (manual), and the customer's own "Pay Now". Doubles as the order's
+// invoice — an itemized subtotal/HST/total breakdown, not just a thank-you.
+const LEGAL_NAME = "Royal Art Treasure Inc.";
 
 export async function sendPaymentReceived(
   orderId: string,
@@ -130,16 +128,64 @@ export async function sendPaymentReceived(
   customerName: string,
   customerEmail: string,
   customerPhone: string,
-  amountCad: number
+  breakdown: { subtotal: number; hst: number; total: number }
 ) {
   await Promise.allSettled([
-    sendStatusEmail(orderId, orderCode, customerName, customerEmail, "payment_received", PAYMENT_RECEIVED_MSG),
+    sendPaymentReceivedEmail(orderId, orderCode, customerName, customerEmail, breakdown),
     dispatchWhatsApp(orderId, customerPhone, "payment_received", {
       "1": customerName,
       "2": orderCode,
-      "3": amountCad.toFixed(2),
+      "3": breakdown.total.toFixed(2),
     }),
   ]);
+}
+
+async function sendPaymentReceivedEmail(
+  orderId: string,
+  orderCode: string,
+  customerName: string,
+  customerEmail: string,
+  { subtotal, hst, total }: { subtotal: number; hst: number; total: number }
+) {
+  if (!resend) {
+    await logNotification(orderId, "email", "payment_received", "skipped");
+    return;
+  }
+  const hstNumber = process.env.HST_REGISTRATION_NUMBER;
+  const row = (label: string, value: string, bold = false) => `
+    <tr>
+      <td style="padding:6px 0;color:${bold ? "#1a1a2e" : "#666"};font-size:${bold ? "15px" : "13px"};font-weight:${bold ? 700 : 400};">${label}</td>
+      <td style="padding:6px 0;text-align:right;color:${bold ? "#1a1a2e" : "#333"};font-size:${bold ? "15px" : "13px"};font-weight:${bold ? 700 : 600};">${value}</td>
+    </tr>`;
+  const content = `
+    <p style="margin:0 0 4px;color:#555;font-size:15px;line-height:1.5;">Hi ${escapeHtml(customerName)},</p>
+    <p style="margin:0 0 24px;color:#1a1a2e;font-size:16px;line-height:1.6;font-weight:500;">We've received your payment — thank you!</p>
+    <div style="background:#f7f7fa;border-radius:12px;padding:20px 24px;margin:0 0 24px;">
+      <p style="margin:0 0 4px;color:#888;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;">Invoice</p>
+      <p style="margin:0 0 16px;color:#1a1a2e;font-size:15px;font-weight:600;">${LEGAL_NAME}${hstNumber ? ` — HST# ${escapeHtml(hstNumber)}` : ""}</p>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="padding:4px 0;color:#666;font-size:13px;">Order</td><td style="padding:4px 0;text-align:right;font-family:monospace;font-weight:700;color:#ED1D24;font-size:14px;">${orderCode}</td></tr>
+        ${row("Subtotal", `$${subtotal.toFixed(2)} CAD`)}
+        ${row("HST (13%)", `$${hst.toFixed(2)} CAD`)}
+        ${row("Total paid", `$${total.toFixed(2)} CAD`, true)}
+      </table>
+    </div>
+    <p style="margin:0 0 28px;color:#888;font-size:13px;">We'll notify you once your order is out for delivery.</p>
+    <a href="${SITE_URL}/order"
+       style="display:block;background:#ED1D24;color:#ffffff;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;font-weight:600;font-size:15px;">
+      Track My Order →
+    </a>`;
+  try {
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: customerEmail,
+      subject: `Payment received — thank you! — Order ${orderCode}`,
+      html: emailShell(content),
+    });
+    await logNotification(orderId, "email", "payment_received", error ? "failed" : "sent", data?.id);
+  } catch {
+    await logNotification(orderId, "email", "payment_received", "failed");
+  }
 }
 
 // Ad-hoc note to a specific customer about their order — e.g. a garment

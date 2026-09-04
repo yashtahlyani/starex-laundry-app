@@ -7,6 +7,7 @@ import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle, CheckCirc
 import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
+import { calculateHst } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -372,7 +373,7 @@ export default function AppOrderDrawer({
                 <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F0FDF4", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, marginBottom: 4 }}>
                   <CheckCircle size={15} color="#16A34A" style={{ flexShrink: 0 }} />
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#166534", fontWeight: 600 }}>
-                    Payment received{order?.price != null ? ` — $${order.price.toFixed(2)} CAD` : ""}
+                    Payment received{order?.price != null ? ` — $${calculateHst(order.price).total.toFixed(2)} CAD incl. HST` : ""}
                   </p>
                 </div>
               )}
@@ -386,11 +387,21 @@ export default function AppOrderDrawer({
                   )}
                   <input
                     type="number" min={0} step="0.01" inputMode="decimal"
-                    placeholder="Confirmed order total (CAD)"
+                    placeholder="Order subtotal — before HST (CAD)"
                     value={pendingPrice}
                     onChange={e => { setPendingPrice(e.target.value); setPriceSaved(false); }}
                     style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", background: "#fff" }}
                   />
+                  {(() => {
+                    const n = parseFloat(pendingPrice);
+                    if (!pendingPrice.trim() || isNaN(n) || n <= 0) return null;
+                    const { hst, total } = calculateHst(n);
+                    return (
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#92400E" }}>
+                        + HST (13%): ${hst.toFixed(2)} = <strong>${total.toFixed(2)} total</strong>
+                      </p>
+                    );
+                  })()}
                   {paymentError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{paymentError}</p>}
                   <div style={{ display: "flex", gap: 8 }}>
                     {hasCardOnFile && (

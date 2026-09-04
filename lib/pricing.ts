@@ -44,6 +44,17 @@ export const MINIMUM_ORDER = {
 export const HST_RATE = 0.13;
 export const HST_LABEL = "+HST";
 
+// The staff-confirmed order price (orders.price) is always the pre-tax
+// subtotal — every price shown on the site is "+HST", so what staff weigh
+// and confirm is the subtotal, not a tax-inclusive total. This computes the
+// actual amount to charge/invoice from that subtotal. Amounts in dollars
+// (not cents); rounded to the cent the same way Stripe amounts are.
+export function calculateHst(subtotalCad: number) {
+  const hst = Math.round(subtotalCad * HST_RATE * 100) / 100;
+  const total = Math.round((subtotalCad + hst) * 100) / 100;
+  return { subtotal: subtotalCad, hst, total };
+}
+
 export const MEMBERSHIP = {
   name: "StareX Monthly Plan",
   monthlyPriceCad: 100,

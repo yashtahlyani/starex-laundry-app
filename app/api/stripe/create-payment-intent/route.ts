@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
+import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +44,10 @@ export async function POST(req: NextRequest) {
     // payment_method is already on the intent. They can still choose "use a
     // different card" client-side, which falls back to a fresh PaymentElement.
     const hasSavedCard = Boolean(order.stripe_customer_id && order.stripe_payment_method_id);
+    // order.price is the pre-tax subtotal — the customer pays that plus HST.
+    const { total } = calculateHst(order.price);
     const intent = await stripe!.paymentIntents.create({
-      amount: Math.round(order.price * 100),
+      amount: Math.round(total * 100),
       currency: "cad",
       ...(order.stripe_customer_id ? { customer: order.stripe_customer_id } : {}),
       ...(hasSavedCard ? { payment_method: order.stripe_payment_method_id! } : {}),
@@ -55,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       clientSecret: intent.client_secret,
-      amountCad: order.price,
+      amountCad: total,
       savedCard: hasSavedCard ? { brand: order.card_brand, last4: order.card_last4 } : null,
     });
   } catch (err: any) {

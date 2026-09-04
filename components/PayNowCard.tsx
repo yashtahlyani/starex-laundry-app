@@ -123,13 +123,18 @@ function QuickPayButton({
   );
 }
 
-export default function PayNowCard({ orderCode, amountCad, onPaid }: { orderCode: string; amountCad: number; onPaid?: (status: string) => void }) {
+export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }: { orderCode: string; amountCad: number; onPaid?: (status: string) => void }) {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [savedCard, setSavedCard] = useState<{ brand: string | null; last4: string | null } | null>(null);
   const [useNewCard, setUseNewCard] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "unavailable" | "error">("loading");
   const [paid, setPaid] = useState<"delivered" | "paid" | null>(null);
+  // Starts as the pre-tax subtotal (what the parent page has on hand before
+  // this component loads); replaced with the real tax-inclusive total the
+  // moment the PaymentIntent comes back — that's the actual amount charged,
+  // and the only thing that should ever appear on the "Pay $X" button.
+  const [amountCad, setAmountCad] = useState(subtotalCad);
 
   useEffect(() => {
     fetch("/api/stripe/config")
@@ -146,6 +151,7 @@ export default function PayNowCard({ orderCode, amountCad, onPaid }: { orderCode
         if (!res.ok) { setStatus("error"); return; }
         setClientSecret(data.clientSecret);
         setSavedCard(data.savedCard ?? null);
+        if (typeof data.amountCad === "number") setAmountCad(data.amountCad);
         setStatus("ready");
       })
       .catch(() => setStatus("unavailable"));

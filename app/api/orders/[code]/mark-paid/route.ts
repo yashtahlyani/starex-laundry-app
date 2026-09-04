@@ -3,12 +3,16 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { sendPaymentReceived } from "@/lib/notifications";
+import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
 // Admin-only: confirms payment collected outside Stripe (cash, e-transfer,
 // etc.) — used whenever there's no card on file to charge. Only records
 // payment; delivery is a separate action staff take explicitly.
+//
+// amountCad is the pre-tax subtotal, same as everywhere else — staff collect
+// that amount plus 13% HST from the customer in person.
 export async function POST(req: NextRequest, { params }: { params: { code: string } }) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -32,10 +36,11 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
   try {
-    const note = amountCad != null ? `Payment received (manual) — $${amountCad.toFixed(2)} CAD` : "Payment received (manual)";
+    const breakdown = amountCad != null ? calculateHst(amountCad) : null;
+    const note = breakdown ? `Payment received (manual) — $${breakdown.total.toFixed(2)} CAD incl. HST` : "Payment received (manual)";
     await orders.markPaid(order.id, note, amountCad);
-    if (amountCad != null) {
-      await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, amountCad).catch(() => {});
+    if (breakdown) {
+      await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, breakdown).catch(() => {});
     }
 
     return NextResponse.json({ success: true, status: "paid" });

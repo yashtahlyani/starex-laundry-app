@@ -9,6 +9,7 @@ import { StatusBadge, PaymentBadge, ProgressTrack, STATUS_META, fmtSlot } from "
 import AppOrderDrawer, { type DrawerOrder } from "@/components/AppOrderDrawer";
 import PayNowCard from "@/components/PayNowCard";
 import { orderCodeColor } from "@/lib/orderCode";
+import { calculateHst } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -122,7 +123,7 @@ export default function DashboardPage() {
                       <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.95rem", color: orderCodeColor(o.code).text }}>{o.code}</span>
                       <span style={{ color: "#8C8C8C", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{o.service_title ?? o.service}</span>
                     </div>
-                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#92400E" }}>${Number(o.price).toFixed(2)} CAD</span>
+                    <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#92400E" }}>${calculateHst(Number(o.price)).total.toFixed(2)} CAD</span>
                   </div>
                   <PayNowCard orderCode={o.code} amountCad={Number(o.price)} />
                 </div>

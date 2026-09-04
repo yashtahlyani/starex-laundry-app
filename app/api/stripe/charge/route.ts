@@ -4,6 +4,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { sendPaymentReceived } from "@/lib/notifications";
+import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,10 @@ export const dynamic = "force-dynamic";
 // staff-confirmed amount. Uses OrderRepository.markPaid, which only records
 // payment — delivery is a separate action staff take explicitly once the
 // order is actually handed over.
+//
+// amountCad is the pre-tax subtotal (matches what "Confirmed order total"
+// means everywhere else in the app — see lib/pricing.ts calculateHst) —
+// the actual Stripe charge is that subtotal plus 13% HST.
 export async function POST(req: NextRequest) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -41,9 +46,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No card on file for this order — collect payment manually" }, { status: 400 });
   }
 
+  const { hst, total } = calculateHst(amountCad);
+
   try {
     const intent = await stripe!.paymentIntents.create({
-      amount: Math.round(amountCad * 100),
+      amount: Math.round(total * 100),
       currency: "cad",
       customer: order.stripe_customer_id,
       payment_method: order.stripe_payment_method_id,
@@ -53,9 +60,9 @@ export async function POST(req: NextRequest) {
     });
 
     const orders = new OrderRepository(db);
-    await orders.markPaid(order.id, `Charged $${amountCad.toFixed(2)} CAD (card ending in the customer's card on file)`, amountCad);
+    await orders.markPaid(order.id, `Charged $${total.toFixed(2)} CAD incl. HST (card ending in the customer's card on file)`, amountCad);
     await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
-    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, amountCad).catch(() => {});
+    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, { subtotal: amountCad, hst, total }).catch(() => {});
 
     return NextResponse.json({ success: true, paymentIntentId: intent.id, status: "paid" });
   } catch (err: any) {
