@@ -71,7 +71,7 @@ export const DETAILING = {
 // Pricing / Services pages.
 export const DRY_CLEAN_COMBO = {
   tagline: "5 for $50",
-  title: "Value for Money",
+  title: "Most Popular",
   priceCad: 50,
   itemCount: 5,
   description: "Dry clean any 5 regular garments/pieces, including 1 blanket or quilt.",
