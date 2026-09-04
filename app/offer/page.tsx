@@ -42,7 +42,7 @@ const exampleSavings = exampleTotal - DRY_CLEAN_COMBO.priceCad;
 const steps = [
   { n: "01", title: "Book the combo",       desc: "Choose Dry Cleaning at checkout — no separate combo code needed." },
   { n: "02", title: "We collect & itemize", desc: "Pick your 5 pieces (and your 1 blanket/quilt) at pickup." },
-  { n: "03", title: "Cleaned & pressed",    desc: "Professional dry cleaning, ready in 24–48 hours." },
+  { n: "03", title: "Cleaned & pressed",    desc: "Professional dry cleaning, ready in 3–4 days." },
   { n: "04", title: "Delivered to your door", desc: "One flat $50, confirmed before we start." },
 ];
 
@@ -52,6 +52,7 @@ const faqs = [
   { q: "Can I mix garment types?", a: "Yes. Any 5 regular garments or pieces qualify, including 1 blanket or quilt." },
   { q: "What if I only have 3 or 4 items?", a: "Standard per-item dry-clean pricing applies below 5 items — see the full price list." },
   { q: "Is this on top of the $40 minimum order value?", a: "The combo price itself ($50) already clears the $40 minimum, so no extra minimum charge applies." },
+  { q: "How long does the combo take?", a: "3–4 days from pickup to delivery — a bit longer than standard dry cleaning, since combo orders are batched for the flat rate." },
 ];
 
 export default function OfferPage() {

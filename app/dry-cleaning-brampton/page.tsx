@@ -42,7 +42,7 @@ export default function DryCleaningBramptonPage() {
         ]}
         faqs={[
           { q: "Do you dry clean suits, sarees and gowns in Brampton?", a: "Yes — everyday and formal wear, outerwear, sarees, gowns, and household items like curtains and rugs are all covered. See the full price list on our Pricing page." },
-          { q: "What's the 5 for $50 combo?", a: "Dry clean any 5 regular garments or pieces, including 1 blanket or quilt, for a flat $50. Multi-piece items like a 2-piece suit count as 2 of your 5. Wedding dresses and leather items are excluded." },
+          { q: "What's the 5 for $50 combo?", a: "Dry clean any 5 regular garments or pieces, including 1 blanket or quilt, for a flat $50 — ready in 3–4 days. Multi-piece items like a 2-piece suit count as 2 of your 5. Wedding dresses, leather, suede, and other high-value items are excluded." },
           { q: "How fast is dry cleaning delivery in Brampton?", a: "Most orders are ready for delivery within 24–48 hours of pickup." },
           { q: "Is there a minimum order for dry cleaning?", a: "Yes, a $40 minimum order value applies, same as our other services." },
         ]}
