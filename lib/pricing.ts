@@ -53,6 +53,7 @@ export const MEMBERSHIP = {
     "No minimum laundry commitment",
     "2+1 pickups per month (up to 50 lbs)",
     "24–48h turnaround on all orders",
+    "Free pickup & delivery included",
     "Free fabric softener, hot wash & bleach",
     "Exclusive discounts for commercial clients",
     "Additional laundry beyond 50 lbs billed at $2/lb",
@@ -74,7 +75,7 @@ export const DRY_CLEAN_COMBO = {
   priceCad: 50,
   itemCount: 5,
   description: "Dry clean any 5 regular garments/pieces, including 1 blanket or quilt.",
-  exclusions: "Excludes wedding dresses and leather items.",
+  exclusions: "Excludes wedding dresses, leather, suede, and other high-value items.",
   // Multi-piece garments count per piece, not per set — a 2-piece suit uses
   // 2 of the 5 slots, a 3-piece suit uses 3, etc.
   multiPieceNote: "Multi-piece items (e.g. a 2-piece suit) count as separate pieces toward your 5.",

@@ -435,7 +435,7 @@ function BookPageInner() {
                 <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>
                   {isCombo
                     ? `Flat $${DRY_CLEAN_COMBO.priceCad} for your 5 combo items, ${HST_LABEL}. We'll confirm at pickup that your items qualify.`
-                    : `Price confirmed via SMS after weigh-in. Prices shown ${HST_LABEL}. $${MINIMUM_ORDER.standardCad} minimum order value applies ($${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing).`}
+                    : `Price confirmed via SMS after weigh-in. Prices shown ${HST_LABEL}. $${MINIMUM_ORDER.standardCad} minimum order value before HST applies ($${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing). Free pickup & delivery included.`}
                 </p>
 
                 <StripeCardStep
@@ -560,7 +560,7 @@ function BookPageInner() {
                   );
                 })}
                 <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#8C8C8C" }}>
-                  Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value applies.
+                  Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value before HST applies. Free pickup & delivery included.
                 </p>
               </div>
             )}

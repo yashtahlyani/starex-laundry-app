@@ -187,7 +187,7 @@ export default function OfferPage() {
               Any {DRY_CLEAN_COMBO.itemCount} pieces, <em className="display-accent" style={{ display: "inline" }}>one flat price.</em>
             </h2>
             <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
-              Mix and match any {DRY_CLEAN_COMBO.itemCount} regular garments or pieces — pay ${DRY_CLEAN_COMBO.priceCad} flat, {HST_LABEL}.
+              Mix and match any {DRY_CLEAN_COMBO.itemCount} regular garments or pieces — pay ${DRY_CLEAN_COMBO.priceCad} flat, {HST_LABEL}. Free pickup &amp; delivery included.
             </p>
           </AnimatedContent>
 

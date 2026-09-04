@@ -18,11 +18,11 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 }
 
 const payAsYouGo = [
-  { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded" },
-  { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast" },
-  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear" },
-  { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses" },
-  { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Duvets, blankets, curtains, rugs & more" },
+  { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded. Delivery included." },
+  { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast. Delivery included." },
+  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
+  { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses. Delivery included." },
+  { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Duvets, blankets, curtains, rugs & more. Delivery included." },
   { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $199",  unit: "",        min: "$199 minimum order value",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },
 ];
 
@@ -34,6 +34,7 @@ const planPPP = {
   features: [
     "$40 minimum order value",
     "24–48h turnaround service",
+    "Free pickup & delivery included",
     "Serving Brampton & Mississauga",
     "Same-day Express available at $3/lb (Wash & Fold only)",
     "Wash preferences from $2.99",
@@ -276,7 +277,7 @@ export default function PricingPage() {
 
           <AnimatedContent>
             <p style={{ color: "#8C8C8C", fontSize: "0.875rem", marginTop: 24, textAlign: "center", fontFamily: "Kodchasan, sans-serif" }}>
-              Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value (${MINIMUM_ORDER.detailingCad} for Car &amp; Sofa Detailing). We weigh at pickup and confirm your price before washing.
+              All prices shown are before HST ({HST_LABEL}). ${MINIMUM_ORDER.standardCad} minimum order value before HST (${MINIMUM_ORDER.detailingCad} for Car &amp; Sofa Detailing). Free pickup &amp; delivery included on every order. We weigh at pickup and confirm your price before washing.
             </p>
           </AnimatedContent>
         </div>
