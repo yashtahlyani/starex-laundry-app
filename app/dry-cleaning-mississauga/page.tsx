@@ -28,7 +28,7 @@ export default function DryCleaningMississaugaPage() {
         neighborhoods={["Port Credit", "Cooksville", "Streetsville", "Erin Mills", "Meadowvale", "Hurontario"]}
         bookHref="/book?service=dry-clean"
         priceHighlights={[
-          { label: "Everyday & Formal Wear", price: "From $4.99", desc: "Shirts, dresses, suits, sweaters and more, priced per item." },
+          { label: "Everyday & Formal Wear", price: "From $5.99", desc: "Shirts, dresses, suits, sweaters and more, priced per item." },
           { label: "5 for $50 Combo", price: "$50 flat", desc: "Any 5 regular pieces including 1 blanket or quilt — see the offer." },
           { label: "Wedding & Special Care", price: "From $249.99", desc: "Wedding dresses and other special-care items, priced individually." },
         ]}

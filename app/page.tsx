@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
-import { HST_LABEL } from "@/lib/pricing";
+import { HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -69,11 +69,12 @@ const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2
 
 const services = [
   { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2/lb",        tags: ["Everyday", "Delivery Included"] },
-  { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $4.99",      tags: ["Delicates", "Delivery Included"] },
+  { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $5.99",      tags: ["Delicates", "Delivery Included"] },
   { num: "03", title: "Same-Day Express",      desc: "Need it back today? Same-day rush service on Wash & Fold, subject to availability.",                    price: "$3/lb",            tags: ["Same-day", "Delivery Included"] },
-  { num: "04", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Delivery Included"] },
-  { num: "05", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Delivery Included"] },
-  { num: "06", title: "Car & Sofa Detailing",  desc: "Interior detailing, deep clean and shampoo for vehicles and sofas. Final pricing upon inspection.",    price: "From $199",       tags: ["New", "Detailing"] },
+  { num: "04", title: DRY_CLEAN_COMBO.tagline, desc: `${DRY_CLEAN_COMBO.description} ${DRY_CLEAN_COMBO.exclusions}`,                                          price: `$${DRY_CLEAN_COMBO.priceCad} flat`, tags: [DRY_CLEAN_COMBO.title, "Delivery Included"], href: "/offer" },
+  { num: "05", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Delivery Included"] },
+  { num: "06", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Delivery Included"] },
+  { num: "07", title: "Car & Sofa Detailing",  desc: "Interior detailing, deep clean and shampoo for vehicles and sofas. Final pricing upon inspection.",    price: "From $200",       tags: ["New", "Detailing"] },
 ];
 
 const steps = [
@@ -96,7 +97,7 @@ const LOCAL_BUSINESS_JSON_LD = {
   description: "Laundry pickup & delivery, dry cleaning, ironing, household items, and car & sofa detailing serving Brampton and Mississauga, Ontario.",
   url: "https://starex-laundry-app-v2.vercel.app",
   telephone: "+1-437-607-7251",
-  email: "hello@starexlaundrydryclean.ca",
+  email: "info@royalarttreasure.com",
   priceRange: "$$",
   areaServed: [
     { "@type": "City", name: "Brampton" },
@@ -212,7 +213,7 @@ export default function Home() {
                 Google Business Profile stats once they exist. */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.75, ease }}
               style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "48px", flexWrap: "wrap" }}>
-              {["Fully insured", "Brampton & Mississauga", "24–48h turnaround"].map(item => (
+              {["Fully insured", "Delivery Included", "Brampton & Mississauga", "24–48h turnaround"].map(item => (
                 <span key={item} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F2F2F2", borderRadius: 999, padding: "6px 14px", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif", fontWeight: 600, color: "#4A4A4A" }}>
                   <CheckCircle size={12} color="#B30F14" /> {item}
                 </span>
@@ -355,25 +356,36 @@ export default function Home() {
           </AnimatedContent>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "16px" }} className="services-grid">
-            {services.map((s, i) => (
-              <motion.div
+            {services.map((s, i) => {
+              const Card = s.href ? motion.a : motion.div;
+              return (
+              <Card
                 key={s.title}
+                {...(s.href ? { href: s.href } : {})}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.6, delay: i * 0.06, ease }}
                 whileHover={{ y: -6, boxShadow: "0 20px 60px rgba(20,20,20,0.12)" }}
-                style={{ background: pasteColors[i % pasteColors.length], borderRadius: "20px", padding: "32px 28px", height: "100%", display: "flex", flexDirection: "column", cursor: "default" }}
+                style={{ background: pasteColors[i % pasteColors.length], borderRadius: "20px", padding: "32px 28px", height: "100%", display: "flex", flexDirection: "column", cursor: s.href ? "pointer" : "default", textDecoration: "none" }}
               >
                 <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "2rem", letterSpacing: "-0.03em", color: "rgba(20,20,20,0.18)", lineHeight: 1, marginBottom: "28px" }}>{s.num}</p>
                 <div style={{ height: "1px", background: "rgba(20,20,20,0.1)", marginBottom: "20px" }} />
                 <h3 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem", letterSpacing: "-0.01em", color: "#161616", marginBottom: "10px" }}>{s.title}</h3>
                 <p style={{ color: "rgba(20,20,20,0.65)", fontSize: "0.9rem", lineHeight: 1.7, fontFamily: "Kodchasan, sans-serif", flexGrow: 1, marginBottom: "20px" }}>{s.desc}</p>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#431E2C" }}>{s.price}</p>
                 </div>
-              </motion.div>
-            ))}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {s.tags.map(tag => (
+                    <span key={tag} style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.7rem", color: "#431E2C", background: "rgba(67,30,44,0.08)", borderRadius: 999, padding: "3px 9px" }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </Card>
+              );
+            })}
           </div>
 
           <AnimatedContent style={{ textAlign: "center", marginTop: "48px" }}>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Search } from "lucide-react";
+import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Armchair, Search } from "lucide-react";
 import { CATALOG, MEMBERSHIP, DETAILING, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import PriceCalculator from "@/components/PriceCalculator";
 
@@ -20,10 +20,10 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 const payAsYouGo = [
   { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded. Delivery included." },
   { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast. Delivery included." },
-  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
+  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $5.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
   { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses. Delivery included." },
   { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Duvets, blankets, curtains, rugs & more. Delivery included." },
-  { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $199",  unit: "",        min: "$199 minimum order value",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },
+  { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $200",  unit: "",        min: "$199 minimum order value",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },
 ];
 
 const planPPP = {
@@ -315,7 +315,7 @@ export default function PricingPage() {
                       <Car size={20} color="#FFFFFF" />
                     </div>
                     <div>
-                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Car detailing / shampoo</p>
+                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Car detailing (interior only)</p>
                       <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>From ${DETAILING.carFromCad} per vehicle</p>
                     </div>
                   </div>
@@ -324,8 +324,17 @@ export default function PricingPage() {
                       <Sofa size={20} color="#FFFFFF" />
                     </div>
                     <div>
-                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Sofa deep clean / shampoo</p>
+                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Sofa / couch deep clean</p>
                       <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>${DETAILING.sofaPerSeatCad} per seat</p>
+                    </div>
+                  </div>
+                  <div style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 16, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(255,255,255,0.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Armchair size={20} color="#FFFFFF" />
+                    </div>
+                    <div>
+                      <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem" }}>Dining chair deep clean</p>
+                      <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif" }}>${DETAILING.chairPerSeatCad} per seat</p>
                     </div>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, paddingLeft: 4 }}>

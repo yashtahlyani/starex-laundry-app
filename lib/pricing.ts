@@ -72,8 +72,9 @@ export const MEMBERSHIP = {
 };
 
 export const DETAILING = {
-  carFromCad: 199,     // car detailing / dry cleaning / shampoo — starting price
-  sofaPerSeatCad: 49,  // sofa deep clean / shampoo — per seat, subject to the $199 minimum below
+  carFromCad: 200,       // car detailing (interior only) — starting price
+  sofaPerSeatCad: 50,    // sofa/couch deep clean — per seat
+  chairPerSeatCad: 25,   // dining chair — per seat
   minimumCad: MINIMUM_ORDER.detailingCad,
   note: "Final pricing upon inspection. $199 minimum order applies.",
 };
@@ -114,11 +115,14 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Iron Prices",
         items: [
-          { name: "T-Shirt / Shorts / Skirts / Jeans / Pants", price: 2.99 },
-          { name: "Baby Clothes / Pillow Cases", price: 1.99 },
-          { name: "Shirt / Blouses / Dresses", price: 3.99 },
-          { name: "Bedding & Table Cloths", price: 7.99 },
-          { name: "Complex Dresses / Saree / Maxi / Pleated", price: 9.99 },
+          { name: "Baby Clothes / Pillow Case", price: 1.99 },
+          { name: "T-Shirt / Shorts / Skirts", price: 2.99 },
+          { name: "Jeans / Pants", price: 3.49 },
+          { name: "Shirt / Blouse", price: 3.99 },
+          { name: "Simple Dress", price: 5.99 },
+          { name: "Long Maxi / Pleated Skirt / Dress", price: 7.99 },
+          { name: "Saree / Complex Fancy Dress", price: 9.99 },
+          { name: "Table Cloth / Bedsheet", price: 7.99 },
         ],
       },
     ],
@@ -168,11 +172,6 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Curtains & More",
         items: [
-          { name: "Sheer Curtain — No Lining", price: 19.99, from: true },
-          { name: "Standard Curtain", price: 24.99, from: true },
-          { name: "Lined Curtain", price: 34.99, from: true },
-          { name: "Stuffed Toy — Small", price: 9.99, from: true },
-          { name: "Stuffed Toy — Big", price: 29.99, from: true },
           { name: "Sleeping Bag", price: 29.99, from: true },
           { name: "Small Rug", price: 49.99, from: true },
           { name: "Big Rug", price: 99.99, from: true },
@@ -214,10 +213,6 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Household & Misc",
         items: [
-          { name: "Curtain — No Lining", price: 4.99, from: true },
-          { name: "Curtain — With Lining", price: 7.99, from: true },
-          { name: "Stuffed Toy — Small", price: 4.99, from: true },
-          { name: "Stuffed Toy — Big", price: 9.99, from: true },
           { name: "Sleeping Bag", price: 19.99, from: true },
           { name: "Small Rug", price: 49.99, from: true },
           { name: "Big Rug", price: 99.99, from: true },
@@ -241,8 +236,9 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Detailing",
         items: [
-          { name: "Car Detailing / Shampoo (per vehicle)", price: 199, from: true },
-          { name: "Sofa Deep Clean / Shampoo (per seat)", price: 49, from: true },
+          { name: "Car Detailing (Interior Only)", price: 200, from: true },
+          { name: "Sofa / Couch (per seat)", price: 50, from: true },
+          { name: "Dining Chair (per seat)", price: 25, from: true },
         ],
       },
     ],

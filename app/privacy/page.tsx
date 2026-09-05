@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const EFFECTIVE = "August 2, 2026";
-const ADDRESS_LINE = "Business address available on request — email hello@starexlaundrydryclean.ca or call 437-607-7251";
+const ADDRESS_LINE = "Business address available on request — email info@royalarttreasure.com or call 437-607-7251";
 const LEGAL_NAME = "Royal Art Treasure Inc.";
 
 const sections: LegalSection[] = [
@@ -31,7 +31,7 @@ const sections: LegalSection[] = [
       { type: "ul", items: [
         { label: "Legal entity:", text: LEGAL_NAME },
         { label: "Title:", text: "Privacy Officer, Starex" },
-        { label: "Email:", text: "hello@starexlaundrydryclean.ca" },
+        { label: "Email:", text: "info@royalarttreasure.com" },
         { label: "Phone:", text: "437-607-7251" },
         { label: "Mailing Address:", text: ADDRESS_LINE },
       ]},
@@ -221,7 +221,7 @@ const sections: LegalSection[] = [
       { type: "p", text: "For any question, request, or complaint about this Policy or our handling of your personal information:" },
       { type: "ul", items: [
         { label: "Privacy Officer, Starex", text: "" },
-        { label: "Email:", text: "hello@starexlaundrydryclean.ca" },
+        { label: "Email:", text: "info@royalarttreasure.com" },
         { label: "Phone:", text: "437-607-7251" },
         { label: "Mailing Address:", text: ADDRESS_LINE },
       ]},

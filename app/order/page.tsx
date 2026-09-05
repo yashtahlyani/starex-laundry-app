@@ -250,7 +250,7 @@ function OrderTracker() {
 
             <p className="text-center text-xs text-[#8C8C8C] font-body">
               Questions? Email us at{" "}
-              <a href="mailto:hello@starexlaundrydryclean.ca" className="text-[#B30F14] underline">hello@starexlaundrydryclean.ca</a>
+              <a href="mailto:info@royalarttreasure.com" className="text-[#B30F14] underline">info@royalarttreasure.com</a>
             </p>
           </div>
         )}

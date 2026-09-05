@@ -25,7 +25,7 @@ const categories = [
       { q: "I don't know my laundry's weight — how much should I bring?", a: "No scale needed. As a rough guide, a standard 13-gallon trash bag (about 24×32\"), filled and tied at the top, holds roughly a typical Wash & Fold load — you can bring up to 2 bags per order. Prefer to estimate by weight instead? Step on a bathroom scale by yourself, then again while holding the bag, and subtract the difference. Either way, we weigh everything ourselves at pickup and bill the actual weight — so there's no need to get it exact." },
       { q: "Do you offer subscription plans?", a: "Yes! The StareX Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
       { q: "Are there any hidden fees?", a: "Never. Your price is confirmed before we touch your laundry. What you see is what you pay." },
-      { q: "How does car & sofa detailing pricing work?", a: "Car detailing/shampoo starts from $199 per vehicle and sofa deep cleaning is $49 per seat. Final pricing is confirmed upon inspection." },
+      { q: "How does car & sofa detailing pricing work?", a: "Car detailing (interior only) starts from $200 per vehicle, sofa/couch deep cleaning is $50 per seat, and dining chairs are $25 per seat. Final pricing is confirmed upon inspection." },
     ],
   },
   {

@@ -13,10 +13,10 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 const services = [
   { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",         price: "$2/lb",       color: "#EDEDED" },
   { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Wash & Fold only",          price: "$3/lb",       color: "#F2F2F2" },
-  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",        price: "From $4.99",  color: "#EAEAEA" },
+  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",        price: "From $5.99",  color: "#EAEAEA" },
   { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",             price: "From $1.99",  color: "#E5E5E5" },
   { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs",    price: "From $9.99",  color: "#EDEDED" },
-  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",     price: "From $199",   color: "#F2F2F2" },
+  { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",     price: "From $200",   color: "#F2F2F2" },
 ];
 
 // Dry cleaning and household/bedding items overlap a lot (blankets, curtains,
@@ -38,6 +38,14 @@ const timeSlots = [
   { label: "11:00 AM – 2:00 PM", startHour: 11 },
   { label: "2:00 PM – 5:00 PM",  startHour: 14 },
   { label: "5:00 PM – 8:00 PM",  startHour: 17 },
+];
+
+// Car & Sofa Detailing uses half-day appointment windows instead of the
+// standard 3-hour pickup windows — a detailer visit runs longer than a
+// laundry pickup (per client, 2026-09-06).
+const detailingTimeSlots = [
+  { label: "8:00 AM – 1:00 PM", startHour: 8 },
+  { label: "1:00 PM – 6:00 PM", startHour: 13 },
 ];
 
 const stepLabels = ["Service", "Schedule", "Details", "Confirm"];
@@ -89,16 +97,22 @@ function BookPageInner() {
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const currentHour = now.getHours() + now.getMinutes() / 60;
-  const availableTimeSlots = form.date === todayStr
-    ? timeSlots.filter(s => s.startHour > currentHour)
+  // Detailing gets its own half-day windows; Same-Day Express only offers the
+  // two earliest pickup windows so there's enough of the day left to actually
+  // turn it around same-day (per client, 2026-09-06).
+  const baseTimeSlots = form.service === "detailing" ? detailingTimeSlots
+    : form.service === "express" ? timeSlots.slice(0, 2)
     : timeSlots;
+  const availableTimeSlots = form.date === todayStr
+    ? baseTimeSlots.filter(s => s.startHour > currentHour)
+    : baseTimeSlots;
 
   useEffect(() => {
     if (form.time && !availableTimeSlots.some(s => s.label === form.time)) {
       setForm(p => ({ ...p, time: "" }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.date]);
+  }, [form.date, form.service]);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -311,12 +325,16 @@ function BookPageInner() {
             {step === 1 && (
               <motion.div key="step1" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
-                  When should we <em className="display-accent" style={{ display: "inline" }}>come?</em>
+                  {form.service === "detailing"
+                    ? <>When should we come to clean your <em className="display-accent" style={{ display: "inline" }}>sofa and car?</em></>
+                    : <>When should we <em className="display-accent" style={{ display: "inline" }}>come?</em></>}
                 </h2>
-                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>Choose a pickup date and time window.</p>
+                <p style={{ color: "#6B6B6B", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>
+                  {form.service === "detailing" ? "Choose a date and appointment window." : "Choose a pickup date and time window."}
+                </p>
 
                 <div style={{ marginBottom: 24 }}>
-                  <label style={labelStyle}><Calendar size={13} style={{ display: "inline", marginRight: 6 }} />Pickup Date</label>
+                  <label style={labelStyle}><Calendar size={13} style={{ display: "inline", marginRight: 6 }} />{form.service === "detailing" ? "Appointment Date" : "Pickup Date"}</label>
                   <input type="date" value={form.date} min={new Date().toISOString().split("T")[0]}
                     onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
                     style={inputStyle}
@@ -326,10 +344,10 @@ function BookPageInner() {
                 </div>
 
                 <div style={{ marginBottom: 28 }}>
-                  <label style={labelStyle}><Clock size={13} style={{ display: "inline", marginRight: 6 }} />Time Window</label>
+                  <label style={labelStyle}><Clock size={13} style={{ display: "inline", marginRight: 6 }} />{form.service === "detailing" ? "Appointment Window" : "Time Window"}</label>
                   {availableTimeSlots.length === 0 ? (
                     <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>
-                      No pickup windows left for today — please choose another date.
+                      {form.service === "detailing" ? "No appointment windows left for today — please choose another date." : "No pickup windows left for today — please choose another date."}
                     </p>
                   ) : (
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>

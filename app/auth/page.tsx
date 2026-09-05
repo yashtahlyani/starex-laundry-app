@@ -378,8 +378,8 @@ export default function AuthPage() {
 
           <p className="mt-6 text-center text-xs text-white/30 font-body">
             Need help?{" "}
-            <a href="mailto:hello@starexlaundrydryclean.ca" className="text-mint hover:underline">
-              hello@starexlaundrydryclean.ca
+            <a href="mailto:info@royalarttreasure.com" className="text-mint hover:underline">
+              info@royalarttreasure.com
             </a>
           </p>
         </div>
