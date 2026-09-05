@@ -125,6 +125,9 @@ export default function Navbar() {
                 <Logo color="#161616" fontSize="3rem" />
               </motion.div>
             </a>
+            <span className="md:hidden" style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.1rem", letterSpacing: "-0.01em", color: "#161616" }}>
+              Starex
+            </span>
           </div>
 
           {/* Desktop nav */}
