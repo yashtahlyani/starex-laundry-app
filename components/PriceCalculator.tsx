@@ -19,15 +19,15 @@ const DRY_CLEAN_ITEMS = [
 
 const HOUSEHOLD_ITEMS = [
   { key: "pillow",   label: "Pillow",                          price: 9.99 },
-  { key: "curtain",  label: "Standard Curtain",                price: 24.99 },
+  { key: "sleeping-bag", label: "Sleeping Bag",                price: 19.99 },
   { key: "blanket",  label: "Single Blanket",                  price: 17.99 },
   { key: "duvet",    label: "Queen Duvet / Comforter / Quilt",  price: 29.99 },
 ];
 
 const IRONING_ITEMS = [
-  { key: "iron-basic",   label: "T-Shirt / Shorts / Jeans",     price: 2.99 },
-  { key: "iron-shirt",   label: "Shirt / Blouses / Dresses",    price: 3.99 },
-  { key: "iron-complex", label: "Complex Dress / Saree / Maxi", price: 9.99 },
+  { key: "iron-basic",   label: "T-Shirt / Shorts / Skirts",       price: 2.99 },
+  { key: "iron-shirt",   label: "Shirt / Blouse",                  price: 3.99 },
+  { key: "iron-complex", label: "Saree / Complex Fancy Dress",     price: 9.99 },
 ];
 
 function Stepper({ value, onChange }: { value: number; onChange: (v: number) => void }) {
