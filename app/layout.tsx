@@ -33,6 +33,11 @@ export const metadata: Metadata = {
     images: ["/images/starex-hero-banner.jpg"],
   },
   robots: { index: true, follow: true },
+  // Default for pages that don't set their own alternates.canonical (notably
+  // the homepage, app/page.tsx, which has no metadata export at all) — points
+  // search engines at the one canonical hostname now that both the apex
+  // domain and www resolve to identical live content.
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
