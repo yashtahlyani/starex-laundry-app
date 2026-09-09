@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { getSupabaseAdmin } from "./supabaseAdmin";
 import { BUSINESS_NAME } from "./pricing";
-import { SITE_ORIGIN } from "./site";
+import { SITE_ORIGIN, CONTACT } from "./site";
 
 // Undefined until RESEND_API_KEY is set — email sends are skipped gracefully until then,
 // same as the Twilio WhatsApp path below.
@@ -15,6 +15,12 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 // verified. Exported so every send site (here + the issues route) stays in sync.
 const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 export const FROM_EMAIL = `${BUSINESS_NAME} <${FROM_ADDRESS}>`;
+// The From address has to live on the domain verified in Resend
+// (starexlaundrydryclean.ca) or delivery breaks — but that mailbox isn't one
+// the owner actually checks. Every customer-facing send sets replyTo to the
+// real inbox instead, so "just reply to this message" (several templates say
+// exactly that) actually reaches someone.
+export const REPLY_TO = CONTACT.email;
 // Reuses the same https-only guard as SEO surfaces — a stray
 // NEXT_PUBLIC_SITE_URL=http://localhost in the deploy environment must never
 // leak into a real customer's email as their "Track My Order" link.
@@ -179,6 +185,7 @@ async function sendPaymentReceivedEmail(
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: customerEmail,
+      replyTo: REPLY_TO,
       subject: `Payment received — thank you! — Order ${orderCode}`,
       html: emailShell(content),
     });
@@ -227,6 +234,7 @@ async function sendCustomerNoteEmail(
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: customerEmail,
+      replyTo: REPLY_TO,
       subject: `A note about your order — ${orderCode}`,
       html: buildStatusEmailHtml(customerName, orderCode, escapeHtml(message).replace(/\n/g, "<br>")),
     });
@@ -249,6 +257,7 @@ export async function notifyOwnerOfNewOrder(p: BookingNotificationPayload) {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: adminEmail,
+      replyTo: p.customerEmail,
       subject: `New booking — Order ${p.orderCode} (${formatService(p.serviceType)})`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
@@ -276,6 +285,7 @@ export async function notifyOwnerOfNewContact(p: { name: string; email: string; 
     await resend.emails.send({
       from: FROM_EMAIL,
       to: adminEmail,
+      replyTo: p.email,
       subject: `New contact message${p.subject ? `: ${p.subject}` : ""}`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
@@ -328,6 +338,7 @@ async function sendBookingEmail(p: BookingNotificationPayload) {
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: p.customerEmail,
+      replyTo: REPLY_TO,
       subject: `Booking confirmed — Order ${p.orderCode}`,
       html: buildBookingEmailHtml(p),
     });
@@ -357,6 +368,7 @@ async function sendStatusEmail(
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: customerEmail,
+      replyTo: REPLY_TO,
       subject: `${msg.subject} — Order ${orderCode}`,
       html: buildStatusEmailHtml(customerName, orderCode, body),
     });

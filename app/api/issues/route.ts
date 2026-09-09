@@ -80,6 +80,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: adminEmail,
+      replyTo: customerEmail.trim(),
       subject: `${isUrgent ? "🚨" : "⚠️"} Issue Reported${orderCode ? ` — Order ${orderCode}` : ""}: ${issueType.replace(/_/g, " ")}`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
