@@ -337,7 +337,8 @@ export default function Home() {
       </section>
 
       {/* ══ HOW IT WORKS — light bg, vertical timeline ══ */}
-      <section style={{ padding: "96px 0", background: "#FFFFFF" }}>
+      {/* Smaller top padding: sits right under the offer banner, which already separates the sections */}
+      <section style={{ padding: "48px 0 96px", background: "#FFFFFF" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ marginBottom: "72px" }}>
             <span className="eyebrow" style={{ color: "#431E2C" }}>How It Works</span>
