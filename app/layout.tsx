@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     description: "Laundry at $2/lb, $40 minimum order value. Serving Brampton & Mississauga with 24–48h turnaround.",
     url: PROD_URL,
     locale: "en_CA",
-    images: [{ url: "/images/starex-hero-banner.jpg", width: 1600, height: 854, alt: BUSINESS_NAME }],
+    images: [{ url: "/images/starex/01_homepage_without_copy_v1.jpg", width: 1600, height: 854, alt: BUSINESS_NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
     description: "Laundry at $2/lb, $40 minimum order value. Serving Brampton & Mississauga.",
-    images: ["/images/starex-hero-banner.jpg"],
+    images: ["/images/starex/01_homepage_without_copy_v1.jpg"],
   },
   robots: { index: true, follow: true },
   // Default for pages that don't set their own alternates.canonical (notably

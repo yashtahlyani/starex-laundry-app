@@ -18,6 +18,9 @@ export type LocalSEOProps = {
   city: string;
   serviceLabel: string;      // "Dry Cleaning" | "Laundry Service"
   heroImage: string;
+  // Focal point for the cover-cropped hero photo, e.g. "65% center" — keeps
+  // a right-of-centre subject in frame on narrow phones.
+  heroPosition?: string;
   h1: string;
   intro: string;
   neighborhoods: string[];
@@ -36,7 +39,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
         paddingTop: 120, paddingBottom: 80, textAlign: "center", position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
         backgroundImage: `url(${heroImage})`,
-        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 500,
+        backgroundSize: "cover", backgroundPosition: props.heroPosition ?? "center", backgroundRepeat: "no-repeat", minHeight: 500,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.6)" }} />
         <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px", position: "relative" }}>

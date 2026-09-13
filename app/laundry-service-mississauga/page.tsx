@@ -22,7 +22,7 @@ export default function LaundryServiceMississaugaPage() {
       <LocalSEOLanding
         city="Mississauga"
         serviceLabel="Laundry Service"
-        heroImage="/images/starex/folded-towels-sprig.webp"
+        heroImage="/images/starex/07_basket_towels_without_copy.jpg" heroPosition="70% center"
         h1="Laundry Pickup & Delivery in Mississauga, Ontario"
         intro="Everyday wash, dry and fold laundry — collected from your door, cleaned and sorted by colour and fabric, and returned within 24–48 hours. Just $2 per pound, no drop-off required."
         neighborhoods={["Port Credit", "Cooksville", "Streetsville", "Erin Mills", "Meadowvale", "Hurontario"]}

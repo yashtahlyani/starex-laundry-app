@@ -232,8 +232,8 @@ export default function Home() {
             }}
           >
             <img
-              src="/images/starex-hero-banner.jpg"
-              alt="StareX premium laundry service — fresh laundry, delivered to your door"
+              src="/images/starex/01_homepage_without_copy_v1.jpg"
+              alt="Freshly folded laundry and a StareX pickup bag on an entryway bench, ready at the door"
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", display: "block" }}
             />
           </motion.div>
@@ -252,12 +252,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ══ STATS — brand red band with a clean text-free backdrop ══ */}
+      {/* ══ STATS — flat brand red band. Left photo-free on purpose: every
+          photo on the site is used exactly once, and this band sits directly
+          under the hero photo, so a plain band keeps the counters legible. ══ */}
       <section style={{
         padding: "64px 0", position: "relative",
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/rack-clothes.webp)",
-        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px", position: "relative" }}>
@@ -311,6 +311,30 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* ══ OFFER BANNER — the 5-for-$50 creative shown whole. Its copy is baked
+          into the image, so it's only ever shown uncropped like this, never as
+          a background under live text. ══ */}
+      <section style={{ padding: "72px 0 0", background: "#FFFFFF" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
+          <AnimatedContent>
+            <motion.a
+              href="/offer"
+              aria-label="See the 5 for $50 dry cleaning offer"
+              whileHover={{ y: -4, boxShadow: "0 24px 60px rgba(20,20,20,0.16)" }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              style={{ display: "block", position: "relative", borderRadius: 24, overflow: "hidden", aspectRatio: "16 / 9", boxShadow: "0 12px 40px rgba(20,20,20,0.10)" }}
+            >
+              <img
+                src="/images/starex/10_offer_red_with_copy.jpg"
+                alt="Dry cleaning 5 for $50 plus HST — look sharp, spend less. Free pickup and delivery."
+                loading="lazy"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+            </motion.a>
+          </AnimatedContent>
+        </div>
+      </section>
 
       {/* ══ HOW IT WORKS — light bg, vertical timeline ══ */}
       <section style={{ padding: "96px 0", background: "#FFFFFF" }}>

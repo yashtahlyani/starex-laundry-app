@@ -22,7 +22,7 @@ export default function DryCleaningMississaugaPage() {
       <LocalSEOLanding
         city="Mississauga"
         serviceLabel="Dry Cleaning"
-        heroImage="/images/starex/washer-basket-2.webp"
+        heroImage="/images/starex/02_rack_without_copy_alternate.jpg" heroPosition="center"
         h1="Dry Cleaning in Mississauga, Ontario"
         intro="Suits, sarees, gowns, coats and more — picked up from your door, professionally dry cleaned, and delivered back pressed and ready to wear. No drop-off, no queue, no guessing what it'll cost."
         neighborhoods={["Port Credit", "Cooksville", "Streetsville", "Erin Mills", "Meadowvale", "Hurontario"]}

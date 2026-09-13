@@ -22,7 +22,7 @@ export default function DryCleaningBramptonPage() {
       <LocalSEOLanding
         city="Brampton"
         serviceLabel="Dry Cleaning"
-        heroImage="/images/starex/rack-clothes.webp"
+        heroImage="/images/starex/02_rack_without_copy.jpg" heroPosition="62% center"
         h1="Dry Cleaning in Brampton, Ontario"
         intro="Suits, sarees, gowns, coats and more — picked up from your door, professionally dry cleaned, and delivered back pressed and ready to wear. No drop-off, no queue, no guessing what it'll cost."
         neighborhoods={["Bramalea", "Downtown Brampton", "Mount Pleasant", "Springdale", "Snelgrove", "Castlemore"]}

@@ -75,8 +75,8 @@ export default function OfferPage() {
       <section style={{
         paddingTop: 120, paddingBottom: 88, textAlign: "center", position: "relative", overflow: "hidden",
         backgroundColor: "var(--brand)",
-        backgroundImage: "url(/images/starex/rack-clothes.webp)",
-        backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", minHeight: 560,
+        backgroundImage: "url(/images/starex/01_homepage_without_copy_v2.jpg)",
+        backgroundSize: "cover", backgroundPosition: "75% center", backgroundRepeat: "no-repeat", minHeight: 560,
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.62)" }} />
         <div aria-hidden="true" style={{

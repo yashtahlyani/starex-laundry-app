@@ -22,7 +22,7 @@ export default function LaundryServiceBramptonPage() {
       <LocalSEOLanding
         city="Brampton"
         serviceLabel="Laundry Service"
-        heroImage="/images/starex/basket-towels.webp"
+        heroImage="/images/starex/06_washer_basket_without_copy.jpg" heroPosition="70% center"
         h1="Laundry Pickup & Delivery in Brampton, Ontario"
         intro="Everyday wash, dry and fold laundry — collected from your door, cleaned and sorted by colour and fabric, and returned within 24–48 hours. Just $2 per pound, no drop-off required."
         neighborhoods={["Bramalea", "Downtown Brampton", "Mount Pleasant", "Springdale", "Snelgrove", "Castlemore"]}
