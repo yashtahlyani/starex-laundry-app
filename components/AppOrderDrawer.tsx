@@ -75,9 +75,15 @@ export default function AppOrderDrawer({
   const [localPaymentStatus, setLocalPaymentStatus] = useState<"unpaid" | "paid" | null>(null);
   const [localTracking, setLocalTracking] = useState<{ received?: number; returned?: number } | null>(null);
   const [pendingCount, setPendingCount] = useState<string>("");
+  const [pendingDetails, setPendingDetails] = useState<string>("");
   const [pendingWeight, setPendingWeight] = useState<string>("");
   const [countError, setCountError] = useState<string | null>(null);
   const [pendingPrice, setPendingPrice] = useState<string>("");
+  // The drawer is handed a snapshot of the order taken when the row was
+  // clicked, and router.refresh() re-renders the list behind it without
+  // replacing that snapshot — so a just-saved total stayed invisible until
+  // the drawer was closed and reopened (per client, 2026-09-25).
+  const [localPrice, setLocalPrice] = useState<number | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [payingWith, setPayingWith] = useState<"charge" | "manual" | null>(null);
   const [savingPrice, setSavingPrice] = useState(false);
@@ -101,9 +107,11 @@ export default function AppOrderDrawer({
     setLocalPaymentStatus(null);
     setLocalTracking(null);
     setPendingCount("");
+    setPendingDetails("");
     setPendingWeight("");
     setCountError(null);
     setPendingPrice("");
+    setLocalPrice(null);
     setPaymentError(null);
     setPayingWith(null);
     setSavingPrice(false);
@@ -132,7 +140,11 @@ export default function AppOrderDrawer({
   // Picked Up, before verification) doesn't make sense.
   const showPaymentPanel = admin && !isPaid && ["confirmed", "ready_for_delivery"].includes(currentStatus);
 
-  const tracking = order ? getItemTracking(order.status_history as any) : { received: null, returned: null, missing: null };
+  // What the order is actually worth right now: the amount just saved in this
+  // drawer if there is one, otherwise whatever the server snapshot carried.
+  const effectivePrice = localPrice ?? (order?.price != null ? Number(order.price) : null);
+
+  const tracking = getItemTracking(order?.status_history as any);
   const received = localTracking?.received ?? tracking.received;
   const returned = localTracking?.returned ?? tracking.returned;
   const missing = received != null && returned != null ? received - returned : null;
@@ -155,6 +167,7 @@ export default function AppOrderDrawer({
 
       setLocalPaymentStatus("paid");
       if (data.status) setLocalStatus(data.status);
+      setLocalPrice(amount);
       setPendingPrice("");
       router.refresh();
     } catch {
@@ -180,6 +193,7 @@ export default function AppOrderDrawer({
       const data = await res.json();
       if (!res.ok) { setPaymentError(data.error ?? "Could not save order total"); return; }
       setPriceSaved(true);
+      setLocalPrice(amount);
       router.refresh();
     } catch {
       setPaymentError("Could not save order total — check your connection and try again");
@@ -238,6 +252,7 @@ export default function AppOrderDrawer({
           status: nextStatusId,
           note: nextStatusId === "confirmed" ? (pendingDiscrepancy.trim() || null) : null,
           itemCount,
+          itemDetails: needsCount ? (pendingDetails.trim() || undefined) : undefined,
           weight: nextStatusId === "confirmed" ? (pendingWeight.trim() || undefined) : undefined,
         }),
       });
@@ -248,7 +263,7 @@ export default function AppOrderDrawer({
             ? { ...prev, received: itemCount }
             : { ...prev, returned: itemCount });
         }
-        setPendingCount(""); setPendingWeight(""); setPendingDiscrepancy("");
+        setPendingCount(""); setPendingDetails(""); setPendingWeight(""); setPendingDiscrepancy("");
         // Without this, the order list/KPIs behind the drawer stay stale until
         // a manual page reload — the drawer itself updates via local state,
         // but nothing tells the server-rendered page underneath to refetch.
@@ -312,7 +327,13 @@ export default function AppOrderDrawer({
                 <Row icon={CalendarClock} label="Pickup date" value={order.date} />
                 <Row icon={CalendarClock} label="Time slot" value={order.time_slot} />
                 {order.weight && order.weight !== "TBD" && <Row icon={Package} label="Weight" value={order.weight} />}
-                {order.price != null && <Row icon={Package} label="Price" value={`$${Number(order.price).toFixed(2)}`} />}
+                {effectivePrice != null && (
+                  <Row
+                    icon={Package}
+                    label={isPaid ? "Amount paid" : "Amount"}
+                    value={`$${calculateHst(effectivePrice).total.toFixed(2)} CAD incl. HST — subtotal $${effectivePrice.toFixed(2)} + HST $${calculateHst(effectivePrice).hst.toFixed(2)}`}
+                  />
+                )}
                 {order.notes && <Row icon={Package} label="Notes" value={order.notes} />}
                 {admin && order.customer_name && <Row icon={Package} label="Customer" value={`${order.customer_name} · ${order.email} · ${order.phone}`} />}
               </div>
@@ -331,6 +352,16 @@ export default function AppOrderDrawer({
                     Received: <strong style={{ color: "#161616" }}>{received ?? "—"}</strong>
                     {" · "}Returned: <strong style={{ color: "#161616" }}>{returned ?? "—"}</strong>
                   </p>
+                  {tracking.receivedDetails && (
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B", marginTop: 4 }}>
+                      In: {tracking.receivedDetails}
+                    </p>
+                  )}
+                  {tracking.returnedDetails && (
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B", marginTop: 2 }}>
+                      Out: {tracking.returnedDetails}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -373,7 +404,7 @@ export default function AppOrderDrawer({
                 <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F0FDF4", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, marginBottom: 4 }}>
                   <CheckCircle size={15} color="#16A34A" style={{ flexShrink: 0 }} />
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#166534", fontWeight: 600 }}>
-                    Payment received{order?.price != null ? ` — $${calculateHst(order.price).total.toFixed(2)} CAD incl. HST` : ""}
+                    Payment received{effectivePrice != null ? ` — $${calculateHst(effectivePrice).total.toFixed(2)} CAD incl. HST` : ""}
                   </p>
                 </div>
               )}
@@ -422,7 +453,7 @@ export default function AppOrderDrawer({
                   <div style={{ borderTop: "1px solid #FDE68A", paddingTop: 8, marginTop: 2 }}>
                     {priceSaved ? (
                       <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#166534", fontWeight: 600 }}>
-                        Saved — the customer can now pay online from their tracking page.
+                        Saved{effectivePrice != null ? `: $${effectivePrice.toFixed(2)} + HST = $${calculateHst(effectivePrice).total.toFixed(2)} CAD` : ""} — the customer can now pay online from their tracking page.
                       </p>
                     ) : (
                       <button
@@ -439,10 +470,26 @@ export default function AppOrderDrawer({
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
                   <input
                     type="number" min={0} inputMode="numeric"
-                    placeholder={nextStatusId === "picked_up" ? "Items received from customer" : "Items returned to customer"}
+                    placeholder={nextStatusId === "picked_up" ? "How many items? (count)" : "How many items came back? (count)"}
                     value={pendingCount}
                     onChange={e => setPendingCount(e.target.value)}
                     style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
+                  />
+                  {/* type="text", so phones open the full keyboard, not the
+                      number pad — staff need to write out what the items
+                      actually are, not just how many (per client,
+                      2026-09-25). The count above stays, because the
+                      missing-item check is arithmetic on those two numbers. */}
+                  <textarea
+                    rows={2}
+                    inputMode="text"
+                    maxLength={500}
+                    placeholder={nextStatusId === "picked_up"
+                      ? "Items received from customer — e.g. 3 shirts, 2 trousers, 1 bedsheet"
+                      : "Items returned to customer — e.g. 3 shirts, 2 trousers, 1 bedsheet"}
+                    value={pendingDetails}
+                    onChange={e => setPendingDetails(e.target.value)}
+                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", resize: "vertical", boxSizing: "border-box" }}
                   />
                   {countError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{countError}</p>}
                 </div>

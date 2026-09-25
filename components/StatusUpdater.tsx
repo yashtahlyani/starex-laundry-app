@@ -39,9 +39,9 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
 
   // When set, we're mid-way through confirming a picked_up/delivered transition
   // that needs an item count (and optionally weight) before it commits.
-  const [pending, setPending] = useState<{ status: string; itemCount: string; weight: string } | null>(null);
+  const [pending, setPending] = useState<{ status: string; itemCount: string; itemDetails: string; weight: string } | null>(null);
 
-  async function commitUpdate(newStatus: string, extra?: { itemCount?: number; weight?: string }) {
+  async function commitUpdate(newStatus: string, extra?: { itemCount?: number; weight?: string; itemDetails?: string }) {
     if (newStatus === status) return;
     setSaving(true); setSaved(false); setError(null);
     try {
@@ -67,7 +67,7 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
     if (newStatus === status) return;
     if (NEEDS_EXTRA[newStatus]) {
       setError(null);
-      setPending({ status: newStatus, itemCount: "", weight: "" });
+      setPending({ status: newStatus, itemCount: "", itemDetails: "", weight: "" });
     } else {
       commitUpdate(newStatus);
     }
@@ -87,6 +87,7 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
     }
     commitUpdate(pending.status, {
       itemCount,
+      itemDetails: pending.itemDetails.trim() || undefined,
       weight: pending.weight.trim() || undefined,
     });
   }
@@ -100,10 +101,18 @@ export default function StatusUpdater({ orderCode, currentStatus }: { orderCode:
           <label className="text-xs text-gray-500">
             {meta.itemLabel}
             <input
-              type="number" min={0} inputMode="numeric" placeholder="e.g. 15"
+              type="number" min={0} inputMode="numeric" placeholder="How many? e.g. 15"
               className="mt-0.5 w-full text-xs border rounded px-2 py-1 bg-white"
               value={pending.itemCount}
               onChange={e => setPending({ ...pending, itemCount: e.target.value })}
+            />
+            {/* Full keyboard, not the number pad — what the items are, not
+                just how many (per client, 2026-09-25). */}
+            <textarea
+              rows={2} maxLength={500} placeholder="What are they? e.g. 3 shirts, 2 trousers, 1 bedsheet"
+              className="mt-1 w-full text-xs border rounded px-2 py-1 bg-white"
+              value={pending.itemDetails}
+              onChange={e => setPending({ ...pending, itemDetails: e.target.value })}
             />
           </label>
         )}

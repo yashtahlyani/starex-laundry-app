@@ -306,6 +306,59 @@ export async function notifyOwnerOfNewContact(p: { name: string; email: string; 
   }
 }
 
+// Fires the moment a customer pays their own invoice online. Until this
+// existed the owner had no way to find out except by opening /admin and
+// looking — payment came in silently, and any delivery timing the customer
+// wanted never reached anyone (per client, 2026-09-25). The customer's
+// requested delivery window, typed on the payment page, is the headline of
+// this email: it's the thing staff have to act on.
+export async function notifyOwnerOfPayment(p: {
+  orderCode: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  breakdown: { subtotal: number; hst: number; total: number };
+  deliveryRequest?: string | null;
+}) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!adminEmail || !resend) return;
+  const delivery = p.deliveryRequest?.trim();
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: adminEmail,
+      replyTo: p.customerEmail,
+      subject: delivery
+        ? `Paid — Order ${p.orderCode} — wants delivery ${delivery}`
+        : `Paid — Order ${p.orderCode} — $${p.breakdown.total.toFixed(2)} CAD`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
+          <h2 style="color:#ED1D24;margin:0 0 16px">Customer Paid Their Invoice</h2>
+          <p style="font-size:15px;color:#1a1a2e;margin:0 0 16px;">
+            ${escapeHtml(p.customerName)} has paid order
+            <strong style="font-family:monospace">${escapeHtml(p.orderCode)}</strong> online.
+          </p>
+          ${delivery ? `
+          <div style="background:#FFFBEB;border-left:3px solid #F59E0B;padding:16px;margin:0 0 16px;border-radius:4px;">
+            <p style="margin:0 0 4px;color:#92400E;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;">Delivery requested</p>
+            <p style="margin:0;font-size:15px;color:#1a1a2e;font-weight:600;">${escapeHtml(delivery).replace(/\n/g, "<br>")}</p>
+          </div>` : `
+          <p style="margin:0 0 16px;color:#6B7280;font-size:13px;">The customer didn't specify a delivery time — coordinate with them directly.</p>`}
+          <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
+            <tr><td style="color:#6B7280;width:140px">Customer</td><td>${escapeHtml(p.customerName)} — ${escapeHtml(p.customerEmail)} — ${escapeHtml(p.customerPhone)}</td></tr>
+            <tr><td style="color:#6B7280">Subtotal</td><td>$${p.breakdown.subtotal.toFixed(2)} CAD</td></tr>
+            <tr><td style="color:#6B7280">HST (13%)</td><td>$${p.breakdown.hst.toFixed(2)} CAD</td></tr>
+            <tr><td style="color:#6B7280">Total paid</td><td><strong>$${p.breakdown.total.toFixed(2)} CAD</strong></td></tr>
+          </table>
+          <a href="${SITE_URL}/admin?tab=orders&q=${encodeURIComponent(p.orderCode)}" style="display:inline-block;margin-top:16px;color:#ED1D24;">Open Admin Console →</a>
+        </div>
+      `,
+    });
+  } catch {
+    // Best-effort — a failed owner alert must never fail the customer's payment.
+  }
+}
+
 export async function notifyOwnerOfLowRating(orderCode: string, rating: number) {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!adminEmail || !resend) return;

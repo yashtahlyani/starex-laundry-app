@@ -3,7 +3,7 @@ import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { OrderRepository } from "@/lib/repositories/order.repository";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
-import { sendPaymentReceived } from "@/lib/notifications";
+import { sendPaymentReceived, notifyOwnerOfPayment } from "@/lib/notifications";
 import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
@@ -25,12 +25,18 @@ export async function POST(req: NextRequest) {
   const allowed = await checkRateLimit(`rate:pay-confirm:${clientIp(req)}`, 30, 3600);
   if (!allowed) return NextResponse.json({ error: "Too many requests — please try again later" }, { status: 429 });
 
-  let body: { orderCode?: string; paymentIntentId?: string };
+  let body: { orderCode?: string; paymentIntentId?: string; deliveryRequest?: string };
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
   const orderCode = (body.orderCode ?? "").trim().toUpperCase();
   const paymentIntentId = (body.paymentIntentId ?? "").trim();
+  // Free text the customer types on the payment page ("Friday after 6pm").
+  // Capped because it lands in the owner's email subject line and in
+  // status_history — neither should carry an unbounded string.
+  const deliveryRequest = typeof body.deliveryRequest === "string"
+    ? body.deliveryRequest.trim().slice(0, 300)
+    : "";
   if (!orderCode || !paymentIntentId) {
     return NextResponse.json({ error: "orderCode and paymentIntentId are required" }, { status: 400 });
   }
@@ -60,11 +66,28 @@ export async function POST(req: NextRequest) {
     // the pre-tax subtotal set at Confirmed, and intent.amount is that
     // subtotal plus HST; overwriting price with the tax-inclusive figure
     // would break the "price is always pre-tax" convention everywhere else.
-    await new OrderRepository(db).markPaid(order.id, "Paid online by customer");
+    const breakdown = calculateHst(order.price ?? 0);
+    await new OrderRepository(db).markPaid(
+      order.id,
+      deliveryRequest
+        ? `Paid online by customer — delivery requested: ${deliveryRequest}`
+        : "Paid online by customer",
+    );
     // Not duplicated in the webhook handler — that's a backstop for when this
     // call never completes (tab closed mid-payment), and firing the
     // confirmation from both paths risks sending it twice for the same charge.
-    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, calculateHst(order.price ?? 0)).catch(() => {});
+    await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, breakdown).catch(() => {});
+    // The owner's own alert: payment used to land silently, so staff only
+    // found out by opening /admin, and a delivery time the customer wanted
+    // reached nobody (per client, 2026-09-25).
+    await notifyOwnerOfPayment({
+      orderCode: order.code,
+      customerName: order.customer_name,
+      customerEmail: order.email,
+      customerPhone: order.phone,
+      breakdown,
+      deliveryRequest,
+    }).catch(() => {});
 
     return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {

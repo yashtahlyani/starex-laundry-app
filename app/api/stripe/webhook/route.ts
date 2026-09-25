@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, isStripeConfigured } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { OrderRepository } from "@/lib/repositories/order.repository";
+import { sendPaymentReceived, notifyOwnerOfPayment } from "@/lib/notifications";
+import { calculateHst } from "@/lib/pricing";
 import Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
@@ -56,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     if (orderId && note) {
       const supabaseAdmin = getSupabaseAdmin();
-      const { data: order } = await supabaseAdmin.from("orders").select("code, status, status_history, payment_status, customer_name, email, phone").eq("id", orderId).single();
+      const { data: order } = await supabaseAdmin.from("orders").select("code, status, status_history, payment_status, customer_name, email, phone, price").eq("id", orderId).single();
       if (order) {
         // A successful charge that the admin charge route hasn't already
         // recorded (payment_status still unpaid) marks the order paid here —
@@ -70,6 +72,19 @@ export async function POST(req: NextRequest) {
           // amount here is that subtotal plus HST; overwriting price with it
           // would break that convention everywhere else in the app.
           await new OrderRepository(supabaseAdmin).markPaid(orderId, note);
+          // Only reached when /api/stripe/confirm-payment never ran (customer
+          // closed the tab mid-payment) — that route is what normally sends
+          // these, and it won't have, so the receipt and the owner's "customer
+          // paid" alert would otherwise be lost for this order entirely.
+          const breakdown = calculateHst(order.price ?? 0);
+          await sendPaymentReceived(orderId, order.code, order.customer_name, order.email, order.phone, breakdown).catch(() => {});
+          await notifyOwnerOfPayment({
+            orderCode: order.code,
+            customerName: order.customer_name,
+            customerEmail: order.email,
+            customerPhone: order.phone,
+            breakdown,
+          }).catch(() => {});
         } else {
           const history = order.status_history ?? [];
           await supabaseAdmin

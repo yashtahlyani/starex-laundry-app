@@ -1,11 +1,74 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CreditCard, CheckCircle, Lock } from "lucide-react";
 
-function PayForm({ orderCode, amountCad, onPaid }: { orderCode: string; amountCad: number; onPaid: (status: string) => void }) {
+// Paying and getting the order delivered are two different conversations —
+// customers used to pay, then have to phone or message separately to agree a
+// delivery time, and staff had no idea payment had even landed (per client,
+// 2026-09-25). Captured here at the moment of payment and emailed straight to
+// the owner, so the delivery window arrives with the money.
+function DeliveryRequestFields({
+  date, time, onDateChange, onTimeChange,
+}: {
+  date: string; time: string;
+  onDateChange: (v: string) => void; onTimeChange: (v: string) => void;
+}) {
+  // The dashboard renders one of these per unpaid order, so a hardcoded id
+  // would repeat down the page and point every label at the first field.
+  const dateId = useId();
+  // Eastern-time "today", not the browser's local date — a customer travelling
+  // in another timezone must not be offered (or blocked from) a delivery date
+  // that doesn't line up with the days Starex actually operates.
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+  const inputStyle: React.CSSProperties = {
+    width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid #E5E7EB",
+    fontSize: "0.85rem", fontFamily: "Kodchasan, sans-serif", background: "#fff",
+    color: "#161616", boxSizing: "border-box",
+  };
+  return (
+    <div style={{ background: "#FAFAFA", border: "1px solid #EFEFEF", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
+      <label htmlFor={dateId} style={{ display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem", color: "#161616", marginBottom: 2 }}>
+        When would you like it delivered?
+      </label>
+      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C", marginBottom: 10 }}>
+        Optional — we&apos;ll send this to our team with your payment and confirm the time with you.
+      </p>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <input
+          id={dateId} type="date" min={today} value={date}
+          onChange={e => onDateChange(e.target.value)}
+          aria-label="Preferred delivery date"
+          style={{ ...inputStyle, flex: "1 1 140px" }}
+        />
+        <input
+          type="text" value={time} maxLength={120}
+          onChange={e => onTimeChange(e.target.value)}
+          placeholder="Time — e.g. after 6 pm"
+          aria-label="Preferred delivery time"
+          style={{ ...inputStyle, flex: "1 1 160px" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// Turns the two fields into the one line the owner reads in their inbox.
+// Empty when the customer skipped both, which the email handles explicitly.
+export function buildDeliveryRequest(date: string, time: string): string {
+  const parts: string[] = [];
+  if (date.trim()) {
+    parts.push(new Date(`${date}T00:00:00`).toLocaleDateString("en-CA", {
+      weekday: "long", month: "long", day: "numeric",
+    }));
+  }
+  if (time.trim()) parts.push(time.trim());
+  return parts.join(" · ");
+}
+
+function PayForm({ orderCode, amountCad, deliveryRequest, onPaid }: { orderCode: string; amountCad: number; deliveryRequest: string; onPaid: (status: string) => void }) {
   const stripe = useStripe();
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
@@ -32,7 +95,7 @@ function PayForm({ orderCode, amountCad, onPaid }: { orderCode: string; amountCa
       const res = await fetch("/api/stripe/confirm-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderCode, paymentIntentId: paymentIntent.id }),
+        body: JSON.stringify({ orderCode, paymentIntentId: paymentIntent.id, deliveryRequest }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Payment succeeded but couldn't be recorded — contact us");
@@ -62,11 +125,11 @@ function PayForm({ orderCode, amountCad, onPaid }: { orderCode: string; amountCa
 }
 
 function QuickPayButton({
-  stripePromise, clientSecret, amountCad, savedCard, onUseDifferentCard, onPaid, orderCode,
+  stripePromise, clientSecret, amountCad, savedCard, onUseDifferentCard, onPaid, orderCode, deliveryRequest,
 }: {
   stripePromise: Promise<Stripe | null>; clientSecret: string; amountCad: number;
   savedCard: { brand: string | null; last4: string | null }; onUseDifferentCard: () => void;
-  onPaid: (status: string) => void; orderCode: string;
+  onPaid: (status: string) => void; orderCode: string; deliveryRequest: string;
 }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,7 +152,7 @@ function QuickPayButton({
       const res = await fetch("/api/stripe/confirm-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderCode, paymentIntentId: paymentIntent.id }),
+        body: JSON.stringify({ orderCode, paymentIntentId: paymentIntent.id, deliveryRequest }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Payment succeeded but couldn't be recorded — contact us");
@@ -135,6 +198,9 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
   // moment the PaymentIntent comes back — that's the actual amount charged,
   // and the only thing that should ever appear on the "Pay $X" button.
   const [amountCad, setAmountCad] = useState(subtotalCad);
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const [deliveryTime, setDeliveryTime] = useState("");
+  const deliveryRequest = buildDeliveryRequest(deliveryDate, deliveryTime);
 
   useEffect(() => {
     fetch("/api/stripe/config")
@@ -165,7 +231,9 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
         <div>
           <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9375rem", color: "#166534" }}>Payment received — thank you!</p>
           <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#166534" }}>
-            {paid === "delivered" ? "Your order is complete." : "We'll update your order shortly."}
+            {deliveryRequest
+              ? `We've sent your delivery request (${deliveryRequest}) to our team — we'll confirm it with you shortly.`
+              : paid === "delivered" ? "Your order is complete." : "We'll update your order shortly."}
           </p>
         </div>
       </div>
@@ -190,6 +258,12 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
           Couldn&apos;t start the payment. Please refresh, or contact us to pay another way.
         </p>
       )}
+      {status === "ready" && clientSecret && stripePromise && (
+        <DeliveryRequestFields
+          date={deliveryDate} time={deliveryTime}
+          onDateChange={setDeliveryDate} onTimeChange={setDeliveryTime}
+        />
+      )}
       {status === "ready" && clientSecret && stripePromise && savedCard && !useNewCard && (
         <QuickPayButton
           stripePromise={stripePromise}
@@ -197,13 +271,14 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
           amountCad={amountCad}
           savedCard={savedCard}
           orderCode={orderCode}
+          deliveryRequest={deliveryRequest}
           onUseDifferentCard={() => setUseNewCard(true)}
           onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }}
         />
       )}
       {status === "ready" && clientSecret && stripePromise && (!savedCard || useNewCard) && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <PayForm orderCode={orderCode} amountCad={amountCad} onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }} />
+          <PayForm orderCode={orderCode} amountCad={amountCad} deliveryRequest={deliveryRequest} onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }} />
         </Elements>
       )}
     </div>

@@ -43,6 +43,11 @@ export interface StatusEvent {
   // the two (see lib/itemTracking.ts) is how staff catch a lost item before
   // the customer has to notice it themselves.
   itemCount?: number;
+  // The same reconciliation in words — what the items actually were ("3
+  // shirts, 2 trousers, 1 bedsheet"). Staff asked for a real keyboard here,
+  // not just a number pad, because a count alone can't tell you which
+  // garment is the missing one (per client, 2026-09-25).
+  itemDetails?: string;
 }
 
 export type NewOrder = Omit<Order, "id" | "created_at" | "updated_at">;
@@ -173,7 +178,7 @@ export class OrderRepository {
     id: string,
     status: string,
     note?: string,
-    extra?: { itemCount?: number; weight?: string }
+    extra?: { itemCount?: number; weight?: string; itemDetails?: string }
   ): Promise<void> {
     // Fetch current status_history
     const { data: current } = await this.db.from("orders").select("status_history").eq("id", id).single();
@@ -184,6 +189,7 @@ export class OrderRepository {
       time: new Date().toISOString(),
       ...(note ? { note } : {}),
       ...(extra?.itemCount != null ? { itemCount: extra.itemCount } : {}),
+      ...(extra?.itemDetails?.trim() ? { itemDetails: extra.itemDetails.trim() } : {}),
     };
     const updatePayload: Record<string, unknown> = {
       status, status_history: [...history, newEvent], updated_at: new Date().toISOString(), is_new: false,

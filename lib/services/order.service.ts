@@ -44,7 +44,7 @@ export class OrderService {
     orderCode: string,
     newStatus: OrderStatus,
     note: string | null,
-    extra?: { itemCount?: number; weight?: string }
+    extra?: { itemCount?: number; weight?: string; itemDetails?: string }
   ) {
     const order = await this.orders.findByCode(orderCode);
     if (!order) throw Object.assign(new Error("Order not found"), { statusCode: 404 });

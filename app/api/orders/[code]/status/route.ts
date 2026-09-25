@@ -10,7 +10,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { code: stri
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: { status: string; note?: string; itemCount?: number; weight?: string };
+  let body: { status: string; note?: string; itemCount?: number; weight?: string; itemDetails?: string };
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
@@ -27,6 +27,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { code: stri
     const result = await service.updateStatus(params.code.trim().toUpperCase(), newStatus, body.note ?? null, {
       itemCount: body.itemCount,
       weight: body.weight,
+      // Free text staff type at pickup/delivery — capped so a stuck key can't
+      // bloat the order's status_history.
+      itemDetails: typeof body.itemDetails === "string" ? body.itemDetails.trim().slice(0, 500) : undefined,
     });
     if (result.unchanged) return NextResponse.json({ message: "Status unchanged" });
 

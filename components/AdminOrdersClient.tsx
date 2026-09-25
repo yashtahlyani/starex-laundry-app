@@ -7,8 +7,13 @@ import { ChevronRight, Check } from "lucide-react";
 import { StatusBadge, PaymentBadge, fmtSlot } from "./OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "./AppOrderDrawer";
 import { orderCodeColor } from "@/lib/orderCode";
+import { calculateHst } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
+
+// Header and rows have to stay in lockstep — they're two separate grids
+// drawn to look like one table.
+const COLUMNS = "1.3fr 1.1fr 0.9fr 0.8fr 0.9fr auto";
 
 type AdminOrder = DrawerOrder;
 
@@ -78,8 +83,8 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
   return (
     <>
       <div style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 1fr 1fr auto", gap: 16, padding: "12px 22px", background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }} className="admin-th">
-          {["Order", "Customer", "Status", "Payment", ""].map((h, i) => (
+        <div style={{ display: "grid", gridTemplateColumns: COLUMNS, gap: 16, padding: "12px 22px", background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }} className="admin-th">
+          {["Order", "Customer", "Status", "Amount", "Payment", ""].map((h, i) => (
             <span key={i} style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.7rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "#A1A1AA" }}>{h}</span>
           ))}
         </div>
@@ -88,7 +93,7 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
         )}
         {orders.map((o, i) => (
           <button key={o.id} onClick={() => setSelected(o)} style={{
-            width: "100%", display: "grid", gridTemplateColumns: "1.4fr 1.2fr 1fr 1fr auto", gap: 16, alignItems: "center",
+            width: "100%", display: "grid", gridTemplateColumns: COLUMNS, gap: 16, alignItems: "center",
             padding: "16px 22px",
             borderBottom: i < orders.length - 1 ? "1px solid #F4F4F5" : "none",
             borderLeft: "none", borderRight: "none", borderTop: "none",
@@ -109,6 +114,24 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.76rem", color: "#A1A1AA" }}>{o.phone ?? o.email ?? ""}</p>
             </div>
             <StatusBadge status={o.status} size="sm" pulse={!["delivered","cancelled"].includes(o.status)} />
+            {/* The confirmed total, visible without opening the order — the
+                owner needs to read amounts down the list (and off a printed
+                manifest), not one drawer at a time (per client, 2026-09-25).
+                Shown tax-inclusive, since that's what's actually charged. */}
+            <div>
+              {o.price != null ? (
+                <>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#161616" }}>
+                    ${calculateHst(Number(o.price)).total.toFixed(2)}
+                  </p>
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA" }}>
+                    incl. HST
+                  </p>
+                </>
+              ) : (
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#C0C0C0" }}>—</p>
+              )}
+            </div>
             <PaymentBadge status={o.payment_status} size="sm" />
             <ChevronRight size={16} color="#C0C0C0" />
           </button>

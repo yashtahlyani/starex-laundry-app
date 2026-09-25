@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
+import { getItemTracking } from "@/lib/itemTracking";
+import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -15,11 +17,26 @@ function csvCell(value: unknown): string {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
+// Amounts are split out rather than left as one "Price" column: orders.price
+// is always the pre-tax subtotal, so a manifest showing only that understates
+// every order by 13% against what was actually charged (per client,
+// 2026-09-25). Item counts and any delivery time the customer asked for at
+// payment are here too, so the printed manifest is the whole story.
 const HEADERS = [
   "Order Code", "Status", "Payment Status", "Customer Name", "Email", "Phone",
-  "Service", "Price (CAD)", "Weight", "Pickup Date", "Time Slot", "Address",
+  "Service", "Subtotal (CAD)", "HST (CAD)", "Total incl. HST (CAD)", "Paid At",
+  "Weight", "Items Received", "Items Returned", "Items Missing", "Item Details",
+  "Delivery Requested", "Pickup Date", "Time Slot", "Address",
   "Notes", "Created At", "Updated At",
 ];
+
+// The customer's requested delivery window is recorded as a status_history
+// note when they pay (see app/api/stripe/confirm-payment) — pull the most
+// recent one back out so it lands in the manifest as its own column.
+function deliveryRequestOf(history: any[]): string {
+  const match = [...(history ?? [])].reverse().find((e: any) => typeof e?.note === "string" && e.note.includes("delivery requested:"));
+  return match ? String(match.note).split("delivery requested:")[1].trim() : "";
+}
 
 export async function GET(req: NextRequest) {
   const admin = await getAdminUser();
@@ -56,11 +73,28 @@ export async function GET(req: NextRequest) {
 
   const lines = [
     HEADERS.join(","),
-    ...rows.map((o: any) => [
-      o.code, o.status, o.payment_status ?? "unpaid", o.customer_name, o.email, o.phone,
-      o.service_title ?? o.service, o.price ?? "", o.weight ?? "", o.date, o.time_slot, o.address,
-      o.notes ?? "", o.created_at, o.updated_at,
-    ].map(csvCell).join(",")),
+    ...rows.map((o: any) => {
+      const subtotal = o.price != null ? Number(o.price) : null;
+      const { hst, total } = subtotal != null ? calculateHst(subtotal) : { hst: null, total: null };
+      const { received, returned, missing, receivedDetails, returnedDetails } = getItemTracking(o.status_history);
+      const details = [
+        receivedDetails ? `In: ${receivedDetails}` : "",
+        returnedDetails ? `Out: ${returnedDetails}` : "",
+      ].filter(Boolean).join(" | ");
+      return [
+        o.code, o.status, o.payment_status ?? "unpaid", o.customer_name, o.email, o.phone,
+        o.service_title ?? o.service,
+        subtotal != null ? subtotal.toFixed(2) : "",
+        hst != null ? hst.toFixed(2) : "",
+        total != null ? total.toFixed(2) : "",
+        o.paid_at ?? "",
+        o.weight ?? "",
+        received ?? "", returned ?? "", missing ?? "", details,
+        deliveryRequestOf(o.status_history),
+        o.date, o.time_slot, o.address,
+        o.notes ?? "", o.created_at, o.updated_at,
+      ].map(csvCell).join(",");
+    }),
   ];
 
   // Leading BOM so Excel (which guesses encoding from the first bytes, not
