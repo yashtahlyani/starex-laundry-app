@@ -15,13 +15,16 @@ export const metadata: Metadata = {
     default: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
     template: `%s | ${BUSINESS_NAME}`,
   },
-  description: "Laundry at $2/lb, $40 minimum order value. Dry cleaning, ironing, household items, and car & sofa detailing. Serving Brampton & Mississauga with 24–48h turnaround.",
+  // Leads with the combo rather than the $40 minimum: the minimum is a barrier,
+  // the combo is the reason to click, and it's what the business actually wants
+  // people booking (per client, 2026-09-29).
+  description: "Dry clean 5 pieces for $50 flat — blanket or quilt included. Wash & fold $2/lb, free pickup & delivery in Brampton & Mississauga. 24–48h turnaround.",
   keywords: "laundry pickup delivery, dry cleaning, wash fold, Brampton, Mississauga, Canada, car detailing, sofa cleaning",
   openGraph: {
     type: "website",
     siteName: BUSINESS_NAME,
     title: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
-    description: "Laundry at $2/lb, $40 minimum order value. Serving Brampton & Mississauga with 24–48h turnaround.",
+    description: "Dry clean 5 pieces for $50 flat — blanket included. Wash & fold $2/lb, free pickup & delivery in Brampton & Mississauga.",
     url: PROD_URL,
     locale: "en_CA",
     images: [{ url: "/images/starex/01_homepage_without_copy_v1.jpg", width: 1600, height: 854, alt: BUSINESS_NAME }],

@@ -53,7 +53,46 @@ const faqs = [
   { q: "What if I only have 3 or 4 items?", a: "Standard per-item dry-clean pricing applies below 5 items — see the full price list." },
   { q: "Is this on top of the $40 minimum order value?", a: "The combo price itself ($50) already clears the $40 minimum, so no extra minimum charge applies." },
   { q: "How long does the combo take?", a: "3–4 days from pickup to delivery — a bit longer than standard dry cleaning, since combo orders are batched for the flat rate." },
+  // Added after two customers booked single items at full price without ever
+  // meeting the combo — one paid $39.99 to clean a single duvet (per client,
+  // 2026-09-29). This is the comparison that would have changed that booking.
+  { q: "I only need one blanket or duvet cleaned — is the combo still worth it?", a: "Almost always, yes. A king duvet on its own is $39.99 and a queen blanket is $22.99. For a flat $50 that same duvet counts as one of your 5 pieces, so you can add four garments for around $10 more than cleaning the duvet alone." },
 ];
+
+// Marks the combo up as a real Offer so Google can show the price directly in
+// search results, and the questions as an FAQ so they can appear beneath the
+// listing. The page had no structured data at all, which is part of why people
+// searching for dry cleaning never saw the offer before landing.
+const OFFER_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Offer",
+  name: `Dry Cleaning ${DRY_CLEAN_COMBO.tagline} Combo`,
+  description: `${DRY_CLEAN_COMBO.description} ${DRY_CLEAN_COMBO.exclusions}`,
+  price: DRY_CLEAN_COMBO.priceCad.toFixed(2),
+  priceCurrency: "CAD",
+  availability: "https://schema.org/InStock",
+  url: "https://starexlaundrydryclean.ca/offer",
+  areaServed: [
+    { "@type": "City", name: "Brampton" },
+    { "@type": "City", name: "Mississauga" },
+  ],
+  offeredBy: {
+    "@type": "LaundryService",
+    name: "StareX",
+    telephone: "+1-437-607-7251",
+    url: "https://starexlaundrydryclean.ca",
+  },
+};
+
+const FAQ_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
 
 export default function OfferPage() {
   const [showSticky, setShowSticky] = useState(false);
@@ -70,6 +109,8 @@ export default function OfferPage() {
     // button — on short mobile viewports the two were colliding since the
     // fixed bar sat directly on top of that in-page button.
     <div style={{ background: "#FFFFFF", paddingBottom: showSticky ? 84 : 0, transition: "padding-bottom 0.2s ease" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(OFFER_JSON_LD) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
 
       {/* Hero */}
       <section style={{

@@ -87,7 +87,12 @@ function BookPageInner() {
   // Tied to the live selected service, not just the initial URL param, so if
   // the customer goes back and picks a different service the combo styling
   // correctly disappears rather than sticking around inaccurately.
-  const isCombo = comboParam && form.service === "dry-clean";
+  // Opt-in starts from the URL param but is switchable in the flow. Previously
+  // the combo existed only for people who arrived from /offer — someone who
+  // picked "Dry Cleaning" off the service grid was never offered it, and one
+  // customer paid $100 for 9 garments that way (per client, 2026-09-29).
+  const [comboOptIn, setComboOptIn] = useState(comboParam);
+  const isCombo = comboOptIn && form.service === "dry-clean";
   const [submitting, setSubmitting] = useState(false);
 
   // Hide pickup windows that have already started when booking for today —
@@ -324,6 +329,35 @@ function BookPageInner() {
             {/* Step 1: Schedule */}
             {step === 1 && (
               <motion.div key="step1" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                {/* The catch-them-before-they-pay-more prompt. Shown to anyone
+                    booking dry cleaning or household items who hasn't already
+                    taken the combo — the exact two cases the client lost money
+                    on were a single duvet and 9 loose garments. */}
+                {!isCombo && (form.service === "dry-clean" || form.service === "household") && (
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 14, background: "#FFF5F6", border: "1.5px solid rgba(184,50,79,0.25)", borderLeft: "5px solid #ED1D24", borderRadius: 14, padding: "16px 18px", marginBottom: 24 }}>
+                    <Sparkles size={18} color="#B30F14" style={{ flexShrink: 0, marginTop: 2 }} />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.95rem", color: "#161616", margin: 0 }}>
+                        Cleaning 5 pieces or more? Pay ${DRY_CLEAN_COMBO.priceCad} flat.
+                      </p>
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", color: "#6B6B6B", margin: "4px 0 10px", lineHeight: 1.55 }}>
+                        {DRY_CLEAN_COMBO.description} A king duvet alone is $39.99 — four garments with it costs about $10 more.
+                      </p>
+                      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                        <button
+                          type="button"
+                          onClick={() => { setComboOptIn(true); setForm(p => ({ ...p, service: "dry-clean" })); }}
+                          style={{ background: "#ED1D24", color: "#FFFFFF", border: "none", borderRadius: 999, padding: "8px 18px", cursor: "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem" }}
+                        >
+                          Add the {DRY_CLEAN_COMBO.tagline} combo
+                        </button>
+                        <a href="/offer" style={{ display: "inline-flex", alignItems: "center", fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", color: "#B30F14", textDecoration: "underline" }}>
+                          What&apos;s included?
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   {form.service === "detailing"
                     ? <>When should we come to clean your <em className="display-accent" style={{ display: "inline" }}>sofa and car?</em></>

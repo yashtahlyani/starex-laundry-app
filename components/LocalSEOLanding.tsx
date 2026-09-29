@@ -21,6 +21,11 @@ export type LocalSEOProps = {
   // Focal point for the cover-cropped hero photo, e.g. "65% center" — keeps
   // a right-of-centre subject in frame on narrow phones.
   heroPosition?: string;
+  // Shown as a full-width band directly under the hero. Dry-cleaning pages are
+  // where Google sends people searching "dry cleaning near me", and those
+  // visitors were booking single items at full price without ever meeting the
+  // combo (per client, 2026-09-29).
+  offerBand?: { headline: string; detail: string; href: string };
   h1: string;
   intro: string;
   neighborhoods: string[];
@@ -73,6 +78,33 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
           </motion.div>
         </div>
       </section>
+
+      {props.offerBand && (
+        <section style={{ background: "var(--brand)", padding: "20px 0" }}>
+          <a
+            href={props.offerBand.href}
+            style={{
+              maxWidth: 1000, margin: "0 auto", padding: "0 24px", textDecoration: "none",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              gap: 16, flexWrap: "wrap", textAlign: "center",
+            }}
+          >
+            <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.125rem", color: "#FFFFFF" }}>
+              {props.offerBand.headline}
+            </span>
+            <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "rgba(255,255,255,0.9)" }}>
+              {props.offerBand.detail}
+            </span>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 6, background: "#FFFFFF", color: "var(--brand)",
+              fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem",
+              padding: "8px 18px", borderRadius: 999, whiteSpace: "nowrap",
+            }}>
+              See the offer <ArrowRight size={14} />
+            </span>
+          </a>
+        </section>
+      )}
 
       {/* Price highlights */}
       <section style={{ padding: "80px 0" }}>

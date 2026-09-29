@@ -23,6 +23,11 @@ export default function DryCleaningMississaugaPage() {
         city="Mississauga"
         serviceLabel="Dry Cleaning"
         heroImage="/images/starex/02_rack_without_copy_alternate.jpg" heroPosition="center"
+        offerBand={{
+          headline: "5 pieces dry cleaned for $50",
+          detail: "Any 5 regular garments, including 1 blanket or quilt.",
+          href: "/offer",
+        }}
         h1="Dry Cleaning in Mississauga, Ontario"
         intro="Suits, sarees, gowns, coats and more — picked up from your door, professionally dry cleaned, and delivered back pressed and ready to wear. No drop-off, no queue, no guessing what it'll cost."
         neighborhoods={["Port Credit", "Cooksville", "Streetsville", "Erin Mills", "Meadowvale", "Hurontario"]}

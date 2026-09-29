@@ -130,7 +130,20 @@ export default function PricingPage() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.35, ease }}
             >
-              <p style={{ textAlign: "center", color: "#8C8C8C", fontSize: "0.9rem", marginBottom: 28, fontFamily: "Kodchasan, sans-serif" }}>{tab.blurb}</p>
+              <p style={{ textAlign: "center", color: "#8C8C8C", fontSize: "0.9rem", marginBottom: 12, fontFamily: "Kodchasan, sans-serif" }}>{tab.blurb}</p>
+              {/* Someone pricing a single duvet or a couple of shirts is exactly
+                  the customer who should be told about the combo — this is the
+                  moment they decide, and two of them have already paid more for
+                  less without seeing it (per client, 2026-09-29). */}
+              {(tab.id === "household" || tab.id === "dry-clean") && (
+                <p style={{ textAlign: "center", marginBottom: 28, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem" }}>
+                  <a href="/offer" style={{ color: "#B30F14", fontWeight: 600, textDecoration: "underline" }}>
+                    {tab.id === "household"
+                      ? "Cleaning a blanket or duvet? It counts as one of the 5 for $50 combo →"
+                      : "Five or more pieces? The 5 for $50 combo is usually cheaper →"}
+                  </a>
+                </p>
+              )}
               <div style={{ display: "grid", gridTemplateColumns: tab.sections.length > 1 ? "repeat(2,1fr)" : "minmax(0,560px)", gap: 20, justifyContent: "center" }} className="catalog-grid">
                 {tab.sections.map((section) => (
                   <div key={section.title} style={{ background: "#ffffff", borderRadius: 20, padding: "26px 28px", border: "1px solid rgba(20,20,20,0.06)", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)" }}>

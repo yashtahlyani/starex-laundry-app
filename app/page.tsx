@@ -140,15 +140,21 @@ export default function Home() {
                 padding: "10px 24px", gap: 16,
               }}
             >
+              {/* This bar used to advertise the $40 minimum order value — the
+                  single most valuable strip on the site spent stating a barrier
+                  to entry. Two customers in Sept 2026 found us through Google,
+                  never saw the combo, and paid more for less: one paid $40 for a
+                  single duvet, when $50 covers that duvet plus four garments.
+                  The offer goes here instead (per client, 2026-09-29). */}
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "#FFFFFF", margin: 0 }}>
-                🍁 Book your first pickup today — $40 minimum order value.
+                🍁 <strong style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>Dry cleaning: 5 pieces for $50</strong> — including a blanket or quilt.
               </p>
-              <a href="/book" style={{
+              <a href="/offer" style={{
                 fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8125rem",
                 color: "var(--brand)", background: "#FFFFFF",
                 padding: "4px 14px", borderRadius: 999, textDecoration: "none", whiteSpace: "nowrap",
               }}>
-                Book free →
+                See the offer →
               </a>
               <button
                 onClick={() => setPromoDismissed(true)}
@@ -188,8 +194,37 @@ export default function Home() {
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }}
               style={{ color: "#6B6B6B", fontSize: "1.0625rem", lineHeight: 1.75, maxWidth: "42ch", marginBottom: 40, fontFamily: "Kodchasan, sans-serif" }}>
               Schedule a pickup in 60 seconds. We wash, fold, and deliver — you relax.
-              Just $2/lb, $40 minimum order value.
+              Wash &amp; Fold just $2/lb — or dry clean 5 pieces for $50 flat.
             </motion.p>
+
+            {/* The offer, above the fold and clickable. It previously appeared
+                only as a banner far down the page and a nav pill, and customers
+                arriving from Google were booking single items at full price
+                without ever seeing it (per client, 2026-09-29). The duvet
+                comparison is the exact case that lost money: $39.99 for one
+                duvet versus $50 for that duvet plus four garments. */}
+            <motion.a
+              href="/offer"
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5, ease }}
+              whileHover={{ y: -2 }}
+              style={{
+                display: "flex", alignItems: "center", gap: 14, textDecoration: "none",
+                background: "#FFF5F6", border: "1.5px solid rgba(184,50,79,0.25)",
+                borderLeft: "5px solid var(--brand)", borderRadius: 14,
+                padding: "14px 18px", marginBottom: 32, maxWidth: "44ch",
+              }}
+            >
+              <div>
+                <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.0625rem", color: "#161616", margin: 0, lineHeight: 1.3 }}>
+                  Dry clean 5 pieces for $50
+                  <span style={{ color: "var(--brand)" }}> — blanket included</span>
+                </p>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B", margin: "4px 0 0", lineHeight: 1.5 }}>
+                  One king duvet on its own is $39.99. Add four garments for $10 more.
+                </p>
+              </div>
+              <ArrowRight size={18} color="#B30F14" style={{ flexShrink: 0, marginLeft: "auto" }} />
+            </motion.a>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55, ease }}
               style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
