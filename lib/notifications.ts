@@ -549,9 +549,24 @@ async function logNotification(
 
 // ─── Formatting utilities ─────────────────────────────────────────────────────
 
+// A pickup date is a calendar date ("2026-10-03"), not a moment in time, so it
+// must never be run through a timezone conversion.
+//
+// The old version did exactly that: `new Date("2026-10-03T00:00:00")` has no
+// timezone suffix, so it was parsed in the *server's* zone — UTC on Vercel —
+// and then formatted for America/Toronto, which is 4–5 hours behind. Midnight
+// UTC is 8pm the previous evening in Toronto, so every booking email and
+// WhatsApp message announced the pickup **one day early**: an order booked for
+// Saturday 3 October went out as "Friday, October 2" (reported by the client,
+// 2026-10-04 — the booking itself was correct in the database all along).
+//
+// Building the date in UTC and formatting it in UTC keeps the calendar date
+// exactly as the customer picked it.
 function formatDate(date: string) {
-  return new Date(`${date}T00:00:00`).toLocaleDateString("en-CA", {
-    timeZone: "America/Toronto",
+  const [year, month, day] = date.split("-").map(Number);
+  if (!year || !month || !day) return date; // never throw inside a notification
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString("en-CA", {
+    timeZone: "UTC",
     weekday: "long",
     month: "long",
     day: "numeric",

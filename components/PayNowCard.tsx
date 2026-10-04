@@ -60,8 +60,13 @@ function DeliveryRequestFields({
 export function buildDeliveryRequest(date: string, time: string): string {
   const parts: string[] = [];
   if (date.trim()) {
-    parts.push(new Date(`${date}T00:00:00`).toLocaleDateString("en-CA", {
-      weekday: "long", month: "long", day: "numeric",
+    // Built in UTC and formatted in UTC so the chosen calendar date survives
+    // intact. Parsing "YYYY-MM-DDT00:00:00" uses whatever zone the runtime is
+    // in, which is how every booking email ended up a day early (see
+    // formatDate in lib/notifications.ts).
+    const [year, month, day] = date.split("-").map(Number);
+    parts.push(new Date(Date.UTC(year, month - 1, day)).toLocaleDateString("en-CA", {
+      timeZone: "UTC", weekday: "long", month: "long", day: "numeric",
     }));
   }
   if (time.trim()) parts.push(time.trim());

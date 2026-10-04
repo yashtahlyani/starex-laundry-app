@@ -150,6 +150,10 @@ function BookPageInner() {
   };
 
   const goNext = () => {
+    if (step === 1 && form.date && form.date < todayStr) {
+      setErrors({ date: "That date has already passed — please choose today or later" });
+      return;
+    }
     if (step === 2 && !validateDetails()) return;
     setErrors({});
     setDirection(1);
@@ -200,9 +204,12 @@ function BookPageInner() {
     }
   };
 
+  // `min` on a date input only constrains the picker UI — a date typed straight
+  // into the field still lands in state and submits. The server rejects it, but
+  // the customer shouldn't reach that point to find out.
   const canNext = [
     form.service !== "",
-    form.date !== "" && form.time !== "",
+    form.date !== "" && form.date >= todayStr && form.time !== "",
     true,
     true,
   ][step] ?? true;
@@ -369,12 +376,17 @@ function BookPageInner() {
 
                 <div style={{ marginBottom: 24 }}>
                   <label style={labelStyle}><Calendar size={13} style={{ display: "inline", marginRight: 6 }} />{form.service === "detailing" ? "Appointment Date" : "Pickup Date"}</label>
-                  <input type="date" value={form.date} min={new Date().toISOString().split("T")[0]}
-                    onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
+                  {/* min was built from toISOString(), which is UTC — between
+                      8pm and midnight Eastern that's already tomorrow, so the
+                      picker blocked tonight's valid bookings. todayStr is the
+                      Toronto date the rest of this flow already works from. */}
+                  <input type="date" value={form.date} min={todayStr}
+                    onChange={e => { setForm(p => ({ ...p, date: e.target.value })); setErrors(p => ({ ...p, date: undefined })); }}
                     style={inputStyle}
                     onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#ED1D24"}
                     onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#E4E4E7"}
                   />
+                  {errors.date && <p style={{ color: "#DC2626", fontSize: "0.8rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>{errors.date}</p>}
                 </div>
 
                 <div style={{ marginBottom: 28 }}>

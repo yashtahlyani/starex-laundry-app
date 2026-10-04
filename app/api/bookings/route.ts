@@ -86,14 +86,18 @@ export async function POST(req: NextRequest) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(new Date(date).getTime())) {
     return NextResponse.json({ error: "Invalid pickup date" }, { status: 400 });
   }
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  if (new Date(`${date}T00:00:00`) < today) {
+  // "Past" means past in Toronto, where the vans actually drive — not in UTC,
+  // which is where this function runs. Comparing against a UTC midnight meant
+  // that between 8pm and midnight Eastern the server already considered it
+  // tomorrow, and would reject a legitimate booking made this evening.
+  // ISO dates compare correctly as plain strings, so no Date object is needed.
+  const nowET = nowInToronto();
+  if (date < nowET.dateStr) {
     return NextResponse.json({ error: "Pickup date can't be in the past" }, { status: 400 });
   }
   // Same-day bookings can't select a pickup window that's already started —
   // mirrors the slot filtering in app/book/page.tsx (Eastern time, matching
   // the service area, not the server's UTC clock).
-  const nowET = nowInToronto();
   if (nowET.dateStr === date) {
     const slotStartHour = { "8:00 AM": 8, "11:00 AM": 11, "2:00 PM": 14, "5:00 PM": 17 }[timeSlot.split(" – ")[0]];
     if (slotStartHour != null && slotStartHour <= nowET.hour) {

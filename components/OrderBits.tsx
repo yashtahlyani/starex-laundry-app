@@ -47,6 +47,10 @@ export const PAYMENT_META: Record<"unpaid" | "paid", { label: string; bg: string
 
 export function fmtSlot(val: string) {
   if (!val) return "—";
+  // A bare "YYYY-MM-DD" is a calendar date, not an instant — running it through
+  // a timezone conversion shifts it a day, which is exactly how every booking
+  // email came out one day early (see formatDate in lib/notifications.ts).
+  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
   if (isNaN(Date.parse(val))) return val; // already human-readable
   return new Date(val).toLocaleString("en-CA", {
     timeZone: "America/Toronto",
