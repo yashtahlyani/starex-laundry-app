@@ -14,17 +14,26 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
   );
 }
 
+// This was a fabricated company history — "Founded in a garage" in 2019, "First
+// 500 customers" in 2020, "10,000+ customers served" in 2024 — on a business
+// that is still counting its first orders one at a time. Invented milestones
+// are misleading advertising, and they're the kind of claim a careful customer
+// checks and finds nothing behind, which costs more trust than it buys.
+//
+// Replaced with how the service actually works, which is true today and needs
+// no footnote. If any real dates or figures exist in the business records,
+// they're better than this and should go straight back in.
 const milestones = [
-  { year: "2019", title: "Founded in a garage", desc: "Started with two laundry machines and a dream to make laundry day disappear for good." },
-  { year: "2020", title: "First 500 customers",  desc: "Word of mouth grew us across Brampton. Quality over everything — always." },
-  { year: "2022", title: "Expanded across Peel", desc: "Grew our pickup & delivery routes to cover Brampton and Mississauga end to end." },
-  { year: "2024", title: "10,000+ customers served", desc: "Now serving Brampton & Mississauga — plus car & sofa detailing, our newest service." },
+  { year: "What we do",   title: "Laundry, collected and returned", desc: "Wash & Fold by the pound, dry cleaning, ironing, household items and car & sofa detailing — picked up from your door and brought back clean." },
+  { year: "Where",        title: "Brampton & Mississauga",          desc: "Free pickup and delivery across both cities. No drop-off, no queue, no driving across town at closing time." },
+  { year: "How it's priced", title: "Confirmed before we start",    desc: "Wash & Fold is $2/lb and every order is weighed and priced with you before any cleaning begins. No surprise totals at delivery." },
+  { year: "How long",     title: "24–48 hours, standard",           desc: "Most orders are back within 24–48 hours. Same-day Wash & Fold is available subject to driver availability." },
 ];
 
 const values = [
   { Icon: Shield, title: "Radical transparency", desc: "Price confirmed before we touch your clothes. No surprises, ever.", color: "#EDEDED" },
   { Icon: Leaf,   title: "Eco-first",            desc: "Biodegradable detergents, optimised wash loads, carbon-offset delivery.", color: "#F2F2F2" },
-  { Icon: Clock,  title: "Obsessed with time",   desc: "We know your time is precious. 98% of deliveries arrive on schedule.", color: "#EAEAEA" },
+  { Icon: Clock,  title: "Obsessed with time",   desc: "You choose the pickup window. We confirm it, and we tell you the moment anything changes.", color: "#EAEAEA" },
   { Icon: Heart,  title: "Care in every fold",   desc: "Every garment is handled like it belongs to us — because for a few hours, it does.", color: "#E5E5E5" },
 ];
 
@@ -57,13 +66,16 @@ export default function About() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
             style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif", marginBottom: 36 }}
           >
-            StareX started in 2019 with one belief: laundry should be invisible. You should never have to think about it. Five years later, we serve over 10,000 Canadians who&apos;ve reclaimed their weekends.
+            StareX runs on one belief: laundry should be invisible. You shouldn&apos;t have to think about it, drive to it, or wait around for it. We collect from your door across Brampton and Mississauga, clean it properly, and bring it back.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.35 }}
             style={{ display: "flex", gap: 32, flexWrap: "wrap" }}
           >
-            {[["10,000+", "customers"], ["98%", "on-time"], ["24–48h", "turnaround"], ["2019", "founded"]].map(([n, l]) => (
+            {/* Customer counts, on-time percentages and a founding year that
+                nobody can evidence have been replaced with facts that are
+                true today and checkable on the price list. */}
+            {[["$2/lb", "wash & fold"], ["24–48h", "turnaround"], ["2", "cities served"], ["Free", "pickup & delivery"]].map(([n, l]) => (
               <div key={l}>
                 <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.375rem", color: "#ffffff", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{n}</p>
                 <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif" }}>{l}</p>

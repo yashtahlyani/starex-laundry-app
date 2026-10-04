@@ -1,15 +1,18 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
 import { HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
+import { SITE_ORIGIN, CONTACT } from "@/lib/site";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const marqueeItems = [
   "Fully Insured", "$40 Minimum Order", "24–48h Turnaround", "$2 Per Pound",
-  "Same-Day Service Available", "Dry Cleaning & Ironing", "Car & Sofa Detailing", "No Hidden Fees",
+  // "Same-Day Service Available" unqualified reads as same-day dry cleaning,
+  // which isn't offered — express is Wash & Fold only, subject to availability.
+  "Same-Day Wash & Fold", "Dry Cleaning & Ironing", "Car & Sofa Detailing", "No Hidden Fees",
 ];
 
 const cities = ["Brampton", "Mississauga"];
@@ -22,27 +25,6 @@ const comparisons = [
   { feature: "Order Tracking",    them: "No updates — just wait",      us: "Real-time status updates" },
   { feature: "Pricing",           them: "Coin-by-coin, adds up",       us: "$2/lb or $100/mo flat" },
 ];
-
-function Counter({ target, suffix = "", fixed = false, prefix = false }: { target: number; suffix?: string; fixed?: boolean; prefix?: boolean }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  useEffect(() => {
-    if (!inView) return;
-    const dur = 1800;
-    const start = Date.now();
-    const raf = () => {
-      const p = Math.min((Date.now() - start) / dur, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      const val = fixed ? parseFloat((target * e).toFixed(1)) : Math.floor(target * e);
-      setCount(val);
-      if (p < 1) requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
-  }, [inView, target, fixed]);
-  const num = fixed ? count.toFixed(1) : count.toLocaleString();
-  return <span ref={ref}>{prefix ? `${suffix}${num}` : `${num}${suffix}`}</span>;
-}
 
 function AnimatedContent({ children, style, delay = 0 }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number }) {
   return (
@@ -58,11 +40,21 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
   );
 }
 
-const stats: { value: number; suffix: string; label: string; desc: string; fixed?: boolean; prefix?: boolean }[] = [
-  { value: 2,     suffix: "$", label: "Per Pound",        desc: "Wash & Fold, no surprises", prefix: true },
-  { value: 40,    suffix: "$", label: "Minimum Order",    desc: "Flat, no surprises", prefix: true },
-  { value: 98,    suffix: "%", label: "On-Time Delivery", desc: "Promised window kept" },
-  { value: 24,    suffix: "hr", label: "Turnaround",      desc: "24–48h, door to door" },
+// Static, not animated counters. These used to count up from zero, which meant
+// the server-rendered page — the thing a visitor sees before JavaScript runs,
+// and the only thing Google indexes — read "$0 Per Pound", "$0 Minimum Order",
+// "0%" and "0hr". A paid visitor landing on $0 prices at the exact moment they
+// are deciding whether to trust the business is as bad as it gets, and it was
+// live while the Facebook ad was running (107 landing-page views, 0 bookings).
+//
+// Every value here is also one that can actually be checked. The old "98%
+// On-Time Delivery" was not a measured number, so it's been replaced with the
+// combo, which is both true and the thing the business most wants booked.
+const stats: { value: string; label: string; desc: string }[] = [
+  { value: "$2",       label: "Per Pound",       desc: "Wash & Fold, no surprises" },
+  { value: "$40",      label: "Minimum Order",   desc: "Flat, before HST" },
+  { value: "24–48h",   label: "Turnaround",      desc: "Standard, door to door" },
+  { value: "5 for $50", label: "Dry Clean Combo", desc: "Any 5 pieces, blanket included" },
 ];
 
 const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2F2F2"];
@@ -80,14 +72,19 @@ const services = [
 const steps = [
   { label: "Step 1", title: "Schedule Pickup",  desc: "Book online in 60 seconds. Choose your date, time window and service type. We remember your preferences.", tags: ["60-Second Booking", "Any Day"] },
   { label: "Step 2", title: "We Collect",        desc: "Contactless pickup at your door — no need to be home. Sealed, labelled and logged the moment it leaves your hands.", tags: ["Contactless", "GPS Tracked"] },
-  { label: "Step 3", title: "Fresh Delivery",    desc: "Clean, folded and returned within 24 hours — or ironed and hung. Ready to wear, zero stress.", tags: ["24hr Return", "Insured"] },
+  // "within 24 hours" contradicted the 24–48h promise used everywhere else on
+  // the site. One promise, stated the same way in every place a customer reads it.
+  { label: "Step 3", title: "Fresh Delivery",    desc: "Clean, folded and returned in 24–48 hours — or ironed and hung. Ready to wear, zero stress.", tags: ["24–48h Return", "Insured"] },
 ];
 
 const trust = [
   { Icon: Shield, title: "Fully Insured",  desc: "Your garments are insured — see our claim policy in the Terms & Conditions." },
   { Icon: Leaf,   title: "Eco-Friendly",   desc: "Biodegradable detergents. Low-water wash cycles." },
   { Icon: CheckCircle, title: "No Hidden Fees", desc: "Every price confirmed with you before we start." },
-  { Icon: Clock,  title: "Always On Time", desc: "98% of deliveries arrive within the promised window." },
+  // Was "98% of deliveries arrive within the promised window" — a measured-
+  // sounding number nobody has measured. Replaced with what's actually true
+  // and provable: you pick the window, and you're told before we start.
+  { Icon: Clock,  title: "You Pick The Window", desc: "Choose your pickup window when you book. We confirm before we collect." },
 ];
 
 const LOCAL_BUSINESS_JSON_LD = {
@@ -95,15 +92,24 @@ const LOCAL_BUSINESS_JSON_LD = {
   "@type": "LaundryService",
   name: "StareX",
   description: "Laundry pickup & delivery, dry cleaning, ironing, household items, and car & sofa detailing serving Brampton and Mississauga, Ontario.",
-  url: "https://starex-laundry-app-v2.vercel.app",
+  // Was pointing at the Vercel preview domain, which told Google the canonical
+  // business lived at a URL customers never see.
+  url: SITE_ORIGIN,
   telephone: "+1-437-607-7251",
-  email: "info@royalarttreasure.com",
+  email: CONTACT.email,
   priceRange: "$$",
   areaServed: [
     { "@type": "City", name: "Brampton" },
     { "@type": "City", name: "Mississauga" },
   ],
-  address: { "@type": "PostalAddress", addressLocality: "Brampton", addressRegion: "ON", addressCountry: "CA" },
+  // Service-area business: pickup and delivery only, no storefront to visit.
+  // A PostalAddress with just a city and no street implies a premises that
+  // doesn't exist, so the service area carries this instead.
+  serviceArea: {
+    "@type": "GeoCircle",
+    geoMidpoint: { "@type": "GeoCoordinates", latitude: 43.6834, longitude: -79.7663 },
+    geoRadius: "25000",
+  },
   // NOTE: no aggregateRating here on purpose. Marking up a star rating that
   // isn't backed by real, on-page reviews violates Google's structured-data
   // policy and can earn a manual penalty. Add it back only once real reviews
@@ -305,7 +311,7 @@ export default function Home() {
                   transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 >
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2rem,3.5vw,2.8rem)", letterSpacing: "-0.02em", color: "#ffffff", lineHeight: 1, marginBottom: "8px" }}>
-                    <Counter target={s.value} suffix={s.suffix} fixed={s.fixed} prefix={s.prefix} />
+                    {s.value}
                   </p>
                   <p style={{ color: "#ffffff", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", marginBottom: "4px" }}>{s.label}</p>
                   <p style={{ color: "rgba(255,255,255,0.75)", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem" }}>{s.desc}</p>

@@ -3,7 +3,11 @@
 // client attaches their custom domain and updates that env var, every SEO
 // surface moves with it. Falls back to the Vercel URL otherwise (e.g. local
 // dev, where NEXT_PUBLIC_SITE_URL is http://localhost).
-const FALLBACK = "https://starex-laundry-app-v2.vercel.app";
+// The custom domain is live and permanent, so it's the safe default. The old
+// fallback was the Vercel preview URL, which meant any environment missing
+// NEXT_PUBLIC_SITE_URL would quietly publish canonical tags, sitemap entries
+// and structured data pointing at a hostname customers never see.
+const FALLBACK = "https://starexlaundrydryclean.ca";
 const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const SITE_ORIGIN =

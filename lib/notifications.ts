@@ -47,6 +47,9 @@ export type BookingNotificationPayload = {
   pickupDate: string;
   pickupTimeSlot: string;
   pickupAddress: string;
+  // Where this booking came from — "facebook / paid", "google", "direct".
+  // Shown only to the owner, so the ad spend can finally be tied to orders.
+  source?: string;
 };
 
 // Status change messages sent to the customer. Keys must match VALID_STATUSES
@@ -268,6 +271,7 @@ export async function notifyOwnerOfNewOrder(p: BookingNotificationPayload) {
             <tr><td style="color:#6B7280">Service</td><td>${formatService(p.serviceType)}</td></tr>
             <tr><td style="color:#6B7280">Pickup</td><td>${formatDate(p.pickupDate)} · ${escapeHtml(p.pickupTimeSlot)}</td></tr>
             <tr><td style="color:#6B7280">Address</td><td>${escapeHtml(p.pickupAddress)}</td></tr>
+            ${p.source ? `<tr><td style="color:#6B7280">Came from</td><td><strong>${escapeHtml(p.source)}</strong></td></tr>` : ""}
           </table>
           <a href="${SITE_URL}/admin" style="display:inline-block;margin-top:16px;color:#ED1D24;">Open Admin Console →</a>
         </div>

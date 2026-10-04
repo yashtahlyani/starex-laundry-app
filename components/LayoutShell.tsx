@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { captureSource } from "@/lib/attribution";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import FloatingCTA from "./FloatingCTA";
@@ -13,6 +15,9 @@ const OWN_STICKY_CTA_PATHS = ["/offer"];
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
+  // Records how this visitor arrived, once per visit, so a booking can be
+  // traced back to the ad (or to Google, or to nothing) later.
+  useEffect(() => { captureSource(); }, []);
   const isAuthOrAdmin = path === "/auth" || path.startsWith("/admin");
   const isAppPage     = APP_PATHS.some(p => path.startsWith(p));
   const hasOwnStickyCta = OWN_STICKY_CTA_PATHS.some(p => path.startsWith(p));

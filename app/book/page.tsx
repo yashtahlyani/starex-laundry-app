@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import { CATALOG, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
+import { getSource } from "@/lib/attribution";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
@@ -190,6 +191,8 @@ function BookPageInner() {
           stripePaymentMethodId: savedCard?.stripePaymentMethodId,
           cardBrand: savedCard?.cardBrand,
           cardLast4: savedCard?.cardLast4,
+          // How this visitor found us, captured on their first page view.
+          source: getSource() ?? undefined,
         }),
       });
       const data = await res.json();

@@ -6,6 +6,7 @@ import { BookingService } from "@/lib/services/booking.service";
 import { PLANS } from "@/lib/pricing";
 import { enqueueBookingConfirmation } from "@/lib/queue/notification.queue";
 import { notifyOwnerOfNewOrder } from "@/lib/notifications";
+import { describeSource } from "@/lib/attribution";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +42,9 @@ type BookingRequest = {
   stripePaymentMethodId?: string;
   cardBrand?: string;
   cardLast4?: string;
+  // How the visitor arrived (see lib/attribution.ts). Client-supplied and
+  // therefore untrusted — only ever shown to staff, never acted on.
+  source?: { source?: string; medium?: string; campaign?: string; landedOn?: string };
 };
 
 export async function POST(req: NextRequest) {
@@ -60,7 +64,7 @@ export async function POST(req: NextRequest) {
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
-  const { service, name, email, phone, address, date, timeSlot, notes, stripeCustomerId, stripePaymentMethodId, cardBrand, cardLast4 } = body;
+  const { service, name, email, phone, address, date, timeSlot, notes, stripeCustomerId, stripePaymentMethodId, cardBrand, cardLast4, source } = body;
   if (!service || !name || !email || !phone || !address || !date || !timeSlot) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
@@ -139,6 +143,9 @@ export async function POST(req: NextRequest) {
       pickupDate: date,
       pickupTimeSlot: timeSlot,
       pickupAddress: address.trim(),
+      // Arrives from the browser and lands in an HTML email, so it's capped
+      // and stripped of angle brackets here as well as being escaped at render.
+      source: describeSource(source as any).replace(/[<>]/g, "").slice(0, 120),
     };
     await Promise.allSettled([
       enqueueBookingConfirmation(notificationPayload),
