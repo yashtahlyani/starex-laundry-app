@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Armchair, Search } from "lucide-react";
+import { CheckCircle, ArrowRight, Shirt, Sparkles, Zap, Package, Home, Car, Sofa, Armchair, Search, Wind } from "lucide-react";
 import { CATALOG, MEMBERSHIP, DETAILING, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import PriceCalculator from "@/components/PriceCalculator";
 
@@ -20,7 +20,8 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 const payAsYouGo = [
   { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded. Delivery included." },
   { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast. Delivery included." },
-  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $5.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
+  { Icon: Wind,     title: "Wash & Press",                 price: "$5/lb",      unit: "",        min: "$40 minimum order value",                                desc: "Washed and pressed, priced by weight. No counting garments." },
+  { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
   { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses. Delivery included." },
   { Icon: Home,     title: "Household Items",             price: "From $9.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Duvets, blankets, curtains, rugs & more. Delivery included." },
   { Icon: Car,      title: "Car & Sofa Detailing",        price: "From $200",  unit: "",        min: "$199 minimum order value",                 desc: "Deep clean & shampoo — final price on inspection", badge: "New" },

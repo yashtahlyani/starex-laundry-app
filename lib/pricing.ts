@@ -14,6 +14,10 @@ export const SITE_URL = "www.starexlaundrydryclean.ca";
 export const PLANS = [
   { id: "wash-fold", label: "Wash & Fold",           unit: "per lb",   price: 2.00, turnaround: "24–48 hrs" },
   { id: "express",   label: "Same-Day Express",      unit: "per lb",   price: 3.00, turnaround: "Same day" },
+  // Added 2026-10-10 per client: washed and pressed, priced by weight like
+  // Wash & Fold rather than per garment — for people who want everything back
+  // ironed without counting items.
+  { id: "wash-press", label: "Wash & Press",           unit: "per lb",   price: 5.00, turnaround: "24–48 hrs" },
   { id: "dry-clean", label: "Dry Clean / Premium",   unit: "per item", price: null, turnaround: "24–48 hrs" },
   { id: "ironing",   label: "Ironing & Press",       unit: "per item", price: null, turnaround: "24–48 hrs" },
   { id: "household", label: "Household Items",       unit: "per item", price: null, turnaround: "24–48 hrs" },
@@ -188,9 +192,9 @@ export const CATALOG: CatalogTab[] = [
         title: "Everyday & Formal Wear",
         items: [
           { name: "2 Pcs Suit", price: 29.99, from: true },
-          { name: "Shirt / T-Shirt", price: 6.99, from: true },
+          { name: "Shirt / T-Shirt", price: 4.99, from: true },
           { name: "Dress Casual", price: 22.99, from: true },
-          { name: "Pant / Skirt / Bottom", price: 9.99, from: true },
+          { name: "Pant / Skirt / Bottom", price: 6.99, from: true },
           { name: "Sweater", price: 12.99, from: true },
           { name: "Hoodie / Sweatshirt", price: 19.99, from: true },
           { name: "Silk Shirt / Blouse", price: 12.99, from: true },

@@ -30,7 +30,9 @@ const excluded = ["Wedding dresses", "Leather items"];
 // suit, etc.) count as separate pieces toward the 5, so this example sticks
 // to 5 genuinely single pieces to keep the math unambiguous.
 const exampleItems = [
-  { name: "Shirt / T-Shirt",   price: 6.99,  Icon: Shirt },
+  // Kept in step with the live price list — shirts dropped to $4.99 on
+  // 2026-10-10, so the worked example and its savings total move with it.
+  { name: "Shirt / T-Shirt",   price: 4.99,  Icon: Shirt },
   { name: "Dress Casual",      price: 22.99, Icon: Shirt },
   { name: "Coat / Jacket",     price: 22.99, Icon: Package },
   { name: "Sweater",           price: 12.99, Icon: Shirt },

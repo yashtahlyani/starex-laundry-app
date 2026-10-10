@@ -6,7 +6,7 @@ import { calculateHst } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
-const WASH_FAMILY = ["wash-fold", "express"];
+const WASH_FAMILY = ["wash-fold", "express", "wash-press"];
 const DRY_FAMILY  = ["dry-clean", "ironing", "household", "detailing"];
 
 // Excel/Sheets choke on unescaped commas, quotes, and newlines inside a

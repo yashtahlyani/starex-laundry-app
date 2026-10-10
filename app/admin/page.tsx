@@ -36,7 +36,7 @@ const PAYMENT_BADGE: Record<string, string> = {
   unpaid: "bg-amber-100 text-amber-800",
 };
 
-const WASH_FAMILY = ["wash-fold", "express"];
+const WASH_FAMILY = ["wash-fold", "express", "wash-press"];
 const DRY_FAMILY  = ["dry-clean", "ironing", "household", "detailing"];
 
 function fmtDate(d: string) {

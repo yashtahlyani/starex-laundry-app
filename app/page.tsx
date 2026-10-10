@@ -61,12 +61,13 @@ const pasteColors = ["#EDEDED", "#F2F2F2", "#EAEAEA", "#E5E5E5", "#EDEDED", "#F2
 
 const services = [
   { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2/lb",        tags: ["Everyday", "Delivery Included"] },
-  { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $5.99",      tags: ["Delicates", "Delivery Included"] },
-  { num: "03", title: "Same-Day Express",      desc: "Need it back today? Same-day rush service on Wash & Fold, subject to availability.",                    price: "$3/lb",            tags: ["Same-day", "Delivery Included"] },
-  { num: "04", title: DRY_CLEAN_COMBO.tagline, desc: `${DRY_CLEAN_COMBO.description} ${DRY_CLEAN_COMBO.exclusions}`,                                          price: `$${DRY_CLEAN_COMBO.priceCad} flat`, tags: [DRY_CLEAN_COMBO.title, "Delivery Included"], href: "/offer" },
-  { num: "05", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Delivery Included"] },
-  { num: "06", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Delivery Included"] },
-  { num: "07", title: "Car & Sofa Detailing",  desc: "Interior detailing, deep clean and shampoo for vehicles and sofas. Final pricing upon inspection.",    price: "From $200",       tags: ["New", "Detailing"] },
+  { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $4.99",      tags: ["Delicates", "Delivery Included"] },
+  { num: "03", title: "Wash & Press",         desc: "Everything washed and pressed, priced by weight — no counting garments. Back crisp and ready to wear.", price: "$5/lb",           tags: ["New", "Delivery Included"] },
+  { num: "04", title: "Same-Day Express",      desc: "Need it back today? Same-day rush service on Wash & Fold, subject to availability.",                    price: "$3/lb",            tags: ["Same-day", "Delivery Included"] },
+  { num: "05", title: DRY_CLEAN_COMBO.tagline, desc: `${DRY_CLEAN_COMBO.description} ${DRY_CLEAN_COMBO.exclusions}`,                                          price: `$${DRY_CLEAN_COMBO.priceCad} flat`, tags: [DRY_CLEAN_COMBO.title, "Delivery Included"], href: "/offer" },
+  { num: "06", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Delivery Included"] },
+  { num: "07", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Delivery Included"] },
+  { num: "08", title: "Car & Sofa Detailing",  desc: "Interior detailing, deep clean and shampoo for vehicles and sofas. Final pricing upon inspection.",    price: "From $200",       tags: ["New", "Detailing"] },
 ];
 
 const steps = [

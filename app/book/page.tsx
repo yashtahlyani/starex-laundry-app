@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car, Wind } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import { CATALOG, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import { getSource } from "@/lib/attribution";
@@ -14,7 +14,8 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 const services = [
   { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",         price: "$2/lb",       color: "#EDEDED" },
   { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Wash & Fold only",          price: "$3/lb",       color: "#F2F2F2" },
-  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",        price: "From $5.99",  color: "#EAEAEA" },
+  { id: "wash-press",  icon: Wind,     title: "Wash & Press",        desc: "Washed & ironed, by weight", price: "$5/lb",      color: "#F2F2F2" },
+  { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",        price: "From $4.99",  color: "#EAEAEA" },
   { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",             price: "From $1.99",  color: "#E5E5E5" },
   { id: "household",   icon: Home,     title: "Household Items",     desc: "Duvets, curtains, rugs",    price: "From $9.99",  color: "#EDEDED" },
   { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",     price: "From $200",   color: "#F2F2F2" },
