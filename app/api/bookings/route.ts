@@ -38,6 +38,11 @@ type BookingRequest = {
   date: string;
   timeSlot: string;
   notes?: string;
+  // The itemized estimate the customer was shown before confirming, so staff
+  // can see what they expected to pay. Client-supplied and therefore
+  // untrusted: it is recorded for humans to read, never used to price or
+  // charge anything — the real amount is still set by staff after weigh-in.
+  estimateNote?: string;
   stripeCustomerId?: string;
   stripePaymentMethodId?: string;
   cardBrand?: string;
@@ -64,7 +69,7 @@ export async function POST(req: NextRequest) {
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }); }
 
-  const { service, name, email, phone, address, date, timeSlot, notes, stripeCustomerId, stripePaymentMethodId, cardBrand, cardLast4, source } = body;
+  const { service, name, email, phone, address, date, timeSlot, notes, estimateNote, stripeCustomerId, stripePaymentMethodId, cardBrand, cardLast4, source } = body;
   if (!service || !name || !email || !phone || !address || !date || !timeSlot) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
@@ -72,7 +77,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unknown service" }, { status: 400 });
   }
   if (name.length > 120 || email.length > 254 || phone.length > 40 || address.length > 300 ||
-      date.length > 20 || timeSlot.length > 40 || (notes?.length ?? 0) > 1000) {
+      date.length > 20 || timeSlot.length > 40 || (notes?.length ?? 0) > 1000 ||
+      (estimateNote?.length ?? 0) > 800) {
     return NextResponse.json({ error: "One or more fields are too long" }, { status: 400 });
   }
   // Mirrors the client-side checks in app/book/page.tsx — the UI form can't be
@@ -120,7 +126,11 @@ export async function POST(req: NextRequest) {
       service,
       date,
       timeSlot,
-      notes: notes?.trim(),
+      // Appended rather than stored separately: notes already surface in the
+      // admin drawer, the CSV export and the order's own status history, so
+      // the estimate lands everywhere staff already look. Combined length is
+      // bounded by the two caps checked above.
+      notes: [notes?.trim(), estimateNote?.trim()].filter(Boolean).join(" — ") || undefined,
       stripeCustomerId,
       stripePaymentMethodId,
       cardBrand,

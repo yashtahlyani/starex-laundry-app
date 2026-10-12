@@ -5,9 +5,16 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car, Wind } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
-import { CATALOG, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
+import {
+  CATALOG, CATALOG_FOR_SERVICE, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO,
+  buildEstimate, formatEstimateNote, isPerItemService, isPerLbService,
+  type ItemSelection,
+} from "@/lib/pricing";
 import { getSource } from "@/lib/attribution";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
+import EstimateBill from "@/components/EstimateBill";
+import ItemPicker from "@/components/ItemPicker";
+import WeightPicker from "@/components/WeightPicker";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -21,15 +28,9 @@ const services = [
   { id: "detailing",   icon: Car,      title: "Car & Sofa Detailing", desc: "Priced on inspection",     price: "From $200",   color: "#F2F2F2" },
 ];
 
-// Dry cleaning and household/bedding items overlap a lot (blankets, curtains,
-// rugs can go either way) — when a customer is looking at Dry Cleaning prices,
-// show the Household catalog right alongside it so they don't have to guess
-// or leave the booking flow to check.
-const CATALOG_FOR_SERVICE: Record<string, string[]> = {
-  "dry-clean": ["dry-clean", "household"],
-  "ironing":   ["ironing"],
-  "household": ["household", "dry-clean"],
-};
+// CATALOG_FOR_SERVICE now lives in lib/pricing.ts — the estimator needs the
+// same mapping to know which tabs a service can be priced from, and two copies
+// would drift.
 
 // 3-hour pickup windows (per client request, matching the Laundry Lady site).
 // startHour is used to hide windows that have already begun when the
@@ -50,7 +51,22 @@ const detailingTimeSlots = [
   { label: "1:00 PM – 6:00 PM", startHour: 13 },
 ];
 
-const stepLabels = ["Service", "Schedule", "Details", "Confirm"];
+// Car & Sofa Detailing is quoted on inspection, so it has nothing to estimate
+// and skips that step — which means the step list is per-service, not fixed.
+// Steps are addressed by id everywhere below; indices shift.
+type StepId = "service" | "estimate" | "schedule" | "details" | "confirm";
+
+function stepsFor(serviceId: string): StepId[] {
+  const skipEstimate = serviceId === "detailing";
+  return skipEstimate
+    ? ["service", "schedule", "details", "confirm"]
+    : ["service", "estimate", "schedule", "details", "confirm"];
+}
+
+function stepLabel(id: StepId, serviceId: string): string {
+  if (id === "estimate") return isPerLbService(serviceId) ? "Weight" : "Items";
+  return { service: "Service", schedule: "Schedule", details: "Details", confirm: "Confirm" }[id];
+}
 
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "13px 16px",
@@ -97,6 +113,24 @@ function BookPageInner() {
   const isCombo = comboOptIn && form.service === "dry-clean";
   const [submitting, setSubmitting] = useState(false);
 
+  // What the customer has picked, so the bill can be shown before they order
+  // (per client, 2026-10-13). Selection is keyed by catalog tab + item name —
+  // "Sleeping Bag" exists in two tabs at two different prices.
+  const [selection, setSelection] = useState<ItemSelection>({});
+  const [weightLbs, setWeightLbs] = useState<number | null>(null);
+
+  const stepIds = stepsFor(form.service);
+  // Guard against the list shrinking under us: picking Detailing after having
+  // gone further removes a step, and a stale index would land past the end.
+  const stepIndex = Math.min(step, stepIds.length - 1);
+  const current = stepIds[stepIndex];
+
+  const estimate = buildEstimate({ serviceId: form.service, selection, weightLbs, isCombo });
+  // The same basket priced without the combo, so the flow can admit when the
+  // combo it is pushing would actually cost more (small baskets: the flat $50
+  // sits above the $40 minimum).
+  const comboCostsMore = isCombo && !estimate.isEmpty && (estimate.comboSavingCad ?? 0) < 0;
+
   // Hide pickup windows that have already started when booking for today —
   // otherwise someone booking this evening could still pick this morning's slot.
   // Uses the browser's local date/time (not UTC) to match the <input type="date">
@@ -121,6 +155,7 @@ function BookPageInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.date, form.service]);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
@@ -152,16 +187,16 @@ function BookPageInner() {
   };
 
   const goNext = () => {
-    if (step === 1 && form.date && form.date < todayStr) {
+    if (current === "schedule" && form.date && form.date < todayStr) {
       setErrors({ date: "That date has already passed — please choose today or later" });
       return;
     }
-    if (step === 2 && !validateDetails()) return;
+    if (current === "details" && !validateDetails()) return;
     setErrors({});
     setDirection(1);
-    setStep(s => s + 1);
+    setStep(() => stepIndex + 1);
   };
-  const goBack = () => { setErrors({}); setDirection(-1); setStep(s => s - 1); };
+  const goBack = () => { setErrors({}); setDirection(-1); setStep(() => Math.max(0, stepIndex - 1)); };
 
   const selectedService = services.find(s => s.id === form.service);
 
@@ -176,6 +211,11 @@ function BookPageInner() {
       // customer's own status history.
       const comboNote = `Booked via ${DRY_CLEAN_COMBO.tagline} combo offer (5 items, $${DRY_CLEAN_COMBO.priceCad} flat).`;
       const combinedNotes = isCombo ? [comboNote, form.notes.trim()].filter(Boolean).join(" — ") : form.notes;
+      // What the customer was shown before they pressed the button. Travels
+      // with the order so staff can see the expectation they're confirming
+      // against — a $45 estimate and a $120 weigh-in is a conversation worth
+      // having at the door, not on the invoice.
+      const estimateNote = formatEstimateNote(estimate, form.service);
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -188,6 +228,7 @@ function BookPageInner() {
           date: form.date,
           timeSlot: form.time,
           notes: combinedNotes || undefined,
+          estimateNote: estimateNote ?? undefined,
           stripeCustomerId: savedCard?.stripeCustomerId,
           stripePaymentMethodId: savedCard?.stripePaymentMethodId,
           cardBrand: savedCard?.cardBrand,
@@ -200,7 +241,7 @@ function BookPageInner() {
       if (!res.ok) throw new Error(data.error ?? "Booking failed");
       setOrderId(data.orderCode);
       setDirection(1);
-      setStep(4);
+      setDone(true);
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
     } finally {
@@ -211,12 +252,16 @@ function BookPageInner() {
   // `min` on a date input only constrains the picker UI — a date typed straight
   // into the field still lands in state and submits. The server rejects it, but
   // the customer shouldn't reach that point to find out.
-  const canNext = [
-    form.service !== "",
-    form.date !== "" && form.date >= todayStr && form.time !== "",
-    true,
-    true,
-  ][step] ?? true;
+  // The estimate step is deliberately skippable: staff count and weigh
+  // everything at pickup anyway, so forcing an exact item list before someone
+  // can book would add friction to no purpose.
+  const canNext = {
+    service:  form.service !== "",
+    estimate: true,
+    schedule: form.date !== "" && form.date >= todayStr && form.time !== "",
+    details:  true,
+    confirm:  true,
+  }[current] ?? true;
 
   const pageVariants = {
     initial: (d: number) => ({ opacity: 0, x: d * 40 }),
@@ -224,7 +269,7 @@ function BookPageInner() {
     exit:    (d: number) => ({ opacity: 0, x: d * -40, transition: { duration: 0.2, ease } }),
   };
 
-  if (step === 4 && orderId) {
+  if (done && orderId) {
     return (
       <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center", padding: "80px 24px" }}>
@@ -268,13 +313,13 @@ function BookPageInner() {
       <div style={{ background: "var(--brand)", paddingTop: 0, paddingBottom: 0 }}>
         <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 24px 0" }}>
           <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
-            {stepLabels.map((s, i) => (
-              <div key={s} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= step ? "#FFFFFF" : "rgba(255,255,255,0.25)", transition: "background 0.3s" }} />
+            {stepIds.map((s, i) => (
+              <div key={s} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= stepIndex ? "#FFFFFF" : "rgba(255,255,255,0.25)", transition: "background 0.3s" }} />
             ))}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: 20 }}>
-            {stepLabels.map((s, i) => (
-              <p key={s} style={{ fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif", fontWeight: i === step ? 700 : 400, color: i <= step ? "#FFFFFF" : "rgba(255,255,255,0.55)" }}>{s}</p>
+            {stepIds.map((s, i) => (
+              <p key={s} style={{ fontSize: "0.75rem", fontFamily: "Kodchasan, sans-serif", fontWeight: i === stepIndex ? 700 : 400, color: i <= stepIndex ? "#FFFFFF" : "rgba(255,255,255,0.55)" }}>{stepLabel(s, form.service)}</p>
             ))}
           </div>
         </div>
@@ -297,8 +342,8 @@ function BookPageInner() {
 
           <AnimatePresence mode="wait" custom={direction}>
 
-            {/* Step 0: Service */}
-            {step === 0 && (
+            {/* Step: Service */}
+            {current === "service" && (
               <motion.div key="step0" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   What do you need <em className="display-accent" style={{ display: "inline" }}>cleaned?</em>
@@ -337,8 +382,118 @@ function BookPageInner() {
               </motion.div>
             )}
 
-            {/* Step 1: Schedule */}
-            {step === 1 && (
+            {/* Step: Items / Weight — the estimated bill the client asked for */}
+            {current === "estimate" && (
+              <motion.div key="stepEstimate" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
+                  {isPerLbService(form.service)
+                    ? <>How much <em className="display-accent" style={{ display: "inline" }}>laundry?</em></>
+                    : <>What are we <em className="display-accent" style={{ display: "inline" }}>cleaning?</em></>}
+                </h2>
+                <p style={{ color: "#6B6B6B", marginBottom: 24, fontFamily: "Kodchasan, sans-serif" }}>
+                  {isPerLbService(form.service)
+                    ? "Pick the closest size and we'll show your estimated bill. We weigh everything at pickup."
+                    : "Add your pieces to see the bill before you book. You can change anything at pickup."}
+                </p>
+
+                {isPerLbService(form.service) ? (
+                  <WeightPicker serviceId={form.service} weightLbs={weightLbs} onChange={setWeightLbs} />
+                ) : (
+                  <ItemPicker serviceId={form.service} selection={selection} onChange={setSelection} />
+                )}
+
+                {/* The bill, inline — the sidebar is below the fold on a phone,
+                    and the whole point of this step is seeing the number. */}
+                <div style={{ marginTop: 28, background: "#F8F8F8", border: "1px solid rgba(20,20,20,0.08)", borderRadius: 16, padding: "20px 22px" }}>
+                  <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.95rem", color: "#161616", marginBottom: 14 }}>
+                    Your estimated bill
+                  </p>
+                  <EstimateBill estimate={estimate} />
+                </div>
+
+                {comboCostsMore && (
+                  <div style={{ marginTop: 16, display: "flex", alignItems: "flex-start", gap: 12, background: "#FFFBEB", border: "1.5px solid #FDE68A", borderRadius: 14, padding: "14px 16px" }}>
+                    <Sparkles size={17} color="#B45309" style={{ flexShrink: 0, marginTop: 2 }} />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem", color: "#92400E", margin: 0 }}>
+                        The combo costs ${Math.abs(estimate.comboSavingCad ?? 0).toFixed(2)} more for what you&apos;ve picked.
+                      </p>
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", color: "#92400E", margin: "4px 0 10px", lineHeight: 1.55 }}>
+                        The {DRY_CLEAN_COMBO.tagline} deal is a flat ${DRY_CLEAN_COMBO.priceCad}, which is above the
+                        ${MINIMUM_ORDER.standardCad} minimum — so on a smaller basket you&apos;d pay less item by item.
+                        Add a few more pieces and it turns in your favour.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setComboOptIn(false)}
+                        style={{ background: "#92400E", color: "#FFFFFF", border: "none", borderRadius: 999, padding: "7px 16px", cursor: "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8rem" }}
+                      >
+                        Drop the combo, price my items
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {!isCombo && form.service === "dry-clean" && !estimate.isEmpty && (() => {
+                  const withCombo = buildEstimate({ serviceId: form.service, selection, isCombo: true });
+                  const saving = estimate.total - withCombo.total;
+                  if (saving <= 0.01) return null;
+                  return (
+                    <div style={{ marginTop: 16, display: "flex", alignItems: "flex-start", gap: 12, background: "#FFF5F6", border: "1.5px solid rgba(184,50,79,0.25)", borderLeft: "5px solid #ED1D24", borderRadius: 14, padding: "14px 16px" }}>
+                      <Sparkles size={17} color="#B30F14" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.9rem", color: "#161616", margin: 0 }}>
+                          Add the {DRY_CLEAN_COMBO.tagline} combo and save ${saving.toFixed(2)}.
+                        </p>
+                        <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", color: "#6B6B6B", margin: "4px 0 10px", lineHeight: 1.55 }}>
+                          Your {estimate.itemCount} piece{estimate.itemCount === 1 ? "" : "s"} would come to ${estimate.total.toFixed(2)};
+                          with the combo it&apos;s ${withCombo.total.toFixed(2)}.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setComboOptIn(true)}
+                          style={{ background: "#ED1D24", color: "#FFFFFF", border: "none", borderRadius: 999, padding: "7px 16px", cursor: "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8rem" }}
+                        >
+                          Add the combo
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 28 }}>
+                  <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
+                  <button onClick={goNext} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    {estimate.isEmpty ? "Skip — price at pickup" : "Continue"} <ArrowRight size={16} />
+                  </button>
+                </div>
+
+                {/* On a phone the catalog is long and both the inline bill and
+                    the sidebar sit well below the fold — so the running total
+                    follows you down the list. Desktop already has the sticky
+                    sidebar, so this is mobile-only. */}
+                {!estimate.isEmpty && (
+                  <div className="book-sticky-total">
+                    <div>
+                      <p style={{ margin: 0, fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#8C8C8C" }}>
+                        {estimate.mode === "weight"
+                          ? `About ${weightLbs} lb`
+                          : `${estimate.itemCount} piece${estimate.itemCount === 1 ? "" : "s"}`} · estimated
+                      </p>
+                      <p style={{ margin: 0, fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#ED1D24" }}>
+                        ${estimate.total.toFixed(2)}
+                      </p>
+                    </div>
+                    <button onClick={goNext} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                      Continue <ArrowRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Step: Schedule */}
+            {current === "schedule" && (
               <motion.div key="step1" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 {/* The catch-them-before-they-pay-more prompt. Shown to anyone
                     booking dry cleaning or household items who hasn't already
@@ -424,8 +579,8 @@ function BookPageInner() {
               </motion.div>
             )}
 
-            {/* Step 2: Details */}
-            {step === 2 && (
+            {/* Step: Details */}
+            {current === "details" && (
               <motion.div key="step2" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   Your <em className="display-accent" style={{ display: "inline" }}>details.</em>
@@ -473,8 +628,8 @@ function BookPageInner() {
               </motion.div>
             )}
 
-            {/* Step 3: Confirm */}
-            {step === 3 && (
+            {/* Step: Confirm */}
+            {current === "confirm" && (
               <motion.div key="step3" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em" }}>
                   Ready to <em className="display-accent" style={{ display: "inline" }}>confirm?</em>
@@ -500,10 +655,51 @@ function BookPageInner() {
                   ))}
                 </div>
 
+                {/* The bill, immediately above the order button — the client's
+                    actual request: "the customer wants to see the bill ... and
+                    then press the order button, after checking the total
+                    price (at least estimated)". */}
+                <div style={{ border: "2px solid #161616", borderRadius: 16, padding: "22px 24px", marginBottom: 20 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14, gap: 12 }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#161616", margin: 0 }}>
+                      Your bill
+                    </p>
+                    {!estimate.isEmpty && stepIds.includes("estimate") && (
+                      <button
+                        type="button"
+                        onClick={() => { setDirection(-1); setStep(stepIds.indexOf("estimate")); }}
+                        style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#B30F14", textDecoration: "underline" }}
+                      >
+                        Edit items
+                      </button>
+                    )}
+                  </div>
+
+                  {estimate.isEmpty && stepIds.includes("estimate") ? (
+                    <div>
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "#6B6B6B", margin: "0 0 12px", lineHeight: 1.6 }}>
+                        You haven&apos;t listed your items, so we can&apos;t estimate a total yet. We&apos;ll count and
+                        price everything at pickup and confirm before any work starts — or you can add them now
+                        and see the bill first.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => { setDirection(-1); setStep(stepIds.indexOf("estimate")); }}
+                        className="btn-ghost"
+                        style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+                      >
+                        <ArrowLeft size={14} /> {isPerLbService(form.service) ? "Estimate my weight" : "Add my items"}
+                      </button>
+                    </div>
+                  ) : (
+                    <EstimateBill estimate={estimate} />
+                  )}
+                </div>
+
                 <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", marginBottom: 16, fontFamily: "Kodchasan, sans-serif" }}>
-                  {isCombo
-                    ? `Flat $${DRY_CLEAN_COMBO.priceCad} for your 5 combo items, ${HST_LABEL}. We'll confirm at pickup that your items qualify.`
-                    : `Price confirmed via SMS after weigh-in. Prices shown ${HST_LABEL}. $${MINIMUM_ORDER.standardCad} minimum order value before HST applies ($${MINIMUM_ORDER.detailingCad} for Car & Sofa Detailing). Free pickup & delivery included.`}
+                  Prices shown {HST_LABEL}. ${MINIMUM_ORDER.standardCad} minimum order value before HST applies
+                  (${MINIMUM_ORDER.detailingCad} for Car &amp; Sofa Detailing). Free pickup &amp; delivery included.
+                  We confirm the final price with you before any work begins.
                 </p>
 
                 <StripeCardStep
@@ -576,15 +772,23 @@ function BookPageInner() {
                   </div>
                 ))}
                 <div style={{ borderTop: "1px solid rgba(20,20,20,0.08)", paddingTop: 14 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{isCombo ? "Combo price" : "Starting from"}</span>
-                    <span style={{ color: "#ED1D24", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>
-                      {isCombo ? `$${DRY_CLEAN_COMBO.priceCad} flat` : (selectedService?.price || "—")}
-                    </span>
-                  </div>
-                  <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>
-                    {isCombo ? `5 items, one flat price. Prices shown ${HST_LABEL}.` : `Final price confirmed via SMS after weigh-in. Prices shown ${HST_LABEL}.`}
-                  </p>
+                  {estimate.isEmpty ? (
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <span style={{ color: "#8C8C8C", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>{isCombo ? "Combo price" : "Starting from"}</span>
+                        <span style={{ color: "#ED1D24", fontSize: "1rem", fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>
+                          {isCombo ? `$${DRY_CLEAN_COMBO.priceCad} flat` : (selectedService?.price || "—")}
+                        </span>
+                      </div>
+                      <p style={{ color: "#8C8C8C", fontSize: "0.75rem", marginTop: 6, fontFamily: "Kodchasan, sans-serif" }}>
+                        {form.service === "detailing"
+                          ? `Quoted on inspection. Prices shown ${HST_LABEL}.`
+                          : `Add your ${isPerLbService(form.service) ? "weight" : "items"} to see the full bill. Prices shown ${HST_LABEL}.`}
+                      </p>
+                    </>
+                  ) : (
+                    <EstimateBill estimate={estimate} compact />
+                  )}
                 </div>
               </div>
               <div style={{ marginTop: 20, background: "#F2F2F2", borderRadius: 10, padding: "11px 14px" }}>
@@ -603,7 +807,7 @@ function BookPageInner() {
                 service" CTA pre-selects the service and skips straight to
                 Schedule. Customers can see exact prices and book without
                 ever leaving this screen. */}
-            {CATALOG_FOR_SERVICE[form.service] && (
+            {CATALOG_FOR_SERVICE[form.service] && current !== "estimate" && (
               <div style={{ marginTop: 16, background: "#ffffff", border: "1px solid rgba(20,20,20,0.08)", borderRadius: 20, padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", maxHeight: 420, overflowY: "auto" }}>
                 <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#161616", marginBottom: 16 }}>Item Prices</p>
                 {CATALOG_FOR_SERVICE[form.service].map(catId => {
@@ -637,7 +841,19 @@ function BookPageInner() {
       </section>
 
       <style>{`
-        @media (max-width: 768px) { .book-layout { grid-template-columns: 1fr !important; } }
+        .book-sticky-total { display: none; }
+        @media (max-width: 768px) {
+          .book-layout { grid-template-columns: 1fr !important; }
+          .book-sticky-total {
+            display: flex; align-items: center; justify-content: space-between; gap: 16;
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+            background: #FFFFFF; border-top: 1px solid rgba(20,20,20,0.1);
+            padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.07);
+          }
+          /* keep the bar from covering the last row of the catalog */
+          .book-layout { padding-bottom: 92px; }
+        }
         @media (max-width: 480px) { .book-catalog-grid { grid-template-columns: 1fr !important; } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>

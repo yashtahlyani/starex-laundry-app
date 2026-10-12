@@ -106,7 +106,20 @@ export function estimateOrderAmountCents(serviceId: string): number {
   return Math.round(minimum * 100);
 }
 
-export type CatalogItem = { name: string; price: number; from?: boolean };
+// `comboExcluded` marks the items DRY_CLEAN_COMBO.exclusions names — wedding
+// dresses, leather, and the other high-value pieces — so the booking
+// estimator never silently absorbs one into the 5-for-$50 deal and quotes a
+// customer $50 for work that actually costs $250.
+//
+// `bedding` marks blankets, duvets and quilts, because the combo includes at
+// most *one* of them among the 5 (see DRY_CLEAN_COMBO.description).
+export type CatalogItem = {
+  name: string;
+  price: number;
+  from?: boolean;
+  comboExcluded?: boolean;
+  bedding?: boolean;
+};
 export type CatalogSection = { title: string; items: CatalogItem[] };
 export type CatalogTab = { id: string; label: string; blurb: string; sections: CatalogSection[] };
 
@@ -164,21 +177,21 @@ export const CATALOG: CatalogTab[] = [
         title: "Bedding",
         items: [
           { name: "Pillow", price: 9.99, from: true },
-          { name: "King / Double Blanket", price: 29.99, from: true },
-          { name: "Queen Blanket", price: 22.99, from: true },
-          { name: "Single Blanket", price: 17.99, from: true },
-          { name: "King Duvet / Comforter / Quilt", price: 39.99, from: true },
-          { name: "Queen Duvet / Comforter / Quilt", price: 29.99, from: true },
-          { name: "Single Duvet / Comforter / Quilt", price: 22.99, from: true },
-          { name: "Feather Duvet / Comforter / Blanket", price: 49.99, from: true },
+          { name: "King / Double Blanket", price: 29.99, from: true, bedding: true },
+          { name: "Queen Blanket", price: 22.99, from: true, bedding: true },
+          { name: "Single Blanket", price: 17.99, from: true, bedding: true },
+          { name: "King Duvet / Comforter / Quilt", price: 39.99, from: true, bedding: true },
+          { name: "Queen Duvet / Comforter / Quilt", price: 29.99, from: true, bedding: true },
+          { name: "Single Duvet / Comforter / Quilt", price: 22.99, from: true, bedding: true },
+          { name: "Feather Duvet / Comforter / Blanket", price: 49.99, from: true, bedding: true },
         ],
       },
       {
         title: "Curtains & More",
         items: [
-          { name: "Sleeping Bag", price: 29.99, from: true },
-          { name: "Small Rug", price: 49.99, from: true },
-          { name: "Big Rug", price: 99.99, from: true },
+          { name: "Sleeping Bag", price: 29.99, from: true, bedding: true },
+          { name: "Small Rug", price: 49.99, from: true, comboExcluded: true },
+          { name: "Big Rug", price: 99.99, from: true, comboExcluded: true },
         ],
       },
     ],
@@ -207,7 +220,7 @@ export const CATALOG: CatalogTab[] = [
         items: [
           { name: "Coat / Jacket", price: 22.99, from: true },
           { name: "Long Coat / Winter Jacket", price: 29.99, from: true },
-          { name: "Leather Jacket", price: 99.99, from: true },
+          { name: "Leather Jacket", price: 99.99, from: true, comboExcluded: true },
           { name: "Gown / Long Dress", price: 29.99, from: true },
           { name: "Jump Suit", price: 29.99, from: true },
           { name: "Punjabi Suit 2 Pcs", price: 24.99, from: true },
@@ -217,17 +230,17 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Household & Misc",
         items: [
-          { name: "Sleeping Bag", price: 19.99, from: true },
-          { name: "Small Rug", price: 49.99, from: true },
-          { name: "Big Rug", price: 99.99, from: true },
-          { name: "Shoes", price: 19.99, from: true },
+          { name: "Sleeping Bag", price: 19.99, from: true, bedding: true },
+          { name: "Small Rug", price: 49.99, from: true, comboExcluded: true },
+          { name: "Big Rug", price: 99.99, from: true, comboExcluded: true },
+          { name: "Shoes", price: 19.99, from: true, comboExcluded: true },
         ],
       },
       {
         title: "Special Care",
         items: [
-          { name: "Wedding Dress", price: 249.99, from: true },
-          { name: "Carpet", price: 74.99, from: true },
+          { name: "Wedding Dress", price: 249.99, from: true, comboExcluded: true },
+          { name: "Carpet", price: 74.99, from: true, comboExcluded: true },
         ],
       },
     ],
@@ -252,3 +265,260 @@ export const CATALOG: CatalogTab[] = [
 export const SERVICE_AREA_POSTAL_PREFIXES: string[] = [
   // TODO: fill in the real serviceable postal code prefixes once confirmed.
 ];
+
+// ---------------------------------------------------------------------------
+// Booking estimator
+//
+// Added 2026-10-13 per client: "the customer wants to see the bill when he
+// puts an order for drycleaning and then press the order button, after
+// checking the total price (at least estimated)".
+//
+// This is an ESTIMATE, never a quote. Most catalog prices are `from:` prices
+// that vary with size, fabric and condition, and per-pound services aren't
+// weighed until pickup — so every surface that shows a number from here also
+// has to say it is confirmed before work begins. What it is genuinely good
+// for is letting someone see the shape of the bill (and, more importantly,
+// the $40 minimum) before they commit, instead of after a van has driven out.
+// ---------------------------------------------------------------------------
+
+// Which catalog tabs a given service prices from. Dry cleaning and household
+// overlap heavily — blankets, curtains and rugs can go either way — so a
+// dry-clean booking can pick from both rather than having to leave the flow.
+export const CATALOG_FOR_SERVICE: Record<string, string[]> = {
+  "dry-clean": ["dry-clean", "household"],
+  "ironing":   ["ironing"],
+  "household": ["household", "dry-clean"],
+};
+
+export const PER_ITEM_SERVICES = ["dry-clean", "ironing", "household"];
+export const PER_LB_SERVICES   = ["wash-fold", "express", "wash-press"];
+
+export function isPerItemService(id: string) { return PER_ITEM_SERVICES.includes(id); }
+export function isPerLbService(id: string)   { return PER_LB_SERVICES.includes(id); }
+
+// "Sleeping Bag" exists in both the dry-clean tab ($19.99) and the household
+// tab ($29.99) — so a selection keyed on the item name alone would price the
+// wrong one. Every key carries its tab.
+export function itemKey(tabId: string, name: string) { return `${tabId}::${name}`; }
+
+export function lookupCatalogItem(key: string): { tabId: string; item: CatalogItem } | null {
+  const [tabId, name] = key.split("::");
+  const tab = CATALOG.find(t => t.id === tabId);
+  const item = tab?.sections.flatMap(s => s.items).find(i => i.name === name);
+  return tab && item ? { tabId, item } : null;
+}
+
+/** qty keyed by itemKey(tabId, name) */
+export type ItemSelection = Record<string, number>;
+
+export type EstimateLine = {
+  key: string;
+  name: string;
+  unitPrice: number;
+  qty: number;
+  from: boolean;
+  lineTotal: number;
+  /** of `qty`, how many units the 5-for-$50 combo absorbed */
+  comboCovered: number;
+};
+
+export type Estimate = {
+  mode: "items" | "weight" | "inspection";
+  lines: EstimateLine[];
+  itemCount: number;
+  /** present only when the combo applies */
+  combo: { price: number; covered: number; slots: number } | null;
+  /** what the selection comes to before the minimum order value is applied */
+  rawSubtotal: number;
+  minimumCad: number;
+  /** true when the minimum order value is higher than what was selected */
+  minimumApplied: boolean;
+  subtotal: number;
+  hst: number;
+  total: number;
+  /** any line is a "from" price, so the real total can be higher */
+  hasFromPrices: boolean;
+  /** nothing picked yet — callers should show a prompt, not "$0.00" */
+  isEmpty: boolean;
+  /**
+   * With the combo on: what it saves against pricing the same basket item by
+   * item. NEGATIVE means the combo costs more — which happens on small
+   * baskets, because the flat $50 is above the $40 minimum. The booking flow
+   * actively pushes the combo, so it has to be honest when it is the worse
+   * deal; null when the combo isn't applied.
+   */
+  comboSavingCad: number | null;
+};
+
+export function buildEstimate(opts: {
+  serviceId: string;
+  selection?: ItemSelection;
+  weightLbs?: number | null;
+  isCombo?: boolean;
+}): Estimate {
+  const { serviceId, selection = {}, weightLbs = null, isCombo = false } = opts;
+
+  const minimumCad = serviceId === "detailing" ? MINIMUM_ORDER.detailingCad : MINIMUM_ORDER.standardCad;
+  const base = {
+    minimumCad,
+    combo: null as Estimate["combo"],
+    hasFromPrices: false,
+    lines: [] as EstimateLine[],
+    itemCount: 0,
+  };
+
+  // Car & Sofa Detailing is quoted on inspection — there is nothing honest to
+  // compute here, so it returns an empty estimate rather than a fake one.
+  if (serviceId === "detailing") {
+    return { ...base, mode: "inspection", rawSubtotal: 0, minimumApplied: false,
+             subtotal: 0, hst: 0, total: 0, isEmpty: true, comboSavingCad: null };
+  }
+
+  if (isPerLbService(serviceId)) {
+    const plan = PLANS.find(p => p.id === serviceId);
+    const rate = plan?.price ?? 0;
+    const lbs = Math.max(0, weightLbs ?? 0);
+    const rawSubtotal = round2(lbs * rate);
+    const { subtotal, hst, total, minimumApplied } = applyMinimum(rawSubtotal, minimumCad);
+    return {
+      ...base,
+      mode: "weight",
+      lines: lbs > 0 ? [{
+        key: serviceId, name: `${plan?.label ?? "Laundry"} — ${lbs} lb @ $${rate.toFixed(2)}/lb`,
+        unitPrice: rate, qty: lbs, from: false, lineTotal: rawSubtotal, comboCovered: 0,
+      }] : [],
+      itemCount: 0,
+      rawSubtotal, minimumApplied, subtotal, hst, total,
+      isEmpty: lbs <= 0,
+      comboSavingCad: null,
+    };
+  }
+
+  // ---- per-item services -------------------------------------------------
+  // Expand the selection into one entry per physical piece, because the combo
+  // is counted in pieces: a 2-piece suit uses 2 of the 5 slots, not 1
+  // (DRY_CLEAN_COMBO.multiPieceNote).
+  type Unit = { key: string; name: string; price: number; from: boolean; excluded: boolean; bedding: boolean };
+  const units: Unit[] = [];
+  for (const [key, qty] of Object.entries(selection)) {
+    const found = lookupCatalogItem(key);
+    if (!found || qty <= 0) continue;
+    for (let i = 0; i < qty; i++) {
+      units.push({
+        key,
+        name: found.item.name,
+        price: found.item.price,
+        from: !!found.item.from,
+        excluded: !!found.item.comboExcluded,
+        bedding: !!found.item.bedding,
+      });
+    }
+  }
+
+  if (units.length === 0) {
+    return { ...base, mode: "items", rawSubtotal: 0, minimumApplied: false,
+             subtotal: 0, hst: 0, total: 0, isEmpty: true, comboSavingCad: null };
+  }
+
+  // Decide which pieces the combo absorbs. Sorted most expensive first so the
+  // deal is applied in the customer's favour — the alternative (cheapest
+  // first) would quote a higher total for the same basket.
+  const coveredKeys = new Map<string, number>();
+  let comboCoveredTotal = 0;
+  if (isCombo) {
+    const eligible = units
+      .map((u, i) => ({ u, i }))
+      .filter(({ u }) => !u.excluded)
+      .sort((a, b) => b.u.price - a.u.price);
+    let beddingUsed = 0;
+    for (const { u, i } of eligible) {
+      if (comboCoveredTotal >= DRY_CLEAN_COMBO.itemCount) break;
+      // "any 5 regular garments/pieces, including 1 blanket or quilt" — so at
+      // most one bedding piece can ride inside the combo.
+      if (u.bedding && beddingUsed >= 1) continue;
+      if (u.bedding) beddingUsed++;
+      coveredKeys.set(u.key, (coveredKeys.get(u.key) ?? 0) + 1);
+      comboCoveredTotal++;
+      units[i] = { ...u, price: 0 }; // absorbed; priced by the flat combo fee
+    }
+  }
+
+  // Collapse back to one display line per catalog item.
+  const byKey = new Map<string, EstimateLine>();
+  for (const [key, qty] of Object.entries(selection)) {
+    const found = lookupCatalogItem(key);
+    if (!found || qty <= 0) continue;
+    const covered = coveredKeys.get(key) ?? 0;
+    const billedQty = qty - covered;
+    byKey.set(key, {
+      key,
+      name: found.item.name,
+      unitPrice: found.item.price,
+      qty,
+      from: !!found.item.from,
+      lineTotal: round2(billedQty * found.item.price),
+      comboCovered: covered,
+    });
+  }
+  const lines = [...byKey.values()];
+
+  const itemsTotal = round2(lines.reduce((s, l) => s + l.lineTotal, 0));
+  const rawSubtotal = round2(itemsTotal + (isCombo ? DRY_CLEAN_COMBO.priceCad : 0));
+  const { subtotal, hst, total, minimumApplied } = applyMinimum(rawSubtotal, minimumCad);
+
+  return {
+    mode: "items",
+    lines,
+    itemCount: units.length,
+    combo: isCombo
+      ? { price: DRY_CLEAN_COMBO.priceCad, covered: comboCoveredTotal, slots: DRY_CLEAN_COMBO.itemCount }
+      : null,
+    rawSubtotal,
+    minimumCad,
+    minimumApplied,
+    subtotal,
+    hst,
+    total,
+    hasFromPrices: lines.some(l => l.from && l.lineTotal > 0),
+    isEmpty: false,
+    // Priced the same basket without the combo to compare. Safe from
+    // recursion: the inner call passes isCombo false, which returns here.
+    comboSavingCad: isCombo
+      ? round2(buildEstimate({ serviceId, selection, isCombo: false }).total - total)
+      : null,
+  };
+}
+
+function round2(n: number) { return Math.round(n * 100) / 100; }
+
+// The minimum order value is charged no matter the weight, item count or size
+// (MINIMUM_ORDER.note), so it is a floor on the subtotal — not a separate fee
+// added on top, and HST is calculated after it is applied.
+function applyMinimum(rawSubtotal: number, minimumCad: number) {
+  const minimumApplied = rawSubtotal > 0 && rawSubtotal < minimumCad;
+  const subtotal = Math.max(rawSubtotal, rawSubtotal > 0 ? minimumCad : 0);
+  const { hst, total } = calculateHst(subtotal);
+  return { subtotal, hst, total, minimumApplied };
+}
+
+/**
+ * One-line summary of what the customer was shown, to travel with the order so
+ * staff can see what they expected to pay before anything was weighed.
+ * Capped so it can't blow the notes field's server-side length limit.
+ */
+export function formatEstimateNote(est: Estimate, serviceId: string): string | null {
+  if (est.isEmpty || est.mode === "inspection") return null;
+  const parts: string[] = [];
+  if (est.mode === "weight") {
+    parts.push(`approx. ${est.lines[0]?.qty ?? 0} lb`);
+  } else {
+    for (const l of est.lines) parts.push(`${l.qty}x ${l.name}`);
+  }
+  let body = parts.join(", ");
+  if (body.length > 420) body = body.slice(0, 417) + "…";
+  const bits = [`Customer's on-site estimate (${serviceId}): ${body}`];
+  if (est.combo) bits.push(`${DRY_CLEAN_COMBO.tagline} combo covered ${est.combo.covered} of ${est.combo.slots}`);
+  if (est.minimumApplied) bits.push(`selection was $${est.rawSubtotal.toFixed(2)}, raised to the $${est.minimumCad} minimum`);
+  bits.push(`est. subtotal $${est.subtotal.toFixed(2)} + HST $${est.hst.toFixed(2)} = $${est.total.toFixed(2)} — ESTIMATE ONLY, confirm on weigh-in`);
+  return bits.join(". ");
+}
