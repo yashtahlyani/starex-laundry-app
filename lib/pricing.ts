@@ -1,10 +1,10 @@
-// StareX — pricing config
+// Starex — pricing config
 //
-// Prices confirmed by the client (StareX Laundry / Dry Clean flyers, July 2026).
+// Prices confirmed by the client (Starex Laundry / Dry Clean flyers, July 2026).
 // Item prices marked `from: true` are starting prices ("$X.XX +") — final price
 // can vary with size/fabric/condition and is confirmed before work begins.
 
-export const BUSINESS_NAME = "StareX";
+export const BUSINESS_NAME = "Starex";
 export const PHONE = "437-607-7251";
 export const PHONE_HREF = "tel:+14376077251";
 export const SERVICE_AREA = "Brampton & Mississauga";
@@ -60,7 +60,7 @@ export function calculateHst(subtotalCad: number) {
 }
 
 export const MEMBERSHIP = {
-  name: "StareX Monthly Plan",
+  name: "Starex Monthly Plan",
   monthlyPriceCad: 100,
   includedLbs: 50,
   overagePerLbCad: 2, // additional laundry beyond the plan's included weight

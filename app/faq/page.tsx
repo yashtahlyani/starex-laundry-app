@@ -10,7 +10,7 @@ const categories = [
   {
     name: "Getting Started",
     faqs: [
-      { q: "How does StareX work?", a: "Schedule a pickup online, leave your laundry bag at your door, and we'll return it clean, fresh, and folded — within 24–48 hours." },
+      { q: "How does Starex work?", a: "Schedule a pickup online, leave your laundry bag at your door, and we'll return it clean, fresh, and folded — within 24–48 hours." },
       { q: "What areas do you serve?", a: "We currently serve Brampton and Mississauga, Ontario. Not sure if you're in our zone? Call or text us at 437-607-7251." },
       { q: "Do I need to be home for pickup?", a: "No! Just leave your bag at your door. Our driver will pick it up safely." },
       { q: "How do I schedule a pickup?", a: "Book online in under 2 minutes. Choose a time window, add your address, and we'll handle the rest." },
@@ -20,10 +20,10 @@ const categories = [
   {
     name: "Pricing & Plans",
     faqs: [
-      { q: "How much does StareX cost?", a: "Wash & Fold is $2/lb. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. All prices shown +HST. No hidden fees — ever." },
+      { q: "How much does Starex cost?", a: "Wash & Fold is $2/lb. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. All prices shown +HST. No hidden fees — ever." },
       { q: "Is there a minimum order?", a: "Yes — $40 minimum order value for Wash & Fold, Same-Day Express, Dry Cleaning, Ironing, and Household Items. Car & Sofa Detailing has a $199 minimum." },
       { q: "I don't know my laundry's weight — how much should I bring?", a: "No scale needed. As a rough guide, a standard 13-gallon trash bag (about 24×32\"), filled and tied at the top, holds roughly a typical Wash & Fold load — you can bring up to 2 bags per order. Prefer to estimate by weight instead? Step on a bathroom scale by yourself, then again while holding the bag, and subtract the difference. Either way, we weigh everything ourselves at pickup and bill the actual weight — so there's no need to get it exact." },
-      { q: "Do you offer subscription plans?", a: "Yes! The StareX Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
+      { q: "Do you offer subscription plans?", a: "Yes! The Starex Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
       { q: "Are there any hidden fees?", a: "Never. Your price is confirmed before we touch your laundry. What you see is what you pay." },
       { q: "How does car & sofa detailing pricing work?", a: "Car detailing (interior only) starts from $200 per vehicle, sofa/couch deep cleaning is $50 per seat, and dining chairs are $25 per seat. Final pricing is confirmed upon inspection." },
     ],
@@ -120,7 +120,7 @@ export default function FAQ() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
             style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", marginBottom: 32, fontFamily: "Kodchasan, sans-serif" }}
           >
-            Everything you need to know about StareX. Can&apos;t find an answer? We&apos;re just a message away.
+            Everything you need to know about Starex. Can&apos;t find an answer? We&apos;re just a message away.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}

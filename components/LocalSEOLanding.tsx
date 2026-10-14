@@ -136,7 +136,7 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
       <section style={{ padding: "80px 0", background: "#F2F2F2" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
           <AnimatedContent style={{ textAlign: "center", marginBottom: 40 }}>
-            <span className="eyebrow" style={{ color: "#B30F14" }}>Why {city} Chooses StareX</span>
+            <span className="eyebrow" style={{ color: "#B30F14" }}>Why {city} Chooses Starex</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616" }}>
               Built for your neighbourhood.
             </h2>

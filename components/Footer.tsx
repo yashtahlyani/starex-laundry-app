@@ -117,7 +117,7 @@ export default function Footer() {
                     style={{ marginTop: 2, width: 13, height: 13, flexShrink: 0, accentColor: "#ED1D24", cursor: "pointer" }}
                   />
                   <span style={{ color: consentError ? "#DC2626" : "#8C8C8C", fontSize: "0.7rem", lineHeight: 1.5, fontFamily: "Kodchasan, sans-serif" }}>
-                    I agree to receive marketing emails from StareX. See our{" "}
+                    I agree to receive marketing emails from Starex. See our{" "}
                     <a href="/privacy" style={{ color: "inherit", textDecoration: "underline" }}>Privacy Policy</a>. Unsubscribe anytime.
                   </span>
                 </label>
@@ -202,7 +202,7 @@ export default function Footer() {
 
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", position: "relative" }}>
           <p style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif" }}>
-            &copy; {new Date().getFullYear()} Royal Art Treasure Inc., operating as StareX. Made in Canada 🍁
+            &copy; {new Date().getFullYear()} Royal Art Treasure Inc., operating as Starex. Made in Canada 🍁
           </p>
           <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
             <a href="/terms" style={{ color: "#8C8C8C", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", textDecoration: "none" }}>Terms</a>

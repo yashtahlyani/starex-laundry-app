@@ -9,6 +9,9 @@ export default function AdminTabs({ activeTab, newContacts }: { activeTab: strin
   const [isPending, startTransition] = useTransition();
   const tabs = [
     { id: "orders",    label: "Orders" },
+    // Customer records — sits next to Orders because looking a returning
+    // customer up mid-call is a daily job, not an occasional report.
+    { id: "customers", label: "Customers" },
     { id: "contacts",  label: "Messages", badge: newContacts > 0 ? newContacts : null },
     { id: "analytics", label: "Analytics" },
   ];

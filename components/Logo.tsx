@@ -1,4 +1,4 @@
-// StareX wordmark — traced directly from the real StareX Dry Cleaners
+// Starex wordmark — traced directly from the real Starex Dry Cleaners
 // (India) logo.png via potrace (bitmap-to-vector tracing), not redrawn by
 // hand and not a lookalike font. Both paths below are in the logo's native
 // 1600x1389 pixel space, so they align correctly together. Includes the (R)
@@ -21,7 +21,7 @@ export default function Logo({ color = "#FFFFFF", fontSize = "1.2rem" }: LogoPro
     <svg
       viewBox="0 0 1600 1389"
       role="img"
-      aria-label="StareX"
+      aria-label="Starex"
       style={{ height: fontSize, width: "auto", display: "block", flexShrink: 0 }}
     >
       <path d={TEXT_PATH} fill={color} fillRule="evenodd" />

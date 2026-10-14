@@ -107,7 +107,7 @@ export default function ServicesPage() {
             <div style={{ background: "var(--brand)", borderRadius: 28, padding: "48px 40px", position: "relative", overflow: "hidden" }}>
               <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 40, alignItems: "center" }} className="monthly-grid">
                 <div>
-                  <span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }}>StareX Monthly Plan</span>
+                  <span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }}>Starex Monthly Plan</span>
                   <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.022em", color: "#ffffff", marginBottom: 12, marginTop: 8 }}>
                     Laundry on <em style={{ fontStyle: "italic" }}>autopilot.</em>
                   </h2>

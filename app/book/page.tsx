@@ -13,6 +13,7 @@ import {
 import { getSource } from "@/lib/attribution";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
 import EstimateBill from "@/components/EstimateBill";
+import TrustBadge from "@/components/TrustBadge";
 import ItemPicker from "@/components/ItemPicker";
 import WeightPicker from "@/components/WeightPicker";
 
@@ -716,7 +717,7 @@ function BookPageInner() {
                     style={{ marginTop: 3, width: 16, height: 16, accentColor: "#ED1D24", flexShrink: 0, cursor: "pointer" }}
                   />
                   <span style={{ color: "#4A4A4A", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", lineHeight: 1.5 }}>
-                    I've read and agree to StareX's <a href="/terms" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
+                    I've read and agree to Starex's <a href="/terms" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Terms &amp; Conditions</a>,{" "}
                     <a href="/privacy" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Privacy Policy</a>, and{" "}
                     <a href="/refund-policy" target="_blank" style={{ color: "#B30F14", textDecoration: "underline" }}>Refund, Cancellation &amp; Damage Policy</a>.
                   </span>
@@ -736,6 +737,9 @@ function BookPageInner() {
                 {needsCard && (
                   <p style={{ color: "#B45309", fontSize: "0.8125rem", marginBottom: 12, fontFamily: "Kodchasan, sans-serif" }}>Save a card above to continue.</p>
                 )}
+                {/* Rating next to the button that commits the order (per
+                    client). Renders nothing unless there is real data. */}
+                <div style={{ marginBottom: 14 }}><TrustBadge /></div>
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
                   <button onClick={handleSubmit} disabled={blocked} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, opacity: blocked ? 0.5 : 1, cursor: blocked ? "not-allowed" : "pointer" }}>

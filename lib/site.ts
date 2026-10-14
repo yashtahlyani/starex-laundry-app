@@ -18,7 +18,7 @@ export const SITE_ORIGIN =
 // the profiles — the footer renders the icon but doesn't link anywhere while a
 // URL is blank, so there are no dead "#" links that jump the page to the top.
 export const CONTACT = {
-  email: "info@royalarttreasure.com",
+  email: "sushil.starex@gmail.com",
   phone: "437-607-7251",
   phoneHref: "+14376077251",
   cities: ["Brampton, ON", "Mississauga, ON"],
@@ -28,4 +28,26 @@ export const SOCIAL_LINKS: { instagram: string; twitter: string; facebook: strin
   instagram: "",
   twitter: "",
   facebook: "",
+};
+
+// Google Business Profile. Empty until the owner sends the real profile link —
+// the trust badge then switches from showing Starex's own verified order
+// ratings to showing the Google rating, and links to the profile so anyone can
+// check it.
+//
+// These stay blank rather than being filled with a plausible-looking number:
+// a rating nobody can verify is worth less than no rating, and a wrong one on
+// a review badge is the kind of thing that gets a Business Profile actioned.
+// There is an unrelated "Starex Drycleaners" trading elsewhere — its rating is
+// not this business's and must never be used here.
+export const GOOGLE_REVIEWS: {
+  profileUrl: string;
+  writeReviewUrl: string;
+  ratingValue: number | null;
+  reviewCount: number | null;
+} = {
+  profileUrl: "",
+  writeReviewUrl: "",
+  ratingValue: null,
+  reviewCount: null,
 };

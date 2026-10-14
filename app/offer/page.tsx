@@ -24,7 +24,7 @@ const eligible = [
 
 const excluded = ["Wedding dresses", "Leather items"];
 
-// Real example priced off StareX's own per-item dry-clean & household rates
+// Real example priced off Starex's own per-item dry-clean & household rates
 // (lib/pricing.ts CATALOG) — an illustration of typical savings, not a
 // guarantee for every combination of 5 items. Multi-piece garments (a 2-piece
 // suit, etc.) count as separate pieces toward the 5, so this example sticks
@@ -80,7 +80,7 @@ const OFFER_JSON_LD = {
   ],
   offeredBy: {
     "@type": "LaundryService",
-    name: "StareX",
+    name: "Starex",
     telephone: "+1-437-607-7251",
     url: "https://starexlaundrydryclean.ca",
   },
@@ -178,7 +178,7 @@ export default function OfferPage() {
               <em className="display-accent" style={{ display: "inline" }}>${exampleTotal.toFixed(2)}.</em>
             </h2>
             <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", maxWidth: "56ch", margin: "0 auto" }}>
-              Based on StareX&apos;s own per-item dry-clean rates — one illustration of what 5 typical pieces cost individually versus the flat combo price.
+              Based on Starex&apos;s own per-item dry-clean rates — one illustration of what 5 typical pieces cost individually versus the flat combo price.
             </p>
           </AnimatedContent>
 

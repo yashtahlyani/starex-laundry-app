@@ -1,6 +1,6 @@
-# StareX — Laundry Pickup & Delivery
+# Starex — Laundry Pickup & Delivery
 
-Production web app for StareX Laundry (Brampton & Mississauga): a customer-facing
+Production web app for Starex Laundry (Brampton & Mississauga): a customer-facing
 marketing + booking site and an owner admin console.
 
 **Live:** https://starex-laundry-app-v2.vercel.app

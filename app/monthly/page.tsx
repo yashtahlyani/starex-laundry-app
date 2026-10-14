@@ -133,7 +133,7 @@ export default function MonthlyPlanPage() {
           {/* Step 0: Plan overview */}
           {step === 0 && (
             <motion.div key="step0" custom={direction} variants={pageVariants} initial="initial" animate="animate" exit="exit">
-              <span className="eyebrow" style={{ color: "#B30F14" }}>StareX Monthly Plan</span>
+              <span className="eyebrow" style={{ color: "#B30F14" }}>Starex Monthly Plan</span>
               <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.75rem", color: "#161616", marginBottom: 8, letterSpacing: "-0.02em", marginTop: 8 }}>
                 Laundry on <em className="display-accent" style={{ display: "inline" }}>autopilot.</em>
               </h2>

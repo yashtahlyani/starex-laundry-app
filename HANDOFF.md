@@ -1,6 +1,6 @@
-# StareX Laundry — Handoff Guide
+# Starex Laundry — Handoff Guide
 
-Customer-facing booking site + owner admin console for StareX Laundry
+Customer-facing booking site + owner admin console for Starex Laundry
 (Brampton & Mississauga). Live at **https://starex-laundry-app-v2.vercel.app**.
 
 ## Stack

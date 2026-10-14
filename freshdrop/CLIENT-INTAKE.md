@@ -1,4 +1,4 @@
-# StareX — Client Intake Form
+# Starex — Client Intake Form
 
 Please fill in as much as you can. Anything left blank, we'll use a sensible
 default and you can change it later. Items marked **(account needed)** require

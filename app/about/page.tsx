@@ -53,7 +53,7 @@ export default function About() {
       }}>
         <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(184,50,79,0.55)" }} />
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px", position: "relative" }}>
-          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About StareX</motion.span>
+          <motion.span className="eyebrow" style={{ color: "rgba(255,255,255,0.8)" }} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>About Starex</motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.08, ease }}
@@ -66,7 +66,7 @@ export default function About() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.22 }}
             style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.0625rem", lineHeight: 1.8, maxWidth: "48ch", fontFamily: "Kodchasan, sans-serif", marginBottom: 36 }}
           >
-            StareX runs on one belief: laundry should be invisible. You shouldn&apos;t have to think about it, drive to it, or wait around for it. We collect from your door across Brampton and Mississauga, clean it properly, and bring it back.
+            Starex runs on one belief: laundry should be invisible. You shouldn&apos;t have to think about it, drive to it, or wait around for it. We collect from your door across Brampton and Mississauga, clean it properly, and bring it back.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.35 }}
@@ -149,7 +149,7 @@ export default function About() {
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#161616", marginBottom: 16, letterSpacing: "-0.022em" }}>
             Join our <em className="display-accent" style={{ display: "inline" }}>community.</em>
           </h2>
-          <p style={{ color: "#6B6B6B", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>Try StareX risk-free. First pickup on us.</p>
+          <p style={{ color: "#6B6B6B", marginBottom: 32, fontSize: "1.0625rem", fontFamily: "Kodchasan, sans-serif" }}>Try Starex risk-free. First pickup on us.</p>
           <a href="/book" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "1rem", padding: "14px 32px" }}>
             Get Started Free <ArrowRight size={16} />
           </a>

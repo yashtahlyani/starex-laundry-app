@@ -8,7 +8,9 @@ import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersC
 import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
 import { getItemTracking } from "@/lib/itemTracking";
+import AdminCustomers, { groupCustomers, filterCustomers } from "@/components/AdminCustomers";
 import { orderCodeColor } from "@/lib/orderCode";
+import { calculateHst } from "@/lib/pricing";
 import { Bell, AlertTriangle, X, Download } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -87,6 +89,7 @@ export default async function AdminDashboardPage({
     { data: activeOrders },
     { data: pastOrders },
     { data: contacts },
+    { data: allOrdersForCustomers },
     { count: totalOrders },
     { count: activeCount },
     { count: newContacts },
@@ -106,6 +109,12 @@ export default async function AdminDashboardPage({
       : Promise.resolve({ data: null }),
     tab === "contacts"
       ? db.from("contact_submissions").select("*").order("created_at", { ascending: false }).limit(100)
+      : Promise.resolve({ data: null }),
+    // Customers tab only. Deliberately unfiltered by status and far above the
+    // 20-row cap used for Past Orders — the whole point of this view is the
+    // full history of a returning customer, which a cap would hide.
+    tab === "customers"
+      ? db.from("orders").select("*").order("created_at", { ascending: false }).limit(2000)
       : Promise.resolve({ data: null }),
     db.from("orders").select("*", { count: "exact", head: true }),
     db.from("orders").select("*", { count: "exact", head: true }).not("status", "in", `(${FINAL_STATUSES.join(",")})`),
@@ -151,7 +160,7 @@ export default async function AdminDashboardPage({
     { label: "In progress",  value: inProgressOrders.length, accent: false, filterKey: "in_progress", href: "/admin?tab=orders&filter=in_progress" },
     { label: "Orders today", value: todayOrders ?? 0, accent: false, filterKey: "today", href: "/admin?tab=orders&filter=today" },
     { label: "Total orders", value: totalOrders ?? 0, accent: false, filterKey: null, href: "/admin?tab=orders" },
-    { label: "Customers",    value: totalCustomers ?? 0, accent: false, filterKey: null, href: null },
+    { label: "Customers",    value: totalCustomers ?? 0, accent: false, filterKey: null, href: "/admin?tab=customers" },
     { label: "Messages",     value: newContacts ?? 0, accent: false, filterKey: null, href: "/admin?tab=contacts" },
   ];
 
@@ -230,6 +239,37 @@ export default async function AdminDashboardPage({
         {/* Tabs */}
         <AdminTabs activeTab={tab} newContacts={newContacts ?? 0} />
 
+        {/* ── Customers Tab ── */}
+        {tab === "customers" && (() => {
+          const customers = groupCustomers((allOrdersForCustomers ?? []) as any);
+          const shown = filterCustomers(customers, searchParams.q ?? "");
+          const repeats = customers.filter(c => c.orders.length > 1).length;
+          return (
+            <div>
+              <form action="/admin" method="get" style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
+                <input type="hidden" name="tab" value="customers" />
+                <input
+                  name="q"
+                  defaultValue={searchParams.q ?? ""}
+                  placeholder="Search by name, phone, email, address or order code…"
+                  className="flex-1 input-field"
+                  style={{ padding: "8px 14px", fontSize: "0.85rem", minWidth: 260 }}
+                />
+                <button type="submit" className="btn-primary px-5 py-2 text-sm">Search</button>
+                {searchParams.q && <a href="/admin?tab=customers" className="btn-ghost px-4 py-2 text-sm">Clear</a>}
+              </form>
+
+              <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#8C8C8C", marginBottom: 12 }}>
+                {searchParams.q
+                  ? `${shown.length} customer${shown.length === 1 ? "" : "s"} matching "${searchParams.q}"`
+                  : `${customers.length} customer${customers.length === 1 ? "" : "s"} · ${repeats} repeat`}
+              </p>
+
+              <AdminCustomers customers={shown} query={searchParams.q ?? ""} />
+            </div>
+          );
+        })()}
+
         {/* ── Orders Tab ── */}
         {tab === "orders" && (
           <div>
@@ -304,10 +344,23 @@ export default async function AdminDashboardPage({
             )}
 
             {(() => {
-            const filteredPast = fam
+            const famPast = fam
               ? (pastOrders ?? []).filter((o: any) => (fam === "wash" ? WASH_FAMILY : DRY_FAMILY).includes(o.service))
               : (pastOrders ?? []);
-            return (filteredPast.length ?? 0) > 0 && !q && (
+            // Past orders used to be hidden outright whenever the search box
+            // had anything in it (`&& !q`), so looking a customer up made
+            // their completed orders disappear — the exact opposite of what
+            // searching is for. Now the same query filters them.
+            const filteredPast = q
+              ? famPast.filter((o: any) =>
+                  o.code?.toLowerCase().includes(q) ||
+                  o.customer_name?.toLowerCase().includes(q) ||
+                  o.email?.toLowerCase().includes(q) ||
+                  o.phone?.toLowerCase().includes(q) ||
+                  o.address?.toLowerCase().includes(q)
+                )
+              : famPast;
+            return (filteredPast.length ?? 0) > 0 && (
               <>
                 <p className="font-heading font-bold text-[0.85rem] text-[#A1A1AA] mb-3">Past Orders</p>
                 <div className="bg-white border border-[#EAEAEA] rounded-2xl overflow-hidden">
@@ -315,7 +368,7 @@ export default async function AdminDashboardPage({
                     <table className="w-full text-sm">
                       <thead className="bg-[#FAFAFA] border-b border-[#F0F0F0]">
                         <tr>
-                          {["Order", "Customer", "Service", "Date", "Status", "Payment", "Update"].map(h => (
+                          {["Order", "Customer", "Service", "Date", "Total", "Status", "Payment", "Update"].map(h => (
                             <th key={h} className="text-left px-4 py-3 font-heading font-semibold text-[0.7rem] tracking-wide uppercase text-[#A1A1AA]">{h}</th>
                           ))}
                         </tr>
@@ -336,6 +389,9 @@ export default async function AdminDashboardPage({
                             <td className="px-4 py-3 text-xs text-[#6B6B6B]">{o.customer_name ?? "—"}</td>
                             <td className="px-4 py-3 text-xs text-[#8C8C8C]">{o.service_title ?? o.service}</td>
                             <td className="px-4 py-3 text-xs text-[#8C8C8C]">{o.date}</td>
+                            <td className="px-4 py-3 text-xs font-heading font-bold text-[#161616] whitespace-nowrap">
+                              {o.price != null ? `$${calculateHst(Number(o.price)).total.toFixed(2)}` : <span className="font-body font-normal text-[#A1A1AA]">—</span>}
+                            </td>
                             <td className="px-4 py-3">
                               <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[o.status] ?? "bg-gray-100 text-gray-600"}`}>
                                 {STATUS_LABELS[o.status] ?? o.status}

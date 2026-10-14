@@ -189,7 +189,7 @@ export default function AuthPage() {
               { icon: "📦", text: "Track all your orders in real time" },
               { icon: "📅", text: "Book and reschedule pickups easily" },
               { icon: "💬", text: "Get email & WhatsApp updates" },
-              { icon: "🏅", text: "Unlock StareX Monthly Plan perks" },
+              { icon: "🏅", text: "Unlock Starex Monthly Plan perks" },
             ].map(({ icon, text }) => (
               <div key={text} className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.2)" }}>
                 <span className="text-lg">{icon}</span>
@@ -304,7 +304,7 @@ export default function AuthPage() {
                       required
                     />
                     <span className="text-sm text-[#4A4A4A] font-body leading-snug">
-                      I agree to StareX's{" "}
+                      I agree to Starex's{" "}
                       <a href="/terms" target="_blank" className="text-mint underline">Terms &amp; Conditions</a>,{" "}
                       <a href="/privacy" target="_blank" className="text-mint underline">Privacy Policy</a>, and{" "}
                       <a href="/refund-policy" target="_blank" className="text-mint underline">Refund, Cancellation &amp; Damage Policy</a>.
@@ -378,8 +378,8 @@ export default function AuthPage() {
 
           <p className="mt-6 text-center text-xs text-white/30 font-body">
             Need help?{" "}
-            <a href="mailto:info@royalarttreasure.com" className="text-mint hover:underline">
-              info@royalarttreasure.com
+            <a href="mailto:sushil.starex@gmail.com" className="text-mint hover:underline">
+              sushil.starex@gmail.com
             </a>
           </p>
         </div>

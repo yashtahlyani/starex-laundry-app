@@ -193,7 +193,7 @@ export default function PricingPage() {
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
             <span className="eyebrow" style={{ color: "#B30F14" }}>Choose Your Plan</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 16 }}>
-              Two ways to <em className="display-accent" style={{ display: "inline" }}>StareX.</em>
+              Two ways to <em className="display-accent" style={{ display: "inline" }}>Starex.</em>
             </h2>
             <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif" }}>
               Pay by the pound whenever you need us, or lock in the monthly plan and never think about laundry again.

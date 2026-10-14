@@ -3,32 +3,55 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, ArrowRight } from "lucide-react";
-import { MINIMUM_ORDER, HST_LABEL } from "@/lib/pricing";
+import { MINIMUM_ORDER, HST_LABEL, HST_RATE, PLANS, calculateHst, itemKey, lookupCatalogItem } from "@/lib/pricing";
 
-// A representative slice of the real catalog (lib/pricing.ts) — not every
-// item, just enough per category to give a realistic estimate without
-// turning this into a second full price list.
-const DRY_CLEAN_ITEMS = [
-  { key: "shirt",  label: "Shirt / T-Shirt",       price: 6.99 },
-  { key: "bottom", label: "Pant / Skirt / Bottom",  price: 9.99 },
-  { key: "sweater",label: "Sweater",                price: 12.99 },
-  { key: "dress",  label: "Dress Casual",           price: 22.99 },
-  { key: "coat",   label: "Coat / Jacket",          price: 22.99 },
-  { key: "suit",   label: "2 Pcs Suit",             price: 29.99 },
-];
+// This calculator used to carry its own copy of the prices, which is how it
+// came to be quoting $6.99 shirts and $9.99 trousers for three days after the
+// 10 Oct price cut (reported by the client, 13 Oct). It now names the items it
+// wants and reads every price straight out of the catalog in lib/pricing.ts,
+// so a price can only ever be changed in one place.
+type Pick = { tab: string; name: string };
 
-const HOUSEHOLD_ITEMS = [
-  { key: "pillow",   label: "Pillow",                          price: 9.99 },
-  { key: "sleeping-bag", label: "Sleeping Bag",                price: 19.99 },
-  { key: "blanket",  label: "Single Blanket",                  price: 17.99 },
-  { key: "duvet",    label: "Queen Duvet / Comforter / Quilt",  price: 29.99 },
-];
+function resolve(picks: Pick[]) {
+  return picks
+    .map(p => {
+      const key = itemKey(p.tab, p.name);
+      const found = lookupCatalogItem(key);
+      // An item renamed in the catalog simply drops out of the calculator
+      // rather than rendering a crash or a stale price.
+      return found ? { key, label: found.item.name, price: found.item.price, from: !!found.item.from } : null;
+    })
+    .filter(Boolean) as { key: string; label: string; price: number; from: boolean }[];
+}
 
-const IRONING_ITEMS = [
-  { key: "iron-basic",   label: "T-Shirt / Shorts / Skirts",       price: 2.99 },
-  { key: "iron-shirt",   label: "Shirt / Blouse",                  price: 3.99 },
-  { key: "iron-complex", label: "Saree / Complex Fancy Dress",     price: 9.99 },
-];
+// A representative slice of the catalog — enough per category to give a
+// realistic estimate without turning this into a second full price list.
+const DRY_CLEAN_ITEMS = resolve([
+  { tab: "dry-clean", name: "Shirt / T-Shirt" },
+  { tab: "dry-clean", name: "Pant / Skirt / Bottom" },
+  { tab: "dry-clean", name: "Sweater" },
+  { tab: "dry-clean", name: "Dress Casual" },
+  { tab: "dry-clean", name: "Coat / Jacket" },
+  { tab: "dry-clean", name: "2 Pcs Suit" },
+]);
+
+const HOUSEHOLD_ITEMS = resolve([
+  { tab: "household", name: "Pillow" },
+  { tab: "household", name: "Sleeping Bag" },
+  { tab: "household", name: "Single Blanket" },
+  { tab: "household", name: "Queen Duvet / Comforter / Quilt" },
+]);
+
+const IRONING_ITEMS = resolve([
+  { tab: "ironing", name: "T-Shirt / Shorts / Skirts" },
+  { tab: "ironing", name: "Shirt / Blouse" },
+  { tab: "ironing", name: "Saree / Complex Fancy Dress" },
+]);
+
+// The by-weight services, also read from the catalog so Wash & Press can't go
+// missing here the way it did when it was added on 10 Oct.
+const WEIGHT_PLANS = PLANS.filter(p => p.unit === "per lb" && typeof p.price === "number") as
+  { id: string; label: string; unit: string; price: number; turnaround: string }[];
 
 function Stepper({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
@@ -89,31 +112,59 @@ function ItemRow({ label, price, value, onChange }: { label: string; price: numb
 
 export default function PriceCalculator() {
   const [lbs, setLbs] = useState(0);
+  const [planId, setPlanId] = useState(WEIGHT_PLANS[0]?.id ?? "wash-fold");
   const [qty, setQty] = useState<Record<string, number>>({});
 
   const setItem = (key: string, v: number) => setQty((p) => ({ ...p, [key]: v }));
 
   const allItems = [...DRY_CLEAN_ITEMS, ...HOUSEHOLD_ITEMS, ...IRONING_ITEMS];
+  const plan = WEIGHT_PLANS.find(p => p.id === planId) ?? WEIGHT_PLANS[0];
 
-  const { itemsSubtotal, washSubtotal, totalItems, subtotal, belowMinimum } = useMemo(() => {
-    const itemsSubtotal = allItems.reduce((sum, it) => sum + (qty[it.key] ?? 0) * it.price, 0);
-    const washSubtotal = lbs * 2;
+  const { itemsSubtotal, washSubtotal, totalItems, subtotal, hst, total, belowMinimum } = useMemo(() => {
+    const round2 = (n: number) => Math.round(n * 100) / 100;
+    const itemsSubtotal = round2(allItems.reduce((sum, it) => sum + (qty[it.key] ?? 0) * it.price, 0));
+    const washSubtotal = round2(lbs * (plan?.price ?? 0));
     const totalItems = allItems.reduce((sum, it) => sum + (qty[it.key] ?? 0), 0);
-    const rawSubtotal = itemsSubtotal + washSubtotal;
+    const rawSubtotal = round2(itemsSubtotal + washSubtotal);
     const subtotal = Math.max(rawSubtotal, rawSubtotal > 0 ? MINIMUM_ORDER.standardCad : 0);
-    return { itemsSubtotal, washSubtotal, totalItems, subtotal, belowMinimum: rawSubtotal > 0 && rawSubtotal < MINIMUM_ORDER.standardCad };
+    // The headline figure used to be the pre-tax subtotal with "+HST" beneath
+    // it, so the number a customer remembered was 13% under what they'd pay.
+    // The booking flow now shows tax explicitly; this matches it.
+    const { hst, total } = calculateHst(subtotal);
+    return { itemsSubtotal, washSubtotal, totalItems, subtotal, hst, total, belowMinimum: rawSubtotal > 0 && rawSubtotal < MINIMUM_ORDER.standardCad };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qty, lbs]);
+  }, [qty, lbs, planId]);
 
   return (
     <div style={{ background: "#F2F2F2", borderRadius: 24, padding: "36px" }} className="calc-wrap">
       <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 28 }} className="calc-grid">
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <CategoryCard title="Wash & Fold">
+          <CategoryCard title="By Weight">
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {WEIGHT_PLANS.map(p => {
+                const on = p.id === planId;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setPlanId(p.id)}
+                    style={{
+                      padding: "7px 13px", borderRadius: 999,
+                      border: `1.5px solid ${on ? "#ED1D24" : "rgba(20,20,20,0.15)"}`,
+                      background: on ? "#FDF0F1" : "#fff", color: on ? "#B30F14" : "#4A4A4A",
+                      fontFamily: "Kodchasan, sans-serif", fontWeight: on ? 700 : 500, fontSize: "0.8rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {p.label} · ${p.price.toFixed(2)}/lb
+                  </button>
+                );
+              })}
+            </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
               <div>
                 <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "#161616", fontWeight: 500 }}>Approx. weight (lbs)</p>
-                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C" }}>$2.00 per lb</p>
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C" }}>${(plan?.price ?? 0).toFixed(2)} per lb</p>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <button type="button" onClick={() => setLbs(Math.max(0, lbs - 5))} aria-label="Decrease"
@@ -160,20 +211,20 @@ export default function PriceCalculator() {
               Estimated Total
             </p>
             <motion.p
-              key={subtotal.toFixed(2)}
+              key={total.toFixed(2)}
               initial={{ opacity: 0.4, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "2.5rem", letterSpacing: "-0.02em", lineHeight: 1, marginBottom: 4 }}
             >
-              ${subtotal.toFixed(2)}
+              ${total.toFixed(2)}
             </motion.p>
             <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "rgba(255,255,255,0.55)", marginBottom: 18 }}>
-              Prices shown {HST_LABEL}
+              {total > 0 ? `Including HST — item prices shown ${HST_LABEL}` : `Prices shown ${HST_LABEL}`}
             </p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingBottom: 16, marginBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.12)" }}>
               {lbs > 0 && (
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", color: "rgba(255,255,255,0.8)" }}>
-                  <span>Wash &amp; Fold ({lbs} lb)</span><span>${washSubtotal.toFixed(2)}</span>
+                  <span>{plan?.label} ({lbs} lb)</span><span>${washSubtotal.toFixed(2)}</span>
                 </div>
               )}
               {totalItems > 0 && (
@@ -187,6 +238,17 @@ export default function PriceCalculator() {
                 </p>
               )}
             </div>
+
+            {total > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingBottom: 16, marginBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.12)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", color: "rgba(255,255,255,0.8)" }}>
+                  <span>Subtotal</span><span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", fontFamily: "Kodchasan, sans-serif", color: "rgba(255,255,255,0.8)" }}>
+                  <span>HST ({Math.round(HST_RATE * 100)}%)</span><span>${hst.toFixed(2)}</span>
+                </div>
+              </div>
+            )}
 
             {belowMinimum && (
               <p style={{ fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif", color: "#FBBF77", marginBottom: 16, lineHeight: 1.5 }}>

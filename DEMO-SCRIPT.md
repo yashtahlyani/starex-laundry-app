@@ -1,4 +1,4 @@
-# StareX — Client Demo Script
+# Starex — Client Demo Script
 
 Live site: **https://starex-laundry-app-v2.vercel.app**
 

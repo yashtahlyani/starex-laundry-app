@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
 import { HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import { SITE_ORIGIN, CONTACT } from "@/lib/site";
+import TrustBadge from "@/components/TrustBadge";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -91,7 +92,7 @@ const trust = [
 const LOCAL_BUSINESS_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "LaundryService",
-  name: "StareX",
+  name: "Starex",
   description: "Laundry pickup & delivery, dry cleaning, ironing, household items, and car & sofa detailing serving Brampton and Mississauga, Ontario.",
   // Was pointing at the Vercel preview domain, which told Google the canonical
   // business lived at a URL customers never see.
@@ -246,6 +247,8 @@ export default function Home() {
               }}>
                 See How It Works
               </a>
+              {/* Hidden until there are enough real ratings to mean anything. */}
+              <TrustBadge compact />
             </motion.div>
 
             {/* Trust strip — factual claims only (insured, service area, turnaround).
@@ -263,7 +266,7 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Right — official StareX brand imagery, shown at its own aspect ratio so nothing gets cropped */}
+          {/* Right — official Starex brand imagery, shown at its own aspect ratio so nothing gets cropped */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2, ease }}
             className="hero-panel"
@@ -275,7 +278,7 @@ export default function Home() {
           >
             <img
               src="/images/starex/01_homepage_without_copy_v1.jpg"
-              alt="Freshly folded laundry and a StareX pickup bag on an entryway bench, ready at the door"
+              alt="Freshly folded laundry and a Starex pickup bag on an entryway bench, ready at the door"
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", display: "block" }}
             />
           </motion.div>
@@ -475,7 +478,7 @@ export default function Home() {
             <AnimatedContent>
               <span className="eyebrow" style={{ color: "#431E2C" }}>The Difference</span>
               <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.875rem,4vw,2.75rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: "16px" }}>
-                Why StareX beats the{" "}
+                Why Starex beats the{" "}
                 <span className="display-accent" style={{ fontWeight: 600 }}>laundromat.</span>
               </h2>
               <p style={{ color: "#6B6B6B", fontSize: "1rem", lineHeight: 1.75, fontFamily: "Kodchasan, sans-serif", maxWidth: "38ch", marginBottom: "28px" }}>
@@ -493,7 +496,7 @@ export default function Home() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "16px 24px", background: "rgba(20,20,20,0.03)", borderBottom: "1px solid rgba(20,20,20,0.06)" }} className="comparison-row">
                   <span />
                   <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(20,20,20,0.35)", textAlign: "center" }}>Traditional</span>
-                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#ED1D24", textAlign: "center" }}>StareX</span>
+                  <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#ED1D24", textAlign: "center" }}>Starex</span>
                 </div>
                 {comparisons.map((row, i) => (
                   <div key={row.feature} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "14px 24px", borderBottom: i < comparisons.length - 1 ? "1px solid rgba(20,20,20,0.06)" : "none", alignItems: "center", gap: 8 }} className="comparison-row">
@@ -603,7 +606,7 @@ export default function Home() {
         background: "var(--brand)",
       }}>
         <div aria-hidden="true" style={{ position: "absolute", bottom: "-30px", left: "50%", transform: "translateX(-50%)", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "160px", color: "rgba(255,255,255,0.08)", letterSpacing: "-8px", whiteSpace: "nowrap", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>
-          StareX
+          Starex
         </div>
         <AnimatedContent style={{ maxWidth: 580, margin: "0 auto", textAlign: "center", padding: "0 24px", position: "relative" }}>
           <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", display: "block", marginBottom: 14 }}>

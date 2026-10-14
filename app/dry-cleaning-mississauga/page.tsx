@@ -7,7 +7,7 @@ const SERVICE_JSON_LD = {
   serviceType: "Dry Cleaning",
   provider: {
     "@type": "LaundryService",
-    name: "StareX",
+    name: "Starex",
     telephone: "+1-437-607-7251",
     url: SITE_ORIGIN,
   },

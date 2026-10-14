@@ -1,4 +1,4 @@
-# StareX — going live
+# Starex — going live
 
 Everything in the app is built and the code is **ready for the cloud**. What's
 left are the steps that need *your* accounts/passwords (I can't create those
