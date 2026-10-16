@@ -44,12 +44,18 @@ export const SOCIAL_LINKS: { instagram: string; twitter: string; facebook: strin
 // Business Profile link the owner sent on 16 Oct. It survives name and
 // address edits, unlike a maps.google URL with coordinates in it.
 //
-// ratingValue / reviewCount stay null deliberately: Google blocks automated
-// reads of the knowledge panel, so the live rating can't be fetched here and
-// nothing plausible has been typed in its place. Fill these in with the real
-// figures from the profile and the badge switches to the Google logo and
-// wording on its own. (There is an unrelated "Starex Drycleaners" trading
-// elsewhere — its rating is not this business's and must never be used.)
+// ratingValue / reviewCount are reported by the owner from their own Business
+// Profile (16 Oct 2026: 5.0 from 17 reviews). Google blocks automated reads of
+// the knowledge panel, so these cannot be fetched or checked from here.
+//
+// THEY ARE A SNAPSHOT AND WILL GO STALE. Every new review moves the real
+// figure, and a rating on the site that no longer matches the profile is
+// worse than none — update both numbers whenever the profile changes. To stop
+// maintaining them by hand, add a Google Places API key and fetch
+// rating/user_ratings_total live in /api/reviews/summary.
+//
+// (There is an unrelated "Starex Drycleaners" trading elsewhere — its rating
+// is not this business's and must never be used here.)
 export const GOOGLE_REVIEWS: {
   profileUrl: string;
   writeReviewUrl: string;
@@ -60,6 +66,6 @@ export const GOOGLE_REVIEWS: {
   // Needs the Place ID (not the kgmid), which isn't in the link supplied —
   // left blank rather than built into a URL that would 404.
   writeReviewUrl: "",
-  ratingValue: null,
-  reviewCount: null,
+  ratingValue: 5,
+  reviewCount: 17,
 };
