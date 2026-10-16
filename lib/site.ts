@@ -40,13 +40,25 @@ export const SOCIAL_LINKS: { instagram: string; twitter: string; facebook: strin
 // a review badge is the kind of thing that gets a Business Profile actioned.
 // There is an unrelated "Starex Drycleaners" trading elsewhere — its rating is
 // not this business's and must never be used here.
+// kgmid is the stable Google identifier for this business, taken from the
+// Business Profile link the owner sent on 16 Oct. It survives name and
+// address edits, unlike a maps.google URL with coordinates in it.
+//
+// ratingValue / reviewCount stay null deliberately: Google blocks automated
+// reads of the knowledge panel, so the live rating can't be fetched here and
+// nothing plausible has been typed in its place. Fill these in with the real
+// figures from the profile and the badge switches to the Google logo and
+// wording on its own. (There is an unrelated "Starex Drycleaners" trading
+// elsewhere — its rating is not this business's and must never be used.)
 export const GOOGLE_REVIEWS: {
   profileUrl: string;
   writeReviewUrl: string;
   ratingValue: number | null;
   reviewCount: number | null;
 } = {
-  profileUrl: "",
+  profileUrl: "https://www.google.com/search?kgmid=/g/11z90pm234",
+  // Needs the Place ID (not the kgmid), which isn't in the link supplied —
+  // left blank rather than built into a URL that would 404.
   writeReviewUrl: "",
   ratingValue: null,
   reviewCount: null,

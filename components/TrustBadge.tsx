@@ -81,11 +81,37 @@ export default function TrustBadge({ compact = false }: { compact?: boolean }) {
     </div>
   );
 
-  return data.profileUrl ? (
-    <a href={data.profileUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+  // When the figure is Google's, the whole badge links to the profile. When
+  // it's Starex's own rating, the link is a separate "see us on Google" —
+  // wrapping a Starex figure in a Google link would read as if Google had
+  // given that score.
+  if (!data.profileUrl) return body;
+
+  if (isGoogle) {
+    return (
+      <a href={data.profileUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+        {body}
+      </a>
+    );
+  }
+
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
       {body}
-    </a>
-  ) : body;
+      <a
+        href={data.profileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          fontFamily: "Kodchasan, sans-serif", fontSize: compact ? "0.72rem" : "0.78rem",
+          color: "#4A4A4A", textDecoration: "underline", textUnderlineOffset: 2,
+        }}
+      >
+        <GoogleG size={compact ? 12 : 13} /> See us on Google
+      </a>
+    </span>
+  );
 }
 
 function GoogleG({ size }: { size: number }) {

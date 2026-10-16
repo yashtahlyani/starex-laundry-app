@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   const db = getSupabaseAdmin();
   const { data: order, error } = await db
     .from("orders")
-    .select("id, code, customer_name, email, phone, stripe_customer_id, stripe_payment_method_id")
+    .select("id, code, customer_name, email, phone, stripe_customer_id, stripe_payment_method_id, card_brand, card_last4")
     .eq("code", orderCode)
     .maybeSingle();
   if (error || !order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -60,7 +60,14 @@ export async function POST(req: NextRequest) {
     });
 
     const orders = new OrderRepository(db);
-    await orders.markPaid(order.id, `Charged $${total.toFixed(2)} CAD incl. HST (card ending in the customer's card on file)`, amountCad);
+    // Name the actual card in the payment record. This used to read "card
+    // ending in the customer's card on file" because the real digits were
+    // never stored (see /api/stripe/payment-method) — useless when the owner
+    // is later reconciling what a customer was charged.
+    const cardLabel = /^\d{4}$/.test(order.card_last4 ?? "")
+      ? `${(order.card_brand || "card").toUpperCase()} ending ${order.card_last4}`
+      : "card on file";
+    await orders.markPaid(order.id, `Charged $${total.toFixed(2)} CAD incl. HST (subtotal $${amountCad.toFixed(2)} + HST $${hst.toFixed(2)}) to ${cardLabel}`, amountCad);
     await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
     await sendPaymentReceived(order.id, order.code, order.customer_name, order.email, order.phone, { subtotal: amountCad, hst, total }).catch(() => {});
 

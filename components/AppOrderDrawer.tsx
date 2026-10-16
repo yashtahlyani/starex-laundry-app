@@ -111,7 +111,13 @@ export default function AppOrderDrawer({
     setPendingDetails("");
     setPendingWeight("");
     setCountError(null);
-    setPendingPrice("");
+    // Seed from the total already saved on this order, rather than blanking
+    // it. Staff save an amount, the customer then says "just charge my card",
+    // and the charge box came back empty — so Charge Card failed with "Enter
+    // the confirmed order total" for an amount the owner could no longer see
+    // and had to remember (per client, 2026-10-15: "I saved the amount
+    // already ... he told me to charge his card and I don't know the amount").
+    setPendingPrice(order?.price != null ? String(order.price) : "");
     setLocalPrice(null);
     setPaymentError(null);
     setPayingWith(null);
@@ -124,6 +130,15 @@ export default function AppOrderDrawer({
     setPendingDiscrepancy("");
     setWeightError(null);
   }, [order?.id]);
+
+  // Seed the charge box from the total already saved on this order, without
+  // touching anything else the owner has typed — the bulk reset above owns
+  // that and is keyed on the order id. Never overwrites a figure they have
+  // entered themselves; only fills a box that is empty.
+  useEffect(() => {
+    if (order?.price == null) return;
+    setPendingPrice(prev => (prev.trim() === "" ? String(order.price) : prev));
+  }, [order?.price]);
 
   const currentStatus = localStatus ?? order?.status ?? "placed";
   const paymentStatus = localPaymentStatus ?? order?.payment_status ?? "unpaid";
@@ -169,7 +184,6 @@ export default function AppOrderDrawer({
       setLocalPaymentStatus("paid");
       if (data.status) setLocalStatus(data.status);
       setLocalPrice(amount);
-      setPendingPrice("");
       router.refresh();
     } catch {
       setPaymentError("Payment failed — check your connection and try again");
@@ -412,9 +426,35 @@ export default function AppOrderDrawer({
               {showPaymentPanel && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4, padding: "14px", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 12 }}>
                   <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.8rem", color: "#92400E" }}>Collect payment</p>
+
+                  {/* The amount already saved on this order, stated outright.
+                      Without it the owner had to remember the figure before
+                      he could charge the card. */}
+                  {effectivePrice != null && (
+                    <div style={{ background: "#fff", border: "1px solid #FDE68A", borderRadius: 10, padding: "10px 12px" }}>
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#92400E", margin: 0 }}>
+                        Amount saved for this order
+                      </p>
+                      <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.15rem", color: "#161616", margin: "2px 0 0" }}>
+                        ${calculateHst(effectivePrice).total.toFixed(2)}
+                        <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 400, fontSize: "0.75rem", color: "#6B6B6B" }}>
+                          {" "}incl. HST
+                        </span>
+                      </p>
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#6B6B6B", margin: "2px 0 0" }}>
+                        subtotal ${effectivePrice.toFixed(2)} + HST ${calculateHst(effectivePrice).hst.toFixed(2)} — this is what Charge Card will take
+                      </p>
+                    </div>
+                  )}
+
                   {hasCardOnFile && (
                     <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B" }}>
-                      Card on file: {order?.card_brand?.toUpperCase() ?? "card"} ending in {order?.card_last4 ?? "····"}
+                      {/* Older orders stored placeholder values because the
+                          card details were never read back from Stripe — say
+                          "a saved card" rather than "ending in ····". */}
+                      {order?.card_last4 && /^\d{4}$/.test(order.card_last4)
+                        ? <>Card on file: {(order.card_brand || "card").toUpperCase()} ending in {order.card_last4}</>
+                        : <>Card on file — saved by the customer at booking</>}
                     </p>
                   )}
                   <input

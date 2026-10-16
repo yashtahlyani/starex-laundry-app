@@ -54,14 +54,38 @@ function CardForm({ name, email, onSaved }: { name: string; email: string; onSav
 
       const pm = result.setupIntent?.payment_method;
       const pmId = typeof pm === "string" ? pm : pm?.id;
-      const card = typeof pm === "object" ? pm?.card : undefined;
+      let card = typeof pm === "object" ? pm?.card : undefined;
       if (!pmId) throw new Error("Card could not be saved");
+
+      // confirmCardSetup resolves payment_method as a bare id string, so the
+      // card object above is almost always undefined and the brand/last4 used
+      // to fall through to the literal placeholders "card" and "····" — which
+      // were then saved on the order and shown to staff as "CARD ending in
+      // ····". Read the real values back from Stripe server-side instead.
+      if (!card?.last4) {
+        try {
+          const r = await fetch("/api/stripe/payment-method", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ paymentMethodId: pmId }),
+          });
+          if (r.ok) {
+            const d = await r.json();
+            if (d.cardLast4) card = { brand: d.cardBrand ?? "card", last4: d.cardLast4 } as any;
+          }
+        } catch {
+          // The card is saved either way — a missing label must not fail the
+          // booking, so this falls through to the undefined case below.
+        }
+      }
 
       const savedCard: SavedCard = {
         stripeCustomerId: data.customerId,
         stripePaymentMethodId: pmId,
-        cardBrand: card?.brand ?? "card",
-        cardLast4: card?.last4 ?? "····",
+        // Left undefined rather than faked when Stripe can't be read back —
+        // the admin then says "a saved card" instead of inventing digits.
+        cardBrand: card?.brand ?? "",
+        cardLast4: card?.last4 ?? "",
       };
       setSaved(savedCard);
       onSaved(savedCard);
@@ -77,7 +101,9 @@ function CardForm({ name, email, onSaved }: { name: string; email: string; onSav
       <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#F0FDF4", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, padding: "12px 16px" }}>
         <CheckCircle size={16} color="#16A34A" style={{ flexShrink: 0 }} />
         <span style={{ color: "#166534", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}>
-          Card saved — {saved.cardBrand.toUpperCase()} ending in {saved.cardLast4}
+          {/^\d{4}$/.test(saved.cardLast4)
+            ? <>Card saved — {(saved.cardBrand || "card").toUpperCase()} ending in {saved.cardLast4}</>
+            : <>Card saved securely</>}
         </span>
       </div>
     );
