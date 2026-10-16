@@ -7,7 +7,7 @@ import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle, CheckCirc
 import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
-import { calculateHst } from "@/lib/pricing";
+import { calculateHst, isPerLbService } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -146,6 +146,16 @@ export default function AppOrderDrawer({
   const nextStatusId = NEXT_STATUS[currentStatus] ?? null;
   const nextLabel = nextStatusId ? STATUS_META[nextStatusId]?.label : null;
   const needsCount = nextStatusId === "picked_up" || nextStatusId === "delivered";
+  // Wash & Fold, Express and Wash & Press are weighed, not counted — nobody
+  // tallies 45 individual socks. Asking "how many items?" on those orders got
+  // the owner typing "45 LB" into a number field and losing the unit (per
+  // client, 2026-10-16: "I wanted to write 45 LB but it was written only 45
+  // because no full key pad was available"). The field now states the unit
+  // instead, so 45 on its own is complete and unambiguous.
+  const byWeight = isPerLbService(order?.service ?? "");
+  const unit = byWeight ? "lb" : "item";
+  const fmtQty = (n: number) =>
+    byWeight ? `${Number(n.toFixed(1))} lb` : `${n} item${n === 1 ? "" : "s"}`;
   // Weighing happens at Confirmed, not Picked Up — Picked Up is just the
   // courier collecting the bag, before anything's been verified at the
   // facility (per client, 2026-08-18).
@@ -247,9 +257,16 @@ export default function AppOrderDrawer({
 
     let itemCount: number | undefined;
     if (needsCount) {
-      if (!pendingCount.trim()) { setCountError("Enter an item count"); return; }
-      itemCount = parseInt(pendingCount, 10);
-      if (isNaN(itemCount) || itemCount < 0) { setCountError("Enter a valid item count"); return; }
+      if (!pendingCount.trim()) {
+        setCountError(byWeight ? "Enter the weight in lb" : "Enter an item count");
+        return;
+      }
+      // parseFloat, not parseInt: a 45.5 lb bag was silently truncated to 45.
+      itemCount = byWeight ? parseFloat(pendingCount) : parseInt(pendingCount, 10);
+      if (isNaN(itemCount) || itemCount < 0) {
+        setCountError(byWeight ? "Enter a valid weight in lb" : "Enter a valid item count");
+        return;
+      }
     }
     if (needsWeight && !pendingWeight.trim()) {
       setWeightError("Enter the verified weight");
@@ -359,13 +376,13 @@ export default function AppOrderDrawer({
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                       <AlertTriangle size={15} color="#DC2626" />
                       <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#DC2626" }}>
-                        {missing} item{missing !== 1 ? "s" : ""} missing
+                        {byWeight ? `${fmtQty(missing)} less came back` : `${missing} item${missing !== 1 ? "s" : ""} missing`}
                       </p>
                     </div>
                   ) : null}
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B" }}>
-                    Received: <strong style={{ color: "#161616" }}>{received ?? "—"}</strong>
-                    {" · "}Returned: <strong style={{ color: "#161616" }}>{returned ?? "—"}</strong>
+                    Received: <strong style={{ color: "#161616" }}>{received != null ? fmtQty(received) : "—"}</strong>
+                    {" · "}Returned: <strong style={{ color: "#161616" }}>{returned != null ? fmtQty(returned) : "—"}</strong>
                   </p>
                   {tracking.receivedDetails && (
                     <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B", marginTop: 4 }}>
@@ -509,13 +526,36 @@ export default function AppOrderDrawer({
               )}
               {admin && nextLabel && needsCount && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
-                  <input
-                    type="number" min={0} inputMode="numeric"
-                    placeholder={nextStatusId === "picked_up" ? "How many items? (count)" : "How many items came back? (count)"}
-                    value={pendingCount}
-                    onChange={e => setPendingCount(e.target.value)}
-                    style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
-                  />
+                  {/* The unit lives in the field, not in the owner's head.
+                      step="0.1" matters on weight orders — the default step
+                      of 1 rejected 45.5 lb in the browser and parseInt would
+                      have truncated it anyway. */}
+                  <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                    <input
+                      type="number"
+                      min={0}
+                      step={byWeight ? "0.1" : "1"}
+                      inputMode={byWeight ? "decimal" : "numeric"}
+                      placeholder={byWeight
+                        ? (nextStatusId === "picked_up" ? "Weight collected" : "Weight returned")
+                        : (nextStatusId === "picked_up" ? "How many items? (count)" : "How many items came back? (count)")}
+                      value={pendingCount}
+                      onChange={e => { setPendingCount(e.target.value); setCountError(null); }}
+                      style={{
+                        width: "100%", padding: byWeight ? "10px 46px 10px 14px" : "10px 14px",
+                        borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem",
+                        fontFamily: "Kodchasan, sans-serif", boxSizing: "border-box",
+                      }}
+                    />
+                    {byWeight && (
+                      <span style={{
+                        position: "absolute", right: 14, fontFamily: "Poppins, sans-serif",
+                        fontWeight: 700, fontSize: "0.82rem", color: "#8C8C8C", pointerEvents: "none",
+                      }}>
+                        lb
+                      </span>
+                    )}
+                  </div>
                   {/* type="text", so phones open the full keyboard, not the
                       number pad — staff need to write out what the items
                       actually are, not just how many (per client,
@@ -525,9 +565,13 @@ export default function AppOrderDrawer({
                     rows={2}
                     inputMode="text"
                     maxLength={500}
-                    placeholder={nextStatusId === "picked_up"
-                      ? "Items received from customer — e.g. 3 shirts, 2 trousers, 1 bedsheet"
-                      : "Items returned to customer — e.g. 3 shirts, 2 trousers, 1 bedsheet"}
+                    placeholder={byWeight
+                      ? (nextStatusId === "picked_up"
+                          ? "What was collected (optional) — e.g. 2 bags, 1 duvet, 1 delicate item"
+                          : "What was returned (optional) — e.g. 2 bags, 1 duvet")
+                      : (nextStatusId === "picked_up"
+                          ? "Items received from customer — e.g. 3 shirts, 2 trousers, 1 bedsheet"
+                          : "Items returned to customer — e.g. 3 shirts, 2 trousers, 1 bedsheet")}
                     value={pendingDetails}
                     onChange={e => setPendingDetails(e.target.value)}
                     style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif", resize: "vertical", boxSizing: "border-box" }}

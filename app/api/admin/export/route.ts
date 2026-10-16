@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { getItemTracking } from "@/lib/itemTracking";
-import { calculateHst } from "@/lib/pricing";
+import { calculateHst, PER_LB_SERVICES } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
-const WASH_FAMILY = ["wash-fold", "express", "wash-press"];
+// The wash/dry split comes from lib/pricing.ts so it can't drift —
+// PER_LB_SERVICES is the same list this file used to keep privately.
+const WASH_FAMILY = PER_LB_SERVICES;
 const DRY_FAMILY  = ["dry-clean", "ironing", "household", "detailing"];
 
 // Excel/Sheets choke on unescaped commas, quotes, and newlines inside a
@@ -25,7 +27,9 @@ function csvCell(value: unknown): string {
 const HEADERS = [
   "Order Code", "Status", "Payment Status", "Customer Name", "Email", "Phone",
   "Service", "Subtotal (CAD)", "HST (CAD)", "Total incl. HST (CAD)", "Paid At",
-  "Weight", "Items Received", "Items Returned", "Items Missing", "Item Details",
+  // Renamed from "Items ..." because on Wash & Fold / Express / Wash & Press
+  // these are pounds, not garments — the Qty Unit column says which.
+  "Weight", "Qty Received", "Qty Returned", "Qty Difference", "Qty Unit", "Item Details",
   "Delivery Requested", "Pickup Date", "Time Slot", "Address",
   "Notes", "Created At", "Updated At",
 ];
@@ -89,7 +93,9 @@ export async function GET(req: NextRequest) {
         total != null ? total.toFixed(2) : "",
         o.paid_at ?? "",
         o.weight ?? "",
-        received ?? "", returned ?? "", missing ?? "", details,
+        received ?? "", returned ?? "", missing ?? "",
+        received != null || returned != null ? (WASH_FAMILY.includes(o.service) ? "lb" : "items") : "",
+        details,
         deliveryRequestOf(o.status_history),
         o.date, o.time_slot, o.address,
         o.notes ?? "", o.created_at, o.updated_at,

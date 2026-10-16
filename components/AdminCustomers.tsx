@@ -1,4 +1,4 @@
-import { calculateHst } from "@/lib/pricing";
+import { calculateHst, PER_LB_SERVICES } from "@/lib/pricing";
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
 import { MapPin, Phone, Mail, Repeat } from "lucide-react";
@@ -193,7 +193,7 @@ export default function AdminCustomers({ customers, query }: { customers: Custom
                 <table className="w-full text-sm">
                   <thead className="bg-[#FAFAFA] border-y border-[#F0F0F0]">
                     <tr>
-                      {["Order", "Date", "Service", "Weight / items", "Subtotal", "HST", "Total", "Status"].map(h => (
+                      {["Order", "Date", "Service", "Quantity", "Subtotal", "HST", "Total", "Status"].map(h => (
                         <th key={h} className="text-left px-3 py-2 font-heading font-semibold text-[0.68rem] tracking-wide uppercase text-[#A1A1AA] whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -203,10 +203,13 @@ export default function AdminCustomers({ customers, query }: { customers: Custom
                       const priced = o.price != null;
                       const { subtotal, hst, total } = priced ? calculateHst(Number(o.price)) : { subtotal: 0, hst: 0, total: 0 };
                       const { received, returned } = getItemTracking(o.status_history);
+                      // Wash services are weighed, dry cleaning is counted —
+                      // "45 in" means pounds on one and garments on the other.
+                      const unit = PER_LB_SERVICES.includes(o.service) ? "lb" : "items";
                       const qty = [
                         o.weight && o.weight !== "TBD" ? o.weight : null,
-                        received != null ? `${received} in` : null,
-                        returned != null ? `${returned} out` : null,
+                        received != null ? `${received} ${unit} in` : null,
+                        returned != null ? `${returned} ${unit} out` : null,
                       ].filter(Boolean).join(" · ");
                       return (
                         <tr key={o.id} className="border-b border-[#F4F4F5] align-top">

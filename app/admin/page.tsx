@@ -10,7 +10,7 @@ import AdminLivePoll from "@/components/AdminLivePoll";
 import { getItemTracking } from "@/lib/itemTracking";
 import AdminCustomers, { groupCustomers, filterCustomers } from "@/components/AdminCustomers";
 import { orderCodeColor } from "@/lib/orderCode";
-import { calculateHst } from "@/lib/pricing";
+import { calculateHst, PER_LB_SERVICES } from "@/lib/pricing";
 import { Bell, AlertTriangle, X, Download } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +38,9 @@ const PAYMENT_BADGE: Record<string, string> = {
   unpaid: "bg-amber-100 text-amber-800",
 };
 
-const WASH_FAMILY = ["wash-fold", "express", "wash-press"];
+// The wash/dry split comes from lib/pricing.ts so it can't drift —
+// PER_LB_SERVICES is the same list this file used to keep privately.
+const WASH_FAMILY = PER_LB_SERVICES;
 const DRY_FAMILY  = ["dry-clean", "ironing", "household", "detailing"];
 
 function fmtDate(d: string) {
