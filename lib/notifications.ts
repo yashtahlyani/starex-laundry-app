@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { getSupabaseAdmin } from "./supabaseAdmin";
 import { BUSINESS_NAME } from "./pricing";
-import { CANCELLATION_FEE_CAD, FREE_CANCELLATION_HOURS, type NoticeBand } from "./cancellation";
+import { CANCELLATION_FEES, type NoticeBand } from "./cancellation";
 import { SITE_ORIGIN, CONTACT } from "./site";
 
 // Undefined until RESEND_API_KEY is set — email sends are skipped gracefully until then,
@@ -389,11 +389,14 @@ export async function notifyOwnerOfCancellation(p: {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!adminEmail || !resend) return;
 
-  const bandLabel = {
-    free: `${FREE_CANCELLATION_HOURS}+ hours' notice — no fee`,
-    late: `Under ${FREE_CANCELLATION_HOURS} hours' notice — $${CANCELLATION_FEE_CAD} fee may apply`,
-    no_show: `Pickup window already started — $${CANCELLATION_FEE_CAD} fee may apply`,
-  }[p.band];
+  const F = CANCELLATION_FEES;
+  const bandLabel: Record<NoticeBand, string> = {
+    free: `${F.freeFromHours}+ hours' notice — no fee`,
+    reduced: `${F.reducedFromHours}–${F.freeFromHours} hours' notice — $${F.reducedFeeCad} fee may apply`,
+    late: `Under ${F.reducedFromHours} hours' notice — $${F.lateFeeCad} fee may apply`,
+    no_show: `Pickup window already started — $${F.lateFeeCad} fee may apply`,
+  };
+  const label = bandLabel[p.band];
   const urgent = p.band !== "free";
 
   try {
@@ -410,7 +413,7 @@ export async function notifyOwnerOfCancellation(p: {
           </p>
           <div style="background:${urgent ? "#FFFBEB" : "#F4F4F5"};border-left:3px solid ${urgent ? "#F59E0B" : "#D4D4D8"};padding:16px;margin:0 0 16px;border-radius:4px;">
             <p style="margin:0 0 4px;color:${urgent ? "#92400E" : "#4A4A4A"};font-size:12px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;">Notice given</p>
-            <p style="margin:0;font-size:15px;color:#1a1a2e;font-weight:600;">${escapeHtml(bandLabel)}</p>
+            <p style="margin:0;font-size:15px;color:#1a1a2e;font-weight:600;">${escapeHtml(label)}</p>
             ${urgent ? `<p style="margin:8px 0 0;font-size:13px;color:#92400E;">If a driver is already routed for this window, you may want to call them.</p>` : ""}
           </div>
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">

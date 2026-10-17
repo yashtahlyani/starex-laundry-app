@@ -11,7 +11,7 @@
 // the owner's call on the facts — so the UI tells the customer which band
 // they're in and the order records it, and any fee is applied by staff.
 //
-// Fee set by the client on 18 Oct 2026: a flat $10 under 3 hours' notice,
+// Fees set by the client on 18 Oct 2026 (flat amounts, see CANCELLATION_FEES),
 // replacing the old
 // percentage bands (25% / 50% / up to the $40 minimum). Both published
 // documents were updated in the same change — app/refund-policy and
@@ -22,26 +22,43 @@
 // This is a REDUCTION on every band, so it can take effect immediately;
 // raising a fee would need notice to existing bookings.
 
-/** Flat cancellation fee. One constant — the UI, the policy copy and the
- *  recorded note all read it from here. */
-export const CANCELLATION_FEE_CAD = 10;
+/**
+ * The fee schedule, settled with the client on 18 Oct 2026: 12+ hours free,
+ * 3–12 hours $5, under 3 hours $10. Flat amounts, not percentages.
+ *
+ * This table is the single source for the whole feature — the wording the
+ * customer reads before confirming, the owner's alert email, the note
+ * recorded on the order, and the two published documents are all written
+ * from it. Changing a figure means editing it here and the matching line in
+ * app/refund-policy and app/terms, which must always agree.
+ */
+export const CANCELLATION_FEES = {
+  /** at least this many hours' notice: no fee at all */
+  freeFromHours: 12,
+  /** at least this many hours' notice: the reduced fee */
+  reducedFromHours: 3,
+  reducedFeeCad: 5,
+  /** less notice than that, or a no-show */
+  lateFeeCad: 10,
+} as const;
 
-/** Cancel with at least this much notice and there is no fee at all.
- *  Set to 3 by the client on 18 Oct 2026 ("under 3 hours is 10$, before that
- *  no") — so the fee only bites on a genuinely last-minute cancellation,
- *  once the run is effectively committed. */
-export const FREE_CANCELLATION_HOURS = 3;
+/** Kept as named exports because the notification email and the policy copy
+ *  read them directly. */
+export const FREE_CANCELLATION_HOURS = CANCELLATION_FEES.freeFromHours;
+export const CANCELLATION_FEE_CAD = CANCELLATION_FEES.lateFeeCad;
 
 /** Only an order that hasn't been collected yet can be cancelled by the
  *  customer. Once it's "picked_up" the garments are physically with Starex,
  *  which is a return conversation, not a cancellation — those go to staff. */
 export const CUSTOMER_CANCELLABLE_STATUSES = ["placed"];
 
-export type NoticeBand = "free" | "late" | "no_show";
+export type NoticeBand = "free" | "reduced" | "late" | "no_show";
 
 export type CancellationTerms = {
   band: NoticeBand;
   hoursNotice: number;
+  /** the fee this band carries, in CAD — 0 when free */
+  feeCad: number;
   /** headline the customer sees before confirming */
   headline: string;
   /** the exact wording from the policy for this band */
@@ -107,30 +124,39 @@ export function cancellationTerms(dateStr: string, timeSlot: string | null | und
   // sure of is the wrong way round.
   if (h == null) {
     return {
-      band: "free", hoursNotice: 0, free: true,
+      band: "free", hoursNotice: 0, feeCad: 0, free: true,
       headline: "Free cancellation",
       detail: "No cancellation fee applies.",
     };
   }
 
-  if (h >= FREE_CANCELLATION_HOURS) {
+  const F = CANCELLATION_FEES;
+
+  if (h >= F.freeFromHours) {
     return {
-      band: "free", hoursNotice: h, free: true,
+      band: "free", hoursNotice: h, feeCad: 0, free: true,
       headline: "Free cancellation — no charge",
-      detail: `You're giving ${FREE_CANCELLATION_HOURS}+ hours' notice, so there's no cancellation fee.`,
+      detail: `You're giving ${F.freeFromHours}+ hours' notice, so there's no cancellation fee.`,
+    };
+  }
+  if (h >= F.reducedFromHours) {
+    return {
+      band: "reduced", hoursNotice: h, feeCad: F.reducedFeeCad, free: false,
+      headline: `A $${F.reducedFeeCad} cancellation fee may apply`,
+      detail: `You're giving between ${F.reducedFromHours} and ${F.freeFromHours} hours' notice, so a flat $${F.reducedFeeCad} fee may apply. We'll contact you if we charge it.`,
     };
   }
   if (h >= 0) {
     return {
-      band: "late", hoursNotice: h, free: false,
-      headline: `A $${CANCELLATION_FEE_CAD} cancellation fee may apply`,
-      detail: `You're giving less than ${FREE_CANCELLATION_HOURS} hours' notice, so a flat $${CANCELLATION_FEE_CAD} fee may apply — the driver and the slot are already reserved. We'll contact you if we charge it.`,
+      band: "late", hoursNotice: h, feeCad: F.lateFeeCad, free: false,
+      headline: `A $${F.lateFeeCad} cancellation fee may apply`,
+      detail: `You're giving less than ${F.reducedFromHours} hours' notice, so a flat $${F.lateFeeCad} fee may apply — the driver and the slot are already reserved. We'll contact you if we charge it.`,
     };
   }
   return {
-    band: "no_show", hoursNotice: h, free: false,
+    band: "no_show", hoursNotice: h, feeCad: F.lateFeeCad, free: false,
     headline: "This pickup window has already started",
-    detail: `The pickup window has passed, so a flat $${CANCELLATION_FEE_CAD} fee may apply. Please cancel anyway and we'll be in touch — if our driver hasn't come out yet there's usually nothing to pay.`,
+    detail: `The pickup window has passed, so a flat $${F.lateFeeCad} fee may apply. Please cancel anyway and we'll be in touch — if our driver hasn't come out yet there's usually nothing to pay.`,
   };
 }
 
@@ -143,10 +169,12 @@ export function cancellationNote(terms: CancellationTerms, reason: string | null
     : terms.hoursNotice >= 48
       ? `${Math.round(terms.hoursNotice / 24)} days before the pickup window`
       : `${terms.hoursNotice.toFixed(1)}h before the pickup window`;
+  const F = CANCELLATION_FEES;
   const band = {
-    free: `no fee (${FREE_CANCELLATION_HOURS}+ hours' notice)`,
-    late: `$${CANCELLATION_FEE_CAD} fee may apply (under ${FREE_CANCELLATION_HOURS} hours' notice)`,
-    no_show: `$${CANCELLATION_FEE_CAD} fee may apply (pickup window had started)`,
+    free: `no fee (${F.freeFromHours}+ hours' notice)`,
+    reduced: `$${F.reducedFeeCad} fee may apply (${F.reducedFromHours}–${F.freeFromHours} hours' notice)`,
+    late: `$${F.lateFeeCad} fee may apply (under ${F.reducedFromHours} hours' notice)`,
+    no_show: `$${F.lateFeeCad} fee may apply (pickup window had started)`,
   }[terms.band];
   const why = reason?.trim() ? ` Reason: ${reason.trim().slice(0, 300)}` : "";
   return `${who}, ${notice} — ${band}.${why}`;
