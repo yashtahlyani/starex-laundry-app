@@ -116,8 +116,8 @@ const sections: LegalSection[] = [
     blocks: [
       { type: "p", text: "Separate from your statutory rights in Section 7, our ordinary scheduling policy for changes of plan is:" },
       { type: "ul", items: [
-        { label: "More than 12 hours before pickup:", text: "free cancellation or rescheduling, no charge." },
-        { label: "Less than 12 hours before pickup:", text: "a flat cancellation fee of $10 may apply." },
+        { label: "More than 3 hours before pickup:", text: "free cancellation or rescheduling, no charge." },
+        { label: "Less than 3 hours before pickup:", text: "a flat cancellation fee of $10 may apply." },
         { label: "A missed pickup (no cancellation given):", text: "a flat no-show fee of $10 may apply." },
       ]},
       { type: "p", text: "These fees are a genuine pre-estimate of the costs we incur reserving pickup capacity for you (a driver's time, route allocation, and lost capacity for other customers), not a penalty. Full details of refund eligibility connected to cancellations are set out in our separate Refund, Cancellation & Damage Policy, which forms part of these Terms by reference." },

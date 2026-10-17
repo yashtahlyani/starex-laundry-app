@@ -39,8 +39,8 @@ const sections: LegalSection[] = [
     blocks: [
       { type: "p", text: "You may cancel or reschedule an Order from your order tracking page, or by contacting us. Our scheduling fee is set at a level intended to be a genuine, reasonable pre-estimate of the cost we incur reserving pickup capacity for you — driver time, route planning, and displaced capacity for other customers — not a penalty:" },
       { type: "ul", items: [
-        { label: "12+ hours' notice:", text: "Free cancellation or rescheduling, no charge." },
-        { label: "Less than 12 hours' notice:", text: "A flat cancellation fee of $10 may apply." },
+        { label: "3+ hours' notice:", text: "Free cancellation or rescheduling, no charge." },
+        { label: "Less than 3 hours' notice:", text: "A flat cancellation fee of $10 may apply." },
         { label: "No-show (no cancellation given):", text: "A flat fee of $10 may apply." },
       ]},
       { type: "p", text: "If Starex needs to cancel or reschedule an Order (for example, due to weather, vehicle issues, or capacity constraints), we will notify you as early as possible and no cancellation fee will apply. You may choose an alternative time slot or a full refund of any amount already charged for that Order." },

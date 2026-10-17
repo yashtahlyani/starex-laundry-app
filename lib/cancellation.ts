@@ -11,7 +11,8 @@
 // the owner's call on the facts — so the UI tells the customer which band
 // they're in and the order records it, and any fee is applied by staff.
 //
-// Fee set by the client on 18 Oct 2026: a flat $10, replacing the old
+// Fee set by the client on 18 Oct 2026: a flat $10 under 3 hours' notice,
+// replacing the old
 // percentage bands (25% / 50% / up to the $40 minimum). Both published
 // documents were updated in the same change — app/refund-policy and
 // app/terms — because a policy quoting percentages while the cancel screen
@@ -25,8 +26,11 @@
  *  recorded note all read it from here. */
 export const CANCELLATION_FEE_CAD = 10;
 
-/** Cancel with at least this much notice and there is no fee at all. */
-export const FREE_CANCELLATION_HOURS = 12;
+/** Cancel with at least this much notice and there is no fee at all.
+ *  Set to 3 by the client on 18 Oct 2026 ("under 3 hours is 10$, before that
+ *  no") — so the fee only bites on a genuinely last-minute cancellation,
+ *  once the run is effectively committed. */
+export const FREE_CANCELLATION_HOURS = 3;
 
 /** Only an order that hasn't been collected yet can be cancelled by the
  *  customer. Once it's "picked_up" the garments are physically with Starex,
