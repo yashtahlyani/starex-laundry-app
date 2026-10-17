@@ -7,8 +7,11 @@ import { Suspense } from "react";
 import IssueReportForm from "@/components/IssueReportForm";
 import PayNowCard from "@/components/PayNowCard";
 import RatingCard from "@/components/RatingCard";
+import CancelOrderCard from "@/components/CancelOrderCard";
+import { getSupabaseBrowser } from "@/lib/supabaseClient";
+import { CUSTOMER_CANCELLABLE_STATUSES } from "@/lib/cancellation";
 import { orderCodeColor } from "@/lib/orderCode";
-import { calculateHst } from "@/lib/pricing";
+import { calculateHst, PHONE } from "@/lib/pricing";
 
 type StatusEvent = { status: string; note?: string | null; time?: string; created_at?: string; label?: string };
 type Order = {
@@ -22,6 +25,7 @@ type Order = {
   time_slot: string;
   created_at: string;
   status_history: StatusEvent[];
+  user_id?: string | null;
   payment_status?: "unpaid" | "paid" | null;
   price?: number | null;
   rating?: number | null;
@@ -48,6 +52,15 @@ function OrderTracker() {
   const [error,   setError]   = useState<string | null>(null);
   const [order,   setOrder]   = useState<Order | null>(null);
   const [justPaid, setJustPaid] = useState(false);
+  // Only decides whether a guest must confirm the order email before
+  // cancelling — the server makes the same check independently.
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    getSupabaseBrowser().auth.getUser()
+      .then(({ data: { user } }) => setUserId(user?.id ?? null))
+      .catch(() => setUserId(null));
+  }, []);
 
   useEffect(() => {
     const c = searchParams.get("code");
@@ -161,6 +174,37 @@ function OrderTracker() {
                 )}
               </div>
             </div>
+
+            {/* Cancelling is only offered while the order can still actually
+                be cancelled — once it has been picked up the garments are
+                with us, which is a phone call, not a button. */}
+            {CUSTOMER_CANCELLABLE_STATUSES.includes(order.status) && (
+              <CancelOrderCard
+                orderCode={order.code}
+                date={order.date}
+                timeSlot={order.time_slot}
+                isSignedInOwner={!!userId && !!order.user_id && userId === order.user_id}
+                // Flip the page over immediately rather than waiting on the
+                // refetch — the customer has just confirmed something
+                // irreversible and shouldn't watch an unchanged screen while
+                // a request completes. The refresh then brings the real
+                // status_history in behind it.
+                onCancelled={() => {
+                  setOrder(prev => (prev ? { ...prev, status: "cancelled" } : prev));
+                  refreshOrderSilently(order.code);
+                }}
+              />
+            )}
+
+            {order.status === "cancelled" && (
+              <div className="card rounded-2xl p-5 border border-[#FCA5A5] bg-[#FEF2F2]">
+                <p className="text-sm font-bold font-heading text-[#991B1B]">This pickup is cancelled</p>
+                <p className="text-xs text-[#991B1B] font-body mt-1 leading-relaxed">
+                  Nothing further is needed from you. If this was a mistake, call us on {PHONE} and
+                  we&apos;ll rebook you — or just place a new order.
+                </p>
+              </div>
+            )}
 
             {/* Pay Now sits right after the status summary, before the stage
                 timeline — a customer with money due shouldn't have to scroll

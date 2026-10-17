@@ -363,6 +363,71 @@ export async function notifyOwnerOfPayment(p: {
   }
 }
 
+/**
+ * A pickup has been cancelled. Sent whether the customer did it themselves or
+ * staff did it on their behalf, because the operational consequence is the
+ * same: a van may already be routed for that window.
+ *
+ * The subject line leads with how much notice was given — that's the part the
+ * owner acts on, and on a short-notice cancellation he may want to ring the
+ * customer before the driver leaves.
+ */
+export async function notifyOwnerOfCancellation(p: {
+  orderCode: string;
+  customerName: string;
+  customerPhone: string;
+  pickupDate: string;
+  pickupTimeSlot: string | null;
+  cancelledBy: "customer" | "staff";
+  band: "free" | "fee_25" | "fee_50" | "no_show";
+  hoursNotice: number;
+  reason: string | null;
+  priceCad: number | null;
+  paid: boolean;
+}) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!adminEmail || !resend) return;
+
+  const bandLabel = {
+    free: "12+ hours' notice — no fee",
+    fee_25: "3–12 hours' notice — up to 25% fee may apply",
+    fee_50: "Under 3 hours' notice — up to 50% fee may apply",
+    no_show: "Pickup window already started — fee up to the $40 minimum may apply",
+  }[p.band];
+  const urgent = p.band !== "free";
+
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: adminEmail,
+      subject: `${urgent ? "Short-notice cancellation" : "Cancelled"} — Order ${p.orderCode} — ${p.pickupDate}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px;">
+          <h2 style="color:#ED1D24;margin:0 0 16px">Pickup Cancelled</h2>
+          <p style="font-size:15px;color:#1a1a2e;margin:0 0 16px;">
+            Order <strong style="font-family:monospace">${escapeHtml(p.orderCode)}</strong> was cancelled
+            ${p.cancelledBy === "customer" ? "by the customer on the website" : "by staff"}.
+          </p>
+          <div style="background:${urgent ? "#FFFBEB" : "#F4F4F5"};border-left:3px solid ${urgent ? "#F59E0B" : "#D4D4D8"};padding:16px;margin:0 0 16px;border-radius:4px;">
+            <p style="margin:0 0 4px;color:${urgent ? "#92400E" : "#4A4A4A"};font-size:12px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;">Notice given</p>
+            <p style="margin:0;font-size:15px;color:#1a1a2e;font-weight:600;">${escapeHtml(bandLabel)}</p>
+            ${urgent ? `<p style="margin:8px 0 0;font-size:13px;color:#92400E;">If a driver is already routed for this window, you may want to call them.</p>` : ""}
+          </div>
+          <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
+            <tr><td style="color:#6B7280;width:140px">Customer</td><td>${escapeHtml(p.customerName)} — ${escapeHtml(p.customerPhone)}</td></tr>
+            <tr><td style="color:#6B7280">Was booked for</td><td>${escapeHtml(p.pickupDate)}${p.pickupTimeSlot ? `, ${escapeHtml(p.pickupTimeSlot)}` : ""}</td></tr>
+            ${p.reason ? `<tr><td style="color:#6B7280">Reason given</td><td>${escapeHtml(p.reason)}</td></tr>` : ""}
+            ${p.priceCad != null ? `<tr><td style="color:#6B7280">Order total</td><td>$${p.priceCad.toFixed(2)} CAD + HST${p.paid ? " — <strong style=\"color:#B45309\">ALREADY PAID, may need refunding</strong>" : ""}</td></tr>` : ""}
+          </table>
+          <a href="${SITE_URL}/admin?tab=orders&q=${encodeURIComponent(p.orderCode)}" style="display:inline-block;margin-top:16px;color:#ED1D24;">Open Admin Console →</a>
+        </div>
+      `,
+    });
+  } catch {
+    // Best-effort — a failed owner alert must never fail the cancellation.
+  }
+}
+
 export async function notifyOwnerOfLowRating(orderCode: string, rating: number) {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!adminEmail || !resend) return;

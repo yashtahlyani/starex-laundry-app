@@ -8,6 +8,7 @@ import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } fr
 import { getItemTracking } from "@/lib/itemTracking";
 import { orderCodeColor } from "@/lib/orderCode";
 import { calculateHst, isPerLbService } from "@/lib/pricing";
+import { cancellationTerms } from "@/lib/cancellation";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -95,6 +96,10 @@ export default function AppOrderDrawer({
   const [noteError, setNoteError] = useState<string | null>(null);
   const [pendingDiscrepancy, setPendingDiscrepancy] = useState("");
   const [weightError, setWeightError] = useState<string | null>(null);
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
 
   // The drawer is a single component instance reused across every order
   // (AdminOrderTable/AdminIncomingSection just swap the `order` prop) — its
@@ -129,6 +134,10 @@ export default function AppOrderDrawer({
     setNoteError(null);
     setPendingDiscrepancy("");
     setWeightError(null);
+    setCancelOpen(false);
+    setCancelReason("");
+    setCancelling(false);
+    setCancelError(null);
   }, [order?.id]);
 
   // Seed the charge box from the total already saved on this order, without
@@ -175,6 +184,10 @@ export default function AppOrderDrawer({
   const returned = localTracking?.returned ?? tracking.returned;
   const missing = received != null && returned != null ? received - returned : null;
 
+  // Order codes are URL path segments, and six legacy orders carry codes like
+  // "#SX2402". An unencoded "#" is read by the browser as a fragment, so the
+  // request went to /api/orders/ and 404'd — every action in this drawer
+  // silently failed on those orders. encodeURIComponent on all of them.
   async function handlePayment(method: "charge" | "manual") {
     if (!order) return;
     const amount = parseFloat(pendingPrice);
@@ -183,7 +196,7 @@ export default function AppOrderDrawer({
     setPayingWith(method);
     setPaymentError(null);
     try {
-      const res = await fetch(method === "charge" ? "/api/stripe/charge" : `/api/orders/${order.code}/mark-paid`, {
+      const res = await fetch(method === "charge" ? "/api/stripe/charge" : `/api/orders/${encodeURIComponent(order.code)}/mark-paid`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(method === "charge" ? { orderCode: order.code, amountCad: amount } : { amountCad: amount }),
@@ -210,7 +223,7 @@ export default function AppOrderDrawer({
     setSavingPrice(true);
     setPaymentError(null);
     try {
-      const res = await fetch(`/api/orders/${order.code}/set-price`, {
+      const res = await fetch(`/api/orders/${encodeURIComponent(order.code)}/set-price`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amountCad: amount }),
@@ -235,7 +248,7 @@ export default function AppOrderDrawer({
     setSendingNote(true);
     setNoteError(null);
     try {
-      const res = await fetch(`/api/orders/${order.code}/notify`, {
+      const res = await fetch(`/api/orders/${encodeURIComponent(order.code)}/notify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
@@ -249,6 +262,32 @@ export default function AppOrderDrawer({
       setNoteError("Could not send note — check your connection and try again");
     } finally {
       setSendingNote(false);
+    }
+  }
+
+  // Same endpoint the customer's own cancel uses, so the recorded terms, the
+  // note on the order and the email they receive are identical either way.
+  const cancelTerms = cancellationTerms(order?.date ?? "", order?.time_slot ?? null);
+
+  async function handleCancelOrder() {
+    if (!order) return;
+    setCancelling(true);
+    setCancelError(null);
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(order.code)}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: cancelReason.trim() || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setCancelError(data.error ?? "Could not cancel this order"); return; }
+      setLocalStatus("cancelled");
+      setCancelOpen(false);
+      router.refresh();
+    } catch {
+      setCancelError("Could not cancel — check your connection and try again");
+    } finally {
+      setCancelling(false);
     }
   }
 
@@ -277,7 +316,7 @@ export default function AppOrderDrawer({
     setCountError(null);
     setWeightError(null);
     try {
-      const res = await fetch(`/api/orders/${order.code}/status`, {
+      const res = await fetch(`/api/orders/${encodeURIComponent(order.code)}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -614,6 +653,59 @@ export default function AppOrderDrawer({
                 >
                   {advancing ? "Updating…" : <>Mark as {nextLabel} <ArrowRight size={15} /></>}
                 </button>
+              )}
+
+              {/* Cancelling on a customer's behalf. The status dropdown could
+                  already set "cancelled", but it recorded no reason and sent
+                  no proper cancellation notice — per client, 2026-10-18:
+                  "we can also cancel the order from our side also if the
+                  customer tells us to do so". Goes through the same endpoint
+                  as the customer's own cancel, so the terms, the note and the
+                  customer email are identical either way. */}
+              {admin && !["delivered", "cancelled"].includes(currentStatus) && (
+                cancelOpen ? (
+                  <div style={{ border: "1px solid #FCA5A5", background: "#FEF2F2", borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem", color: "#991B1B" }}>
+                      Cancel this order?
+                    </p>
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#991B1B" }}>
+                      The customer is emailed and messaged automatically. {cancelTerms.free
+                        ? "12+ hours' notice — no fee applies."
+                        : `${cancelTerms.headline} — you decide whether to charge it.`}
+                    </p>
+                    <input
+                      value={cancelReason}
+                      onChange={e => setCancelReason(e.target.value)}
+                      maxLength={300}
+                      placeholder="Reason (e.g. customer called to cancel)"
+                      style={{ padding: "9px 12px", borderRadius: 10, border: "1px solid #FCA5A5", fontSize: "0.82rem", fontFamily: "Kodchasan, sans-serif" }}
+                    />
+                    {cancelError && <p style={{ color: "#DC2626", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{cancelError}</p>}
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button
+                        onClick={() => { setCancelOpen(false); setCancelError(null); }}
+                        disabled={cancelling}
+                        style={{ flex: 1, padding: "9px", background: "#fff", color: "#161616", border: "1.5px solid #E5E7EB", borderRadius: 10, cursor: "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
+                      >
+                        Keep order
+                      </button>
+                      <button
+                        onClick={handleCancelOrder}
+                        disabled={cancelling}
+                        style={{ flex: 1, padding: "9px", background: cancelling ? "#A1A1AA" : "#DC2626", color: "#fff", border: "none", borderRadius: 10, cursor: cancelling ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
+                      >
+                        {cancelling ? "Cancelling…" : "Confirm cancel"}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setCancelOpen(true)}
+                    style={{ width: "100%", padding: "9px", background: "transparent", color: "#B91C1C", border: "none", cursor: "pointer", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", textDecoration: "underline" }}
+                  >
+                    Cancel this order
+                  </button>
+                )
               )}
               {!admin && !["delivered","cancelled"].includes(currentStatus) && (
                 <a href="/contact" style={{
