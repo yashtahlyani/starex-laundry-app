@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { getSupabaseAdmin } from "./supabaseAdmin";
 import { BUSINESS_NAME } from "./pricing";
+import { CANCELLATION_FEE_CAD, FREE_CANCELLATION_HOURS, type NoticeBand } from "./cancellation";
 import { SITE_ORIGIN, CONTACT } from "./site";
 
 // Undefined until RESEND_API_KEY is set — email sends are skipped gracefully until then,
@@ -379,7 +380,7 @@ export async function notifyOwnerOfCancellation(p: {
   pickupDate: string;
   pickupTimeSlot: string | null;
   cancelledBy: "customer" | "staff";
-  band: "free" | "fee_25" | "fee_50" | "no_show";
+  band: NoticeBand;
   hoursNotice: number;
   reason: string | null;
   priceCad: number | null;
@@ -389,10 +390,9 @@ export async function notifyOwnerOfCancellation(p: {
   if (!adminEmail || !resend) return;
 
   const bandLabel = {
-    free: "12+ hours' notice — no fee",
-    fee_25: "3–12 hours' notice — up to 25% fee may apply",
-    fee_50: "Under 3 hours' notice — up to 50% fee may apply",
-    no_show: "Pickup window already started — fee up to the $40 minimum may apply",
+    free: `${FREE_CANCELLATION_HOURS}+ hours' notice — no fee`,
+    late: `Under ${FREE_CANCELLATION_HOURS} hours' notice — $${CANCELLATION_FEE_CAD} fee may apply`,
+    no_show: `Pickup window already started — $${CANCELLATION_FEE_CAD} fee may apply`,
   }[p.band];
   const urgent = p.band !== "free";
 

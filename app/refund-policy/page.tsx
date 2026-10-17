@@ -37,12 +37,11 @@ const sections: LegalSection[] = [
   {
     title: "Cancellations & Rescheduling",
     blocks: [
-      { type: "p", text: "You may cancel or reschedule an Order through your account or by contacting us. Our scheduling fees are set at a level intended to be a genuine, reasonable pre-estimate of the cost we incur reserving pickup capacity for you — driver time, route planning, and displaced capacity for other customers — not a penalty:" },
+      { type: "p", text: "You may cancel or reschedule an Order from your order tracking page, or by contacting us. Our scheduling fee is set at a level intended to be a genuine, reasonable pre-estimate of the cost we incur reserving pickup capacity for you — driver time, route planning, and displaced capacity for other customers — not a penalty:" },
       { type: "ul", items: [
         { label: "12+ hours' notice:", text: "Free cancellation or rescheduling, no charge." },
-        { label: "3–12 hours' notice:", text: "A cancellation fee of 25% of the estimated Order value may apply." },
-        { label: "Less than 3 hours' notice:", text: "A cancellation fee of up to 50% of the estimated Order value may apply." },
-        { label: "No-show (no cancellation given):", text: "A fee up to the full minimum order value ($40) may apply." },
+        { label: "Less than 12 hours' notice:", text: "A flat cancellation fee of $10 may apply." },
+        { label: "No-show (no cancellation given):", text: "A flat fee of $10 may apply." },
       ]},
       { type: "p", text: "If Starex needs to cancel or reschedule an Order (for example, due to weather, vehicle issues, or capacity constraints), we will notify you as early as possible and no cancellation fee will apply. You may choose an alternative time slot or a full refund of any amount already charged for that Order." },
       { type: "note", text: "Statutory cancellation rights: separately from the scheduling fees above, our Terms & Conditions describe statutory rights you may have to cancel an Order at no cost — for example, if we did not provide required pre-contract disclosure, or did not deliver a confirmation copy of your Order. See Section 7 of our Terms & Conditions for details; those rights are unaffected by this Section." },

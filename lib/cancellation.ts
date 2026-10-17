@@ -10,13 +10,30 @@
 // Nothing here charges anything. The policy says a fee "may apply", which is
 // the owner's call on the facts — so the UI tells the customer which band
 // they're in and the order records it, and any fee is applied by staff.
+//
+// Fee set by the client on 18 Oct 2026: a flat $10, replacing the old
+// percentage bands (25% / 50% / up to the $40 minimum). Both published
+// documents were updated in the same change — app/refund-policy and
+// app/terms — because a policy quoting percentages while the cancel screen
+// quotes $10 is a contradiction in a consumer contract, and under Ontario's
+// CPA an ambiguity like that is read against the business.
+//
+// This is a REDUCTION on every band, so it can take effect immediately;
+// raising a fee would need notice to existing bookings.
+
+/** Flat cancellation fee. One constant — the UI, the policy copy and the
+ *  recorded note all read it from here. */
+export const CANCELLATION_FEE_CAD = 10;
+
+/** Cancel with at least this much notice and there is no fee at all. */
+export const FREE_CANCELLATION_HOURS = 12;
 
 /** Only an order that hasn't been collected yet can be cancelled by the
  *  customer. Once it's "picked_up" the garments are physically with Starex,
  *  which is a return conversation, not a cancellation — those go to staff. */
 export const CUSTOMER_CANCELLABLE_STATUSES = ["placed"];
 
-export type NoticeBand = "free" | "fee_25" | "fee_50" | "no_show";
+export type NoticeBand = "free" | "late" | "no_show";
 
 export type CancellationTerms = {
   band: NoticeBand;
@@ -92,31 +109,24 @@ export function cancellationTerms(dateStr: string, timeSlot: string | null | und
     };
   }
 
-  if (h >= 12) {
+  if (h >= FREE_CANCELLATION_HOURS) {
     return {
       band: "free", hoursNotice: h, free: true,
       headline: "Free cancellation — no charge",
-      detail: "You're giving 12+ hours' notice, so there's no cancellation fee.",
-    };
-  }
-  if (h >= 3) {
-    return {
-      band: "fee_25", hoursNotice: h, free: false,
-      headline: "A fee of up to 25% may apply",
-      detail: "You're giving between 3 and 12 hours' notice. Our policy allows a cancellation fee of up to 25% of the estimated order value. We'll contact you if one applies.",
+      detail: `You're giving ${FREE_CANCELLATION_HOURS}+ hours' notice, so there's no cancellation fee.`,
     };
   }
   if (h >= 0) {
     return {
-      band: "fee_50", hoursNotice: h, free: false,
-      headline: "A fee of up to 50% may apply",
-      detail: "You're giving less than 3 hours' notice. Our policy allows a cancellation fee of up to 50% of the estimated order value. We'll contact you if one applies.",
+      band: "late", hoursNotice: h, free: false,
+      headline: `A $${CANCELLATION_FEE_CAD} cancellation fee may apply`,
+      detail: `You're giving less than ${FREE_CANCELLATION_HOURS} hours' notice, so a flat $${CANCELLATION_FEE_CAD} fee may apply — the driver and the slot are already reserved. We'll contact you if we charge it.`,
     };
   }
   return {
     band: "no_show", hoursNotice: h, free: false,
     headline: "This pickup window has already started",
-    detail: "The pickup window has passed. A fee up to the minimum order value may apply. Please cancel anyway and we'll be in touch — if our driver hasn't come out yet there's usually nothing to pay.",
+    detail: `The pickup window has passed, so a flat $${CANCELLATION_FEE_CAD} fee may apply. Please cancel anyway and we'll be in touch — if our driver hasn't come out yet there's usually nothing to pay.`,
   };
 }
 
@@ -130,10 +140,9 @@ export function cancellationNote(terms: CancellationTerms, reason: string | null
       ? `${Math.round(terms.hoursNotice / 24)} days before the pickup window`
       : `${terms.hoursNotice.toFixed(1)}h before the pickup window`;
   const band = {
-    free: "no fee (12+ hours' notice)",
-    fee_25: "up to 25% fee may apply (3–12 hours' notice)",
-    fee_50: "up to 50% fee may apply (under 3 hours' notice)",
-    no_show: "no-show band — fee up to the minimum order value may apply",
+    free: `no fee (${FREE_CANCELLATION_HOURS}+ hours' notice)`,
+    late: `$${CANCELLATION_FEE_CAD} fee may apply (under ${FREE_CANCELLATION_HOURS} hours' notice)`,
+    no_show: `$${CANCELLATION_FEE_CAD} fee may apply (pickup window had started)`,
   }[terms.band];
   const why = reason?.trim() ? ` Reason: ${reason.trim().slice(0, 300)}` : "";
   return `${who}, ${notice} — ${band}.${why}`;
