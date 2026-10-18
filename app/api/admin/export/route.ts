@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
 import { getItemTracking } from "@/lib/itemTracking";
+import { getDeliveryRequest } from "@/lib/deliveryRequest";
 import { calculateHst, PER_LB_SERVICES } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
@@ -34,13 +35,9 @@ const HEADERS = [
   "Notes", "Created At", "Updated At",
 ];
 
-// The customer's requested delivery window is recorded as a status_history
-// note when they pay (see app/api/stripe/confirm-payment) — pull the most
-// recent one back out so it lands in the manifest as its own column.
-function deliveryRequestOf(history: any[]): string {
-  const match = [...(history ?? [])].reverse().find((e: any) => typeof e?.note === "string" && e.note.includes("delivery requested:"));
-  return match ? String(match.note).split("delivery requested:")[1].trim() : "";
-}
+// Reads the customer's requested delivery window out of status_history. The
+// logic lives in lib/deliveryRequest.ts so the console and this manifest can
+// never disagree about what a customer asked for.
 
 export async function GET(req: NextRequest) {
   const admin = await getAdminUser();
@@ -96,7 +93,7 @@ export async function GET(req: NextRequest) {
         received ?? "", returned ?? "", missing ?? "",
         received != null || returned != null ? (WASH_FAMILY.includes(o.service) ? "lb" : "items") : "",
         details,
-        deliveryRequestOf(o.status_history),
+        getDeliveryRequest(o.status_history) ?? "",
         o.date, o.time_slot, o.address,
         o.notes ?? "", o.created_at, o.updated_at,
       ].map(csvCell).join(",");

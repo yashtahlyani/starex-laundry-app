@@ -348,7 +348,7 @@ export async function notifyOwnerOfPayment(p: {
             <p style="margin:0 0 4px;color:#92400E;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;font-weight:700;">Delivery requested</p>
             <p style="margin:0;font-size:15px;color:#1a1a2e;font-weight:600;">${escapeHtml(delivery).replace(/\n/g, "<br>")}</p>
           </div>` : `
-          <p style="margin:0 0 16px;color:#6B7280;font-size:13px;">The customer didn't specify a delivery time — coordinate with them directly.</p>`}
+          <p style="margin:0 0 16px;color:#6B7280;font-size:13px;">No delivery window came through with this payment — check the order in the console before contacting them, in case they gave one another way.</p>`}
           <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#4A4A4A;">
             <tr><td style="color:#6B7280;width:140px">Customer</td><td>${escapeHtml(p.customerName)} — ${escapeHtml(p.customerEmail)} — ${escapeHtml(p.customerPhone)}</td></tr>
             <tr><td style="color:#6B7280">Subtotal</td><td>$${p.breakdown.subtotal.toFixed(2)} CAD</td></tr>

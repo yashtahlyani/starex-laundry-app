@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle, CheckCircle } from "lucide-react";
+import { X, Package, MapPin, CalendarClock, ArrowRight, AlertTriangle, CheckCircle, Truck } from "lucide-react";
 import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } from "./OrderBits";
 import { getItemTracking } from "@/lib/itemTracking";
+import { getDeliveryRequest } from "@/lib/deliveryRequest";
 import { orderCodeColor } from "@/lib/orderCode";
 import { calculateHst, isPerLbService } from "@/lib/pricing";
 import { cancellationTerms } from "@/lib/cancellation";
@@ -100,6 +101,12 @@ export default function AppOrderDrawer({
   const [cancelReason, setCancelReason] = useState("");
   const [cancelling, setCancelling] = useState(false);
   const [cancelError, setCancelError] = useState<string | null>(null);
+  const [refundOpen, setRefundOpen] = useState(false);
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refundReason, setRefundReason] = useState("");
+  const [refunding, setRefunding] = useState(false);
+  const [refundError, setRefundError] = useState<string | null>(null);
+  const [refundDone, setRefundDone] = useState<string | null>(null);
 
   // The drawer is a single component instance reused across every order
   // (AdminOrderTable/AdminIncomingSection just swap the `order` prop) — its
@@ -138,6 +145,12 @@ export default function AppOrderDrawer({
     setCancelReason("");
     setCancelling(false);
     setCancelError(null);
+    setRefundOpen(false);
+    setRefundAmount("");
+    setRefundReason("");
+    setRefunding(false);
+    setRefundError(null);
+    setRefundDone(null);
   }, [order?.id]);
 
   // Seed the charge box from the total already saved on this order, without
@@ -180,6 +193,7 @@ export default function AppOrderDrawer({
   const effectivePrice = localPrice ?? (order?.price != null ? Number(order.price) : null);
 
   const tracking = getItemTracking(order?.status_history as any);
+  const deliveryRequest = getDeliveryRequest(order?.status_history as any);
   const received = localTracking?.received ?? tracking.received;
   const returned = localTracking?.returned ?? tracking.returned;
   const missing = received != null && returned != null ? received - returned : null;
@@ -268,6 +282,36 @@ export default function AppOrderDrawer({
   // Same endpoint the customer's own cancel uses, so the recorded terms, the
   // note on the order and the email they receive are identical either way.
   const cancelTerms = cancellationTerms(order?.date ?? "", order?.time_slot ?? null);
+
+  async function handleRefund() {
+    if (!order) return;
+    setRefunding(true);
+    setRefundError(null);
+    try {
+      const amt = refundAmount.trim();
+      const res = await fetch("/api/stripe/refund", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderCode: order.code,
+          // Omitted means "refund whatever is left" — the common case, and
+          // safer than making the owner retype an amount he could fat-finger.
+          amountCad: amt ? Number(amt) : undefined,
+          reason: refundReason.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setRefundError(data.error ?? "Refund failed"); return; }
+      setRefundDone(`Refunded $${Number(data.refundedCad).toFixed(2)} CAD`);
+      if (data.fullyRefunded) setLocalPaymentStatus("unpaid");
+      setRefundOpen(false);
+      router.refresh();
+    } catch {
+      setRefundError("Refund failed — check your connection and try again");
+    } finally {
+      setRefunding(false);
+    }
+  }
 
   async function handleCancelOrder() {
     if (!order) return;
@@ -405,6 +449,13 @@ export default function AppOrderDrawer({
                     value={`$${calculateHst(effectivePrice).total.toFixed(2)} CAD incl. HST — subtotal $${effectivePrice.toFixed(2)} + HST $${calculateHst(effectivePrice).hst.toFixed(2)}`}
                   />
                 )}
+                {/* The window the customer asked for when they paid. It was
+                    only ever in the status-history notes, so the owner was
+                    phoning customers to ask for a time they had already
+                    given (per client, 2026-10-18). */}
+                {deliveryRequest && (
+                  <Row icon={Truck} label="Delivery requested" value={deliveryRequest} />
+                )}
                 {order.notes && <Row icon={Package} label="Notes" value={order.notes} />}
                 {admin && order.customer_name && <Row icon={Package} label="Customer" value={`${order.customer_name} · ${order.email} · ${order.phone}`} />}
               </div>
@@ -476,6 +527,70 @@ export default function AppOrderDrawer({
                   <CheckCircle size={15} color="#16A34A" style={{ flexShrink: 0 }} />
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#166534", fontWeight: 600 }}>
                     Payment received{effectivePrice != null ? ` — $${calculateHst(effectivePrice).total.toFixed(2)} CAD incl. HST` : ""}
+                  </p>
+                </div>
+              )}
+
+              {/* Refunding from the console. Previously this meant logging
+                  into Stripe, and the order here would still read "Paid"
+                  afterwards (per client, 2026-10-18). */}
+              {admin && isPaid && (
+                refundOpen ? (
+                  <div style={{ border: "1px solid #FDE68A", background: "#FFFBEB", borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
+                    <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.82rem", color: "#92400E" }}>
+                      Refund this payment?
+                    </p>
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#92400E" }}>
+                      Goes back to the card the customer paid with, and can take 5–10 business days to appear.
+                      {effectivePrice != null && ` Leave the amount blank to refund the full $${calculateHst(effectivePrice).total.toFixed(2)}.`}
+                    </p>
+                    <input
+                      type="number" min={0} step="0.01" inputMode="decimal"
+                      value={refundAmount}
+                      onChange={e => { setRefundAmount(e.target.value); setRefundError(null); }}
+                      placeholder={effectivePrice != null ? `Full refund — $${calculateHst(effectivePrice).total.toFixed(2)}` : "Amount incl. HST (CAD)"}
+                      style={{ padding: "9px 12px", borderRadius: 10, border: "1px solid #FDE68A", fontSize: "0.82rem", fontFamily: "Kodchasan, sans-serif" }}
+                    />
+                    <input
+                      value={refundReason}
+                      onChange={e => setRefundReason(e.target.value)}
+                      maxLength={200}
+                      placeholder="Reason (e.g. charged twice, order cancelled)"
+                      style={{ padding: "9px 12px", borderRadius: 10, border: "1px solid #FDE68A", fontSize: "0.82rem", fontFamily: "Kodchasan, sans-serif" }}
+                    />
+                    {refundError && <p style={{ color: "#DC2626", fontSize: "0.78rem", fontFamily: "Kodchasan, sans-serif" }}>{refundError}</p>}
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button
+                        onClick={() => { setRefundOpen(false); setRefundError(null); }}
+                        disabled={refunding}
+                        style={{ flex: 1, padding: "9px", background: "#fff", color: "#161616", border: "1.5px solid #E5E7EB", borderRadius: 10, cursor: "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
+                      >
+                        Don&apos;t refund
+                      </button>
+                      <button
+                        onClick={handleRefund}
+                        disabled={refunding}
+                        style={{ flex: 1, padding: "9px", background: refunding ? "#A1A1AA" : "#B45309", color: "#fff", border: "none", borderRadius: 10, cursor: refunding ? "not-allowed" : "pointer", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem" }}
+                      >
+                        {refunding ? "Refunding…" : "Confirm refund"}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setRefundOpen(true)}
+                    style={{ width: "100%", padding: "9px", background: "transparent", color: "#B45309", border: "none", cursor: "pointer", fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", textDecoration: "underline", marginBottom: 4 }}
+                  >
+                    Refund this payment
+                  </button>
+                )
+              )}
+
+              {refundDone && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 12, marginBottom: 4 }}>
+                  <CheckCircle size={15} color="#B45309" style={{ flexShrink: 0 }} />
+                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#92400E", fontWeight: 600 }}>
+                    {refundDone} — the customer will see it in 5–10 business days.
                   </p>
                 </div>
               )}

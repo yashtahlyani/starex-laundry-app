@@ -223,7 +223,26 @@ export class OrderRepository {
   // order over — so this only ever records payment_status; it never changes
   // the order's pipeline status. Staff advance to Delivered explicitly, same
   // as every other stage.
-  async markPaid(id: string, note: string, amountCad?: number): Promise<{ status: string }> {
+  /**
+   * Records payment, once.
+   *
+   * Three paths can mark the same order paid — the browser calling
+   * /api/stripe/confirm-payment, the Stripe webhook, and the admin charge
+   * route — and they genuinely race: 6 of 19 paid orders had payment recorded
+   * twice, always within the same minute, which sent the owner two "customer
+   * paid" emails for a single charge and had him believing a customer had
+   * been double-billed (reported 2026-10-18; Stripe confirmed only ever one
+   * charge).
+   *
+   * The write is now conditional on the order not already being paid, and the
+   * caller is told which way it went. `alreadyPaid: true` means another path
+   * got there first, so the caller must NOT send notifications.
+   */
+  async markPaid(
+    id: string,
+    note: string,
+    amountCad?: number
+  ): Promise<{ status: string; alreadyPaid: boolean }> {
     const { data: current } = await this.db.from("orders").select("status, status_history, price").eq("id", id).single();
     if (!current) throw new Error("Order not found");
 
@@ -238,10 +257,23 @@ export class OrderRepository {
     };
     if (amountCad != null) updatePayload.price = amountCad;
 
-    const { error } = await this.db.from("orders").update(updatePayload).eq("id", id);
+    // .neq + .select() is what makes this a single atomic compare-and-set:
+    // Postgres evaluates the predicate while holding the row lock, so of two
+    // simultaneous callers exactly one gets a row back and the other gets an
+    // empty array.
+    // .or(...is.null) rather than a bare .neq: payment_status has a DB default
+    // but create() never writes it explicitly, so a NULL is possible — and
+    // `NULL <> 'paid'` is NULL, not true, which would make a bare .neq match
+    // nothing and silently refuse to record the payment at all.
+    const { data, error } = await this.db
+      .from("orders")
+      .update(updatePayload)
+      .eq("id", id)
+      .or("payment_status.is.null,payment_status.neq.paid")
+      .select("id");
     if (error) throw error;
 
-    return { status: current.status };
+    return { status: current.status, alreadyPaid: (data?.length ?? 0) === 0 };
   }
 
   async updateRating(id: string, rating: number): Promise<void> {

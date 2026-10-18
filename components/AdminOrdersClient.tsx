@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Check } from "lucide-react";
 import { StatusBadge, PaymentBadge, fmtSlot } from "./OrderBits";
 import AppOrderDrawer, { type DrawerOrder } from "./AppOrderDrawer";
+import { getDeliveryRequest } from "@/lib/deliveryRequest";
 import { orderCodeColor } from "@/lib/orderCode";
 import { calculateHst } from "@/lib/pricing";
 
@@ -112,6 +113,15 @@ export function AdminOrderTable({ orders }: { orders: AdminOrder[] }) {
             <div>
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.85rem", color: "#161616", fontWeight: 500 }}>{o.customer_name ?? "—"}</p>
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.76rem", color: "#A1A1AA" }}>{o.phone ?? o.email ?? ""}</p>
+              {/* The delivery window the customer asked for when they paid,
+                  readable straight down the list. It was only inside the
+                  order's notes, so the owner was messaging customers to ask
+                  for a time they had already given (per client, 2026-10-18). */}
+              {getDeliveryRequest((o as any).status_history) && (
+                <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#B30F14", fontWeight: 600, marginTop: 2 }}>
+                  Wants: {getDeliveryRequest((o as any).status_history)}
+                </p>
+              )}
             </div>
             <StatusBadge status={o.status} size="sm" pulse={!["delivered","cancelled"].includes(o.status)} />
             {/* The confirmed total, visible without opening the order — the

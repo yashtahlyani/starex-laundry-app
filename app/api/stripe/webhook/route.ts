@@ -71,20 +71,34 @@ export async function POST(req: NextRequest) {
           // subtotal (see lib/pricing.ts calculateHst), and the PaymentIntent
           // amount here is that subtotal plus HST; overwriting price with it
           // would break that convention everywhere else in the app.
-          await new OrderRepository(supabaseAdmin).markPaid(orderId, note);
+          const { alreadyPaid } = await new OrderRepository(supabaseAdmin).markPaid(orderId, note);
           // Only reached when /api/stripe/confirm-payment never ran (customer
           // closed the tab mid-payment) — that route is what normally sends
           // these, and it won't have, so the receipt and the owner's "customer
           // paid" alert would otherwise be lost for this order entirely.
-          const breakdown = calculateHst(order.price ?? 0);
-          await sendPaymentReceived(orderId, order.code, order.customer_name, order.email, order.phone, breakdown).catch(() => {});
-          await notifyOwnerOfPayment({
-            orderCode: order.code,
-            customerName: order.customer_name,
-            customerEmail: order.email,
-            customerPhone: order.phone,
-            breakdown,
-          }).catch(() => {});
+          // Lost the race to /api/stripe/confirm-payment, which has already
+          // sent both of these — sending again is the duplicate-email bug.
+          if (!alreadyPaid) {
+            // Same reason as confirm-payment: without this a webhook-recorded
+            // payment has no Stripe reference to refund against later.
+            if ("id" in obj && typeof obj.id === "string") {
+              await supabaseAdmin.from("orders").update({ stripe_payment_intent_id: obj.id }).eq("id", orderId);
+            }
+            const breakdown = calculateHst(order.price ?? 0);
+            await sendPaymentReceived(orderId, order.code, order.customer_name, order.email, order.phone, breakdown).catch(() => {});
+            await notifyOwnerOfPayment({
+              orderCode: order.code,
+              customerName: order.customer_name,
+              customerEmail: order.email,
+              customerPhone: order.phone,
+              breakdown,
+              // Put on the PaymentIntent before the card was confirmed, so
+              // this path knows the delivery window too. Without it the
+              // webhook's email told the owner the customer "didn't specify
+              // a delivery time" when they had.
+              deliveryRequest: (obj.metadata?.delivery_request ?? "").trim() || undefined,
+            }).catch(() => {});
+          }
         } else {
           const history = order.status_history ?? [];
           await supabaseAdmin

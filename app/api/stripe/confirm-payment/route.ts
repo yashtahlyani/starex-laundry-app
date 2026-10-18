@@ -67,12 +67,23 @@ export async function POST(req: NextRequest) {
     // subtotal plus HST; overwriting price with the tax-inclusive figure
     // would break the "price is always pre-tax" convention everywhere else.
     const breakdown = calculateHst(order.price ?? 0);
-    await new OrderRepository(db).markPaid(
+    const { alreadyPaid } = await new OrderRepository(db).markPaid(
       order.id,
       deliveryRequest
         ? `Paid online by customer — delivery requested: ${deliveryRequest}`
         : "Paid online by customer",
     );
+    // The Stripe webhook races this route for the same charge and can get
+    // there first. Whoever loses must stay silent, or the owner gets two
+    // "customer paid" emails for one payment and reasonably concludes the
+    // customer was billed twice (reported 2026-10-18).
+    if (alreadyPaid) {
+      return NextResponse.json({ success: true, status: "already_paid" });
+    }
+    // Store which PaymentIntent actually paid this order. Only the admin
+    // charge route used to do this, so a customer-paid order had no link back
+    // to Stripe at all — which meant nothing to refund against.
+    await db.from("orders").update({ stripe_payment_intent_id: intent.id }).eq("id", order.id);
     // Not duplicated in the webhook handler — that's a backstop for when this
     // call never completes (tab closed mid-payment), and firing the
     // confirmation from both paths risks sending it twice for the same charge.

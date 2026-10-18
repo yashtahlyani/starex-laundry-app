@@ -73,7 +73,31 @@ export function buildDeliveryRequest(date: string, time: string): string {
   return parts.join(" · ");
 }
 
-function PayForm({ orderCode, amountCad, deliveryRequest, onPaid }: { orderCode: string; amountCad: number; deliveryRequest: string; onPaid: (status: string) => void }) {
+// Put the requested delivery window on the PaymentIntent before the card is
+// confirmed, so whichever server path records the payment first already has
+// it. Previously it travelled only with the post-charge confirm call, and
+// when the Stripe webhook won that race the owner was told the customer
+// "didn't specify a delivery time" for a customer who had.
+//
+// Best-effort by design: confirm-payment still sends the window directly, so
+// a failure here costs nothing and must never block someone paying.
+async function attachDeliveryToIntent(orderCode: string, clientSecret: string, deliveryRequest: string) {
+  if (!deliveryRequest.trim()) return;
+  // "pi_abc_secret_xyz" -> "pi_abc"
+  const paymentIntentId = clientSecret.split("_secret_")[0];
+  if (!paymentIntentId.startsWith("pi_")) return;
+  try {
+    await fetch("/api/stripe/attach-delivery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderCode, paymentIntentId, deliveryRequest }),
+    });
+  } catch {
+    // ignored on purpose — see above
+  }
+}
+
+function PayForm({ orderCode, amountCad, deliveryRequest, clientSecret, onPaid }: { orderCode: string; amountCad: number; deliveryRequest: string; clientSecret: string; onPaid: (status: string) => void }) {
   const stripe = useStripe();
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
@@ -85,6 +109,7 @@ function PayForm({ orderCode, amountCad, deliveryRequest, onPaid }: { orderCode:
     setSubmitting(true);
     setError(null);
     try {
+      await attachDeliveryToIntent(orderCode, clientSecret, deliveryRequest);
       const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
         redirect: "if_required",
@@ -149,6 +174,7 @@ function QuickPayButton({
     try {
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Payments aren't available right now");
+      await attachDeliveryToIntent(orderCode, clientSecret, deliveryRequest);
       const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret);
       if (confirmError) throw new Error(confirmError.message ?? "Payment failed");
       if (!paymentIntent || paymentIntent.status !== "succeeded") {
@@ -283,7 +309,7 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
       )}
       {status === "ready" && clientSecret && stripePromise && (!savedCard || useNewCard) && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <PayForm orderCode={orderCode} amountCad={amountCad} deliveryRequest={deliveryRequest} onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }} />
+          <PayForm orderCode={orderCode} amountCad={amountCad} deliveryRequest={deliveryRequest} clientSecret={clientSecret} onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }} />
         </Elements>
       )}
     </div>
