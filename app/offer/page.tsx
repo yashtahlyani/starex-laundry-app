@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, ArrowRight, Sparkles, Shirt, Package, Zap, Home as HomeIcon } from "lucide-react";
-import { DRY_CLEAN_COMBO, HST_LABEL } from "@/lib/pricing";
+import { DRY_CLEAN_COMBO, HST_LABEL, itemKey, lookupCatalogItem } from "@/lib/pricing";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -29,15 +29,24 @@ const excluded = ["Wedding dresses", "Leather items"];
 // guarantee for every combination of 5 items. Multi-piece garments (a 2-piece
 // suit, etc.) count as separate pieces toward the 5, so this example sticks
 // to 5 genuinely single pieces to keep the math unambiguous.
-const exampleItems = [
-  // Kept in step with the live price list — shirts dropped to $4.99 on
-  // 2026-10-10, so the worked example and its savings total move with it.
-  { name: "Shirt / T-Shirt",   price: 4.99,  Icon: Shirt },
-  { name: "Dress Casual",      price: 22.99, Icon: Shirt },
-  { name: "Coat / Jacket",     price: 22.99, Icon: Package },
-  { name: "Sweater",           price: 12.99, Icon: Shirt },
-  { name: "Queen Blanket",     price: 22.99, Icon: HomeIcon },
+// Prices are read from the catalog, never retyped here. This example used to
+// carry its own copy, which is the same mistake that left the pricing-page
+// calculator quoting pre-cut shirt prices for three days after they changed
+// (fixed 2026-10-14). Naming an item that no longer exists now fails the
+// build instead of silently showing $0.
+const examplePicks: { tab: string; name: string; Icon: React.ElementType }[] = [
+  { tab: "dry-clean", name: "Shirt / T-Shirt",        Icon: Shirt },
+  { tab: "dry-clean", name: "Dress Casual",           Icon: Shirt },
+  { tab: "dry-clean", name: "Coat / Jacket / Blazer", Icon: Package },
+  { tab: "dry-clean", name: "Sweater",                Icon: Shirt },
+  { tab: "household", name: "Queen Blanket",          Icon: HomeIcon },
 ];
+
+const exampleItems = examplePicks.map(({ tab, name, Icon }) => {
+  const found = lookupCatalogItem(itemKey(tab, name));
+  if (!found) throw new Error(`/offer example references "${name}", which is not in the catalog`);
+  return { name: found.item.name, price: found.item.price, Icon };
+});
 const exampleTotal = exampleItems.reduce((sum, i) => sum + i.price, 0);
 const exampleSavings = exampleTotal - DRY_CLEAN_COMBO.priceCad;
 

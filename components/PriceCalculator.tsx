@@ -31,7 +31,7 @@ const DRY_CLEAN_ITEMS = resolve([
   { tab: "dry-clean", name: "Pant / Skirt / Bottom" },
   { tab: "dry-clean", name: "Sweater" },
   { tab: "dry-clean", name: "Dress Casual" },
-  { tab: "dry-clean", name: "Coat / Jacket" },
+  { tab: "dry-clean", name: "Coat / Jacket / Blazer" },
   { tab: "dry-clean", name: "2 Pcs Suit" },
 ]);
 

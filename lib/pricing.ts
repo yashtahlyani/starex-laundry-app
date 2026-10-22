@@ -177,6 +177,8 @@ export const CATALOG: CatalogTab[] = [
         title: "Bedding",
         items: [
           { name: "Pillow", price: 9.99, from: true },
+          { name: "Bed Sheet / Table Cloth", price: 9.99, from: true },
+          { name: "Bed Spread", price: 29.99, from: true, bedding: true },
           { name: "King / Double Blanket", price: 29.99, from: true, bedding: true },
           { name: "Queen Blanket", price: 22.99, from: true, bedding: true },
           { name: "Single Blanket", price: 17.99, from: true, bedding: true },
@@ -189,6 +191,7 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Curtains & More",
         items: [
+          { name: "Curtain (per panel)", price: 19.99, from: true },
           { name: "Sleeping Bag", price: 29.99, from: true, bedding: true },
           { name: "Small Rug", price: 49.99, from: true, comboExcluded: true },
           { name: "Big Rug", price: 99.99, from: true, comboExcluded: true },
@@ -205,6 +208,8 @@ export const CATALOG: CatalogTab[] = [
         title: "Everyday & Formal Wear",
         items: [
           { name: "2 Pcs Suit", price: 29.99, from: true },
+          { name: "Gents Suit 3 Pcs", price: 34.99, from: true },
+          { name: "Ladies Suit 3 Pcs", price: 29.99, from: true },
           { name: "Shirt / T-Shirt", price: 4.99, from: true },
           { name: "Dress Casual", price: 22.99, from: true },
           { name: "Pant / Skirt / Bottom", price: 6.99, from: true },
@@ -212,17 +217,20 @@ export const CATALOG: CatalogTab[] = [
           { name: "Hoodie / Sweatshirt", price: 19.99, from: true },
           { name: "Silk Shirt / Blouse", price: 12.99, from: true },
           { name: "Tie / Hat", price: 5.99, from: true },
-          { name: "Vest / Scarf / Stole", price: 12.99, from: true },
+          { name: "Vest / Scarf / Stole / Dupatta / Shawl", price: 12.99, from: true },
         ],
       },
       {
         title: "Outerwear & Occasion",
         items: [
-          { name: "Coat / Jacket", price: 22.99, from: true },
+          { name: "Coat / Jacket / Blazer", price: 22.99, from: true },
           { name: "Long Coat / Winter Jacket", price: 29.99, from: true },
           { name: "Leather Jacket", price: 99.99, from: true, comboExcluded: true },
           { name: "Gown / Long Dress", price: 29.99, from: true },
           { name: "Jump Suit", price: 29.99, from: true },
+          { name: "Dress Formal / Evening", price: 29.99, from: true },
+          { name: "Kurta Pyjama", price: 19.99, from: true },
+          { name: "Parka / Canada Goose Style Jacket", price: 39.99, from: true },
           { name: "Punjabi Suit 2 Pcs", price: 24.99, from: true },
           { name: "Saree", price: 29.99, from: true },
         ],
@@ -240,6 +248,7 @@ export const CATALOG: CatalogTab[] = [
         title: "Special Care",
         items: [
           { name: "Wedding Dress", price: 249.99, from: true, comboExcluded: true },
+          { name: "Lehenga", price: 149.99, from: true, comboExcluded: true },
           { name: "Carpet", price: 74.99, from: true, comboExcluded: true },
         ],
       },
