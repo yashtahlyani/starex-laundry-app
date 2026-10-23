@@ -51,14 +51,30 @@ export const MANUAL_REVIEWS: Review[] = [];
  * hand-maintained rating in lib/site.ts. Without a key the section falls back
  * to MANUAL_REVIEWS above.
  *
- * GOOGLE_PLACE_ID is optional — with just a key the place is found by name
- * and city. Setting it explicitly is faster and unambiguous.
+ * NOTE, tested 24 Oct 2026 with a live key: rating and userRatingCount come
+ * back fine, but `reviews` returns empty with HTTP 200 and no error. That is
+ * what you get when the Cloud project has no billing account — review TEXT
+ * sits in the "Place Details Enterprise + Atmosphere" SKU, which requires
+ * billing enabled (Google's free monthly Maps credit then covers this
+ * volume). Rating and count work without it, which is why the badge updates
+ * itself today and the reviews section is still waiting.
  *
  * Google's terms require the reviewer's name to be shown with their review
  * and prohibit storing review content long-term, so this is fetched live and
  * only briefly cached, never written to the database.
  */
 export const PLACES_TEXT_QUERY = "Starex Laundry Dryclean Brampton Ontario";
+
+/**
+ * The Business Profile's Place ID, resolved from the owner's own profile on
+ * 24 Oct 2026 and confirmed against it: "Starex - Laundry / Dryclean",
+ * 25 Grendon Cres, Brampton ON L6X 5N4, 5.0 from 19 reviews.
+ *
+ * A Place ID is a public identifier, not a secret — it is safe in the repo,
+ * and hardcoding it skips a lookup call on every cold start. The API KEY is
+ * not here and must never be: it lives only in GOOGLE_PLACES_API_KEY.
+ */
+export const GOOGLE_PLACE_ID = "ChIJMRrq8S0VK4gR9LZIyAL8v34";
 
 export const REVIEWS_SECTION = {
   eyebrow: "What Our Customers Say",

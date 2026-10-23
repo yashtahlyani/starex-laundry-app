@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { GOOGLE_REVIEWS } from "@/lib/site";
+import { fetchGooglePlace } from "@/lib/googlePlaces";
 
 export const dynamic = "force-dynamic";
 // Ratings move slowly and this sits next to the booking button, so a short
@@ -25,27 +26,19 @@ const MIN_RATINGS = 5;
  * the badge renders nothing.
  */
 export async function GET() {
-  // A Places API key, when set, is the best source: it is Google's own
-  // current figure, so the hand-entered numbers below stop drifting as
-  // reviews come in. Falls through to them if the call fails.
-  if (process.env.GOOGLE_PLACES_API_KEY) {
-    try {
-      const r = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/reviews/list`, { next: { revalidate: 1800 } });
-      if (r.ok) {
-        const d = await r.json();
-        if (d.source === "google" && d.rating != null && d.reviewCount != null) {
-          return NextResponse.json({
-            show: true,
-            source: "google",
-            average: Math.round(Number(d.rating) * 10) / 10,
-            count: d.reviewCount,
-            profileUrl: d.profileUrl ?? GOOGLE_REVIEWS.profileUrl ?? null,
-          });
-        }
-      }
-    } catch {
-      // fall through to the configured values
-    }
+  // Live figure from the Business Profile when a key is configured, so the
+  // hand-entered numbers below stop drifting as reviews come in. Calls the
+  // Places API directly — the previous version fetched our own /list route
+  // over HTTP using a build-time URL and so never actually fired.
+  const place = await fetchGooglePlace();
+  if (place?.rating != null && place.reviewCount != null) {
+    return NextResponse.json({
+      show: true,
+      source: "google",
+      average: Math.round(place.rating * 10) / 10,
+      count: place.reviewCount,
+      profileUrl: place.profileUrl ?? GOOGLE_REVIEWS.profileUrl ?? null,
+    });
   }
 
   if (GOOGLE_REVIEWS.ratingValue != null && GOOGLE_REVIEWS.reviewCount != null) {
