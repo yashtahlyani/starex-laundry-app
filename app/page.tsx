@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide
 import { HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import { SITE_ORIGIN, CONTACT } from "@/lib/site";
 import TrustBadge from "@/components/TrustBadge";
+import ReviewsSection from "@/components/ReviewsSection";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -517,6 +518,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ══ REVIEWS — real customer words, straight from Google ══
+            Sits after the comparison and before pricing: the customer has
+            just been told why we're better, and this is someone other than
+            us saying it, right before they see what it costs. Renders
+            nothing until there are genuine reviews to show. */}
+      <ReviewsSection />
 
       {/* ══ PRICING — cream ══ */}
       <section style={{ background: "#F2F2F2", padding: "96px 0" }}>
