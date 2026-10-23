@@ -210,7 +210,7 @@ function BookPageInner() {
       // order should be $50 flat instead of itemized. Prepending it to notes
       // means it shows up in the admin drawer, the CSV export, and the
       // customer's own status history.
-      const comboNote = `Booked via ${DRY_CLEAN_COMBO.tagline} combo offer (5 items, $${DRY_CLEAN_COMBO.priceCad} flat).`;
+      const comboNote = `Booked via ${DRY_CLEAN_COMBO.tagline} combo offer (${DRY_CLEAN_COMBO.pieceCount} pieces, $${DRY_CLEAN_COMBO.priceCad} flat).`;
       const combinedNotes = isCombo ? [comboNote, form.notes.trim()].filter(Boolean).join(" — ") : form.notes;
       // What the customer was shown before they pressed the button. Travels
       // with the order so staff can see the expectation they're confirming
@@ -293,7 +293,7 @@ function BookPageInner() {
           </p>
           <p style={{ color: "#8C8C8C", fontSize: "0.875rem", marginBottom: 36, fontFamily: "Kodchasan, sans-serif" }}>
             {isCombo
-              ? `Bring your 5 items — flat $${DRY_CLEAN_COMBO.priceCad}, confirmed at pickup.`
+              ? `Bring your ${DRY_CLEAN_COMBO.pieceCount} pieces — flat $${DRY_CLEAN_COMBO.priceCad}, confirmed at pickup.`
               : "Final price is confirmed after we weigh your laundry at pickup."}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
@@ -335,7 +335,7 @@ function BookPageInner() {
           }}>
             <Sparkles size={16} style={{ flexShrink: 0 }} />
             <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.875rem" }}>
-              {DRY_CLEAN_COMBO.tagline} Combo — you&apos;re booking 5 items for a flat ${DRY_CLEAN_COMBO.priceCad}, not itemized pricing.
+              {DRY_CLEAN_COMBO.tagline} Combo — you&apos;re booking {DRY_CLEAN_COMBO.pieceCount} pieces for a flat ${DRY_CLEAN_COMBO.priceCad}, not itemized pricing. A 2-piece suit counts as 2.
             </span>
           </div>
         )}
@@ -640,7 +640,7 @@ function BookPageInner() {
                 <div style={{ background: "#F2F2F2", borderRadius: 16, padding: "24px", marginBottom: 24, display: "flex", flexDirection: "column", gap: 14 }}>
                   {([
                     { label: "Service", value: selectedService?.title },
-                    isCombo ? { label: "Offer", value: `${DRY_CLEAN_COMBO.tagline} combo — $${DRY_CLEAN_COMBO.priceCad} flat for 5 items` } : null,
+                    isCombo ? { label: "Offer", value: `${DRY_CLEAN_COMBO.tagline} combo — $${DRY_CLEAN_COMBO.priceCad} flat for ${DRY_CLEAN_COMBO.pieceCount} pieces` } : null,
                     { label: "Date",    value: form.date },
                     { label: "Time",    value: form.time },
                     { label: "Name",    value: form.name },

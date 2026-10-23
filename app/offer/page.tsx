@@ -26,7 +26,7 @@ const excluded = ["Wedding dresses", "Leather items"];
 
 // Real example priced off Starex's own per-item dry-clean & household rates
 // (lib/pricing.ts CATALOG) — an illustration of typical savings, not a
-// guarantee for every combination of 5 items. Multi-piece garments (a 2-piece
+// guarantee for every combination of 5 pieces. Multi-piece garments (a 2-piece
 // suit, etc.) count as separate pieces toward the 5, so this example sticks
 // to 5 genuinely single pieces to keep the math unambiguous.
 // Prices are read from the catalog, never retyped here. This example used to
@@ -59,9 +59,9 @@ const steps = [
 
 const faqs = [
   { q: "Does a 2-piece suit count as 1 item or 2?", a: "2. Multi-piece garments count per piece, not per set — a 2-piece suit uses 2 of your 5, a 3-piece suit uses 3." },
-  { q: "Do all 5 items need to be dropped off at once?", a: "Yes — the combo applies to 5 items in the same pickup so we can confirm the flat rate upfront." },
-  { q: "Can I mix garment types?", a: "Yes. Any 5 regular garments or pieces qualify, including 1 blanket or quilt." },
-  { q: "What if I only have 3 or 4 items?", a: "Standard per-item dry-clean pricing applies below 5 items — see the full price list." },
+  { q: "Do all 5 pieces need to be dropped off at once?", a: "Yes — the combo applies to 5 pieces in the same pickup so we can confirm the flat rate upfront." },
+  { q: "Can I mix garment types?", a: "Yes. Any 5 regular pieces qualify, including 1 blanket or quilt. Multi-piece outfits count per piece — a 2-piece suit uses 2 of your 5, a 3-piece suit uses 3." },
+  { q: "What if I only have 3 or 4 pieces?", a: "Standard per-item dry-clean pricing applies below 5 pieces — see the full price list." },
   { q: "Is this on top of the $40 minimum order value?", a: "The combo price itself ($50) already clears the $40 minimum, so no extra minimum charge applies." },
   { q: "How long does the combo take?", a: "3–4 days from pickup to delivery — a bit longer than standard dry cleaning, since combo orders are batched for the flat rate." },
   // Added after two customers booked single items at full price without ever
@@ -237,10 +237,10 @@ export default function OfferPage() {
           <AnimatedContent style={{ textAlign: "center", marginBottom: 48 }}>
             <span className="eyebrow" style={{ color: "#B30F14" }}>The Fine Print — Kept Short</span>
             <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.75rem,3.5vw,2.5rem)", letterSpacing: "-0.022em", color: "#161616", marginBottom: 8 }}>
-              Any {DRY_CLEAN_COMBO.itemCount} pieces, <em className="display-accent" style={{ display: "inline" }}>one flat price.</em>
+              Any {DRY_CLEAN_COMBO.pieceCount} pieces, <em className="display-accent" style={{ display: "inline" }}>one flat price.</em>
             </h2>
             <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", maxWidth: "52ch", margin: "0 auto" }}>
-              Mix and match any {DRY_CLEAN_COMBO.itemCount} regular garments or pieces — pay ${DRY_CLEAN_COMBO.priceCad} flat, {HST_LABEL}. Free pickup &amp; delivery included.
+              Mix and match any {DRY_CLEAN_COMBO.pieceCount} regular pieces — pay ${DRY_CLEAN_COMBO.priceCad} flat, {HST_LABEL}. A 2-piece suit counts as 2 pieces. Free pickup &amp; delivery included.
             </p>
           </AnimatedContent>
 

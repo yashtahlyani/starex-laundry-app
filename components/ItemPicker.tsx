@@ -101,6 +101,14 @@ export default function ItemPicker({
                         </p>
                         <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.8rem", color: "#6B6B6B", margin: 0 }}>
                           {item.from ? "From " : ""}${item.price.toFixed(2)}
+                          {/* Multi-piece outfits use more than one of the
+                              combo's 5 slots. Saying so on the row is what
+                              stops it being an argument at the door. */}
+                          {(item.pieces ?? 1) > 1 && (
+                            <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 400, color: "#B45309" }}>
+                              {" "}· counts as {item.pieces} pieces
+                            </span>
+                          )}
                           {item.comboExcluded && (
                             <span style={{ fontFamily: "Kodchasan, sans-serif", fontWeight: 400, color: "#B45309" }}>
                               {" "}· not in the combo

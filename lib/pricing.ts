@@ -89,8 +89,11 @@ export const DRY_CLEAN_COMBO = {
   tagline: "5 for $50",
   title: "Most Popular",
   priceCad: 50,
-  itemCount: 5,
-  description: "Dry clean any 5 regular garments/pieces, including 1 blanket or quilt.",
+  // PIECES, not selections. A 2-piece suit uses two of them. Named
+  // pieceCount (was itemCount) because the old name is what led the
+  // estimator to count lines and give away a sixth garment free.
+  pieceCount: 5,
+  description: "Dry clean any 5 regular pieces, including 1 blanket or quilt. A 2-piece suit counts as 2.",
   exclusions: "Excludes wedding dresses, leather, suede, and other high-value items.",
   // Multi-piece garments count per piece, not per set — a 2-piece suit uses
   // 2 of the 5 slots, a 3-piece suit uses 3, etc.
@@ -119,6 +122,14 @@ export type CatalogItem = {
   from?: boolean;
   comboExcluded?: boolean;
   bedding?: boolean;
+  /**
+   * How many garments this line actually is. A "2 Pcs Suit" is two things to
+   * clean, not one, and the combo has always been sold as 5 PIECES — but the
+   * estimator counted lines, so five selections could be six or seven
+   * garments and the shop cleaned them all for $50 (reported 2026-10-23:
+   * "we have to dry clean 6 pcs instead of 5"). Defaults to 1.
+   */
+  pieces?: number;
 };
 export type CatalogSection = { title: string; items: CatalogItem[] };
 export type CatalogTab = { id: string; label: string; blurb: string; sections: CatalogSection[] };
@@ -207,9 +218,9 @@ export const CATALOG: CatalogTab[] = [
       {
         title: "Everyday & Formal Wear",
         items: [
-          { name: "2 Pcs Suit", price: 29.99, from: true },
-          { name: "Gents Suit 3 Pcs", price: 34.99, from: true },
-          { name: "Ladies Suit 3 Pcs", price: 29.99, from: true },
+          { name: "2 Pcs Suit", price: 29.99, from: true, pieces: 2 },
+          { name: "Gents Suit 3 Pcs", price: 34.99, from: true, pieces: 3 },
+          { name: "Ladies Suit 3 Pcs", price: 29.99, from: true, pieces: 3 },
           { name: "Shirt / T-Shirt", price: 4.99, from: true },
           { name: "Dress Casual", price: 22.99, from: true },
           { name: "Pant / Skirt / Bottom", price: 6.99, from: true },
@@ -229,9 +240,9 @@ export const CATALOG: CatalogTab[] = [
           { name: "Gown / Long Dress", price: 29.99, from: true },
           { name: "Jump Suit", price: 29.99, from: true },
           { name: "Dress Formal / Evening", price: 29.99, from: true },
-          { name: "Kurta Pyjama", price: 19.99, from: true },
+          { name: "Kurta Pyjama", price: 19.99, from: true, pieces: 2 },
           { name: "Parka / Canada Goose Style Jacket", price: 39.99, from: true },
-          { name: "Punjabi Suit 2 Pcs", price: 24.99, from: true },
+          { name: "Punjabi Suit 2 Pcs", price: 24.99, from: true, pieces: 2 },
           { name: "Saree", price: 29.99, from: true },
         ],
       },
@@ -327,6 +338,8 @@ export type EstimateLine = {
   qty: number;
   from: boolean;
   lineTotal: number;
+  /** garments per unit of this line — a 2 Pcs Suit is 2 */
+  pieces: number;
   /** of `qty`, how many units the 5-for-$50 combo absorbed */
   comboCovered: number;
 };
@@ -394,7 +407,7 @@ export function buildEstimate(opts: {
       mode: "weight",
       lines: lbs > 0 ? [{
         key: serviceId, name: `${plan?.label ?? "Laundry"} — ${lbs} lb @ $${rate.toFixed(2)}/lb`,
-        unitPrice: rate, qty: lbs, from: false, lineTotal: rawSubtotal, comboCovered: 0,
+        unitPrice: rate, qty: lbs, from: false, lineTotal: rawSubtotal, pieces: 1, comboCovered: 0,
       }] : [],
       itemCount: 0,
       rawSubtotal, minimumApplied, subtotal, hst, total,
@@ -407,7 +420,7 @@ export function buildEstimate(opts: {
   // Expand the selection into one entry per physical piece, because the combo
   // is counted in pieces: a 2-piece suit uses 2 of the 5 slots, not 1
   // (DRY_CLEAN_COMBO.multiPieceNote).
-  type Unit = { key: string; name: string; price: number; from: boolean; excluded: boolean; bedding: boolean };
+  type Unit = { key: string; name: string; price: number; from: boolean; excluded: boolean; bedding: boolean; pieces: number };
   const units: Unit[] = [];
   for (const [key, qty] of Object.entries(selection)) {
     const found = lookupCatalogItem(key);
@@ -420,6 +433,7 @@ export function buildEstimate(opts: {
         from: !!found.item.from,
         excluded: !!found.item.comboExcluded,
         bedding: !!found.item.bedding,
+        pieces: found.item.pieces ?? 1,
       });
     }
   }
@@ -433,7 +447,7 @@ export function buildEstimate(opts: {
   // deal is applied in the customer's favour — the alternative (cheapest
   // first) would quote a higher total for the same basket.
   const coveredKeys = new Map<string, number>();
-  let comboCoveredTotal = 0;
+  let comboCoveredTotal = 0;   // PIECES absorbed, not lines
   if (isCombo) {
     const eligible = units
       .map((u, i) => ({ u, i }))
@@ -441,13 +455,19 @@ export function buildEstimate(opts: {
       .sort((a, b) => b.u.price - a.u.price);
     let beddingUsed = 0;
     for (const { u, i } of eligible) {
-      if (comboCoveredTotal >= DRY_CLEAN_COMBO.itemCount) break;
+      const remaining = DRY_CLEAN_COMBO.pieceCount - comboCoveredTotal;
+      if (remaining <= 0) break;
+      // A 3-piece suit cannot half-ride in two remaining slots — you can't
+      // clean two thirds of a suit. It either fits whole or it is billed
+      // separately, and `continue` rather than `break` lets a smaller garment
+      // later in the list still use the space up.
+      if (u.pieces > remaining) continue;
       // "any 5 regular garments/pieces, including 1 blanket or quilt" — so at
       // most one bedding piece can ride inside the combo.
       if (u.bedding && beddingUsed >= 1) continue;
       if (u.bedding) beddingUsed++;
       coveredKeys.set(u.key, (coveredKeys.get(u.key) ?? 0) + 1);
-      comboCoveredTotal++;
+      comboCoveredTotal += u.pieces;
       units[i] = { ...u, price: 0 }; // absorbed; priced by the flat combo fee
     }
   }
@@ -466,6 +486,7 @@ export function buildEstimate(opts: {
       qty,
       from: !!found.item.from,
       lineTotal: round2(billedQty * found.item.price),
+      pieces: found.item.pieces ?? 1,
       comboCovered: covered,
     });
   }
@@ -478,9 +499,9 @@ export function buildEstimate(opts: {
   return {
     mode: "items",
     lines,
-    itemCount: units.length,
+    itemCount: units.reduce((n, u) => n + u.pieces, 0),
     combo: isCombo
-      ? { price: DRY_CLEAN_COMBO.priceCad, covered: comboCoveredTotal, slots: DRY_CLEAN_COMBO.itemCount }
+      ? { price: DRY_CLEAN_COMBO.priceCad, covered: comboCoveredTotal, slots: DRY_CLEAN_COMBO.pieceCount }
       : null,
     rawSubtotal,
     minimumCad,
@@ -526,7 +547,7 @@ export function formatEstimateNote(est: Estimate, serviceId: string): string | n
   let body = parts.join(", ");
   if (body.length > 420) body = body.slice(0, 417) + "…";
   const bits = [`Customer's on-site estimate (${serviceId}): ${body}`];
-  if (est.combo) bits.push(`${DRY_CLEAN_COMBO.tagline} combo covered ${est.combo.covered} of ${est.combo.slots}`);
+  if (est.combo) bits.push(`${DRY_CLEAN_COMBO.tagline} combo covered ${est.combo.covered} of ${est.combo.slots} PIECES (basket is ${est.itemCount} pieces)`);
   if (est.minimumApplied) bits.push(`selection was $${est.rawSubtotal.toFixed(2)}, raised to the $${est.minimumCad} minimum`);
   bits.push(`est. subtotal $${est.subtotal.toFixed(2)} + HST $${est.hst.toFixed(2)} = $${est.total.toFixed(2)} — ESTIMATE ONLY, confirm on weigh-in`);
   return bits.join(". ");

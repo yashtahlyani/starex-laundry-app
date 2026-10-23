@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "5 for $50 Dry Clean Combo",
-  description: "Dry clean any 5 regular garments or pieces, including 1 blanket or quilt, for a flat $50. Starex's limited-time dry cleaning combo — Brampton & Mississauga.",
+  description: "Dry clean any 5 regular pieces, including 1 blanket or quilt, for a flat $50. A 2-piece suit counts as 2. Starex's dry cleaning combo — Brampton & Mississauga.",
   alternates: { canonical: "/offer" },
   // The offer creative has its copy baked in, so it's used where it's shown
   // whole — as the link preview when this page is shared (mostly WhatsApp) —
@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "/offer",
     title: "5 for $50 Dry Clean Combo | Starex",
-    description: "Dry clean any 5 regular garments or pieces, including 1 blanket or quilt, for a flat $50 +HST. Free pickup & delivery in Brampton & Mississauga.",
+    description: "Dry clean any 5 regular pieces, including 1 blanket or quilt, for a flat $50 +HST. A 2-piece suit counts as 2. Free pickup & delivery in Brampton & Mississauga.",
     images: [{ url: "/images/starex/10_offer_ivory_with_copy.jpg", width: 1920, height: 1080, alt: "Dry cleaning 5 for $50 +HST — look sharp, spend less. Free pickup & delivery." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "5 for $50 Dry Clean Combo | Starex",
-    description: "Dry clean any 5 regular garments or pieces for a flat $50 +HST. Free pickup & delivery.",
+    description: "Dry clean any 5 regular pieces for a flat $50 +HST. A 2-piece suit counts as 2. Free pickup & delivery.",
     images: ["/images/starex/10_offer_ivory_with_copy.jpg"],
   },
 };

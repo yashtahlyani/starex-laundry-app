@@ -62,6 +62,11 @@ export default function EstimateBill({
                   {" "}· {l.comboCovered} in combo
                 </span>
               )}
+              {l.pieces > 1 && (
+                <span style={{ color: "#8C8C8C" }}>
+                  {" "}({l.pieces} pieces each)
+                </span>
+              )}
               {l.from && !fullyCovered && <span style={{ color: "#8C8C8C" }}> (from)</span>}
             </span>
             <span style={{
@@ -77,7 +82,7 @@ export default function EstimateBill({
       {e.combo && (
         <div style={row}>
           <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: fs, color: "#B30F14", fontWeight: 700 }}>
-            {DRY_CLEAN_COMBO.tagline} combo — covers {e.combo.covered} of {e.combo.slots}
+            {DRY_CLEAN_COMBO.tagline} combo — covers {e.combo.covered} of {e.combo.slots} pieces
           </span>
           <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: fs, color: "#B30F14", whiteSpace: "nowrap" }}>
             {money(e.combo.price)}

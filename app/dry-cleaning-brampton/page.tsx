@@ -25,7 +25,7 @@ export default function DryCleaningBramptonPage() {
         heroImage="/images/starex/02_rack_without_copy.jpg" heroPosition="62% center"
         offerBand={{
           headline: "5 pieces dry cleaned for $50",
-          detail: "Any 5 regular garments, including 1 blanket or quilt.",
+          detail: "Any 5 regular pieces, including 1 blanket or quilt. A 2-piece suit counts as 2.",
           href: "/offer",
         }}
         h1="Dry Cleaning in Brampton, Ontario"
