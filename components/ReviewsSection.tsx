@@ -68,7 +68,20 @@ export default function ReviewsSection() {
           )}
         </div>
 
-        <div className="reviews-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18, alignItems: "start" }}>
+        {/* Columns follow the count: four reviews in a three-column grid
+            leaves a lone card on its own row, which reads like something
+            failed to load. */}
+        <div
+          className="reviews-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${data.reviews.length === 4 ? 2 : Math.min(3, data.reviews.length)},1fr)`,
+            gap: 18,
+            alignItems: "start",
+            maxWidth: data.reviews.length <= 2 ? 760 : undefined,
+            margin: data.reviews.length <= 2 ? "0 auto" : undefined,
+          }}
+        >
           {data.reviews.map((r, i) => (
             <article
               key={`${r.author}-${i}`}

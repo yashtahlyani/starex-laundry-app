@@ -38,10 +38,41 @@ export type Review = {
  * punctuation. Do not fix spelling. Do not shorten. If a review is too long
  * for the layout, leave it long; the layout handles it.
  *
- * Deliberately empty: no review has been supplied yet, and a made-up one is
- * not a placeholder, it is a lie.
+ * No relativeTime is set on these. Google's "a month ago" was true on the day
+ * it was read and becomes a lie a month later, and there is no exact date in
+ * a screenshot to compute from. A missing date is honest; a drifting one is
+ * not. The API path supplies live ones once billing is enabled.
  */
-export const MANUAL_REVIEWS: Review[] = [];
+export const MANUAL_REVIEWS: Review[] = [
+  // Transcribed from the owner's Google Business Profile, 24 Oct 2026.
+  // Character for character, including Satinderpal's space before the comma
+  // and his four full stops, and Pinder's missing full stop. "No editing"
+  // means exactly that — these are not tidied, corrected or shortened.
+  //
+  // ONLY reviews visible in full are here. Two others (Eqbal Ali, AMAN GILL)
+  // were cut off by Google's "… More" link, and half a review is an edited
+  // review, so they are left out until the full text is available.
+  {
+    author: "GURPREET KAUR",
+    rating: 5,
+    text: "Excellent service and very professional team. They provide high-quality laundry and dry-cleaning services on time. We are very happy with their reliability, attention to detail, and customer service. Highly recommended!",
+  },
+  {
+    author: "Ratul Kumar",
+    rating: 5,
+    text: "Excellent dry-cleaning service! Very satisfied. Highly recommended!",
+  },
+  {
+    author: "Satinderpal Dhillon",
+    rating: 5,
+    text: "Best in Town , really reliable and honest service....",
+  },
+  {
+    author: "Pinder Brar",
+    rating: 5,
+    text: "Excellent work",
+  },
+];
 
 /**
  * Google Places API.

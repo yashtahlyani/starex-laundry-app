@@ -35,8 +35,10 @@ export async function GET() {
   return NextResponse.json({
     source: MANUAL_REVIEWS.length ? "manual" : "none",
     reviews: MANUAL_REVIEWS,
-    rating: place?.rating ?? null,
-    reviewCount: place?.reviewCount ?? null,
+    // Falls back to the figures configured in lib/site.ts so the section
+    // header still reads "5.0 from 19 Google reviews" without a key.
+    rating: place?.rating ?? GOOGLE_REVIEWS.ratingValue ?? null,
+    reviewCount: place?.reviewCount ?? GOOGLE_REVIEWS.reviewCount ?? null,
     profileUrl: place?.profileUrl ?? GOOGLE_REVIEWS.profileUrl ?? null,
   });
 }
