@@ -67,5 +67,9 @@ export const GOOGLE_REVIEWS: {
   // left blank rather than built into a URL that would 404.
   writeReviewUrl: "",
   ratingValue: 5,
-  reviewCount: 17,
+  // 19 as of 24 Oct 2026, read off the owner's own Business Profile panel.
+  // It was 17 six days earlier — which is exactly why a hand-typed count is
+  // the wrong long-term answer. A Google Cloud key with the Places API
+  // enabled makes this update itself; see lib/reviews.ts.
+  reviewCount: 19,
 };
