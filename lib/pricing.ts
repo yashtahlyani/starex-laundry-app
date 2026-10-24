@@ -282,6 +282,23 @@ export const CATALOG: CatalogTab[] = [
   },
 ];
 
+// Pickup windows. Defined here, not in the booking page, because the FAQ also
+// quotes them — and when it kept its own copy it advertised a 7-10 AM window
+// that has never been bookable (found 2026-10-25).
+export const PICKUP_WINDOWS = [
+  { label: "8:00 AM – 11:00 AM", startHour: 8 },
+  { label: "11:00 AM – 2:00 PM", startHour: 11 },
+  { label: "2:00 PM – 5:00 PM",  startHour: 14 },
+  { label: "5:00 PM – 8:00 PM",  startHour: 17 },
+] as const;
+
+// Car & Sofa Detailing uses half-day appointment windows instead — a detailer
+// visit runs longer than a laundry pickup (per client, 2026-09-06).
+export const DETAILING_WINDOWS = [
+  { label: "8:00 AM – 1:00 PM", startHour: 8 },
+  { label: "1:00 PM – 6:00 PM", startHour: 13 },
+] as const;
+
 export const SERVICE_AREA_POSTAL_PREFIXES: string[] = [
   // TODO: fill in the real serviceable postal code prefixes once confirmed.
 ];

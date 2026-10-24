@@ -6,9 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock, Shirt, Sparkles, Zap, Package, Home, Car, Wind } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabaseClient";
 import {
-  CATALOG, CATALOG_FOR_SERVICE, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO,
-  buildEstimate, formatEstimateNote, isPerItemService, isPerLbService,
-  type ItemSelection,
+  CATALOG, CATALOG_FOR_SERVICE, MINIMUM_ORDER, HST_LABEL, DRY_CLEAN_COMBO, buildEstimate, formatEstimateNote, isPerItemService, isPerLbService, type ItemSelection, PICKUP_WINDOWS, DETAILING_WINDOWS,
 } from "@/lib/pricing";
 import { getSource } from "@/lib/attribution";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
@@ -37,20 +35,14 @@ const services = [
 // startHour is used to hide windows that have already begun when the
 // customer is booking for today — otherwise someone booking at 6 PM could
 // still pick the 8–11 AM slot from earlier that same day.
-const timeSlots = [
-  { label: "8:00 AM – 11:00 AM", startHour: 8 },
-  { label: "11:00 AM – 2:00 PM", startHour: 11 },
-  { label: "2:00 PM – 5:00 PM",  startHour: 14 },
-  { label: "5:00 PM – 8:00 PM",  startHour: 17 },
-];
+// PICKUP_WINDOWS lives in lib/pricing.ts so the FAQ quotes the same windows
+// customers can actually book.
+const timeSlots = PICKUP_WINDOWS;
 
 // Car & Sofa Detailing uses half-day appointment windows instead of the
 // standard 3-hour pickup windows — a detailer visit runs longer than a
 // laundry pickup (per client, 2026-09-06).
-const detailingTimeSlots = [
-  { label: "8:00 AM – 1:00 PM", startHour: 8 },
-  { label: "1:00 PM – 6:00 PM", startHour: 13 },
-];
+const detailingTimeSlots = DETAILING_WINDOWS;
 
 // Car & Sofa Detailing is quoted on inspection, so it has nothing to estimate
 // and skips that step — which means the step list is per-service, not fixed.

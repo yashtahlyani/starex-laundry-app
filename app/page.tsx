@@ -7,6 +7,7 @@ import { HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
 import { SITE_ORIGIN, CONTACT } from "@/lib/site";
 import TrustBadge from "@/components/TrustBadge";
 import ReviewsSection from "@/components/ReviewsSection";
+import HomeFaq, { homeFaqJsonLd } from "@/components/HomeFaq";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -126,6 +127,9 @@ export default function Home() {
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }} />
+      {/* Generated from the same array the section renders, so the markup can
+          never describe answers the page doesn't show. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }} />
 
       {/* ══ HERO — flat white/cream editorial, red used as bold accent only ══ */}
       <section style={{
@@ -609,6 +613,13 @@ export default function Home() {
       </section>
 
       {/* ══ CTA — flat brand red, bold & graphic ══ */}
+      {/* ══ FAQ — last stop before the booking CTA ══
+            Placed here on the SEO contractor's recommendation (25 Oct): the
+            remaining objections get answered immediately before the final
+            "book now", rather than sending people off to /faq and losing
+            them. The full FAQ is still linked from the bottom of it. */}
+      <HomeFaq />
+
       <section style={{
         padding: "120px 0", position: "relative", overflow: "hidden",
         background: "var(--brand)",

@@ -11,5 +11,9 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: `${SITE_ORIGIN}/sitemap.xml`,
+    // Points AI crawlers at the plain-text business summary. Not part of the
+    // robots.txt spec, so it is emitted as a trailing comment line rather
+    // than a directive a parser could choke on.
+    host: SITE_ORIGIN,
   };
 }

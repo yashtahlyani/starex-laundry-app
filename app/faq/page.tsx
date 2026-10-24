@@ -1,5 +1,7 @@
 "use client";
 
+import { PICKUP_WINDOWS } from "@/lib/pricing";
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search, ArrowRight } from "lucide-react";
@@ -41,7 +43,7 @@ const categories = [
   {
     name: "Pickup & Delivery",
     faqs: [
-      { q: "What are your pickup windows?", a: "We offer morning (7–10 AM), afternoon (12–3 PM), and evening (5–8 PM) windows, 7 days a week." },
+      { q: "What are your pickup windows?", a: `We offer ${PICKUP_WINDOWS.map(w => w.label).join(", ")}, 7 days a week. Car & Sofa Detailing uses half-day appointment windows instead.` },
       { q: "How do I track my order?", a: "You'll receive real-time SMS and email updates at every stage — pickup, processing, and delivery." },
       { q: "What if I miss my delivery?", a: "We'll reattempt delivery the next available time slot at no extra charge." },
       { q: "Can I change my delivery address?", a: "Yes, contact us at least 2 hours before your scheduled delivery and we'll update your address." },
