@@ -471,7 +471,11 @@ export default function AppOrderDrawer({
                 {admin && order.customer_name && <Row icon={Package} label="Customer" value={`${order.customer_name} · ${order.email} · ${order.phone}`} />}
               </div>
 
-              {admin && (received != null || returned != null) && (
+              {/* Also renders when there is no count but staff left a note —
+                  clearing STX-966934's bogus pickup quantity hid the note
+                  that carried the real figures ("Actual weight is 6.61LB and
+                  number of pieces are 21"), which was the useful part. */}
+              {admin && (received != null || returned != null || tracking.receivedDetails || tracking.returnedDetails) && (
                 <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 12, background: missing ? "#FEF2F2" : "#F4F4F5", border: missing ? "1px solid #FCA5A5" : "none" }}>
                   {missing ? (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
@@ -481,10 +485,12 @@ export default function AppOrderDrawer({
                       </p>
                     </div>
                   ) : null}
-                  <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B" }}>
-                    Received: <strong style={{ color: "#161616" }}>{received != null ? fmtQty(received) : "—"}</strong>
-                    {" · "}Returned: <strong style={{ color: "#161616" }}>{returned != null ? fmtQty(returned) : "—"}</strong>
-                  </p>
+                  {(received != null || returned != null) && (
+                    <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B" }}>
+                      Received: <strong style={{ color: "#161616" }}>{received != null ? fmtQty(received) : "—"}</strong>
+                      {" · "}Returned: <strong style={{ color: "#161616" }}>{returned != null ? fmtQty(returned) : "—"}</strong>
+                    </p>
+                  )}
                   {tracking.receivedDetails && (
                     <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B", marginTop: 4 }}>
                       In: {tracking.receivedDetails}
