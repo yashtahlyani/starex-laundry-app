@@ -29,7 +29,8 @@ const HEADERS = [
   "Order Code", "Status", "Payment Status", "Customer Name", "Email", "Phone",
   "Service", "Subtotal (CAD)", "HST (CAD)", "Total incl. HST (CAD)", "Paid At",
   // Renamed from "Items ..." because on Wash & Fold / Express / Wash & Press
-  // these are pounds, not garments — the Qty Unit column says which.
+  // these count BAGS handled by the driver, not garments — the Qty Unit
+  // column says which. The actual weighed weight is the Weight column.
   "Weight", "Qty Received", "Qty Returned", "Qty Difference", "Qty Unit", "Item Details",
   "Delivery Requested", "Pickup Date", "Time Slot", "Address",
   "Notes", "Created At", "Updated At",
@@ -91,7 +92,7 @@ export async function GET(req: NextRequest) {
         o.paid_at ?? "",
         o.weight ?? "",
         received ?? "", returned ?? "", missing ?? "",
-        received != null || returned != null ? (WASH_FAMILY.includes(o.service) ? "lb" : "items") : "",
+        received != null || returned != null ? (WASH_FAMILY.includes(o.service) ? "bags" : "items") : "",
         details,
         getDeliveryRequest(o.status_history) ?? "",
         o.date, o.time_slot, o.address,

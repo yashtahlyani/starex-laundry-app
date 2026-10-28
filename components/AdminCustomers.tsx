@@ -205,7 +205,10 @@ export default function AdminCustomers({ customers, query }: { customers: Custom
                       const { received, returned } = getItemTracking(o.status_history);
                       // Wash services are weighed, dry cleaning is counted —
                       // "45 in" means pounds on one and garments on the other.
-                      const unit = PER_LB_SERVICES.includes(o.service) ? "lb" : "items";
+                      // Bags for by-weight services, items for the rest — the
+                      // pickup/delivery count records what the driver handled,
+                      // never a weight. The actual weight is the Weight column.
+                      const unit = PER_LB_SERVICES.includes(o.service) ? "bags" : "items";
                       const qty = [
                         o.weight && o.weight !== "TBD" ? o.weight : null,
                         received != null ? `${received} ${unit} in` : null,

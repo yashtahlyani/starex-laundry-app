@@ -8,7 +8,9 @@ import { StatusBadge, PaymentBadge, ProgressTrack, NEXT_STATUS, STATUS_META } fr
 import { getItemTracking } from "@/lib/itemTracking";
 import { getDeliveryRequest } from "@/lib/deliveryRequest";
 import { orderCodeColor } from "@/lib/orderCode";
-import { calculateHst, isPerLbService } from "@/lib/pricing";
+import {
+  calculateHst, isPerLbService, PLANS, MINIMUM_ORDER,
+} from "@/lib/pricing";
 import { cancellationTerms } from "@/lib/cancellation";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
@@ -174,10 +176,20 @@ export default function AppOrderDrawer({
   // client, 2026-10-16: "I wanted to write 45 LB but it was written only 45
   // because no full key pad was available"). The field now states the unit
   // instead, so 45 on its own is complete and unambiguous.
+  // Wash & Fold, Express and Wash & Press are weighed at the facility when
+  // the order is Confirmed — NOT at pickup, where the driver has only taken a
+  // sealed bag and nothing has been on a scale yet.
+  //
+  // Asking for a weight at pickup (my change, 16 Oct) invited staff to invent
+  // one: on STX-966934 they typed the 20 lb billing minimum, wrote the real
+  // 6.61 lb in the notes, and the drawer then demanded 20 lb back at delivery
+  // for laundry that never weighed 20 lb (reported 2026-10-29).
+  //
+  // What a driver can actually count, at both ends, is BAGS. So that is what
+  // is asked for, and the real weight stays at Confirmed where the scale is.
   const byWeight = isPerLbService(order?.service ?? "");
-  const unit = byWeight ? "lb" : "item";
   const fmtQty = (n: number) =>
-    byWeight ? `${Number(n.toFixed(1))} lb` : `${n} item${n === 1 ? "" : "s"}`;
+    byWeight ? `${n} bag${n === 1 ? "" : "s"}` : `${n} item${n === 1 ? "" : "s"}`;
   // Weighing happens at Confirmed, not Picked Up — Picked Up is just the
   // courier collecting the bag, before anything's been verified at the
   // facility (per client, 2026-08-18).
@@ -341,13 +353,12 @@ export default function AppOrderDrawer({
     let itemCount: number | undefined;
     if (needsCount) {
       if (!pendingCount.trim()) {
-        setCountError(byWeight ? "Enter the weight in lb" : "Enter an item count");
+        setCountError(byWeight ? "Enter how many bags" : "Enter an item count");
         return;
       }
-      // parseFloat, not parseInt: a 45.5 lb bag was silently truncated to 45.
-      itemCount = byWeight ? parseFloat(pendingCount) : parseInt(pendingCount, 10);
+      itemCount = parseInt(pendingCount, 10);
       if (isNaN(itemCount) || itemCount < 0) {
-        setCountError(byWeight ? "Enter a valid weight in lb" : "Enter a valid item count");
+        setCountError(byWeight ? "Enter a valid number of bags" : "Enter a valid item count");
         return;
       }
     }
@@ -466,7 +477,7 @@ export default function AppOrderDrawer({
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                       <AlertTriangle size={15} color="#DC2626" />
                       <p style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.85rem", color: "#DC2626" }}>
-                        {byWeight ? `${fmtQty(missing)} less came back` : `${missing} item${missing !== 1 ? "s" : ""} missing`}
+                        {byWeight ? `${fmtQty(missing)} fewer came back` : `${missing} item${missing !== 1 ? "s" : ""} missing`}
                       </p>
                     </div>
                   ) : null}
@@ -688,15 +699,15 @@ export default function AppOrderDrawer({
                     <input
                       type="number"
                       min={0}
-                      step={byWeight ? "0.1" : "1"}
-                      inputMode={byWeight ? "decimal" : "numeric"}
+                      step="1"
+                      inputMode="numeric"
                       placeholder={byWeight
-                        ? (nextStatusId === "picked_up" ? "Weight collected" : "Weight returned")
+                        ? (nextStatusId === "picked_up" ? "How many bags collected?" : "How many bags returned?")
                         : (nextStatusId === "picked_up" ? "How many items? (count)" : "How many items came back? (count)")}
                       value={pendingCount}
                       onChange={e => { setPendingCount(e.target.value); setCountError(null); }}
                       style={{
-                        width: "100%", padding: byWeight ? "10px 46px 10px 14px" : "10px 14px",
+                        width: "100%", padding: byWeight ? "10px 54px 10px 14px" : "10px 14px",
                         borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem",
                         fontFamily: "Kodchasan, sans-serif", boxSizing: "border-box",
                       }}
@@ -706,7 +717,7 @@ export default function AppOrderDrawer({
                         position: "absolute", right: 14, fontFamily: "Poppins, sans-serif",
                         fontWeight: 700, fontSize: "0.82rem", color: "#8C8C8C", pointerEvents: "none",
                       }}>
-                        lb
+                        bags
                       </span>
                     )}
                   </div>
@@ -736,12 +747,38 @@ export default function AppOrderDrawer({
               {admin && nextStatusId === "confirmed" && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 4 }}>
                   <input
-                    type="text" placeholder="Weight (e.g. 8.2 lbs)"
+                    type="text"
+                    placeholder={byWeight ? "Actual weight from the scale (e.g. 6.61 lbs)" : "Weight (e.g. 8.2 lbs)"}
                     value={pendingWeight}
                     onChange={e => { setPendingWeight(e.target.value); setWeightError(null); }}
                     style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #E5E7EB", fontSize: "0.875rem", fontFamily: "Kodchasan, sans-serif" }}
                   />
                   {weightError && <p style={{ color: "#DC2626", fontSize: "0.8rem", fontFamily: "Kodchasan, sans-serif" }}>{weightError}</p>}
+
+                  {/* Does the minimum-order arithmetic on screen. Staff were
+                      rounding the weight UP to the 20 lb that hits the $40
+                      minimum, because nothing showed them the minimum applies
+                      on its own (STX-966934: 6.61 lb recorded as 20). Enter
+                      the real weight; the floor is applied here. */}
+                  {byWeight && (() => {
+                    const lbs = parseFloat(pendingWeight.replace(/[^\d.]/g, ""));
+                    if (!Number.isFinite(lbs) || lbs <= 0) return (
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: "#8C8C8C" }}>
+                        Enter what the scale actually said — never round up to the minimum. The ${MINIMUM_ORDER.standardCad} minimum is applied automatically.
+                      </p>
+                    );
+                    const rate = PLANS.find(p => p.id === order?.service)?.price ?? 0;
+                    const raw = Math.round(lbs * rate * 100) / 100;
+                    const below = raw < MINIMUM_ORDER.standardCad;
+                    const sub = below ? MINIMUM_ORDER.standardCad : raw;
+                    return (
+                      <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem", color: below ? "#B45309" : "#4A4A4A", lineHeight: 1.6 }}>
+                        {lbs} lb × ${rate.toFixed(2)}/lb = ${raw.toFixed(2)}
+                        {below && <> — under the ${MINIMUM_ORDER.standardCad} minimum, so <strong>${sub.toFixed(2)}</strong> applies</>}
+                        {" "}· total with HST <strong>${calculateHst(sub).total.toFixed(2)}</strong>
+                      </p>
+                    );
+                  })()}
                   <textarea
                     rows={2}
                     placeholder="Any discrepancy to flag? (optional) — e.g. a stain that won't fully remove"
