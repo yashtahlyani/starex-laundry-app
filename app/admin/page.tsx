@@ -7,6 +7,7 @@ import ContactUpdater from "@/components/ContactUpdater";
 import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersClient";
 import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
+import NotificationHealthBanner from "@/components/NotificationHealthBanner";
 import { getItemTracking } from "@/lib/itemTracking";
 import AdminCustomers, { groupCustomers, filterCustomers } from "@/components/AdminCustomers";
 import { orderCodeColor } from "@/lib/orderCode";
@@ -221,6 +222,9 @@ export default async function AdminDashboardPage({
             );
           })}
         </div>
+
+        {/* Silent until notifications are actually failing to reach customers. */}
+        <NotificationHealthBanner />
 
         {tab === "orders" && filter && FILTER_LABELS[filter] && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>

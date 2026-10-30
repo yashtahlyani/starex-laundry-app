@@ -575,7 +575,24 @@ async function dispatchWhatsApp(orderId: string, phone: string, eventType: strin
 
   const to = phone.startsWith("whatsapp:") ? phone : `whatsapp:${toE164(phone)}`;
 
+  // Twilio returns 201 when it ACCEPTS the message, not when WhatsApp
+  // delivers it. Without this callback a message Meta rejects is still
+  // logged "sent" — which is exactly how 142 undelivered messages sat in
+  // the log looking fine from 24 Aug to 30 Oct. Twilio posts the real
+  // outcome to /api/twilio/status, which corrects the row.
+  const statusCallback = process.env.TWILIO_STATUS_CALLBACK_URL
+    || `${SITE_ORIGIN}/api/twilio/status`;
+
   try {
+    const params = new URLSearchParams({
+      From: from,
+      To: to,
+      ContentSid: contentSid,
+      ContentVariables: JSON.stringify(variables),
+    });
+    // Twilio rejects a non-https callback, so localhost dev just skips it.
+    if (statusCallback.startsWith("https://")) params.set("StatusCallback", statusCallback);
+
     const res = await fetch(
       `https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`,
       {
@@ -584,11 +601,20 @@ async function dispatchWhatsApp(orderId: string, phone: string, eventType: strin
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${Buffer.from(`${authUser}:${authPass}`).toString("base64")}`,
         },
-        body: new URLSearchParams({ From: from, To: to, ContentSid: contentSid, ContentVariables: JSON.stringify(variables) }).toString(),
+        body: params.toString(),
       }
     );
     const data = await res.json();
-    await logNotification(orderId, "whatsapp", eventType, res.ok ? "sent" : "failed", data?.sid);
+    // "queued" rather than "sent": accepted by Twilio, delivery unknown
+    // until the callback says otherwise. A rejection here is immediate and
+    // carries Twilio's own error code, which is worth keeping.
+    await logNotification(
+      orderId,
+      "whatsapp",
+      eventType,
+      res.ok ? "queued" : `failed${data?.code ? ` (${data.code})` : ""}`,
+      data?.sid
+    );
   } catch {
     await logNotification(orderId, "whatsapp", eventType, "failed");
   }
