@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAdminUser } from "@/lib/adminAuth";
+import { isMetaTestNumber } from "@/lib/whatsappSender";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,8 @@ const WINDOW_DAYS = 7;
 
 export type NotificationHealth = {
   windowDays: number;
+  /** null when WhatsApp isn't configured in this environment. */
+  whatsappSender: { number: string; isTestNumber: boolean } | null;
   channels: {
     channel: string;
     sent: number;
@@ -26,6 +29,7 @@ export type NotificationHealth = {
     errorCodes: Record<string, number>;
   }[];
 };
+
 
 // A row is a success if WhatsApp/Resend confirmed it, a failure if the
 // provider rejected it, and pending while we are still waiting for the
@@ -39,6 +43,11 @@ export async function GET() {
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const since = new Date(Date.now() - WINDOW_DAYS * 86_400_000).toISOString();
+
+  const configured = process.env.TWILIO_WHATSAPP_NUMBER?.trim();
+  const whatsappSender = configured
+    ? { number: configured.replace(/^whatsapp:/, ""), isTestNumber: isMetaTestNumber(configured) }
+    : null;
 
   try {
     const { data, error } = await getSupabaseAdmin()
@@ -80,11 +89,12 @@ export async function GET() {
 
     return NextResponse.json({
       windowDays: WINDOW_DAYS,
+      whatsappSender,
       channels: [...byChannel.values()].sort((a, b) => b.failed - a.failed),
     } satisfies NotificationHealth);
   } catch {
     // The table is optional (see supabase/schema.sql). An empty report is
     // honest here; claiming everything is fine is what caused the problem.
-    return NextResponse.json({ windowDays: WINDOW_DAYS, channels: [] } satisfies NotificationHealth);
+    return NextResponse.json({ windowDays: WINDOW_DAYS, whatsappSender, channels: [] } satisfies NotificationHealth);
   }
 }

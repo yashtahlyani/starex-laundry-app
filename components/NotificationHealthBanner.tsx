@@ -43,7 +43,12 @@ export default function NotificationHealthBanner() {
     return c.failed >= 3 && attempted > 0 && c.failed / attempted >= 0.2;
   });
 
-  if (!health || broken.length === 0) return null;
+  // A test sender is worth saying out loud even on a quiet day: it will keep
+  // reaching the handful of pre-listed phones (the owner's included), so the
+  // failure rate alone can look survivable while no customer hears anything.
+  const onTestNumber = health?.whatsappSender?.isTestNumber ?? false;
+
+  if (!health || (broken.length === 0 && !onTestNumber)) return null;
 
   return (
     <div
@@ -59,6 +64,15 @@ export default function NotificationHealthBanner() {
         <strong style={{ fontFamily: "Poppins, sans-serif", color: "#B30F14", display: "block", marginBottom: 4 }}>
           Customers are not receiving notifications
         </strong>
+
+        {onTestNumber && (
+          <div style={{ marginBottom: 8 }}>
+            WhatsApp is sending from <strong>{health.whatsappSender!.number}</strong>, which is a
+            Meta <strong>test number</strong>. It can only deliver to about five phones listed in
+            advance in Meta&rsquo;s console — everyone else is rejected, whatever the order says.
+            This needs a real registered WhatsApp sender before customers can be notified.
+          </div>
+        )}
         {broken.map(c => {
           const attempted = c.sent + c.failed;
           const codes = Object.entries(c.errorCodes).sort((a, b) => b[1] - a[1]);

@@ -3,6 +3,7 @@ import { getSupabaseAdmin } from "./supabaseAdmin";
 import { BUSINESS_NAME } from "./pricing";
 import { CANCELLATION_FEES, type NoticeBand } from "./cancellation";
 import { SITE_ORIGIN, CONTACT } from "./site";
+import { isMetaTestNumber } from "./whatsappSender";
 
 // Undefined until RESEND_API_KEY is set — email sends are skipped gracefully until then,
 // same as the Twilio WhatsApp path below.
@@ -557,6 +558,9 @@ async function sendStatusWhatsApp(
   });
 }
 
+// Once per server instance — a warning on every send would just be noise.
+let warnedAboutTestSender = false;
+
 async function dispatchWhatsApp(orderId: string, phone: string, eventType: string, variables: Record<string, string>) {
   const sid = process.env.TWILIO_ACCOUNT_SID;
   const from = process.env.TWILIO_WHATSAPP_NUMBER;
@@ -571,6 +575,19 @@ async function dispatchWhatsApp(orderId: string, phone: string, eventType: strin
     // WhatsApp not configured yet, or this event's template isn't approved yet — skip silently
     await logNotification(orderId, "whatsapp", eventType, "skipped");
     return;
+  }
+
+  // Meta's free test senders live in the fictional +1 555 range and can only
+  // reach a few numbers listed in advance in Meta's console. The site ran on
+  // one for two months: most customers were silently rejected while the
+  // sender reported ONLINE with a HIGH quality rating. Say so in the logs.
+  if (isMetaTestNumber(from) && !warnedAboutTestSender) {
+    warnedAboutTestSender = true;
+    console.warn(
+      `[whatsapp] Sending from ${from}, a Meta TEST number. Only phones pre-listed ` +
+      `in Meta's console will receive anything. Set TWILIO_WHATSAPP_NUMBER to a ` +
+      `registered WhatsApp sender to reach customers.`
+    );
   }
 
   const to = phone.startsWith("whatsapp:") ? phone : `whatsapp:${toE164(phone)}`;
