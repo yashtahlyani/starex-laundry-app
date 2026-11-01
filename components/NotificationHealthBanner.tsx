@@ -16,12 +16,24 @@ import type { NotificationHealth } from "@/app/api/admin/notification-health/rou
  * there is a banner nobody reads.
  */
 
-const CODE_MEANINGS: Record<string, string> = {
-  "63112": "Meta has disabled the WhatsApp Business Account. Only Twilio/Meta can re-enable it.",
-  "63024": "Invalid recipient number — check the phone number on those orders.",
-  "63016": "Message sent outside WhatsApp's 24-hour window without an approved template.",
-  "63018": "Rate limit reached on the WhatsApp sender.",
-  "63003": "The recipient's number is not on WhatsApp.",
+// Twilio's own wording for 63112 is "Meta disabled the WhatsApp Business
+// Account", and this banner repeated it until 1 Nov. On a test sender that is
+// misleading: the account is fine and the real cause is the recipient not
+// being on the sender's short allow-list. Saying "disabled" sent the owner
+// looking for a suspension that did not exist, so the explanation now depends
+// on which kind of sender is configured.
+const codeMeaning = (code: string, onTestNumber: boolean): string => {
+  if (code === "63112") {
+    return onTestNumber
+      ? "Rejected because this customer is not one of the few phones pre-listed on the test number. Not a suspension — the sender itself is healthy."
+      : "Meta rejected the message at the account level. Check the WhatsApp Business Account's status and notifications in Meta Business settings.";
+  }
+  return {
+    "63024": "Invalid recipient number — check the phone number on those orders.",
+    "63016": "Message sent outside WhatsApp's 24-hour window without an approved template.",
+    "63018": "Rate limit reached on the WhatsApp sender.",
+    "63003": "The recipient's number is not on WhatsApp.",
+  }[code] ?? `Provider error ${code}`;
 };
 
 export default function NotificationHealthBanner() {
@@ -85,7 +97,7 @@ export default function NotificationHealthBanner() {
                 : " None have arrived in this period."}
               {codes.map(([code, n]) => (
                 <div key={code} style={{ marginTop: 3, color: "#6B6B6B", fontSize: "0.83rem" }}>
-                  {CODE_MEANINGS[code] ?? `Provider error ${code}`}{codes.length > 1 ? ` (${n}×)` : ""}
+                  {codeMeaning(code, onTestNumber)}{codes.length > 1 ? ` (${n}×)` : ""}
                 </div>
               ))}
             </div>
