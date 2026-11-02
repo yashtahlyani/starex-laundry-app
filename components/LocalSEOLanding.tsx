@@ -35,6 +35,15 @@ export type LocalSEOProps = {
   faqs: { q: string; a: string }[];
 };
 
+/** Every city/service landing page on the site. A page filters itself out of
+ *  this list, so adding a fifth page here links it from all the others. */
+const OTHER_AREAS = [
+  { city: "Brampton",    serviceLabel: "Dry cleaning",    href: "/dry-cleaning-brampton" },
+  { city: "Mississauga", serviceLabel: "Dry cleaning",    href: "/dry-cleaning-mississauga" },
+  { city: "Brampton",    serviceLabel: "Laundry service", href: "/laundry-service-brampton" },
+  { city: "Mississauga", serviceLabel: "Laundry service", href: "/laundry-service-mississauga" },
+] as const;
+
 export default function LocalSEOLanding(props: LocalSEOProps) {
   const { city, serviceLabel, heroImage, h1, intro, neighborhoods, bookHref, priceHighlights, features, faqs } = props;
 
@@ -167,6 +176,52 @@ export default function LocalSEOLanding(props: LocalSEOProps) {
                 <span key={n} style={{ background: "#F2F2F2", borderRadius: 999, padding: "8px 18px", fontFamily: "Kodchasan, sans-serif", fontWeight: 500, fontSize: "0.875rem", color: "#4A4A4A" }}>{n}</span>
               ))}
             </div>
+          </AnimatedContent>
+        </div>
+      </section>
+
+      {/* Other areas and services.
+          These four city pages had no internal links at all — nothing pointed
+          between them or back to the homepage, so each sat on its own with no
+          way for a visitor (or a crawler) to reach the rest. The link text is
+          the city and service rather than "click here", because that text is
+          what tells a search engine what the destination page is about. */}
+      <section style={{ padding: "0 0 72px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
+          <AnimatedContent>
+            <h2 style={{
+              fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "1.125rem",
+              letterSpacing: "-0.015em", color: "#161616", marginBottom: 14,
+            }}>
+              We also cover
+            </h2>
+            <p style={{
+              fontFamily: "Kodchasan, sans-serif", fontSize: "0.95rem",
+              color: "#4A4A4A", lineHeight: 2,
+            }}>
+              {OTHER_AREAS
+                // Case-insensitive: the pages pass "Dry Cleaning", the list
+                // reads "Dry cleaning" so it renders as prose mid-sentence.
+                .filter(a => !(a.city.toLowerCase() === city.toLowerCase()
+                  && a.serviceLabel.toLowerCase() === serviceLabel.toLowerCase()))
+                .map((a, i, arr) => (
+                  <span key={a.href}>
+                    <a href={a.href} style={{ color: "#B30F14", textDecoration: "underline" }}>
+                      {a.serviceLabel} in {a.city}
+                    </a>
+                    {i < arr.length - 1 ? " · " : ""}
+                  </span>
+                ))}
+            </p>
+            <p style={{
+              fontFamily: "Kodchasan, sans-serif", fontSize: "0.95rem",
+              color: "#6B6B6B", marginTop: 10,
+            }}>
+              Or see{" "}
+              <a href="/" style={{ color: "#B30F14", textDecoration: "underline" }}>
+                Starex laundry and dry cleaning in Brampton and Mississauga
+              </a>.
+            </p>
           </AnimatedContent>
         </div>
       </section>

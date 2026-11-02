@@ -4,6 +4,7 @@ import { BUSINESS_NAME } from "@/lib/pricing";
 import PageLoader from "@/components/PageLoader";
 import ScrollProgress from "@/components/ScrollProgress";
 import LayoutShell from "@/components/LayoutShell";
+import Analytics from "@/components/Analytics";
 
 import { SITE_ORIGIN } from "@/lib/site";
 
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
   // the combo is the reason to click, and it's what the business actually wants
   // people booking (per client, 2026-09-29).
   description: "Dry clean 5 pieces for $50 flat — blanket or quilt included. Wash & fold $2/lb, free pickup & delivery in Brampton & Mississauga. 24–48h turnaround.",
-  keywords: "laundry pickup delivery, dry cleaning, wash fold, Brampton, Mississauga, Canada, car detailing, sofa cleaning",
+  // No keywords meta tag. Google ignored it for ranking in 2009 and has said
+  // so publicly; Bing treats a stuffed one as a spam signal. Removed 2 Nov
+  // 2026 at the client's request. Please don't reintroduce it.
   openGraph: {
     type: "website",
     siteName: BUSINESS_NAME,
@@ -41,6 +44,11 @@ export const metadata: Metadata = {
   // search engines at the one canonical hostname now that both the apex
   // domain and www resolve to identical live content.
   alternates: { canonical: "/" },
+  // Search Console ownership. Only emitted once GOOGLE_SITE_VERIFICATION is
+  // set; verifying through the GA property instead makes this unnecessary.
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -50,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollProgress />
         <PageLoader />
         <LayoutShell>{children}</LayoutShell>
+        <Analytics />
       </body>
     </html>
   );
