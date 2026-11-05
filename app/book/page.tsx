@@ -12,6 +12,7 @@ import { getSource } from "@/lib/attribution";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
 import EstimateBill from "@/components/EstimateBill";
 import TrustBadge from "@/components/TrustBadge";
+import BookingReviews from "@/components/BookingReviews";
 import ItemPicker from "@/components/ItemPicker";
 import WeightPicker from "@/components/WeightPicker";
 
@@ -729,8 +730,10 @@ function BookPageInner() {
                 {needsCard && (
                   <p style={{ color: "#B45309", fontSize: "0.8125rem", marginBottom: 12, fontFamily: "Kodchasan, sans-serif" }}>Save a card above to continue.</p>
                 )}
-                {/* Rating next to the button that commits the order (per
-                    client). Renders nothing unless there is real data. */}
+                {/* Rating and reviews next to the button that commits the
+                    order (per client). Both render nothing unless there is
+                    real data — no placeholder stars, no sample quotes. */}
+                <BookingReviews />
                 <div style={{ marginBottom: 14 }}><TrustBadge /></div>
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <button onClick={goBack} className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={14} /> Back</button>
