@@ -54,11 +54,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      {/* Explicit <head> so the Analytics snippet lands in the served HTML.
+          Search Console's Google Analytics verification reads the raw HTML
+          and does not run the page's JavaScript. */}
+      <head>
+        <Analytics />
+      </head>
       <body className="min-h-screen bg-[#FFFFFF] text-[#161616] antialiased font-body">
         <ScrollProgress />
         <PageLoader />
         <LayoutShell>{children}</LayoutShell>
-        <Analytics />
       </body>
     </html>
   );
