@@ -21,14 +21,23 @@ type Payload = {
  *
  * Reviews are printed exactly as written, with no trimming: the standing rule
  * on this site is that review text is never edited, and an ellipsis in a
- * testimonial is an edit. Rather than cut anything, it shows the two SHORTEST
- * real reviews, so what fits is whole.
+ * testimonial is an edit. Rather than cut anything, it picks reviews that are
+ * already short enough to show whole.
+ *
+ * Shortest-first, but only among reviews that actually say something. The
+ * genuinely shortest review we have is "Excellent work" (14 characters), and
+ * two words of praise beside a payment button reads as thin rather than
+ * reassuring. MIN_SUBSTANCE skips it in favour of the next shortest, which is
+ * still short but tells the reader what was good. If fewer than two reviews
+ * clear the bar it falls back to the shortest available, so a business with
+ * only brief reviews still shows them.
  *
  * Renders nothing when there are no real reviews. A fabricated testimonial
  * beside a payment button is a false representation under the Competition
  * Act, quite apart from being a bad way to treat customers.
  */
 const HOW_MANY = 2;
+const MIN_SUBSTANCE = 40;
 
 export default function BookingReviews() {
   const [data, setData] = useState<Payload | null>(null);
@@ -44,10 +53,11 @@ export default function BookingReviews() {
 
   if (!data || data.reviews.length === 0) return null;
 
-  const shown = [...data.reviews]
+  const byLength = [...data.reviews]
     .filter(r => r.text?.trim())
-    .sort((a, b) => a.text.length - b.text.length)
-    .slice(0, HOW_MANY);
+    .sort((a, b) => a.text.length - b.text.length);
+  const substantial = byLength.filter(r => r.text.trim().length >= MIN_SUBSTANCE);
+  const shown = (substantial.length >= HOW_MANY ? substantial : byLength).slice(0, HOW_MANY);
 
   if (shown.length === 0) return null;
 
