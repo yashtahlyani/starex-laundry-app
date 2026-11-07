@@ -27,12 +27,19 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
 
   async function accept(o: AdminOrder) {
     const res = await fetch(`/api/orders/${encodeURIComponent(o.code)}/acknowledge`, { method: "POST" });
-    if (!res.ok) return; // leave it in the list so staff can retry rather than losing it silently
+    if (!res.ok) return; // leave it as-is so staff can retry rather than losing it silently
     setAcknowledged(prev => new Set([...prev, o.id]));
     router.refresh();
   }
 
-  const visible = orders.filter(o => !acknowledged.has(o.id));
+  // Confirming an order no longer removes its card. The order is booked but
+  // still sitting at the customer's door until a driver collects it, so it
+  // stays in this list until pickup (per client, 2026-11-06) and only
+  // changes appearance. `acknowledged` is the optimistic local echo, so the
+  // card settles the moment it is clicked rather than after the refresh.
+  const visible = orders;
+  const needsConfirming = (o: AdminOrder) => o.is_new !== false && !acknowledged.has(o.id);
+  const unconfirmed = visible.filter(needsConfirming).length;
 
   return (
     <>
@@ -43,16 +50,36 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
             style={{ overflow: "hidden", marginBottom: 28 }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }}
-                style={{ width: 9, height: 9, borderRadius: "50%", background: "#ED1D24", flexShrink: 0 }} />
+              {/* The dot pulses only while something still needs a look. A
+                  permanently pulsing marker stops meaning anything. */}
+              {unconfirmed > 0 ? (
+                <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }}
+                  style={{ width: 9, height: 9, borderRadius: "50%", background: "#ED1D24", flexShrink: 0 }} />
+              ) : (
+                <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#16A34A", flexShrink: 0 }} />
+              )}
               <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#161616" }}>
-                New orders — need your confirmation
+                New orders — awaiting pickup
               </h2>
+              <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B" }}>
+                {unconfirmed > 0
+                  ? `${unconfirmed} need${unconfirmed === 1 ? "s" : ""} confirming`
+                  : "all confirmed — waiting on collection"}
+              </span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 12 }}>
-              {visible.map(o => (
+              {visible.map(o => {
+                const pending = needsConfirming(o);
+                return (
                 <motion.div key={o.id} layout initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                  style={{ background: "#fff", border: "2px solid #ED1D24", borderRadius: 16, padding: "20px", boxShadow: "0 6px 24px rgba(184,50,79,0.22)" }}>
+                  style={{
+                    background: "#fff", borderRadius: 16, padding: "20px",
+                    // Red and raised while it needs attention; calm once
+                    // confirmed, so a glance separates the two without
+                    // either disappearing.
+                    border: pending ? "2px solid #ED1D24" : "1.5px solid #E4E4E7",
+                    boxShadow: pending ? "0 6px 24px rgba(184,50,79,0.22)" : "none",
+                  }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                     <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "1rem", color: orderCodeColor(o.code).text }}>{o.code}</span>
                     <span style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA" }}>{o.date} · {o.time_slot}</span>
@@ -61,14 +88,28 @@ export function AdminIncomingSection({ orders }: { orders: AdminOrder[] }) {
                     {o.customer_name ?? "—"} · {o.service_title ?? o.service}
                   </p>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8rem", color: "#8C8C8C", marginBottom: 14 }}>{o.address}</p>
+                  {!pending && (
+                    <p style={{
+                      display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 12,
+                      background: "rgba(22,163,74,0.08)", color: "#15803D", borderRadius: 999,
+                      padding: "5px 11px", fontFamily: "Kodchasan, sans-serif", fontSize: "0.75rem",
+                    }}>
+                      <Check size={12} /> Confirmed · waiting for pickup
+                    </p>
+                  )}
                   <div style={{ display: "flex", gap: 8 }}>
-                    <button onClick={() => accept(o)} className="btn-primary" style={{ flex: 1, padding: "10px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-                      <Check size={14} /> Confirm
+                    {pending && (
+                      <button onClick={() => accept(o)} className="btn-primary" style={{ flex: 1, padding: "10px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                        <Check size={14} /> Confirm
+                      </button>
+                    )}
+                    <button onClick={() => setSelected(o)} className="btn-ghost" style={{ flex: pending ? undefined : 1, padding: "10px 16px", fontSize: "0.85rem" }}>
+                      {pending ? "Details" : "Open order"}
                     </button>
-                    <button onClick={() => setSelected(o)} className="btn-ghost" style={{ padding: "10px 16px", fontSize: "0.85rem" }}>Details</button>
                   </div>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
         )}

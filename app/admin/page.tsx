@@ -126,7 +126,21 @@ export default async function AdminDashboardPage({
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
   ]);
 
-  const newOrders    = (activeOrders ?? []).filter((o: any) => o.is_new);
+  // The New orders box holds everything booked but not yet collected (per
+  // client, 2026-11-06: "I want the new order to be staying in the new order
+  // box until it's picked up").
+  //
+  // It used to be driven by is_new, the unacknowledged flag. Acknowledging an
+  // order clears that flag without advancing status — deliberately, because
+  // "confirmed" is not a valid transition from "placed". So a confirmed order
+  // whose pickup window was still a day away fell out of New orders (no
+  // longer flagged) and never reached In progress (still "placed"), and the
+  // owner could not see it in either box. The two lists are now exactly
+  // complementary: awaiting pickup, then everything past pickup.
+  const newOrders    = (activeOrders ?? []).filter((o: any) => o.status === "placed");
+  // Still unacknowledged — a notification, not a work queue. Drives the bell
+  // and the live poll, which are about "you have not looked at this yet".
+  const unseenOrders = (activeOrders ?? []).filter((o: any) => o.is_new);
   // Family-scoped for the Incoming section only — the header bell/KPI counts
   // deliberately stay global (they're notifications, not tied to whichever
   // queue happens to be selected).
@@ -156,10 +170,10 @@ export default async function AdminDashboardPage({
       )
     : famBase;
 
-  const FILTER_LABELS: Record<string, string> = { new: "New orders", in_progress: "In progress", today: "Orders today" };
+  const FILTER_LABELS: Record<string, string> = { new: "New orders (awaiting pickup)", in_progress: "In progress", today: "Orders today" };
 
   const kpis = [
-    { label: "New orders",   value: newOrders.length, accent: newOrders.length > 0, filterKey: "new", href: "/admin?tab=orders&filter=new" },
+    { label: "New orders",   value: newOrders.length, accent: unseenOrders.length > 0, filterKey: "new", href: "/admin?tab=orders&filter=new" },
     { label: "In progress",  value: inProgressOrders.length, accent: false, filterKey: "in_progress", href: "/admin?tab=orders&filter=in_progress" },
     { label: "Orders today", value: todayOrders ?? 0, accent: false, filterKey: "today", href: "/admin?tab=orders&filter=today" },
     { label: "Total orders", value: totalOrders ?? 0, accent: false, filterKey: null, href: "/admin?tab=orders" },
@@ -177,10 +191,10 @@ export default async function AdminDashboardPage({
             <Logo color="#FFFFFF" fontSize="2.25rem" />
             <div className="admin-header-label" style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
             <p className="admin-header-label" style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.7rem", color: "#F4524D", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600, whiteSpace: "nowrap" }}>Owner console</p>
-            <AdminLivePoll initialCount={newOrders.length} />
-            {newOrders.length > 0 && (
+            <AdminLivePoll initialCount={unseenOrders.length} />
+            {unseenOrders.length > 0 && (
               <span style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, background: "#ED1D24", color: "#FFFFFF", borderRadius: 999, padding: "4px 12px", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.75rem", whiteSpace: "nowrap" }}>
-                <Bell size={12} /> {newOrders.length} new
+                <Bell size={12} /> {unseenOrders.length} new
               </span>
             )}
           </div>

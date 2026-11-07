@@ -48,6 +48,9 @@ export type DrawerOrder = {
   card_brand?: string | null;
   card_last4?: string | null;
   payment_status?: "unpaid" | "paid" | null;
+  /** Staff have not acknowledged this order yet. Distinct from status: an
+   *  acknowledged order is still awaiting pickup until it is collected. */
+  is_new?: boolean;
 };
 
 function Row({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: string | null }) {
