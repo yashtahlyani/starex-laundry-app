@@ -8,6 +8,7 @@ import { enqueueBookingConfirmation } from "@/lib/queue/notification.queue";
 import { notifyOwnerOfNewOrder } from "@/lib/notifications";
 import { describeSource } from "@/lib/attribution";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
+import { getAdminUser } from "@/lib/adminAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -53,8 +54,24 @@ type BookingRequest = {
 };
 
 export async function POST(req: NextRequest) {
-  const allowed = await checkRateLimit(`rate:book:${clientIp(req)}`, 10, 3600);
-  if (!allowed) return NextResponse.json({ error: "Too many bookings from this connection — please try again later" }, { status: 429 });
+  // Staff taking an order over the phone or at the counter come through the
+  // same endpoint as a customer (per client, 2026-11-09: "give Admin the
+  // right to create a new booking with email ID provided by the customers").
+  // One code path means the validation, the order code, the confirmation
+  // email and the owner alert can never drift apart from the public form.
+  //
+  // Two things differ for staff, and only two:
+  //  - no rate limit. It exists to stop a bot booking vans; an owner working
+  //    through a morning of phone orders is not that, and the same cap once
+  //    locked him out of his own console on cancellations.
+  //  - they may book a window that has already started today. They are on
+  //    the phone with the customer and know where the van actually is.
+  const staff = await getAdminUser();
+
+  if (!staff) {
+    const allowed = await checkRateLimit(`rate:book:${clientIp(req)}`, 10, 3600);
+    if (!allowed) return NextResponse.json({ error: "Too many bookings from this connection — please try again later" }, { status: 429 });
+  }
 
   const cookieStore = cookies();
   const supabase = createServerClient(
@@ -108,7 +125,7 @@ export async function POST(req: NextRequest) {
   // Same-day bookings can't select a pickup window that's already started —
   // mirrors the slot filtering in app/book/page.tsx (Eastern time, matching
   // the service area, not the server's UTC clock).
-  if (nowET.dateStr === date) {
+  if (nowET.dateStr === date && !staff) {
     const slotStartHour = { "8:00 AM": 8, "11:00 AM": 11, "2:00 PM": 14, "5:00 PM": 17 }[timeSlot.split(" – ")[0]];
     if (slotStartHour != null && slotStartHour <= nowET.hour) {
       return NextResponse.json({ error: "That pickup window has already started today — please choose a later window or another date" }, { status: 400 });
@@ -116,9 +133,31 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const bookingService = new BookingService(getSupabaseAdmin());
+    const db = getSupabaseAdmin();
+
+    // Whose account this order belongs to.
+    //
+    // For a customer booking themselves it is simply their own session. For
+    // a staff-created order it must NOT be the signed-in session, or the
+    // order would be filed under the owner's own account and show up in his
+    // "my orders" instead of the customer's. Staff orders attach to the
+    // customer's profile when their email already has one, and otherwise to
+    // nobody — exactly like a guest booking, which still reaches them by
+    // email and order code.
+    let ownerUserId: string | null = user?.id ?? null;
+    if (staff) {
+      ownerUserId = null;
+      const { data: match } = await db
+        .from("profiles")
+        .select("id")
+        .ilike("email", email.trim())
+        .limit(1);
+      if (match?.length) ownerUserId = match[0].id;
+    }
+
+    const bookingService = new BookingService(db);
     const result = await bookingService.createBooking({
-      userId: user?.id ?? null,
+      userId: ownerUserId,
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone.trim(),
@@ -130,7 +169,13 @@ export async function POST(req: NextRequest) {
       // admin drawer, the CSV export and the order's own status history, so
       // the estimate lands everywhere staff already look. Combined length is
       // bounded by the two caps checked above.
-      notes: [notes?.trim(), estimateNote?.trim()].filter(Boolean).join(" — ") || undefined,
+      // Staff-created orders are labelled as such, so months later nobody
+      // has to guess why an order has no card and no online trail.
+      notes: [
+        staff ? `Booked by staff (${staff.email ?? "admin"})` : null,
+        notes?.trim(),
+        estimateNote?.trim(),
+      ].filter(Boolean).join(" — ") || undefined,
       stripeCustomerId,
       stripePaymentMethodId,
       cardBrand,

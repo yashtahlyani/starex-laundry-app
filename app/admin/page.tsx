@@ -8,6 +8,7 @@ import { AdminIncomingSection, AdminOrderTable } from "@/components/AdminOrdersC
 import Logo from "@/components/Logo";
 import AdminLivePoll from "@/components/AdminLivePoll";
 import NotificationHealthBanner from "@/components/NotificationHealthBanner";
+import AdminNewBooking from "@/components/AdminNewBooking";
 import { getItemTracking } from "@/lib/itemTracking";
 import AdminCustomers, { groupCustomers, filterCustomers } from "@/components/AdminCustomers";
 import { orderCodeColor } from "@/lib/orderCode";
@@ -239,6 +240,12 @@ export default async function AdminDashboardPage({
 
         {/* Silent until notifications are actually failing to reach customers. */}
         <NotificationHealthBanner />
+
+        {/* Taking an order over the phone or at the counter. Possible at all
+            because a booking no longer needs a card. */}
+        <div style={{ marginBottom: 20 }}>
+          <AdminNewBooking />
+        </div>
 
         {tab === "orders" && filter && FILTER_LABELS[filter] && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
