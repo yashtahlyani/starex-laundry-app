@@ -4,6 +4,8 @@ import { useEffect, useId, useState } from "react";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CreditCard, CheckCircle, Lock } from "lucide-react";
+import ETransferPanel from "./ETransferPanel";
+import { ETRANSFER } from "@/lib/site";
 
 // Paying and getting the order delivered are two different conversations —
 // customers used to pay, then have to phone or message separately to agree a
@@ -232,6 +234,10 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
   const [deliveryDate, setDeliveryDate] = useState("");
   const [deliveryTime, setDeliveryTime] = useState("");
   const deliveryRequest = buildDeliveryRequest(deliveryDate, deliveryTime);
+  // Card stays the default: it settles instantly and needs nothing from
+  // staff. e-Transfer is there for customers who would rather not hand over
+  // card details at all (per client, 2026-11-07).
+  const [method, setMethod] = useState<"card" | "etransfer">("card");
 
   useEffect(() => {
     fetch("/api/stripe/config")
@@ -295,7 +301,38 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
           onDateChange={setDeliveryDate} onTimeChange={setDeliveryTime}
         />
       )}
-      {status === "ready" && clientSecret && stripePromise && savedCard && !useNewCard && (
+      {/* Two ways to pay. Only shown once there is actually a choice to
+          make — a lone "Card" tab is just noise. */}
+      {status === "ready" && ETRANSFER.enabled && (
+        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+          {([
+            { id: "card", label: "Pay by card" },
+            { id: "etransfer", label: "Interac e-Transfer" },
+          ] as const).map(m => {
+            const on = method === m.id;
+            return (
+              <button
+                key={m.id} type="button" onClick={() => setMethod(m.id)} aria-pressed={on}
+                style={{
+                  flex: 1, cursor: "pointer", borderRadius: 10, padding: "9px 10px",
+                  fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.82rem",
+                  color: on ? "#B30F14" : "#6B6B6B",
+                  background: on ? "#FFF9F9" : "#FFFFFF",
+                  border: `1.5px solid ${on ? "#ED1D24" : "#E4E4E7"}`,
+                }}
+              >
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {status === "ready" && method === "etransfer" && ETRANSFER.enabled && (
+        <ETransferPanel orderCode={orderCode} amountCad={amountCad} deliveryRequest={deliveryRequest} />
+      )}
+
+      {status === "ready" && method === "card" && clientSecret && stripePromise && savedCard && !useNewCard && (
         <QuickPayButton
           stripePromise={stripePromise}
           clientSecret={clientSecret}
@@ -307,7 +344,7 @@ export default function PayNowCard({ orderCode, amountCad: subtotalCad, onPaid }
           onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }}
         />
       )}
-      {status === "ready" && clientSecret && stripePromise && (!savedCard || useNewCard) && (
+      {status === "ready" && method === "card" && clientSecret && stripePromise && (!savedCard || useNewCard) && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <PayForm orderCode={orderCode} amountCad={amountCad} deliveryRequest={deliveryRequest} clientSecret={clientSecret} onPaid={(s) => { setPaid(s === "delivered" ? "delivered" : "paid"); onPaid?.(s); }} />
         </Elements>

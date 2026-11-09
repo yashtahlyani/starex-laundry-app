@@ -24,6 +24,23 @@ export const CONTACT = {
   cities: ["Brampton, ON", "Mississauga, ON"],
 };
 
+/**
+ * Interac e-Transfer, offered alongside card at payment time (per client,
+ * 2026-11-07). Customers send the money themselves from their own bank, so
+ * this address is the only thing standing between a customer and their money
+ * going to the wrong place — it lives here, in one place, rather than being
+ * typed into a page.
+ *
+ * Nothing about an e-Transfer is automatic: the customer tells us they have
+ * sent it, and staff mark the order paid only once it actually lands.
+ */
+export const ETRANSFER = {
+  enabled: true,
+  email: "info@royalarttreasure.ca",
+  /** Shown to the customer so the payment can be matched to their order. */
+  memoHint: "Please put your order number in the message box.",
+};
+
 export const SOCIAL_LINKS: { instagram: string; twitter: string; facebook: string } = {
   instagram: "",
   twitter: "",

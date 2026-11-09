@@ -10,6 +10,13 @@ import {
 } from "@/lib/pricing";
 import { getSource } from "@/lib/attribution";
 import StripeCardStep, { type SavedCard } from "@/components/StripeCardStep";
+
+// Whether the booking form starts on "pay later" or "save a card now".
+// Set to "later" on 2026-11-07 to cut the barrier to a first booking; the
+// client wants to watch whether bookings rise before deciding to keep it.
+// Changing this one word puts the previous behaviour back — the card step
+// itself is unchanged and still saves a card when chosen.
+const PAY_DEFAULT: "later" | "card" = "later";
 import EstimateBill from "@/components/EstimateBill";
 import TrustBadge from "@/components/TrustBadge";
 import BookingReviews from "@/components/BookingReviews";
@@ -154,6 +161,10 @@ function BookPageInner() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   const [savedCard, setSavedCard] = useState<SavedCard | null>(null);
+  // "later" keeps the booking free of payment details; "card" stores one for
+  // the owner to charge once the order is weighed. Flip PAY_DEFAULT to "card"
+  // to put the old behaviour back.
+  const [payMode, setPayMode] = useState<"later" | "card">(PAY_DEFAULT);
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
@@ -696,12 +707,69 @@ function BookPageInner() {
                   We confirm the final price with you before any work begins.
                 </p>
 
-                <StripeCardStep
-                  name={form.name}
-                  email={form.email}
-                  onSaved={setSavedCard}
-                  onConfigResolved={setPaymentsEnabled}
-                />
+                {/* Paying is a choice, not a gate (per client, 2026-11-07:
+                    "he can book online and can skip SAVE CARD process").
+                    Booking used to refuse to submit without a card on file,
+                    which is the single biggest thing standing between a
+                    first-time visitor and a booking. Nothing is charged at
+                    this step either way — the card was only ever stored for
+                    later — so requiring it bought no money, only drop-off.
+
+                    Pay later is the default because that is the whole point
+                    of the change. If it turns out to cost more in chasing
+                    payments than it wins in bookings, flipping PAY_DEFAULT
+                    back to "card" restores the old behaviour. */}
+                {paymentsEnabled && (
+                  <div style={{ marginBottom: 20 }}>
+                    <label style={{ display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#161616", marginBottom: 8 }}>
+                      How would you like to pay?
+                    </label>
+                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                      {([
+                        { id: "later", title: "Pay when it's ready", sub: "Card or Interac e-Transfer" },
+                        { id: "card",  title: "Save a card now",     sub: "Nothing charged today" },
+                      ] as const).map(opt => {
+                        const on = payMode === opt.id;
+                        return (
+                          <button
+                            key={opt.id} type="button" onClick={() => setPayMode(opt.id)}
+                            aria-pressed={on}
+                            style={{
+                              flex: "1 1 190px", textAlign: "left", cursor: "pointer",
+                              borderRadius: 12, padding: "12px 14px", background: on ? "#FFF9F9" : "#FFFFFF",
+                              border: `1.5px solid ${on ? "#ED1D24" : "#E4E4E7"}`,
+                            }}
+                          >
+                            <span style={{ display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#161616" }}>
+                              {opt.title}
+                            </span>
+                            <span style={{ display: "block", fontFamily: "Kodchasan, sans-serif", fontSize: "0.78rem", color: "#6B6B6B", marginTop: 2 }}>
+                              {opt.sub}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {payMode === "later" && (
+                      <p style={{ color: "#6B6B6B", fontSize: "0.8rem", marginTop: 10, fontFamily: "Kodchasan, sans-serif", lineHeight: 1.6 }}>
+                        We&apos;ll weigh or count your items, confirm the price with you, and send you a
+                        link to pay once your order is ready. No payment details needed now.
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Kept mounted even when hidden: it is what reports whether
+                    Stripe is configured at all, and it holds the saved card
+                    if the customer fills it in and then changes their mind. */}
+                <div style={{ display: payMode === "card" ? "block" : "none" }}>
+                  <StripeCardStep
+                    name={form.name}
+                    email={form.email}
+                    onSaved={setSavedCard}
+                    onConfigResolved={setPaymentsEnabled}
+                  />
+                </div>
 
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 20, cursor: "pointer" }}>
                   <input
@@ -723,13 +791,12 @@ function BookPageInner() {
                 )}
 
                 {(() => {
-                  const needsCard = paymentsEnabled && !savedCard;
-                  const blocked = submitting || !termsAccepted || needsCard;
+                  // A card is never required to book. The only things that
+                  // stop the button now are the terms checkbox and a submit
+                  // already in flight.
+                  const blocked = submitting || !termsAccepted;
                   return (
                 <>
-                {needsCard && (
-                  <p style={{ color: "#B45309", fontSize: "0.8125rem", marginBottom: 12, fontFamily: "Kodchasan, sans-serif" }}>Save a card above to continue.</p>
-                )}
                 {/* Rating and reviews next to the button that commits the
                     order (per client). Both render nothing unless there is
                     real data — no placeholder stars, no sample quotes. */}
