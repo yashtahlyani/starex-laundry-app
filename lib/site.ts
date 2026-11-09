@@ -33,10 +33,17 @@ export const CONTACT = {
  *
  * Nothing about an e-Transfer is automatic: the customer tells us they have
  * sent it, and staff mark the order paid only once it actually lands.
+ *
+ * The address was first given as info@royalarttreasure.ca, which the owner
+ * confirmed on 10 Nov was a typo. Info@royalarttreasure.com is real but is
+ * the Royal Art Treasure sending address, not where transfers should land;
+ * asked which to use for money, he confirmed his own address below. Worth
+ * recording, because the three are one letter and one word apart and the
+ * wrong one sends a customer's money somewhere nobody is watching.
  */
 export const ETRANSFER = {
   enabled: true,
-  email: "info@royalarttreasure.ca",
+  email: CONTACT.email,
   /** Shown to the customer so the payment can be matched to their order. */
   memoHint: "Please put your order number in the message box.",
 };
