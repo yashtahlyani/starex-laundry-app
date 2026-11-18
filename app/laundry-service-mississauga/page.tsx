@@ -29,7 +29,7 @@ export default function LaundryServiceMississaugaPage() {
         bookHref="/book?service=wash-fold"
         priceHighlights={[
           { label: "Wash & Fold", price: "$2/lb", desc: "Sorted by colour and fabric, washed, dried and neatly folded." },
-          { label: "Same-Day Express", price: "$3/lb", desc: "Need it back today? Rush service on Wash & Fold, subject to availability." },
+          { label: "Same-Day Express", price: "$3/lb", desc: "Need it back today? Rush service on Wash & Fold, and often dry cleaning too — subject to the day’s available slots." },
           { label: "Minimum Order", price: "$40", desc: "Flat minimum order value, no matter the weight — no surprises." },
         ]}
         features={[
@@ -41,9 +41,9 @@ export default function LaundryServiceMississaugaPage() {
           "Real-time order tracking from pickup to delivery",
         ]}
         faqs={[
-          { q: "How much does laundry pickup cost in Mississauga?", a: "Wash & Fold is $2/lb with a $40 minimum order value. Same-Day Express is $3/lb, also on Wash & Fold." },
+          { q: "How much does laundry pickup cost in Mississauga?", a: "Wash & Fold is $2/lb with a $40 minimum order value. Same-Day Express is $3/lb. Same-day dry cleaning is often possible too, depending on the day’s available slots." },
           { q: "How do you weigh my laundry?", a: "Your bag is weighed by our driver at pickup, and the final price is confirmed with you before we start washing." },
-          { q: "Is same-day laundry available in Mississauga?", a: "Yes — Same-Day Express is available on Wash & Fold orders, subject to pickup time and driver availability." },
+          { q: "Is same-day laundry available in Mississauga?", a: "Yes — Same-Day Express is available on Wash & Fold, and same-day dry cleaning can often be arranged as well. Both depend on pickup time and the day’s available slots, so please check the slots when booking or call to confirm." },
           { q: "Do I need an account to book?", a: "No — you can book a pickup as a guest with just your name, contact details and address, in under 2 minutes." },
         ]}
       />

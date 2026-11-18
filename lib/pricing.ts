@@ -24,9 +24,17 @@ export const PLANS = [
   { id: "detailing", label: "Car & Sofa Detailing",  unit: "on inspection", price: null, turnaround: "By appointment" },
 ] as const;
 
-// Same-Day Express is a rush option on Wash & Fold only — not available for
-// dry-clean, ironing, household, or detailing.
-export const EXPRESS_APPLIES_TO = "wash-fold";
+// Same-Day Express is a rush option on Wash & Fold and Dry Cleaning. Dry
+// cleaning was added 2026-11-18: customers kept asking for same-day dry
+// cleaning and the shop can sometimes do it, so it is offered rather than
+// refused — with the honest caveat below, because "sometimes" is the whole
+// truth and promising it outright would mean breaking the promise.
+export const EXPRESS_APPLIES_TO = ["wash-fold", "dry-clean"] as const;
+
+// Shown wherever Same-Day Express is offered. Capacity genuinely varies day
+// to day, so this says so plainly instead of hiding it in terms nobody reads.
+export const EXPRESS_NOTE =
+  "Same-day dry cleaning depends on the day's capacity — please check available slots before booking, or call us to confirm.";
 
 export const PICKUP_DELIVERY = {
   perLbCad: 2.00,
@@ -132,13 +140,22 @@ export type CatalogItem = {
   pieces?: number;
 };
 export type CatalogSection = { title: string; items: CatalogItem[] };
-export type CatalogTab = { id: string; label: string; blurb: string; sections: CatalogSection[] };
+export type CatalogTab = {
+  id: string; label: string; blurb: string; sections: CatalogSection[];
+  /** Printed under the tab's prices. Used by Ironing to state the fallback
+   *  rate for garments that aren't listed, so a customer with an unusual
+   *  item isn't left guessing and staff have something to point at. */
+  note?: string;
+};
 
 export const CATALOG: CatalogTab[] = [
   {
     id: "ironing",
     label: "Ironing",
     blurb: "Crisp, professional pressing. 24–48h turnaround · priced per item.",
+    // Per client 2026-11-18. The fallback matters as much as the prices: it
+    // means an unlisted garment has an answer instead of a phone call.
+    note: "If the ironing price for your garment isn't listed here, it's charged at 50% of the dry cleaning price for that item.",
     sections: [
       {
         title: "Iron Prices",
@@ -149,8 +166,15 @@ export const CATALOG: CatalogTab[] = [
           { name: "Shirt / Blouse", price: 3.99 },
           { name: "Simple Dress", price: 5.99 },
           { name: "Long Maxi / Pleated Skirt / Dress", price: 7.99 },
-          { name: "Saree / Complex Fancy Dress", price: 9.99 },
           { name: "Table Cloth / Bedsheet", price: 7.99 },
+          // Coat/jacket shares the saree rate, on the client's instruction
+          // ("you can add this item with saree, same rate") — one line rather
+          // than two identical ones.
+          { name: "Saree / Coat / Jacket / Complex Fancy Dress", price: 9.99 },
+          { name: "Curtain / Drapery (per panel)", price: 9.99 },
+          { name: "Punjabi / Ladies Suit (2 or 3 Pcs)", price: 14.99 },
+          { name: "Lehenga", price: 69.99 },
+          { name: "Wedding Dress", price: 129.99 },
         ],
       },
     ],
@@ -180,40 +204,9 @@ export const CATALOG: CatalogTab[] = [
     ],
   },
   {
-    id: "household",
-    label: "Household",
-    blurb: "Blankets, duvets, curtains, rugs and more. 24–48h turnaround · priced per item.",
-    sections: [
-      {
-        title: "Bedding",
-        items: [
-          { name: "Pillow", price: 9.99, from: true },
-          { name: "Bed Sheet / Table Cloth", price: 9.99, from: true },
-          { name: "Bed Spread", price: 29.99, from: true, bedding: true },
-          { name: "King / Double Blanket", price: 29.99, from: true, bedding: true },
-          { name: "Queen Blanket", price: 22.99, from: true, bedding: true },
-          { name: "Single Blanket", price: 17.99, from: true, bedding: true },
-          { name: "King Duvet / Comforter / Quilt", price: 39.99, from: true, bedding: true },
-          { name: "Queen Duvet / Comforter / Quilt", price: 29.99, from: true, bedding: true },
-          { name: "Single Duvet / Comforter / Quilt", price: 22.99, from: true, bedding: true },
-          { name: "Feather Duvet / Comforter / Blanket", price: 49.99, from: true, bedding: true },
-        ],
-      },
-      {
-        title: "Curtains & More",
-        items: [
-          { name: "Curtain (per panel)", price: 19.99, from: true },
-          { name: "Sleeping Bag", price: 29.99, from: true, bedding: true },
-          { name: "Small Rug", price: 49.99, from: true, comboExcluded: true },
-          { name: "Big Rug", price: 99.99, from: true, comboExcluded: true },
-        ],
-      },
-    ],
-  },
-  {
     id: "dry-clean",
-    label: "Dry Cleaning",
-    blurb: "Dry cleaning & premium laundry for suits, dresses, and delicates. Priced per item.",
+    label: "Dry Cleaning & Household",
+    blurb: "Dry cleaning & premium laundry for suits, dresses, delicates, bedding and household items. Priced per item.",
     sections: [
       {
         title: "Everyday & Formal Wear",
@@ -246,9 +239,36 @@ export const CATALOG: CatalogTab[] = [
           { name: "Saree", price: 29.99, from: true },
         ],
       },
+      // Household used to be a tab of its own. Merged in here on the
+      // client's instruction (2026-11-18) so a customer sees one price list
+      // for everything cleaned per item, rather than guessing which of two
+      // tabs their blanket belongs in.
+      //
+      // The merge exposed a conflict worth recording: Sleeping Bag was
+      // listed at $29.99 under Household and $19.99 here, and rugs appeared
+      // in both. Kept once, at the lower figure, because every price here is
+      // a "from" price confirmed with the customer before work starts — so
+      // quoting low and confirming up is honest, while quoting high loses
+      // the booking outright.
       {
-        title: "Household & Misc",
+        title: "Bedding",
         items: [
+          { name: "Pillow", price: 9.99, from: true },
+          { name: "Bed Sheet / Table Cloth", price: 9.99, from: true },
+          { name: "Bed Spread", price: 29.99, from: true, bedding: true },
+          { name: "King / Double Blanket", price: 29.99, from: true, bedding: true },
+          { name: "Queen Blanket", price: 22.99, from: true, bedding: true },
+          { name: "Single Blanket", price: 17.99, from: true, bedding: true },
+          { name: "King Duvet / Comforter / Quilt", price: 39.99, from: true, bedding: true },
+          { name: "Queen Duvet / Comforter / Quilt", price: 29.99, from: true, bedding: true },
+          { name: "Single Duvet / Comforter / Quilt", price: 22.99, from: true, bedding: true },
+          { name: "Feather Duvet / Comforter / Blanket", price: 49.99, from: true, bedding: true },
+        ],
+      },
+      {
+        title: "Curtains, Drapery & Household",
+        items: [
+          { name: "Curtain / Drapery (per panel)", price: 19.99, from: true },
           { name: "Sleeping Bag", price: 19.99, from: true, bedding: true },
           { name: "Small Rug", price: 49.99, from: true, comboExcluded: true },
           { name: "Big Rug", price: 99.99, from: true, comboExcluded: true },
@@ -319,12 +339,14 @@ export const SERVICE_AREA_POSTAL_PREFIXES: string[] = [
 // ---------------------------------------------------------------------------
 
 // Which catalog tabs a given service prices from. Dry cleaning and household
-// overlap heavily — blankets, curtains and rugs can go either way — so a
-// dry-clean booking can pick from both rather than having to leave the flow.
+// overlapped heavily — blankets, curtains and rugs could go either way — and
+// are now a single merged tab (2026-11-18), so both services read from it.
+// Household remains its own bookable service even though it no longer has
+// its own price tab: customers do book "Household Items" by name.
 export const CATALOG_FOR_SERVICE: Record<string, string[]> = {
-  "dry-clean": ["dry-clean", "household"],
+  "dry-clean": ["dry-clean"],
   "ironing":   ["ironing"],
-  "household": ["household", "dry-clean"],
+  "household": ["dry-clean"],
 };
 
 export const PER_ITEM_SERVICES = ["dry-clean", "ironing", "household"];

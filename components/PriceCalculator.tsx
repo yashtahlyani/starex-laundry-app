@@ -35,11 +35,14 @@ const DRY_CLEAN_ITEMS = resolve([
   { tab: "dry-clean", name: "2 Pcs Suit" },
 ]);
 
+// Household merged into the Dry Cleaning tab on 2026-11-18; these items
+// still deserve their own group in the calculator, where someone pricing a
+// duvet is not looking under "dry cleaning".
 const HOUSEHOLD_ITEMS = resolve([
-  { tab: "household", name: "Pillow" },
-  { tab: "household", name: "Sleeping Bag" },
-  { tab: "household", name: "Single Blanket" },
-  { tab: "household", name: "Queen Duvet / Comforter / Quilt" },
+  { tab: "dry-clean", name: "Pillow" },
+  { tab: "dry-clean", name: "Sleeping Bag" },
+  { tab: "dry-clean", name: "Single Blanket" },
+  { tab: "dry-clean", name: "Queen Duvet / Comforter / Quilt" },
 ]);
 
 const IRONING_ITEMS = resolve([

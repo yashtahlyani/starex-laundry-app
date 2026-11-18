@@ -16,7 +16,7 @@ const categories = [
       { q: "What areas do you serve?", a: "We currently serve Brampton and Mississauga, Ontario. Not sure if you're in our zone? Call or text us at 437-607-7251." },
       { q: "Do I need to be home for pickup?", a: "No! Just leave your bag at your door. Our driver will pick it up safely." },
       { q: "How do I schedule a pickup?", a: "Book online in under 2 minutes. Choose a time window, add your address, and we'll handle the rest." },
-      { q: "What if I need same-day service?", a: "Same-Day Express is available on Wash & Fold at a flat $3/lb, subject to availability. Book early in the day to secure your slot." },
+      { q: "What if I need same-day service?", a: "Same-Day Express is available on Wash & Fold at a flat $3/lb. Same-day dry cleaning can often be done too, but it depends on the day’s capacity — please check the available slots when booking, or call us to confirm. Book early in the day either way." },
     ],
   },
   {

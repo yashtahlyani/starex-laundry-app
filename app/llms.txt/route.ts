@@ -50,14 +50,12 @@ A ${money(MINIMUM_ORDER.standardCad)} minimum order value applies to every servi
 ### By weight
 ${perLb.map(p => `  - ${p.label}: ${money(p.price as number)} per pound (${p.turnaround})`).join("\n")}
 
-### Dry cleaning (per item)
+### Dry cleaning, bedding and household (per item)
 ${section("dry-clean")}
 
 ### Ironing and pressing (per item)
 ${section("ironing")}
-
-### Household and bedding (per item)
-${section("household")}
+${CATALOG.find(t => t.id === "ironing")?.note ?? ""}
 
 ### Car & sofa detailing
 ${section("detailing")}

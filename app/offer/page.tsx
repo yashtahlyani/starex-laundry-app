@@ -39,7 +39,7 @@ const examplePicks: { tab: string; name: string; Icon: React.ElementType }[] = [
   { tab: "dry-clean", name: "Dress Casual",           Icon: Shirt },
   { tab: "dry-clean", name: "Coat / Jacket / Blazer", Icon: Package },
   { tab: "dry-clean", name: "Sweater",                Icon: Shirt },
-  { tab: "household", name: "Queen Blanket",          Icon: HomeIcon },
+  { tab: "dry-clean", name: "Queen Blanket",          Icon: HomeIcon },
 ];
 
 const exampleItems = examplePicks.map(({ tab, name, Icon }) => {

@@ -19,7 +19,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 
 const payAsYouGo = [
   { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded. Delivery included." },
-  { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold only",           desc: "Back the same day when you need it fast. Delivery included." },
+  { Icon: Zap,      title: "Same-Day Express",            price: "$3",       unit: "/lb",        min: "Wash & Fold or dry cleaning", desc: "Back the same day when you need it fast — dry cleaning subject to the day’s slots. Delivery included." },
   { Icon: Wind,     title: "Wash & Press",                 price: "$5/lb",      unit: "",        min: "$40 minimum order value",                                desc: "Washed and pressed, priced by weight. No counting garments." },
   { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
   { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses. Delivery included." },
@@ -37,7 +37,7 @@ const planPPP = {
     "24–48h turnaround service",
     "Free pickup & delivery included",
     "Serving Brampton & Mississauga",
-    "Same-day Express available at $3/lb (Wash & Fold only)",
+    "Same-day Express available at $3/lb on Wash & Fold, and on dry cleaning subject to available slots",
     "Wash preferences from $2.99",
   ],
 };
@@ -136,12 +136,10 @@ export default function PricingPage() {
                   the customer who should be told about the combo — this is the
                   moment they decide, and two of them have already paid more for
                   less without seeing it (per client, 2026-09-29). */}
-              {(tab.id === "household" || tab.id === "dry-clean") && (
+              {tab.id === "dry-clean" && (
                 <p style={{ textAlign: "center", marginBottom: 28, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem" }}>
                   <a href="/offer" style={{ color: "#B30F14", fontWeight: 600, textDecoration: "underline" }}>
-                    {tab.id === "household"
-                      ? "Cleaning a blanket or duvet? It counts as one of the 5 for $50 combo →"
-                      : "Five or more pieces? The 5 for $50 combo is usually cheaper →"}
+                    Five or more pieces, or a blanket or duvet? The 5 for $50 combo is usually cheaper →
                   </a>
                 </p>
               )}
@@ -164,6 +162,18 @@ export default function PricingPage() {
                   </div>
                 ))}
               </div>
+              {/* A tab's own footnote. Ironing uses it to state the fallback
+                  rate for anything not listed, so an unusual garment has an
+                  answer on the page instead of needing a phone call. */}
+              {tab.note && (
+                <p style={{
+                  maxWidth: 760, margin: "20px auto 0", textAlign: "center",
+                  fontFamily: "Kodchasan, sans-serif", fontSize: "0.85rem",
+                  color: "#6B6B6B", lineHeight: 1.7,
+                }}>
+                  {tab.note}
+                </p>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>

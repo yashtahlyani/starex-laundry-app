@@ -14,7 +14,8 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 const marqueeItems = [
   "Fully Insured", "$40 Minimum Order", "24–48h Turnaround", "$2 Per Pound",
   // "Same-Day Service Available" unqualified reads as same-day dry cleaning,
-  // which isn't offered — express is Wash & Fold only, subject to availability.
+  // which isn't offered — express covers Wash & Fold and, when the day's
+  // capacity allows, dry cleaning. Both subject to availability.
   "Same-Day Wash & Fold", "Dry Cleaning & Ironing", "Car & Sofa Detailing", "No Hidden Fees",
 ];
 
