@@ -246,10 +246,9 @@ export const CATALOG: CatalogTab[] = [
       //
       // The merge exposed a conflict worth recording: Sleeping Bag was
       // listed at $29.99 under Household and $19.99 here, and rugs appeared
-      // in both. Kept once, at the lower figure, because every price here is
-      // a "from" price confirmed with the customer before work starts — so
-      // quoting low and confirming up is honest, while quoting high loses
-      // the booking outright.
+      // in both at the same price. Asked which was right, the client
+      // confirmed $29.99 on 2026-11-18, so that is the single figure now.
+      // Anyone tempted to "correct" it back to $19.99 later: don't.
       {
         title: "Bedding",
         items: [
@@ -269,7 +268,7 @@ export const CATALOG: CatalogTab[] = [
         title: "Curtains, Drapery & Household",
         items: [
           { name: "Curtain / Drapery (per panel)", price: 19.99, from: true },
-          { name: "Sleeping Bag", price: 19.99, from: true, bedding: true },
+          { name: "Sleeping Bag", price: 29.99, from: true, bedding: true },
           { name: "Small Rug", price: 49.99, from: true, comboExcluded: true },
           { name: "Big Rug", price: 99.99, from: true, comboExcluded: true },
           { name: "Shoes", price: 19.99, from: true, comboExcluded: true },
@@ -355,9 +354,10 @@ export const PER_LB_SERVICES   = ["wash-fold", "express", "wash-press"];
 export function isPerItemService(id: string) { return PER_ITEM_SERVICES.includes(id); }
 export function isPerLbService(id: string)   { return PER_LB_SERVICES.includes(id); }
 
-// "Sleeping Bag" exists in both the dry-clean tab ($19.99) and the household
-// tab ($29.99) — so a selection keyed on the item name alone would price the
-// wrong one. Every key carries its tab.
+// Keys carry their tab because the same item name can appear in more than
+// one tab at different prices — "Curtain / Drapery (per panel)" is $19.99 to
+// dry clean and $9.99 to iron — and a selection keyed on the name alone
+// would price the wrong one.
 export function itemKey(tabId: string, name: string) { return `${tabId}::${name}`; }
 
 export function lookupCatalogItem(key: string): { tabId: string; item: CatalogItem } | null {
