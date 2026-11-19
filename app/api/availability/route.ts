@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { getClosedWindows } from "@/lib/availability";
 
 export const dynamic = "force-dynamic";
+// Next patches global fetch and caches GET responses in its Data Cache.
+// supabase-js calls fetch, so this route served its very first answer - an
+// empty list, taken before the table existed - to every later request,
+// reporting "nothing is closed" while /api/bookings correctly refused the
+// same date. force-dynamic alone did not stop it; the fetch itself has to be
+// opted out. Found 2026-11-19 by a holiday the booking endpoint honoured and
+// this one denied.
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 
 /**
  * Which pickup dates and windows are closed, for the booking form.
