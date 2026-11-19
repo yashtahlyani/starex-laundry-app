@@ -136,6 +136,12 @@ function BookPageInner() {
   // otherwise someone booking this evening could still pick this morning's slot.
   // Uses the browser's local date/time (not UTC) to match the <input type="date">
   // value, which is itself always local.
+  //
+  // Declared here rather than with the other hooks below because the slot
+  // list is computed during render, a few lines down, and would hit the
+  // temporal dead zone if this came after it.
+  const [closedWindows, setClosedWindows] =
+    useState<{ date: string; timeSlot: string | null }[]>([]);
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const currentHour = now.getHours() + now.getMinutes() / 60;
@@ -145,9 +151,18 @@ function BookPageInner() {
   const baseTimeSlots = form.service === "detailing" ? detailingTimeSlots
     : form.service === "express" ? timeSlots.slice(0, 2)
     : timeSlots;
+  // Dates and windows the owner has closed (holiday mode). A courtesy only:
+  // /api/bookings checks again on submit, because anything the browser is
+  // told, the browser can be made to forget.
+  const notYetClosed = baseTimeSlots.filter(
+    s => !closedWindows.some(w => w.date === form.date && (w.timeSlot === null || w.timeSlot === s.label))
+  );
   const availableTimeSlots = form.date === todayStr
-    ? baseTimeSlots.filter(s => s.startHour > currentHour)
-    : baseTimeSlots;
+    ? notYetClosed.filter(s => s.startHour > currentHour)
+    : notYetClosed;
+  // Every window on this date is closed, so say so rather than showing an
+  // empty list and letting the customer wonder what they did wrong.
+  const dateFullyClosed = Boolean(form.date) && notYetClosed.length === 0;
 
   useEffect(() => {
     if (form.time && !availableTimeSlots.some(s => s.label === form.time)) {
@@ -165,6 +180,18 @@ function BookPageInner() {
   // the owner to charge once the order is weighed. Flip PAY_DEFAULT to "card"
   // to put the old behaviour back.
   const [payMode, setPayMode] = useState<"later" | "card">(PAY_DEFAULT);
+
+  // Holiday mode, fetched once. Failing to load leaves the list empty, which
+  // shows every window — the server still refuses a closed one, so the worst
+  // case is a clear error at submit instead of a greyed-out button.
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/availability")
+      .then(r => r.json())
+      .then(d => { if (alive && Array.isArray(d?.closed)) setClosedWindows(d.closed); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
@@ -557,7 +584,14 @@ function BookPageInner() {
                   <label style={labelStyle}><Clock size={13} style={{ display: "inline", marginRight: 6 }} />{form.service === "detailing" ? "Appointment Window" : "Time Window"}</label>
                   {availableTimeSlots.length === 0 ? (
                     <p style={{ color: "#6B6B6B", fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem" }}>
-                      {form.service === "detailing" ? "No appointment windows left for today — please choose another date." : "No pickup windows left for today — please choose another date."}
+                      {/* "Closed" and "too late in the day" are different
+                          things to a customer: one means pick another date,
+                          the other means pick a later one today. */}
+                      {dateFullyClosed
+                        ? "We're closed for pickups on that date — please choose another day."
+                        : form.service === "detailing"
+                          ? "No appointment windows left for today — please choose another date."
+                          : "No pickup windows left for today — please choose another date."}
                     </p>
                   ) : (
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>

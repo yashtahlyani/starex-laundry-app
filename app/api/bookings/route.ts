@@ -9,6 +9,10 @@ import { notifyOwnerOfNewOrder } from "@/lib/notifications";
 import { describeSource } from "@/lib/attribution";
 import { checkRateLimit, clientIp } from "@/lib/redis/rateLimit";
 import { getAdminUser } from "@/lib/adminAuth";
+import {
+  isCustomerBlocked, getClosedWindows, isWindowClosed,
+  BLOCKED_CUSTOMER_MESSAGE, CLOSED_WINDOW_MESSAGE,
+} from "@/lib/availability";
 
 export const dynamic = "force-dynamic";
 
@@ -129,6 +133,23 @@ export async function POST(req: NextRequest) {
     const slotStartHour = { "8:00 AM": 8, "11:00 AM": 11, "2:00 PM": 14, "5:00 PM": 17 }[timeSlot.split(" – ")[0]];
     if (slotStartHour != null && slotStartHour <= nowET.hour) {
       return NextResponse.json({ error: "That pickup window has already started today — please choose a later window or another date" }, { status: 400 });
+    }
+  }
+
+  // ── The two owner-controlled gates ────────────────────────────────────────
+  // Staff are exempt from both. They are on the phone with the person and can
+  // see what the website cannot: that the customer has turned up with cash,
+  // or that the van is free on a day the calendar says closed. A gate staff
+  // cannot override is a gate they work around by not using the system.
+  if (!staff) {
+    const blocked = await isCustomerBlocked(email, phone);
+    if (blocked.blocked) {
+      return NextResponse.json({ error: BLOCKED_CUSTOMER_MESSAGE }, { status: 403 });
+    }
+
+    const { windows } = await getClosedWindows();
+    if (isWindowClosed(windows, date, timeSlot)) {
+      return NextResponse.json({ error: CLOSED_WINDOW_MESSAGE }, { status: 409 });
     }
   }
 
