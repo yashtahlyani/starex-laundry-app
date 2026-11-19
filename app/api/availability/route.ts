@@ -14,8 +14,18 @@ export const dynamic = "force-dynamic";
  * submit, because anything a browser is told it can edit.
  */
 export async function GET() {
-  const { windows } = await getClosedWindows();
-  return NextResponse.json({
-    closed: windows.map(w => ({ date: w.date, timeSlot: w.timeSlot })),
-  });
+  const { windows, degraded } = await getClosedWindows();
+  return NextResponse.json(
+    {
+      closed: windows.map(w => ({ date: w.date, timeSlot: w.timeSlot })),
+      // The booking form should know the difference between "nothing is
+      // closed" and "we could not find out" — they look identical in an
+      // empty array, and only one of them means the greyed-out windows can
+      // be trusted.
+      degraded,
+    },
+    // Belt and braces against any layer deciding a GET with no parameters is
+    // cacheable. A stale copy of this would show windows that are closed.
+    { headers: { "Cache-Control": "no-store, max-age=0" } }
+  );
 }
