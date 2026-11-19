@@ -19,7 +19,7 @@ function AnimatedContent({ children, style, delay = 0 }: { children: React.React
 
 const payAsYouGo = [
   { Icon: Shirt,    title: "Wash & Fold (Pay-Per-Pound)", price: "$2",      unit: "/lb",     min: "$40 minimum order value", desc: "24–48h turnaround, washed, dried & folded. Delivery included." },
-  { Icon: Zap,      title: "Same Day Dry Cleaning",       price: "50%",      unit: " extra",     min: "Subject to available slots",  desc: "Dry cleaning back the same day, and wash & fold too. Charged at 50% extra. Please confirm slot availability before booking." },
+  { Icon: Zap,      title: "Same Day Dry Cleaning",       price: "50%",      unit: " extra",     min: "Subject to available slots",  desc: "Your dry cleaning back the same day, at 50% extra on the normal price for those garments. Please confirm slot availability before booking." },
   { Icon: Wind,     title: "Wash & Press",                 price: "$5/lb",      unit: "",        min: "$40 minimum order value",                                desc: "Washed and pressed, priced by weight. No counting garments." },
   { Icon: Sparkles, title: "Dry Cleaning / Premium",      price: "From $4.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Suits, dresses, delicates & formalwear. Delivery included." },
   { Icon: Package,  title: "Ironing & Press",             price: "From $1.99", unit: "/item",   min: "$40 minimum order value",                                desc: "Shirts, pants, sarees & complex dresses. Delivery included." },

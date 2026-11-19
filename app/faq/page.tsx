@@ -16,7 +16,7 @@ const categories = [
       { q: "What areas do you serve?", a: "We currently serve Brampton and Mississauga, Ontario. Not sure if you're in our zone? Call or text us at 437-607-7251." },
       { q: "Do I need to be home for pickup?", a: "No! Just leave your bag at your door. Our driver will pick it up safely." },
       { q: "How do I schedule a pickup?", a: "Book online in under 2 minutes. Choose a time window, add your address, and we'll handle the rest." },
-      { q: "What if I need same-day service?", a: "Yes. Same Day Dry Cleaning covers dry cleaning and wash & fold, charged at 50% extra. It depends on the day’s capacity, so please confirm slot availability before booking, or call us. Book early in the day either way." },
+      { q: "What if I need same-day service?", a: "Yes. Same Day Dry Cleaning returns your garments the same day, charged at 50% extra on the normal dry cleaning price for those items. It depends on the day’s capacity, so please confirm slot availability before booking. For same-day wash & fold, call us and we will tell you if we can fit it in." },
     ],
   },
   {

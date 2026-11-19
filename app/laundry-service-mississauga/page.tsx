@@ -29,7 +29,7 @@ export default function LaundryServiceMississaugaPage() {
         bookHref="/book?service=wash-fold"
         priceHighlights={[
           { label: "Wash & Fold", price: "$2/lb", desc: "Sorted by colour and fabric, washed, dried and neatly folded." },
-          { label: "Same Day Dry Cleaning", price: "50% extra", desc: "Need it back today? Same-day dry cleaning and wash & fold, charged at 50% extra. Please confirm slot availability before booking." },
+          { label: "Same Day Dry Cleaning", price: "50% extra", desc: "Need your garments back today? Same-day dry cleaning at 50% extra on the normal price. Please confirm slot availability before booking." },
           { label: "Minimum Order", price: "$40", desc: "Flat minimum order value, no matter the weight — no surprises." },
         ]}
         features={[

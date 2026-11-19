@@ -13,7 +13,7 @@ export const SITE_URL = "www.starexlaundrydryclean.ca";
 // The bookable service types (Step 1 of the booking flow)
 export const PLANS = [
   { id: "wash-fold", label: "Wash & Fold",           unit: "per lb",   price: 2.00, turnaround: "24–48 hrs" },
-  { id: "express",   label: "Same Day Dry Cleaning", unit: "per lb",   price: 3.00, turnaround: "Same day" },
+  { id: "express",   label: "Same Day Dry Cleaning", unit: "+50%",     price: null, turnaround: "Same day" },
   // Added 2026-10-10 per client: washed and pressed, priced by weight like
   // Wash & Fold rather than per garment — for people who want everything back
   // ironed without counting items.
@@ -24,17 +24,24 @@ export const PLANS = [
   { id: "detailing", label: "Car & Sofa Detailing",  unit: "on inspection", price: null, turnaround: "By appointment" },
 ] as const;
 
-// Same-Day Express is a rush option on Wash & Fold and Dry Cleaning. Dry
-// cleaning was added 2026-11-18: customers kept asking for same-day dry
-// cleaning and the shop can sometimes do it, so it is offered rather than
-// refused — with the honest caveat below, because "sometimes" is the whole
-// truth and promising it outright would mean breaking the promise.
-export const EXPRESS_APPLIES_TO = ["wash-fold", "dry-clean"] as const;
+// Same Day Dry Cleaning prices the dry cleaning list, at a surcharge. It was
+// a per-pound rush option on Wash & Fold until 2026-11-19, when the client
+// settled it: same-day is sold by the garment at 50% extra, because that is
+// what the shop actually does on a rush. Same-day wash & fold is arranged by
+// phone when there is capacity, rather than sold as a separate service.
+export const EXPRESS_APPLIES_TO = ["dry-clean"] as const;
+
+// Same-day work is charged at this much on top of the normal price for the
+// same garments (per client, 2026-11-19: "instead of 3 LB write 50% EXTRA").
+// It replaced a flat $3/lb, which was the same 50% over the $2/lb wash and
+// fold rate but could only ever express itself per pound — useless for a
+// service now sold by the garment.
+export const EXPRESS_SURCHARGE_RATE = 0.5;
 
 // Shown wherever Same-Day Express is offered. Capacity genuinely varies day
 // to day, so this says so plainly instead of hiding it in terms nobody reads.
 export const EXPRESS_NOTE =
-  "Same-day dry cleaning depends on the day's capacity — please check available slots before booking, or call us to confirm.";
+  "Same-day work depends on the day's capacity — please confirm slot availability before booking, or call us.";
 
 export const PICKUP_DELIVERY = {
   perLbCad: 2.00,
@@ -346,10 +353,12 @@ export const CATALOG_FOR_SERVICE: Record<string, string[]> = {
   "dry-clean": ["dry-clean"],
   "ironing":   ["ironing"],
   "household": ["dry-clean"],
+  // Same Day Dry Cleaning prices the same garments, at a surcharge.
+  "express":   ["dry-clean"],
 };
 
-export const PER_ITEM_SERVICES = ["dry-clean", "ironing", "household"];
-export const PER_LB_SERVICES   = ["wash-fold", "express", "wash-press"];
+export const PER_ITEM_SERVICES = ["dry-clean", "ironing", "household", "express"];
+export const PER_LB_SERVICES   = ["wash-fold", "wash-press"];
 
 export function isPerItemService(id: string) { return PER_ITEM_SERVICES.includes(id); }
 export function isPerLbService(id: string)   { return PER_LB_SERVICES.includes(id); }
@@ -417,7 +426,10 @@ export function buildEstimate(opts: {
   weightLbs?: number | null;
   isCombo?: boolean;
 }): Estimate {
-  const { serviceId, selection = {}, weightLbs = null, isCombo = false } = opts;
+  const { serviceId, selection = {}, weightLbs = null } = opts;
+  // The combo is a discount for giving us time; a same-day order is the
+  // opposite of that, so it never applies however it arrives here.
+  const isCombo = serviceId === "express" ? false : (opts.isCombo ?? false);
 
   const minimumCad = serviceId === "detailing" ? MINIMUM_ORDER.detailingCad : MINIMUM_ORDER.standardCad;
   const base = {
@@ -532,7 +544,31 @@ export function buildEstimate(opts: {
   const lines = [...byKey.values()];
 
   const itemsTotal = round2(lines.reduce((s, l) => s + l.lineTotal, 0));
-  const rawSubtotal = round2(itemsTotal + (isCombo ? DRY_CLEAN_COMBO.priceCad : 0));
+
+  // Same-day work costs 50% on top of the same garments' normal price. Shown
+  // as its own line rather than folded into each item, so the customer can
+  // see the ordinary price and what the rush added — a quietly inflated unit
+  // price is the kind of thing people notice later and resent.
+  //
+  // The 5-for-$50 combo does not apply: it is a discount for giving us time,
+  // which is exactly what a same-day order does not do.
+  const expressSurcharge = serviceId === "express"
+    ? round2(itemsTotal * EXPRESS_SURCHARGE_RATE)
+    : 0;
+  if (expressSurcharge > 0) {
+    lines.push({
+      key: "express-surcharge",
+      name: `Same-day service (+${Math.round(EXPRESS_SURCHARGE_RATE * 100)}%)`,
+      unitPrice: expressSurcharge,
+      qty: 1,
+      from: lines.some(l => l.from),
+      lineTotal: expressSurcharge,
+      pieces: 0,
+      comboCovered: 0,
+    });
+  }
+
+  const rawSubtotal = round2(itemsTotal + expressSurcharge + (isCombo ? DRY_CLEAN_COMBO.priceCad : 0));
   const { subtotal, hst, total, minimumApplied } = applyMinimum(rawSubtotal, minimumCad);
 
   return {
