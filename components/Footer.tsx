@@ -16,7 +16,7 @@ const pages = [
   { label: "Contact",      href: "/contact" },
 ];
 
-const serviceList = ["Wash & Fold — $2/lb", "Dry Cleaning", "Same-Day Express", "Ironing & Press", "Household & Bedding", "Car & Sofa Detailing"];
+const serviceList = ["Wash & Fold — $2/lb", "Dry Cleaning", "Same Day Dry Cleaning", "Ironing & Press", "Household & Bedding", "Car & Sofa Detailing"];
 
 const serviceAreas = [
   { label: "Dry Cleaning in Brampton",       href: "/dry-cleaning-brampton" },

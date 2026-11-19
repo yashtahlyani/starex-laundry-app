@@ -81,7 +81,7 @@ const sections: LegalSection[] = [
       { title: "Current Pricing", blocks: [{ type: "ul", items: [
         "Wash & Fold: billed per pound, minimum order value as published on our Pricing page (currently $40)",
         "Dry Cleaning, Ironing & Press, Household & Bedding: billed per item, as published on our Pricing page",
-        "Same-Day Express: billed per pound at the published express rate, subject to availability and cut-off times",
+        "Same Day Dry Cleaning: charged at 50% extra on the applicable service, subject to availability and cut-off times",
         "Car & Sofa Detailing: quoted upon inspection, with the final price confirmed with you before work begins",
       ]}]},
       { title: "Payment", blocks: [{ type: "p", text: "Payment is due upon completion of the Order via the payment method saved to your account, unless you have subscribed to a Monthly Plan (Section 6.4). We accept major credit/debit cards and other methods indicated at checkout. Declined or failed payments may result in your Order being held pending resolution." }] },

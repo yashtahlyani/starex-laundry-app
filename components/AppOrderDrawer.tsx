@@ -17,7 +17,7 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const SERVICE_LABELS: Record<string, string> = {
   "wash-fold": "Wash & Fold",
-  "express":   "Same-Day Express",
+  "express":   "Same Day Dry Cleaning",
   "wash-press": "Wash & Press",
   "dry-clean": "Dry Cleaning",
   ironing:     "Ironing",

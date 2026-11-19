@@ -97,8 +97,8 @@ export default async function AdminDashboardPage({
     { count: totalOrders },
     { count: activeCount },
     { count: newContacts },
-    { count: totalCustomers },
     { count: todayOrders },
+    { data: customerEmails },
   ] = await Promise.all([
     db.from("orders")
       .select("*")
@@ -123,9 +123,27 @@ export default async function AdminDashboardPage({
     db.from("orders").select("*", { count: "exact", head: true }),
     db.from("orders").select("*", { count: "exact", head: true }).not("status", "in", `(${FINAL_STATUSES.join(",")})`),
     db.from("contact_submissions").select("*", { count: "exact", head: true }).eq("status", "new"),
-    db.from("profiles").select("*", { count: "exact", head: true }),
     db.from("orders").select("*", { count: "exact", head: true }).gte("created_at", today.toISOString()),
+    // Every email that has ever placed an order. One column, so even at
+    // thousands of orders this stays small, and it is the only way to count
+    // the people the business actually has (see below).
+    db.from("orders").select("email").limit(5000),
   ]);
+
+  // "Customers" used to be the number of rows in `profiles` — registered
+  // accounts. The owner read 8 next to 59 orders and asked where everyone
+  // had gone (2026-11-19). Nobody was missing: 42 of his 44 customers had
+  // booked as guests and never created an account, so they have no profile
+  // row at all. Signing in has been optional since launch and most people
+  // sensibly don't bother.
+  //
+  // Counted by distinct email across orders instead, which is the same thing
+  // the Customers tab groups by, so the figure and the list finally agree.
+  const customerCount = new Set(
+    (customerEmails ?? [])
+      .map((o: any) => (o.email ?? "").trim().toLowerCase())
+      .filter(Boolean)
+  ).size;
 
   // The New orders box holds everything booked but not yet collected (per
   // client, 2026-11-06: "I want the new order to be staying in the new order
@@ -178,7 +196,7 @@ export default async function AdminDashboardPage({
     { label: "In progress",  value: inProgressOrders.length, accent: false, filterKey: "in_progress", href: "/admin?tab=orders&filter=in_progress" },
     { label: "Orders today", value: todayOrders ?? 0, accent: false, filterKey: "today", href: "/admin?tab=orders&filter=today" },
     { label: "Total orders", value: totalOrders ?? 0, accent: false, filterKey: null, href: "/admin?tab=orders" },
-    { label: "Customers",    value: totalCustomers ?? 0, accent: false, filterKey: null, href: "/admin?tab=customers" },
+    { label: "Customers",    value: customerCount, accent: false, filterKey: null, href: "/admin?tab=customers" },
     { label: "Messages",     value: newContacts ?? 0, accent: false, filterKey: null, href: "/admin?tab=contacts" },
   ];
 
@@ -498,7 +516,7 @@ export default async function AdminDashboardPage({
                 { label: "Active Orders",    value: activeCount ?? 0 },
                 { label: "Orders Today",     value: todayOrders ?? 0 },
                 { label: "Unread Messages",  value: newContacts ?? 0 },
-                { label: "Total Customers",  value: totalCustomers ?? 0 },
+                { label: "Total Customers",  value: customerCount },
               ].map(s => (
                 <div key={s.label} style={{ background: "#fff", border: "1px solid #EAEAEA", borderRadius: 16, padding: "24px" }}>
                   <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.72rem", color: "#A1A1AA", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>{s.label}</p>

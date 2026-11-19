@@ -149,12 +149,12 @@ const sections: LegalSection[] = [
       { title: "Dry Cleaning", blocks: [{ type: "p", text: "Because dry cleaning uses solvents and processes suited to specific fabrics, please flag any embellishments, trims, linings, or unusual construction at booking. Section 10 (care labels and Inherent Vice) applies in full to dry cleaning claims." }] },
       { title: "Household & Bedding", blocks: [{ type: "p", text: "Large items (duvets, curtains, rugs, and similar) are inspected on a best-efforts basis at intake; pre-existing wear, colour loss, or filling clumping in duvets/pillows is common in older items and is treated as Inherent Vice under Section 10 unless our handling is shown to be the cause." }] },
       { title: "Car & Sofa Detailing", blocks: [{ type: "p", text: "Before detailing begins, please remove personal items and valuables from the vehicle or furniture. Final pricing is confirmed upon inspection and any pre-existing damage, stains, odours, or upholstery wear identified at that time will be noted before work begins and is excluded from any claim under this Policy. Starex is not responsible for mechanical, electronic, or cosmetic issues unrelated to the detailing service performed." }] },
-      { title: "Same-Day Express", blocks: [{ type: "p", text: "If Starex accepts a Same-Day Express Order but is unable to meet the same-day turnaround for reasons within our control, we will refund the express surcharge for that Order and complete the service on our standard timeline, at no further charge." }] },
+      { title: "Same Day Dry Cleaning", blocks: [{ type: "p", text: "If Starex accepts a Same Day Dry Cleaning Order but is unable to meet the same-day turnaround for reasons within our control, we will refund the express surcharge for that Order and complete the service on our standard timeline, at no further charge." }] },
     ],
   },
   {
     title: "Weight & Measurement Disputes",
-    blocks: [{ type: "p", text: "Wash & Fold and Same-Day Express pricing depends on the weight recorded at our facility after pickup. If you dispute the recorded weight, contact us within 24 hours of receiving your invoice; where practical, we retain intake records (such as photos or scale logs) that can be reviewed, and we will correct any demonstrated error promptly." }],
+    blocks: [{ type: "p", text: "Wash & Fold and Same Day Dry Cleaning pricing depends on the weight recorded at our facility after pickup. If you dispute the recorded weight, contact us within 24 hours of receiving your invoice; where practical, we retain intake records (such as photos or scale logs) that can be reviewed, and we will correct any demonstrated error promptly." }],
   },
   {
     title: "Redelivery & Failed Delivery Attempts",

@@ -3,55 +3,112 @@
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
 import {
-  BUSINESS_NAME, SERVICE_AREA, MINIMUM_ORDER, DRY_CLEAN_COMBO, PLANS,
+  BUSINESS_NAME, SERVICE_AREA, MINIMUM_ORDER, DRY_CLEAN_COMBO, PLANS, MEMBERSHIP,
+  PHONE, PHONE_HREF, CATALOG, itemKey, lookupCatalogItem,
 } from "@/lib/pricing";
+import { SITE_ORIGIN } from "@/lib/site";
 
 /**
- * Homepage FAQ, requested by the SEO contractor (25 Oct) and supplied as six
- * questions in a .docx.
+ * Homepage FAQ. Rewritten 2026-11-19 from the fourteen questions the owner
+ * sent, and placed directly after How It Works at his request.
  *
- * His copy was accurate against the live price list, which is rare and worth
- * saying. Two things were changed:
+ * Two constraints came with it.
  *
- *  - "StareX" throughout -> "Starex". That spelling was corrected site-wide
- *    on 14 Oct at the owner's request; reintroducing it on the homepage would
- *    undo that.
- *  - Every figure now reads from lib/pricing.ts rather than being typed in.
- *    Prices on this site have drifted three times from exactly this pattern —
- *    a second copy of a number that nobody remembers to update.
+ * The SEO lead asked for no special characters. Em dashes, en dashes and
+ * curly quotes are out: they survive the page fine but get mangled in rich
+ * results, in the Business Profile and anywhere the text is pasted onward.
+ * Plain hyphens and straight apostrophes throughout, and PLAIN_TEXT below
+ * enforces it rather than trusting anyone to remember.
  *
- * The answers are otherwise his, and they match what the site actually does:
- * verified $2/lb, $3/lb express, the $40 minimum, 24-48h, and the five-PIECE
- * combo (which he got right, including that a 2-piece suit counts as two).
+ * He also asked that it align with SEO. So each question is phrased the way
+ * a person actually searches - "how much is wash and fold", "do you clean
+ * sarees" - and each answer puts the concrete fact first, because a snippet
+ * is often all a searcher reads. The city names, the phone number and the
+ * prices come from the price list rather than being typed in, for the usual
+ * reason: a hand-typed price goes stale and starts lying to people.
  */
+
 const rate = (id: string) => PLANS.find(p => p.id === id)?.price ?? 0;
+const price = (tab: string, name: string) =>
+  lookupCatalogItem(itemKey(tab, name))?.item.price ?? 0;
+const money = (n: number) => `$${n % 1 === 0 ? n.toFixed(0) : n.toFixed(2)}`;
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: `What laundry and dry cleaning services does ${BUSINESS_NAME} offer?`,
-    a: `${BUSINESS_NAME} offers professional wash and fold, dry cleaning, wash and press, ironing, same-day express laundry, bedding and blanket cleaning, and car and sofa detailing services.`,
+    q: "Do you offer laundry pickup and delivery?",
+    a: `Yes. Free pickup and delivery across ${SERVICE_AREA} on orders of $${MINIMUM_ORDER.standardCad} or more. Book at ${SITE_ORIGIN.replace("https://", "")} or call ${PHONE}.`,
   },
   {
-    q: `Does ${BUSINESS_NAME} offer laundry pickup and delivery?`,
-    a: `Yes, ${BUSINESS_NAME} provides convenient laundry pickup and delivery in ${SERVICE_AREA}, Ontario. You can schedule a pickup online and have your cleaned laundry delivered to your doorstep.`,
+    q: "How much is wash and fold?",
+    a: `Wash and Fold is ${money(rate("wash-fold"))} per pound. Your clothes are washed, neatly folded and back to you in 24 to 48 hours.`,
   },
   {
-    q: `How much does ${BUSINESS_NAME} charge for laundry services?`,
-    a: `${BUSINESS_NAME}'s wash and fold service starts at $${rate("wash-fold").toFixed(0)} per pound, with a $${MINIMUM_ORDER.standardCad} minimum order. Same-day express laundry starts at $${rate("express").toFixed(0)} per pound. Applicable taxes may apply.`,
+    q: "What dry cleaning offers do you have?",
+    a: `Our Dry Clean Combo is any ${DRY_CLEAN_COMBO.pieceCount} pieces for $${DRY_CLEAN_COMBO.priceCad}, including 1 blanket. Wedding dresses, leather and suede are not included. Shirts start at ${money(price("dry-clean", "Shirt / T-Shirt"))} and pants at ${money(price("dry-clean", "Pant / Skirt / Bottom"))}.`,
   },
   {
-    q: `How long does ${BUSINESS_NAME} take to complete laundry and dry cleaning?`,
-    a: `${BUSINESS_NAME} typically completes orders within 24–48 hours. Same-day express wash and fold is also available, subject to service availability and applicable booking cut-off times.`,
+    q: "Do you clean sarees and Indian outfits?",
+    a: `Yes. Saree dry cleaning starts at ${money(price("dry-clean", "Saree"))}, and we also clean Punjabi suits, kurtas and lehengas. Festive wear is something we do a lot of.`,
   },
   {
-    q: "Can I get blankets, duvets, and other household items cleaned?",
-    a: `Yes, ${BUSINESS_NAME} cleans household items such as blankets, duvets, curtains, and rugs. Its dry cleaning offer includes ${DRY_CLEAN_COMBO.pieceCount} eligible pieces for $${DRY_CLEAN_COMBO.priceCad}, including one blanket or quilt, subject to the offer's exclusions. Multi-piece items count per piece — a 2-piece suit uses 2 of the ${DRY_CLEAN_COMBO.pieceCount}.`,
+    q: "I need something urgently. Can you do same day?",
+    a: `Yes. Same Day Dry Cleaning is charged at 50% extra and depends on the day's capacity, so please confirm slot availability before booking, or call ${PHONE} and we will arrange a pickup.`,
   },
   {
-    q: `How can I book a laundry pickup with ${BUSINESS_NAME}?`,
-    a: "You can book a pickup through this website. Select your preferred service, choose an available pickup date and time window, and provide your collection details to get started.",
+    q: "Do you clean blankets, duvets and comforters?",
+    a: `Yes, in any size. A blanket also counts as one of the ${DRY_CLEAN_COMBO.pieceCount} pieces in the $${DRY_CLEAN_COMBO.priceCad} combo.`,
+  },
+  {
+    q: "What is Wash and Press?",
+    a: `Wash and Press is ${money(rate("wash-press"))} per pound. Your everyday clothes come back washed and pressed, charged by weight instead of per garment.`,
+  },
+  {
+    q: "Is there a minimum order?",
+    a: `Yes. Orders start at $${MINIMUM_ORDER.standardCad} before HST. Pickup and delivery are free at that amount. Car and Sofa Detailing has its own $${MINIMUM_ORDER.detailingCad} minimum.`,
+  },
+  {
+    q: "Do you have a monthly plan?",
+    a: `Yes. The ${MEMBERSHIP.name} is $${MEMBERSHIP.monthlyPriceCad} a month and covers up to ${MEMBERSHIP.includedLbs} lbs, with anything beyond that at $${MEMBERSHIP.overagePerLbCad.toFixed(2)} per pound.`,
+  },
+  {
+    q: "Do I need to be home for pickup?",
+    a: "No. Pickup is contactless at your door. You choose your time window when you book, and your bag is sealed, labelled and tracked from the moment it leaves your hands.",
+  },
+  {
+    q: "Do you detail cars and sofas?",
+    a: `Yes. Interior detailing, deep clean and shampoo for vehicles and sofas, from $${price("detailing", "Car Detailing (Interior Only)")}, with the final price confirmed on inspection.`,
+  },
+  {
+    q: "Are my clothes insured?",
+    a: "Yes. Your garments are covered. The full claim policy is in our Terms and Conditions.",
+  },
+  {
+    q: "Do you clean curtains and drapery?",
+    a: `Yes. Curtain and drapery cleaning starts at ${money(price("dry-clean", "Curtain / Drapery (per panel)"))} per panel, with free pickup and delivery on orders of $${MINIMUM_ORDER.standardCad} or more.`,
+  },
+  {
+    q: "How do I book a pickup?",
+    a: `Book online in about a minute, or call ${PHONE}. Choose your service, pick a pickup day and time window, and tell us where to collect from.`,
   },
 ];
+
+/**
+ * The SEO lead's "no special characters" rule, enforced instead of trusted.
+ * Throws at build time rather than shipping a mangled dash into a rich
+ * result, so the rule outlives whoever remembers it.
+ */
+const PLAIN_TEXT = /^[\x20-\x7E]*$/;
+for (const f of FAQS) {
+  for (const [field, text] of [["question", f.q], ["answer", f.a]] as const) {
+    if (!PLAIN_TEXT.test(text)) {
+      const bad = [...text].filter(c => !PLAIN_TEXT.test(c)).join(" ");
+      throw new Error(
+        `Homepage FAQ ${field} contains non-plain characters (${bad}): "${text.slice(0, 60)}". ` +
+        `Use plain hyphens and straight apostrophes - see the note in HomeFaq.tsx.`
+      );
+    }
+  }
+}
 
 /** Same questions and answers as the visible list, marked up for search
  *  engines and AI assistants. Generated from FAQS so the two can never say
@@ -134,7 +191,7 @@ export default function HomeFaq() {
 
         <p style={{ textAlign: "center", marginTop: 28, fontFamily: "Kodchasan, sans-serif", fontSize: "0.9rem", color: "#6B6B6B" }}>
           More questions? <a href="/faq" style={{ color: "#B30F14", textDecoration: "underline" }}>See the full FAQ</a>{" "}
-          or call <a href="tel:+14376077251" style={{ color: "#B30F14", textDecoration: "underline" }}>437-607-7251</a>.
+          or call <a href={PHONE_HREF} style={{ color: "#B30F14", textDecoration: "underline" }}>{PHONE}</a>.
         </p>
       </div>
     </section>

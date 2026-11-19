@@ -67,7 +67,7 @@ const faqs = [
   // Added after two customers booked single items at full price without ever
   // meeting the combo — one paid $39.99 to clean a single duvet (per client,
   // 2026-09-29). This is the comparison that would have changed that booking.
-  { q: "I only need one blanket or duvet cleaned — is the combo still worth it?", a: "Almost always, yes. A king duvet on its own is $39.99 and a queen blanket is $22.99. For a flat $50 that same duvet counts as one of your 5 pieces, so you can add four garments for around $10 more than cleaning the duvet alone." },
+  { q: "I only need one blanket or duvet cleaned — is the combo still worth it?", a: "Almost always, yes. A king duvet on its own is $39.99 and a queen blanket is $22.99. For a flat $50 that same duvet counts as one of your 5 pieces, so you can add 4 garments for around $10 more than cleaning the duvet alone." },
 ];
 
 // Marks the combo up as a real Offer so Google can show the price directly in

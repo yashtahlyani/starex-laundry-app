@@ -16,14 +16,14 @@ const categories = [
       { q: "What areas do you serve?", a: "We currently serve Brampton and Mississauga, Ontario. Not sure if you're in our zone? Call or text us at 437-607-7251." },
       { q: "Do I need to be home for pickup?", a: "No! Just leave your bag at your door. Our driver will pick it up safely." },
       { q: "How do I schedule a pickup?", a: "Book online in under 2 minutes. Choose a time window, add your address, and we'll handle the rest." },
-      { q: "What if I need same-day service?", a: "Same-Day Express is available on Wash & Fold at a flat $3/lb. Same-day dry cleaning can often be done too, but it depends on the day’s capacity — please check the available slots when booking, or call us to confirm. Book early in the day either way." },
+      { q: "What if I need same-day service?", a: "Yes. Same Day Dry Cleaning covers dry cleaning and wash & fold, charged at 50% extra. It depends on the day’s capacity, so please confirm slot availability before booking, or call us. Book early in the day either way." },
     ],
   },
   {
     name: "Pricing & Plans",
     faqs: [
       { q: "How much does Starex cost?", a: "Wash & Fold is $2/lb. Dry cleaning, ironing, and household items are priced per item — see our full price list on the Pricing page. All prices shown +HST. No hidden fees — ever." },
-      { q: "Is there a minimum order?", a: "Yes — $40 minimum order value for Wash & Fold, Same-Day Express, Dry Cleaning, Ironing, and Household Items. Car & Sofa Detailing has a $199 minimum." },
+      { q: "Is there a minimum order?", a: "Yes — $40 minimum order value for Wash & Fold, Same Day Dry Cleaning, Dry Cleaning, Ironing, and Household Items. Car & Sofa Detailing has a $199 minimum." },
       { q: "I don't know my laundry's weight — how much should I bring?", a: "No scale needed. As a rough guide, a standard 13-gallon trash bag (about 24×32\"), filled and tied at the top, holds roughly a typical Wash & Fold load — you can bring up to 2 bags per order. Prefer to estimate by weight instead? Step on a bathroom scale by yourself, then again while holding the bag, and subtract the difference. Either way, we weigh everything ourselves at pickup and bill the actual weight — so there's no need to get it exact." },
       { q: "Do you offer subscription plans?", a: "Yes! The Starex Monthly Plan is $100/month: 2+1 pickups per month (up to 50 lbs), free fabric softener, hot wash & bleach, and exclusive discounts for commercial clients." },
       { q: "Are there any hidden fees?", a: "Never. Your price is confirmed before we touch your laundry. What you see is what you pay." },

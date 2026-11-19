@@ -67,7 +67,7 @@ const services = [
   { num: "01", title: "Wash & Fold",           desc: "Professional wash, dry and fold for everyday laundry. Sorted by colour, dried right, crisp.",        price: "$2/lb",        tags: ["Everyday", "Delivery Included"] },
   { num: "02", title: "Dry Cleaning",          desc: "Expert care for suits, sarees, gowns and delicates — even leather jackets and wedding dresses.",       price: "From $4.99",      tags: ["Delicates", "Delivery Included"] },
   { num: "03", title: "Wash & Press",         desc: "Everything washed and pressed, priced by weight — no counting garments. Back crisp and ready to wear.", price: "$5/lb",           tags: ["New", "Delivery Included"] },
-  { num: "04", title: "Same-Day Express",      desc: "Need it back today? Same-day rush service on Wash & Fold, subject to availability.",                    price: "$3/lb",            tags: ["Same-day", "Delivery Included"] },
+  { num: "04", title: "Same Day Dry Cleaning", desc: "Need it back today? Same-day dry cleaning, and wash & fold too. Please confirm slot availability before booking.", price: "50% extra",        tags: ["Same-day", "Delivery Included"] },
   { num: "05", title: DRY_CLEAN_COMBO.tagline, desc: `${DRY_CLEAN_COMBO.description} ${DRY_CLEAN_COMBO.exclusions}`,                                          price: `$${DRY_CLEAN_COMBO.priceCad} flat`, tags: [DRY_CLEAN_COMBO.title, "Delivery Included"], href: "/offer" },
   { num: "06", title: "Ironing & Press",       desc: "Crisp, boardroom-ready garments every single time. From baby clothes to complex pleated dresses.",     price: "From $1.99",      tags: ["Shirts", "Delivery Included"] },
   { num: "07", title: "Household & Bedding",   desc: "Duvets, blankets, curtains, rugs and more — fluffed, bagged and brought back fresh.",                  price: "From $9.99",      tags: ["Duvets", "Delivery Included"] },
@@ -158,7 +158,7 @@ export default function Home() {
                   single most valuable strip on the site spent stating a barrier
                   to entry. Two customers in Sept 2026 found us through Google,
                   never saw the combo, and paid more for less: one paid $40 for a
-                  single duvet, when $50 covers that duvet plus four garments.
+                  single duvet, when $50 covers that duvet plus 4 garments.
                   The offer goes here instead (per client, 2026-09-29). */}
               <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.875rem", color: "#FFFFFF", margin: 0 }}>
                 🍁 <strong style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700 }}>Dry cleaning: 5 pieces for $50</strong> — including a blanket or quilt.
@@ -216,7 +216,7 @@ export default function Home() {
                 arriving from Google were booking single items at full price
                 without ever seeing it (per client, 2026-09-29). The duvet
                 comparison is the exact case that lost money: $39.99 for one
-                duvet versus $50 for that duvet plus four garments. */}
+                duvet versus $50 for that duvet plus 4 garments. */}
             <motion.a
               href="/offer"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5, ease }}
@@ -234,7 +234,7 @@ export default function Home() {
                   <span style={{ color: "var(--brand)" }}> — blanket included</span>
                 </p>
                 <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.8125rem", color: "#6B6B6B", margin: "4px 0 0", lineHeight: 1.5 }}>
-                  One king duvet on its own is $39.99. Add four garments for $10 more.
+                  One king duvet on its own is $39.99. Add 4 garments for $10 more.
                 </p>
               </div>
               <ArrowRight size={18} color="#B30F14" style={{ flexShrink: 0, marginLeft: "auto" }} />
@@ -419,6 +419,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* FAQ sits directly after How It Works, at the client's request
+          (2026-11-19): someone who has just read how the service works is
+          exactly the person with the next question. */}
+      <HomeFaq />
 
       {/* ══ SERVICES — white, pastel cards ══ */}
       <section style={{ padding: "96px 0", background: "#ffffff" }}>
@@ -619,7 +624,6 @@ export default function Home() {
             remaining objections get answered immediately before the final
             "book now", rather than sending people off to /faq and losing
             them. The full FAQ is still linked from the bottom of it. */}
-      <HomeFaq />
 
       <section style={{
         padding: "120px 0", position: "relative", overflow: "hidden",

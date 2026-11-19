@@ -27,7 +27,7 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 
 const services = [
   { id: "wash-fold",   icon: Shirt,    title: "Wash & Fold",         desc: "Everyday laundry",         price: "$2/lb",       color: "#EDEDED" },
-  { id: "express",     icon: Zap,      title: "Same-Day Express",    desc: "Wash & Fold or dry cleaning · subject to slots", price: "$3/lb",       color: "#F2F2F2" },
+  { id: "express",     icon: Zap,      title: "Same Day Dry Cleaning", desc: "Please confirm slot availability first", price: "50% extra",   color: "#F2F2F2" },
   { id: "wash-press",  icon: Wind,     title: "Wash & Press",        desc: "Washed & ironed, by weight", price: "$5/lb",      color: "#F2F2F2" },
   { id: "dry-clean",   icon: Sparkles, title: "Dry Cleaning",        desc: "Delicates & formal",        price: "From $4.99",  color: "#EAEAEA" },
   { id: "ironing",     icon: Package,  title: "Ironing & Press",     desc: "Crisp & sharp",             price: "From $1.99",  color: "#E5E5E5" },
@@ -139,7 +139,7 @@ function BookPageInner() {
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const currentHour = now.getHours() + now.getMinutes() / 60;
-  // Detailing gets its own half-day windows; Same-Day Express only offers the
+  // Detailing gets its own half-day windows; Same Day Dry Cleaning only offers the
   // two earliest pickup windows so there's enough of the day left to actually
   // turn it around same-day (per client, 2026-09-06).
   const baseTimeSlots = form.service === "detailing" ? detailingTimeSlots
@@ -512,7 +512,7 @@ function BookPageInner() {
                         Cleaning 5 pieces or more? Pay ${DRY_CLEAN_COMBO.priceCad} flat.
                       </p>
                       <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "0.82rem", color: "#6B6B6B", margin: "4px 0 10px", lineHeight: 1.55 }}>
-                        {DRY_CLEAN_COMBO.description} A king duvet alone is $39.99 — four garments with it costs about $10 more.
+                        {DRY_CLEAN_COMBO.description} A king duvet alone is $39.99 — 4 garments with it costs about $10 more.
                       </p>
                       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                         <button

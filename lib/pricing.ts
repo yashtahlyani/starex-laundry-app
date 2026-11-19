@@ -13,7 +13,7 @@ export const SITE_URL = "www.starexlaundrydryclean.ca";
 // The bookable service types (Step 1 of the booking flow)
 export const PLANS = [
   { id: "wash-fold", label: "Wash & Fold",           unit: "per lb",   price: 2.00, turnaround: "24–48 hrs" },
-  { id: "express",   label: "Same-Day Express",      unit: "per lb",   price: 3.00, turnaround: "Same day" },
+  { id: "express",   label: "Same Day Dry Cleaning", unit: "per lb",   price: 3.00, turnaround: "Same day" },
   // Added 2026-10-10 per client: washed and pressed, priced by weight like
   // Wash & Fold rather than per garment — for people who want everything back
   // ironed without counting items.
