@@ -114,6 +114,20 @@ export async function POST(req: NextRequest) {
   if (address.trim().length < 8) {
     return NextResponse.json({ error: "Enter a full pickup address" }, { status: 400 });
   }
+  // Form-filling bots paste the same string into every text field. One got
+  // through on 19 Nov as "Jack Stefen", with a throwaway email address in
+  // the address box and the shop's own published phone number scraped off
+  // the website — the owner cancelled it, reasonably assuming it was a test.
+  //
+  // Both checks below are things no real booking can trip: a pickup address
+  // is never an email address, and never the customer's own email. Deliberately
+  // narrow — a sloppier rule (say, demanding a digit) would start refusing
+  // real people at "Unit B, Maple Plaza", and a refused real booking costs
+  // far more than a cancelled fake one.
+  const addressLooksLikeEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(address.trim());
+  if (addressLooksLikeEmail || address.trim().toLowerCase() === email.trim().toLowerCase()) {
+    return NextResponse.json({ error: "Enter the street address we should collect from" }, { status: 400 });
+  }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(new Date(date).getTime())) {
     return NextResponse.json({ error: "Invalid pickup date" }, { status: 400 });
   }
