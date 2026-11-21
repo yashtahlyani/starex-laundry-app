@@ -9,14 +9,21 @@ import { isOwnerUser } from "@/lib/owner";
 import Logo from "@/components/Logo";
 import { DRY_CLEAN_COMBO } from "@/lib/pricing";
 
-// About, FAQ, and Contact live in the footer (shown identically on every
-// page, mobile and desktop) rather than duplicated up here — keeps the
-// header nav short.
+// About and Contact live in the footer (shown identically on every page,
+// mobile and desktop) rather than duplicated up here — keeps the header nav
+// short.
+//
+// FAQ was in that group until 2026-11-21, when the owner asked for it in the
+// menu itself, directly below How It Works. Fair: the two answer the same
+// kind of question, and someone who has just read how the service works is
+// the person most likely to want the FAQ next — which is the same reason the
+// homepage FAQ block sits where it does.
 const links = [
   { href: "/services",     label: "Services" },
   { href: "/pricing",      label: "Pricing" },
   { href: "/offer",        label: "Offer" },
   { href: "/how-it-works", label: "How It Works" },
+  { href: "/faq",          label: "FAQ" },
 ];
 
 export default function Navbar() {
