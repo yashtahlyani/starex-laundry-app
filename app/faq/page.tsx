@@ -5,10 +5,11 @@ import { PICKUP_WINDOWS } from "@/lib/pricing";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search, ArrowRight } from "lucide-react";
+import { FAQS, faqJsonLd } from "@/lib/faq";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
-const categories = [
+const baseCategories = [
   {
     name: "Getting Started",
     faqs: [
@@ -91,6 +92,31 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+/**
+ * The owner's fourteen questions lead the page (2026-11-21): six of them are
+ * on the homepage, and someone arriving here from that block should find the
+ * same wording first, not hunt for it among the older categories.
+ *
+ * They come from lib/faq.ts, the same list the homepage renders, so the two
+ * pages cannot drift into answering a question differently.
+ *
+ * Two of the older entries ask the same thing in different words - "Is there
+ * a minimum order?" and "Do I need to be home for pickup?" - and are dropped
+ * here rather than deleted from their categories, so nothing shows twice and
+ * no answer is lost if the owner's list changes.
+ */
+const sameQuestion = (a: string, b: string) =>
+  a.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim() ===
+  b.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+
+const categories = [
+  { name: "Common Questions", faqs: FAQS.map(({ q, a }) => ({ q, a })) },
+  ...baseCategories.map(c => ({
+    ...c,
+    faqs: c.faqs.filter(f => !FAQS.some(o => sameQuestion(o.q, f.q))),
+  })),
+].filter(c => c.faqs.length > 0);
+
 export default function FAQ() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState(categories[0].name);
@@ -101,6 +127,16 @@ export default function FAQ() {
 
   return (
     <div style={{ background: "#FFFFFF" }}>
+      {/* Structured data for every question on the page. This page had none,
+          which is a gap on the one page most likely to earn a rich result.
+          Built from the rendered categories, so it can never advertise a
+          question the page does not actually answer. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd(categories.flatMap(c => c.faqs))),
+        }}
+      />
 
       {/* Hero */}
       <section style={{

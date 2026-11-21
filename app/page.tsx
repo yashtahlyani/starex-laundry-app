@@ -423,7 +423,6 @@ export default function Home() {
       {/* FAQ sits directly after How It Works, at the client's request
           (2026-11-19): someone who has just read how the service works is
           exactly the person with the next question. */}
-      <HomeFaq />
 
       {/* ══ SERVICES — white, pastel cards ══ */}
       <section style={{ padding: "96px 0", background: "#ffffff" }}>
@@ -618,13 +617,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ CTA — flat brand red, bold & graphic ══ */}
-      {/* ══ FAQ — last stop before the booking CTA ══
-            Placed here on the SEO contractor's recommendation (25 Oct): the
-            remaining objections get answered immediately before the final
-            "book now", rather than sending people off to /faq and losing
-            them. The full FAQ is still linked from the bottom of it. */}
+      {/* FAQ — the last thing read before the booking button. Six questions
+          only (the owner's pick, 2026-11-21): the remaining objections get
+          answered at the moment someone decides, rather than sending them
+          off to /faq and losing them. All fourteen are still on /faq, linked
+          from the bottom of this block. */}
+      <HomeFaq />
 
+      {/* ══ CTA — flat brand red, bold & graphic ══ */}
       <section style={{
         padding: "120px 0", position: "relative", overflow: "hidden",
         background: "var(--brand)",
