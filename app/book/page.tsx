@@ -20,6 +20,7 @@ const PAY_DEFAULT: "later" | "card" = "later";
 import EstimateBill from "@/components/EstimateBill";
 import TrustBadge from "@/components/TrustBadge";
 import BookingReviews from "@/components/BookingReviews";
+import PromoBanner from "@/components/PromoBanner";
 import ItemPicker from "@/components/ItemPicker";
 import WeightPicker from "@/components/WeightPicker";
 
@@ -340,6 +341,10 @@ function BookPageInner() {
 
   return (
     <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80 }}>
+
+      {/* Dated promotion — the delivery warning belongs here most of all,
+          where someone is about to commit to a pickup. */}
+      <PromoBanner />
 
       {/* Progress bar strip */}
       <div style={{ background: "var(--brand)", paddingTop: 0, paddingBottom: 0 }}>

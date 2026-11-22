@@ -8,6 +8,7 @@ import { SITE_ORIGIN, CONTACT } from "@/lib/site";
 import TrustBadge from "@/components/TrustBadge";
 import ReviewsSection from "@/components/ReviewsSection";
 import HomeFaq, { homeFaqJsonLd } from "@/components/HomeFaq";
+import PromoBanner from "@/components/PromoBanner";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
@@ -131,6 +132,11 @@ export default function Home() {
       {/* Generated from the same array the section renders, so the markup can
           never describe answers the page doesn't show. */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }} />
+
+      {/* Dated promotion. Removes itself when the window closes — see
+          lib/promo.ts. Above the hero because the delivery warning inside it
+          changes whether someone should book today. */}
+      <PromoBanner />
 
       {/* ══ HERO — flat white/cream editorial, red used as bold accent only ══ */}
       <section style={{
