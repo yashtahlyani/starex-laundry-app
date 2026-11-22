@@ -31,10 +31,11 @@ import TrustBadge from "@/components/TrustBadge";
 const OFFER_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Offer",
-  name: "Black Friday - 50% off laundry and dry cleaning",
+  name: "Black Friday - 50% off dry cleaning",
   description:
-    `50% off laundry and dry cleaning in ${SERVICE_AREA}. Free pickup and delivery. `
-    + `Delivery takes about a week during the offer.`,
+    `50% off dry cleaning in ${SERVICE_AREA}. Leather, suede, wedding dresses and the `
+    + `5 for $50 combo are not included. Free pickup and delivery. Black Friday orders `
+    + `are delivered in about 7 days.`,
   url: `${SITE_ORIGIN}${PROMO.landingPath}`,
   priceCurrency: "CAD",
   availabilityStarts: PROMO.startDate,
@@ -55,7 +56,7 @@ export default function BlackFridayPage() {
   const [state, setState] = useState<"loading" | "live" | "ended">("loading");
   useEffect(() => { setState(isPromoActive() ? "live" : "ended"); }, []);
 
-  const headline = state === "ended" ? "This offer has finished" : "50% off";
+  const headline = state === "ended" ? "This offer has finished" : "50% off dry cleaning";
 
   return (
     <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80 }}>
@@ -82,7 +83,7 @@ export default function BlackFridayPage() {
             {headline}
             {state !== "ended" && (
               <span style={{ display: "block", fontSize: "clamp(1.125rem,2.5vw,1.6rem)", fontWeight: 600, color: "rgba(255,255,255,0.82)", marginTop: 10 }}>
-                laundry &amp; dry cleaning in {SERVICE_AREA}
+                in {SERVICE_AREA}
               </span>
             )}
           </h1>
@@ -95,9 +96,10 @@ export default function BlackFridayPage() {
             </p>
           ) : (
             <p style={{ fontFamily: "Kodchasan, sans-serif", fontSize: "1.0625rem", color: "rgba(255,255,255,0.82)", lineHeight: 1.75, maxWidth: "54ch", margin: "0 auto 28px" }}>
-              Book by {PROMO.endDate.slice(-2)} November and we collect from your door, free.
-              One thing to know before you book: <strong style={{ color: "#fff" }}>delivery is taking about a week</strong> while
-              the offer runs. Regular orders are still back in 24 to 48 hours.
+              Your coat, suit, saree or dress at half price. Book by {PROMO.endDate.slice(-2)} November
+              and we collect from your door, free. One thing to know first:{" "}
+              <strong style={{ color: "#fff" }}>Black Friday orders come back in about 7 days</strong>,
+              not the usual 24 to 48 hours. Regular orders keep the normal schedule.
             </p>
           )}
 
@@ -120,6 +122,10 @@ export default function BlackFridayPage() {
           <h2 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "clamp(1.4rem,3vw,1.9rem)", color: "#161616", marginBottom: 18, textAlign: "center" }}>
             What we clean
           </h2>
+          <p style={{ textAlign: "center", marginTop: -8, marginBottom: 18, fontFamily: "Kodchasan, sans-serif", fontSize: "0.88rem", color: "#6B6B6B", lineHeight: 1.7 }}>
+            The 50% applies to <strong style={{ color: "#161616" }}>dry cleaning</strong>. Everything else is at
+            its normal price, on the normal schedule.
+          </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 12 }}>
             {PLANS.filter(p => p.id !== "express").map(p => (
               <div key={p.id} style={{ border: "1.5px solid #E4E4E7", borderRadius: 14, padding: "16px 18px" }}>

@@ -16,31 +16,32 @@ import { SERVICE_AREA, MINIMUM_ORDER } from "@/lib/pricing";
  * is the one place the creative is seen whole.
  */
 export const metadata: Metadata = {
-  title: "Black Friday: 50% Off Laundry & Dry Cleaning",
+  title: "Black Friday: 50% Off Dry Cleaning",
   description:
-    `50% off laundry and dry cleaning in ${SERVICE_AREA}, ${PROMO.dates}. `
-    + `Free pickup and delivery, $${MINIMUM_ORDER.standardCad} minimum. `
-    + `Delivery takes about a week during the offer.`,
+    `50% off dry cleaning in ${SERVICE_AREA}, ${PROMO.dates}. Free pickup and delivery `
+    + `on orders over $${MINIMUM_ORDER.standardCad}. Black Friday orders are delivered `
+    + `in about 7 days.`,
   alternates: { canonical: PROMO.landingPath },
   openGraph: {
     type: "website",
     siteName: "Starex",
     locale: "en_CA",
     url: PROMO.landingPath,
-    title: `Black Friday: 50% Off | Starex Laundry & Dry Cleaning`,
+    title: `Black Friday: 50% Off Dry Cleaning | Starex`,
     description:
-      `${PROMO.dates} only. 50% off laundry and dry cleaning across ${SERVICE_AREA}, `
-      + `with free pickup and delivery. Delivery takes about a week during the offer.`,
+      `${PROMO.dates} only. Your coat, suit, saree or dress at half price across `
+      + `${SERVICE_AREA}, with free pickup and delivery. Black Friday orders come back `
+      + `in about 7 days.`,
     images: [{
       url: "/images/starex/05_bags_with_copy.jpg",
       width: 1920, height: 1080,
-      alt: "Starex laundry and dry cleaning - Black Friday, 50% off, free pickup and delivery in Brampton and Mississauga.",
+      alt: "Starex - Black Friday, 50% off dry cleaning, free pickup and delivery in Brampton and Mississauga.",
     }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Black Friday: 50% Off | Starex",
-    description: `${PROMO.dates} only. 50% off laundry and dry cleaning, free pickup and delivery.`,
+    title: "Black Friday: 50% Off Dry Cleaning | Starex",
+    description: `${PROMO.dates} only. Half price dry cleaning, free pickup and delivery. Orders come back in about 7 days.`,
     images: ["/images/starex/05_bags_with_copy.jpg"],
   },
 };

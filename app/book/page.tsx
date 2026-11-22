@@ -21,6 +21,7 @@ import EstimateBill from "@/components/EstimateBill";
 import TrustBadge from "@/components/TrustBadge";
 import BookingReviews from "@/components/BookingReviews";
 import PromoBanner from "@/components/PromoBanner";
+import PromoBookingNotice from "@/components/PromoBookingNotice";
 import ItemPicker from "@/components/ItemPicker";
 import WeightPicker from "@/components/WeightPicker";
 
@@ -836,6 +837,11 @@ function BookPageInner() {
                   const blocked = submitting || !termsAccepted;
                   return (
                 <>
+                {/* The Black Friday delivery warning, at the point of
+                    decision. Renders nothing outside the offer, and nothing
+                    for services the discount does not cover. */}
+                <PromoBookingNotice serviceId={form.service} />
+
                 {/* Rating and reviews next to the button that commits the
                     order (per client). Both render nothing unless there is
                     real data — no placeholder stars, no sample quotes. */}
