@@ -15,6 +15,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/dry-cleaning-mississauga`,   lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE}/laundry-service-mississauga`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE}/offer`,               lastModified: now, changeFrequency: "weekly",  priority: 0.8  },
+    // Stays listed after Black Friday: the page explains that the offer has
+    // ended and points at what we do run, which is a better answer to a
+    // stale shared link than a 404.
+    { url: `${BASE}/black-friday`,        lastModified: now, changeFrequency: "daily",   priority: 0.8  },
     { url: `${BASE}/monthly`,             lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/how-it-works`,        lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/about`,               lastModified: now, changeFrequency: "monthly", priority: 0.65 },

@@ -29,6 +29,28 @@ export const PROMO = {
    *  the order is weighed or counted. A customer who sees "50% off" and then
    *  a full-price estimate will assume the offer is not being honoured. */
   appliedNote: "Your 50% discount is applied when we confirm your final price.",
+
+  /** Its own page, so there is one link to share on WhatsApp, Google
+   *  Business and anywhere else. A shared link that previews well is worth
+   *  more than any amount of on-site copy for an eight-day offer. */
+  landingPath: "/black-friday",
+
+  /**
+   * What a customer is told, and nothing more.
+   *
+   * Every line here is something currently true of the business. The owner
+   * had not yet said what the 50% covers when this was written (does it
+   * stack with the 5-for-$50 combo? does the minimum still apply?), so no
+   * line claims it covers everything. Add the specifics here once he
+   * confirms, rather than writing them into a page.
+   */
+  terms: [
+    "Book between 22 and 29 November to get the offer.",
+    "Your discount is applied when we confirm your final price, after your items are weighed or counted.",
+    "Delivery is taking about 1 week during the offer because of high demand.",
+    "Regular orders placed outside the offer are still back in 24 to 48 hours.",
+    "Free pickup and delivery, as always.",
+  ],
 } as const;
 
 /** Today in Toronto, as YYYY-MM-DD. The site serves one city pair in one

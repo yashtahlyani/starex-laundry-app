@@ -30,9 +30,11 @@ export default function PromoBanner({ compact = false }: { compact?: boolean }) 
   if (!show) return null;
 
   return (
-    <aside
-      aria-label="Black Friday offer"
+    <a
+      href={PROMO.landingPath}
+      aria-label="Black Friday offer - see the details"
       style={{
+        display: "block", textDecoration: "none",
         background: "#161616", color: "#FFFFFF",
         padding: compact ? "12px 16px" : "14px 24px",
         borderRadius: compact ? 14 : 0,
@@ -60,6 +62,6 @@ export default function PromoBanner({ compact = false }: { compact?: boolean }) 
           {PROMO.dates}. {PROMO.detail} {PROMO.appliedNote}
         </span>
       </div>
-    </aside>
+    </a>
   );
 }
