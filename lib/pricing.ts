@@ -147,6 +147,11 @@ export type CatalogItem = {
   pieces?: number;
 };
 export type CatalogSection = { title: string; items: CatalogItem[] };
+/** The Wash & Fold rate as it reads in prose: "2", not "2.00". Used by the
+ *  Wash Preferences blurb, which quoted a stale hand-typed figure until
+ *  2026-11-23. */
+const WASH_FOLD_RATE = String(PLANS.find(p => p.id === "wash-fold")?.price ?? 0);
+
 export type CatalogTab = {
   id: string; label: string; blurb: string; sections: CatalogSection[];
   /** Printed under the tab's prices. Used by Ironing to state the fallback
@@ -189,7 +194,10 @@ export const CATALOG: CatalogTab[] = [
   {
     id: "wash-prefs",
     label: "Wash Preferences",
-    blurb: "Customize how your laundry is washed. Added on top of the $2.29/lb base rate.",
+    // The rate was typed in here as $2.29 and had drifted from the real
+    // Wash & Fold price (the owner spotted it, 2026-11-23). Built from PLANS
+    // now, so a price change cannot leave this line behind again.
+    blurb: `Customize how your laundry is washed. Added on top of the $${WASH_FOLD_RATE}/lb base rate.`,
     sections: [
       {
         title: "Wash Preferences",

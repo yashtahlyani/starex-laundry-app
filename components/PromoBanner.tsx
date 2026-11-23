@@ -1,28 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Tag } from "lucide-react";
+import { Clock } from "lucide-react";
 import { PROMO, isPromoActive } from "@/lib/promo";
 
 /**
- * The Black Friday notice, on the homepage and the booking page.
+ * The Black Friday delivery notice, on the homepage and the booking page.
  *
- * It renders nothing outside the promo window, so on 30 November it
- * disappears on its own rather than waiting for someone to remember.
+ * It carries the owner's sentence and nothing else. No discount figure, and
+ * no link to an offer page: he asked for the website to cover the delivery
+ * time only, with the 50% claimed over WhatsApp.
+ *
+ * Renders nothing outside the promo window, so on 30 November it disappears
+ * on its own rather than waiting for someone to remember.
  *
  * The window is checked after mount, not during the server render, because
  * both pages that use it are prerendered at build time: a build made during
- * the offer would otherwise bake "Black Friday" into the HTML and keep
- * serving it in December until something triggered a rebuild. Checking in the
- * browser costs a little pop-in and makes a stale promo impossible, which is
- * the right way round for a banner with dates in it.
+ * the offer would otherwise bake the notice into the HTML and keep serving
+ * it in December until something triggered a rebuild. A little pop-in is a
+ * fair price for a dated notice that cannot go stale.
  *
- * Not dismissible either — the delivery warning is the part a customer most
- * needs before booking, and a dismissed banner is one they never read.
- *
- * The delay is stated as plainly as the discount. Burying "about a week" in
- * small print under a 50% headline is how you turn a good offer into a week
- * of angry phone calls.
+ * Not dismissible. The delay is the part a customer most needs before
+ * booking, and a dismissed banner is one they never read.
  */
 export default function PromoBanner({ compact = false }: { compact?: boolean }) {
   const [show, setShow] = useState(false);
@@ -30,11 +29,9 @@ export default function PromoBanner({ compact = false }: { compact?: boolean }) 
   if (!show) return null;
 
   return (
-    <a
-      href={PROMO.landingPath}
-      aria-label="Black Friday offer - see the details"
+    <aside
+      aria-label="Black Friday delivery notice"
       style={{
-        display: "block", textDecoration: "none",
         background: "#161616", color: "#FFFFFF",
         padding: compact ? "12px 16px" : "14px 24px",
         borderRadius: compact ? 14 : 0,
@@ -52,16 +49,16 @@ export default function PromoBanner({ compact = false }: { compact?: boolean }) 
           fontFamily: "Poppins, sans-serif", fontWeight: 700,
           fontSize: compact ? "0.78rem" : "0.82rem", whiteSpace: "nowrap",
         }}>
-          <Tag size={13} /> {PROMO.headline}
+          <Clock size={13} /> {PROMO.label}
         </span>
         <span style={{
           fontFamily: "Kodchasan, sans-serif",
           fontSize: compact ? "0.8rem" : "0.86rem",
           color: "rgba(255,255,255,0.88)", lineHeight: 1.6,
         }}>
-          {PROMO.dates}. {PROMO.detail} {PROMO.appliedNote}
+          {PROMO.notice}
         </span>
       </div>
-    </a>
+    </aside>
   );
 }

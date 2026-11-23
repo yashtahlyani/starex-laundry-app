@@ -88,7 +88,28 @@ const labelStyle: React.CSSProperties = {
 type FormState = {
   service: string; date: string; time: string;
   name: string; email: string; phone: string; address: string; notes: string;
+  /** Roughly how big the order is, so staff can assign a locker before the
+   *  van leaves (per client, 2026-11-23: "the right locker compartment can
+   *  be assigned - tall bay for big orders, cubby for small ones"). */
+  size: string;
 };
+
+/**
+ * Order size, asked as a rough choice rather than a number.
+ *
+ * The detailed estimate step already collects weights and item counts, but
+ * it can be skipped - the button literally reads "Skip, price at pickup" -
+ * and most people do skip it. That left staff assigning lockers blind.
+ *
+ * Three buttons nobody can get wrong, tied to what the customer can actually
+ * see in front of them. A bag count is something a person knows without
+ * weighing anything; "how many pounds" is not.
+ */
+const ORDER_SIZES = [
+  { id: "small",  label: "Small",  hint: "A few items or one small bag" },
+  { id: "medium", label: "Medium", hint: "About one full bag" },
+  { id: "large",  label: "Large",  hint: "Two or more bags, or bulky items" },
+] as const;
 
 function BookPageInner() {
   const searchParams = useSearchParams();
@@ -100,7 +121,7 @@ function BookPageInner() {
   // service-selection step entirely since it's already chosen, straight to Schedule.
   const [step, setStep] = useState(validPreselect ? 1 : 0);
   const [direction, setDirection] = useState(1);
-  const [form, setForm] = useState<FormState>({ service: validPreselect, date: "", time: "", name: "", email: "", phone: "", address: "", notes: "" });
+  const [form, setForm] = useState<FormState>({ service: validPreselect, date: "", time: "", name: "", email: "", phone: "", address: "", notes: "", size: "" });
   const [errors, setErrors] = useState<Partial<FormState>>({});
   // Arrived from the Offer page / pricing combo CTA — surface this through
   // the whole flow (sidebar, review, confirmation) so the customer never
@@ -244,7 +265,16 @@ function BookPageInner() {
       // means it shows up in the admin drawer, the CSV export, and the
       // customer's own status history.
       const comboNote = `Booked via ${DRY_CLEAN_COMBO.tagline} combo offer (${DRY_CLEAN_COMBO.pieceCount} pieces, $${DRY_CLEAN_COMBO.priceCad} flat).`;
-      const combinedNotes = isCombo ? [comboNote, form.notes.trim()].filter(Boolean).join(" — ") : form.notes;
+      // Size leads the note: it is the first thing staff need, because the
+      // locker has to be chosen before the driver sets off.
+      const sizeNote = form.size
+        ? `Order size: ${ORDER_SIZES.find(o => o.id === form.size)?.label ?? form.size} (${ORDER_SIZES.find(o => o.id === form.size)?.hint ?? ""}).`
+        : "";
+      const combinedNotes = [
+        sizeNote,
+        isCombo ? comboNote : "",
+        form.notes.trim(),
+      ].filter(Boolean).join(" — ");
       // What the customer was shown before they pressed the button. Travels
       // with the order so staff can see the expectation they're confirming
       // against — a $45 estimate and a $120 weigh-in is a conversation worth
@@ -834,13 +864,51 @@ function BookPageInner() {
                   // A card is never required to book. The only things that
                   // stop the button now are the terms checkbox and a submit
                   // already in flight.
-                  const blocked = submitting || !termsAccepted;
+                  // Size is required: an order with no size is an order
+                  // whose locker nobody can choose, which is the whole
+                  // reason it is asked for.
+                  const blocked = submitting || !termsAccepted || !form.size;
                   return (
                 <>
+                {/* Order size. Asked here, on the step nobody can skip,
+                    because the detailed estimate before it can be — and the
+                    locker has to be picked before the driver leaves. */}
+                <div style={{ marginBottom: 22 }}>
+                  <label style={labelStyle}>
+                    <Package size={13} style={{ display: "inline", marginRight: 6 }} />
+                    Roughly how much are you sending?
+                  </label>
+                  <p style={{ color: "#8C8C8C", fontSize: "0.8rem", marginBottom: 10, fontFamily: "Kodchasan, sans-serif" }}>
+                    A rough idea is fine — it just tells us which locker to leave for you.
+                  </p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 8 }}>
+                    {ORDER_SIZES.map(o => {
+                      const on = form.size === o.id;
+                      return (
+                        <button
+                          key={o.id} type="button" aria-pressed={on}
+                          onClick={() => setForm(p => ({ ...p, size: o.id }))}
+                          style={{
+                            textAlign: "left", cursor: "pointer", borderRadius: 12, padding: "11px 13px",
+                            background: on ? "#FFF9F9" : "#FFFFFF",
+                            border: `1.5px solid ${on ? "#ED1D24" : "#E4E4E7"}`,
+                          }}
+                        >
+                          <span style={{ display: "block", fontFamily: "Poppins, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#161616" }}>
+                            {o.label}
+                          </span>
+                          <span style={{ display: "block", fontFamily: "Kodchasan, sans-serif", fontSize: "0.76rem", color: "#6B6B6B", marginTop: 2 }}>
+                            {o.hint}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* The Black Friday delivery warning, at the point of
-                    decision. Renders nothing outside the offer, and nothing
-                    for services the discount does not cover. */}
-                <PromoBookingNotice serviceId={form.service} />
+                    decision. Renders nothing outside the offer window. */}
+                <PromoBookingNotice />
 
                 {/* Rating and reviews next to the button that commits the
                     order (per client). Both render nothing unless there is

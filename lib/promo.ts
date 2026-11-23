@@ -1,66 +1,39 @@
 /**
- * Time-limited promotion notice, shown on the homepage, the booking page and
- * its own page at /black-friday.
+ * The Black Friday notice on the homepage and the booking page.
  *
- * Black Friday 2026, per the owner (2026-11-22, terms confirmed 2026-11-23):
- * 50% off dry cleaning only, excluding leather, suede, wedding dresses and
- * the 5-for-$50 combo. Orders placed on the offer are delivered in about a
- * week; everything else keeps the usual schedule.
+ * What this is NOT: an advert for the discount. The owner was explicit
+ * (2026-11-23): "This is only about the delivery time - please do NOT change
+ * any prices for Black Friday. The 50% off is claimed by WhatsApp, not on
+ * the website."
  *
- * The dates are the point of this file. A "Black Friday" banner still up in
- * December advertises a discount the shop is no longer giving and a delay it
- * is no longer suffering, so the window is declared once here and everything
- * built on it removes itself. Nobody has to remember to take it down.
+ * An earlier version of this file carried the 50% and a /black-friday
+ * landing page sold it. That was built on his message of the 22nd and is
+ * wrong under this one, so the figure is gone from the site entirely. The
+ * website's job here is to warn people about the delivery time before they
+ * book; WhatsApp's job is the offer. Both messages still have to be true, and
+ * the one that costs us if it is missing is the delay.
  *
- * `endDate` is inclusive: the offer runs to the end of 29 November.
+ * The dates are the point of this file. A Black Friday notice still up in
+ * December warns about a delay the shop is no longer suffering, so the window
+ * is declared once and everything built on it removes itself. Nobody has to
+ * remember to take it down.
+ *
+ * `endDate` is inclusive: the notice runs to the end of 29 November.
  */
 export const PROMO = {
   id: "black-friday-2026",
   /** Inclusive, in Toronto time - the clock the vans and the shop run on. */
   startDate: "2026-11-22",
   endDate: "2026-11-29",
-  headline: "Black Friday - 50% off dry cleaning",
-  dates: "Nov 22 to Nov 29",
 
-  /**
-   * The delivery warning, which the owner asked twice to be made unmissable:
-   * "make sure if a person books he/she should be aware of the fact that
-   * their garments are coming in 7 days".
-   *
-   * It is the first thing after the discount everywhere it appears. An offer
-   * that wins bookings by burying a week-long wait wins complaints a week
-   * later, and those complaints land on the same Google profile the offer
-   * was meant to grow.
-   */
-  detail:
-    "Black Friday orders are delivered in about 7 days because of high demand. "
-    + "Regular orders are still back in 24 to 48 hours.",
+  /** The owner's own sentence, used verbatim wherever the notice appears.
+   *  Kept as one string so the homepage, the booking page and the booking
+   *  step cannot drift into three slightly different promises. */
+  notice:
+    "Black Friday offer (Nov 22–29): delivery in about 1 week due to high demand. "
+    + "Regular orders still back in 24–48 hours.",
 
-  /** Said plainly because the website still quotes normal prices: the
-   *  discount is applied by staff when the final price is confirmed, after
-   *  the items are counted. A customer who reads "50% off" and then sees a
-   *  full-price estimate will assume the offer is not being honoured. */
-  appliedNote: "Your 50% discount is applied when we confirm your final price.",
-
-  /** Its own page, so there is one link to share on WhatsApp, Instagram,
-   *  Google Business and anywhere else. A shared link that previews well is
-   *  worth more than any amount of on-site copy for an eight-day offer. */
-  landingPath: "/black-friday",
-
-  /** What the discount covers, in the owner's own terms. Kept as data rather
-   *  than prose so the page, the banner and the booking notice cannot drift
-   *  into promising different things. */
-  appliesTo: "dry cleaning",
-  exclusions: ["leather", "suede", "wedding dresses", "the 5 for $50 combo"],
-
-  terms: [
-    "50% off dry cleaning only. Wash & fold, ironing and detailing are at their normal prices.",
-    "Leather, suede, wedding dresses and the 5 for $50 combo are not included.",
-    "Book between 22 and 29 November to get the offer.",
-    "Black Friday orders are delivered in about 7 days. Regular orders keep the usual 24 to 48 hour schedule.",
-    "Your discount is applied when we confirm your final price, after your items are counted.",
-    "Free pickup and delivery, as always.",
-  ],
+  label: "Black Friday",
 } as const;
 
 /** Today in Toronto, as YYYY-MM-DD. The site serves one city pair in one
@@ -76,11 +49,4 @@ export function todayInToronto(): string {
  *  off-by-one from parsing. */
 export function isPromoActive(today: string = todayInToronto()): boolean {
   return today >= PROMO.startDate && today <= PROMO.endDate;
-}
-
-/** Whether this service is one the discount actually applies to. Used by the
- *  booking page so a wash & fold customer is not told about a dry cleaning
- *  discount they cannot have. */
-export function promoAppliesToService(serviceId: string): boolean {
-  return serviceId === "dry-clean";
 }
