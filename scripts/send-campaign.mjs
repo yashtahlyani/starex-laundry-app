@@ -50,8 +50,19 @@ const SB_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND = process.env.RESEND_API_KEY;
 const FROM = process.env.RESEND_FROM_EMAIL;
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://starexlaundrydryclean.ca";
-const REPLY_TO = process.env.ADMIN_NOTIFICATION_EMAIL || "sushil.starex@gmail.com";
+// NOT read from NEXT_PUBLIC_SITE_URL. That is http://localhost:3000 in the
+// local env file, and a dry run on 2026-11-23 showed it would have sent 49
+// customers a booking link and an unsubscribe link pointing at a machine in
+// another country. A dead unsubscribe link is the exact CASL failure this
+// script exists to prevent, so the live origin is written here and checked
+// below rather than inherited from whatever shell the script runs in.
+const SITE = process.env.CAMPAIGN_SITE_URL || "https://starexlaundrydryclean.ca";
+
+// Replies go to the address the owner reads, which he confirmed on
+// 2026-11-23. Deliberately not ADMIN_NOTIFICATION_EMAIL: that is
+// info@royalarttreasure.com, the address the site sends FROM, not one he
+// watches for customer replies.
+const REPLY_TO = process.env.CAMPAIGN_REPLY_TO || "sushil.starex@gmail.com";
 
 // CASL requires a physical mailing address in the message itself. Set it in
 // .env.local as CAMPAIGN_MAILING_ADDRESS once the owner confirms it.
@@ -65,6 +76,13 @@ const fail = (msg) => { console.error(`\nREFUSING TO SEND: ${msg}\n`); process.e
 
 if (!SB_URL || !SB_KEY) fail("Supabase credentials are missing.");
 if (APPLY && !RESEND) fail("RESEND_API_KEY is not set.");
+
+// Every link in the email is built from SITE. If it is not the live site,
+// the unsubscribe link does not work, and an unsubscribe link that does not
+// work is worse than no campaign at all.
+if (!/^https:\/\/[^/]+\.[a-z]{2,}/i.test(SITE) || /localhost|127\.0\.0\.1/i.test(SITE)) {
+  fail(`Links would point at "${SITE}", which is not the live site. Nothing sent.`);
+}
 if (APPLY && !MAILING_ADDRESS) {
   fail(
     "CAMPAIGN_MAILING_ADDRESS is not set.\n"
