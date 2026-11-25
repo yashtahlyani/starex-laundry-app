@@ -120,6 +120,30 @@ if (!Array.isArray(optOutRows)) {
 }
 const optOuts = new Set(optOutRows.map(r => (r.email ?? "").trim().toLowerCase()));
 
+/**
+ * What to call someone in the greeting.
+ *
+ * Taking the first word of the stored name is wrong for anyone who typed a
+ * title into the name box. A dry run on 2026-11-25 found two: "Ms. Jagdeep
+ * kaur" and "Ms Arora" would have been greeted "Hi Ms.," and "Hi Ms,". That
+ * is the first line of the email, and it reads like a mail merge that went
+ * wrong - which is exactly what it would have been.
+ *
+ * Titles are skipped, and anything left that is not a usable name falls back
+ * to "there". "Hi there" is plain; "Hi Ms.," is embarrassing.
+ */
+const TITLES = new Set(["mr", "mrs", "ms", "miss", "dr", "prof", "sir", "madam"]);
+function greetingName(raw) {
+  const parts = (raw ?? "").trim().split(/\s+/).filter(Boolean);
+  for (const part of parts) {
+    const word = part.replace(/[.,]/g, "");
+    if (!word || TITLES.has(word.toLowerCase())) continue;
+    if (word.length < 2 || /[0-9@]/.test(word)) continue;
+    return word;
+  }
+  return "there";
+}
+
 // One message per person, addressed by the name they last gave us.
 const people = new Map();
 for (const o of orders) {
@@ -127,9 +151,7 @@ for (const o of orders) {
   if (!email || !/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) continue;
   if (email.endsWith("starex-internal.test")) continue;   // our own test identities
   if (optOuts.has(email)) continue;
-  if (!people.has(email)) {
-    people.set(email, { email, name: (o.customer_name ?? "").trim().split(/\s+/)[0] || "there" });
-  }
+  if (!people.has(email)) people.set(email, { email, name: greetingName(o.customer_name) });
 }
 
 let recipients = [...people.values()];
@@ -167,6 +189,7 @@ function html({ name, email }) {
     <p style="margin:0 0 14px;font-size:15px;color:#4A4A4A;line-height:1.65;">
       It's Black Friday week, and we're taking <strong style="color:#161616;">50% off dry cleaning</strong>
       until Sunday 29 November. Coats, suits, sarees, dresses - half price.
+      Leather, suede, wedding dresses and the 5 for $50 combo aren't included.
     </p>
     <p style="margin:0 0 18px;font-size:15px;color:#4A4A4A;line-height:1.65;">
       One thing worth knowing before you book: we're busy, so
@@ -204,6 +227,7 @@ function text({ name, email }) {
     ``,
     `It's Black Friday week, and we're taking 50% off dry cleaning until Sunday 29 November.`,
     `Coats, suits, sarees, dresses - half price.`,
+    `Leather, suede, wedding dresses and the 5 for $50 combo aren't included.`,
     ``,
     `One thing worth knowing: Black Friday orders are taking about a week to come back.`,
     `Regular orders are still 24 to 48 hours.`,
