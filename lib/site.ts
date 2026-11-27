@@ -17,6 +17,41 @@ export const SITE_ORIGIN =
 // Update these in one place. Social URLs are empty until the business creates
 // the profiles — the footer renders the icon but doesn't link anywhere while a
 // URL is blank, so there are no dead "#" links that jump the page to the top.
+/**
+ * Street address, added at the owner's request on 26 Nov 2026 so Google has a
+ * real postal address for the business instead of two city names.
+ *
+ * This is the single copy. The footer, the homepage/book/pricing structured
+ * data and lib/schema.ts all read it from here, so there is no second
+ * hand-typed address to go stale -- the defect this codebase keeps relearning.
+ *
+ * NAP CONSISTENCY: for local ranking this must match the Google Business
+ * Profile character for character, including whether the street is written
+ * "Cres", "Cresc" or "Crescent". If the Business Profile says something
+ * different, change the Business Profile or change this -- but make them the
+ * same. The marketing-email footer carries the same address via
+ * CAMPAIGN_MAILING_ADDRESS in .env.local; keep that in step too.
+ */
+export const BUSINESS_ADDRESS = {
+  street: "25 Grendon Cres",
+  city: "Brampton",
+  region: "ON",
+  regionName: "Ontario",
+  postalCode: "L6X 5N4",
+  country: "CA",
+};
+
+/** One-line form for the footer and anywhere else prose needs it. */
+export const BUSINESS_ADDRESS_LINE =
+  `${BUSINESS_ADDRESS.street}, ${BUSINESS_ADDRESS.city}, ${BUSINESS_ADDRESS.region} ${BUSINESS_ADDRESS.postalCode}`;
+
+/**
+ * Opening hours, corrected from 7am-8pm to 8am-9pm on 26 Nov 2026 (owner).
+ * Read by the structured data on every page that carries business details, so
+ * the hours Google sees can only ever be wrong in one place.
+ */
+export const OPENING_HOURS = { opens: "08:00", closes: "21:00" };
+
 export const CONTACT = {
   email: "sushil.starex@gmail.com",
   phone: "437-607-7251",

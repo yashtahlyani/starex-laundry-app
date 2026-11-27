@@ -4,13 +4,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle, Shield, Leaf, Clock, X, XCircle } from "lucide-react";
 import { HST_LABEL, DRY_CLEAN_COMBO } from "@/lib/pricing";
-import { SITE_ORIGIN, CONTACT } from "@/lib/site";
+import { BUSINESS_JSON_LD } from "@/lib/schema";
 import TrustBadge from "@/components/TrustBadge";
 import ReviewsSection from "@/components/ReviewsSection";
 import HomeFaq, { homeFaqJsonLd } from "@/components/HomeFaq";
 import PromoBanner from "@/components/PromoBanner";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
+
+/** Brand image folder, so the srcSet lists below stay readable. */
+const B = "/images/starex";
 
 const marqueeItems = [
   "Fully Insured", "$40 Minimum Order", "24–48h Turnaround", "$2 Per Pound",
@@ -93,42 +96,12 @@ const trust = [
   { Icon: Clock,  title: "You Pick The Window", desc: "Choose your pickup window when you book. We confirm before we collect." },
 ];
 
-const LOCAL_BUSINESS_JSON_LD = {
-  "@context": "https://schema.org",
-  "@type": "LaundryService",
-  name: "Starex",
-  description: "Laundry pickup & delivery, dry cleaning, ironing, household items, and car & sofa detailing serving Brampton and Mississauga, Ontario.",
-  // Was pointing at the Vercel preview domain, which told Google the canonical
-  // business lived at a URL customers never see.
-  url: SITE_ORIGIN,
-  telephone: "+1-437-607-7251",
-  email: CONTACT.email,
-  priceRange: "$$",
-  areaServed: [
-    { "@type": "City", name: "Brampton" },
-    { "@type": "City", name: "Mississauga" },
-  ],
-  // Service-area business: pickup and delivery only, no storefront to visit.
-  // A PostalAddress with just a city and no street implies a premises that
-  // doesn't exist, so the service area carries this instead.
-  serviceArea: {
-    "@type": "GeoCircle",
-    geoMidpoint: { "@type": "GeoCoordinates", latitude: 43.6834, longitude: -79.7663 },
-    geoRadius: "25000",
-  },
-  // NOTE: no aggregateRating here on purpose. Marking up a star rating that
-  // isn't backed by real, on-page reviews violates Google's structured-data
-  // policy and can earn a manual penalty. Add it back only once real reviews
-  // exist (e.g. pulled from Google Business Profile).
-  openingHoursSpecification: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], opens: "07:00", closes: "20:00" },
-};
-
 export default function Home() {
   const [promoDismissed, setPromoDismissed] = useState(false);
 
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BUSINESS_JSON_LD) }} />
       {/* Generated from the same array the section renders, so the markup can
           never describe answers the page doesn't show. */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }} />
@@ -199,15 +172,24 @@ export default function Home() {
               </span>
             </motion.div>
 
-            <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(2.75rem,5.5vw,4.75rem)", letterSpacing: "-0.03em", lineHeight: 1.02, color: "#161616", marginBottom: "28px" }}>
-              {["Fresh laundry,", "delivered to"].map((line, i) => (
+            {/* H1 set by the owner on 26 Nov 2026 for the Brampton and
+                Mississauga search terms. It is 74 characters against the old
+                "Fresh laundry, delivered to your door." -- which is why the
+                type is smaller here than it was: at the previous 4.75rem cap
+                the city line alone ran about 1030px inside a 548px column and
+                broke out of the hero. Sized so the longest line fits the
+                column on desktop and a 360px phone without wrapping oddly.
+                Measured, not guessed: at 2.5rem the city line came to exactly
+                548px inside a 548px column and broke after "Brampton &". */}
+            <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(1.5rem,3.2vw,2.25rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: "#161616", marginBottom: "28px" }}>
+              {["Dry cleaning & laundry,", "picked up and delivered"].map((line, i) => (
                 <motion.span key={i} initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 + i * 0.1, ease }} style={{ display: "block" }}>
                   {line}
                 </motion.span>
               ))}
               <motion.span initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.3, ease }}
                 style={{ display: "block", color: "var(--brand)" }}>
-                your door.
+                in Brampton &amp; Mississauga.
               </motion.span>
             </h1>
 
@@ -288,11 +270,27 @@ export default function Home() {
               boxShadow: "0 24px 60px rgba(20,20,20,0.12)",
             }}
           >
-            <img
-              src="/images/starex/01_homepage_without_copy_v1.jpg"
-              alt="Freshly folded laundry and a Starex pickup bag on an entryway bench, ready at the door"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-            />
+            {/* Same treatment as the offer banner: this was 441 KB of JPEG
+                shown in a column about 548 px wide. It is not the phone cost
+                the owner asked about -- .hero-panel is display:none below
+                900px, so phones skip it -- but it is the largest thing a
+                desktop visitor waits for, so it is the LCP element. */}
+            <picture>
+              <source
+                type="image/webp"
+                srcSet={`${B}/01_homepage_without_copy_v1-560.webp 560w, ${B}/01_homepage_without_copy_v1-1120.webp 1120w`}
+                sizes="(max-width: 1248px) calc((100vw - 104px) / 2), 548px"
+              />
+              <img
+                src={`${B}/01_homepage_without_copy_v1-fallback.jpg`}
+                alt="Freshly folded laundry and a Starex pickup bag on an entryway bench, ready at the door"
+                fetchPriority="high"
+                decoding="async"
+                width={1120}
+                height={598}
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+              />
+            </picture>
           </motion.div>
         </div>
       </section>
@@ -382,12 +380,31 @@ export default function Home() {
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
               style={{ display: "block", position: "relative", borderRadius: 24, overflow: "hidden", aspectRatio: "16 / 9", boxShadow: "0 12px 40px rgba(20,20,20,0.10)" }}
             >
-              <img
-                src="/images/starex/10_offer_red_with_copy.jpg"
-                alt="Dry cleaning 5 for $50 plus HST — look sharp, spend less. Free pickup and delivery."
-                loading="lazy"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
+              {/* Was a single 1920x1080 JPEG, 570 KB, displayed at most 1052
+                  CSS px wide and far less than that on a phone -- the owner
+                  spotted it on 26 Nov 2026. WebP at the widths actually
+                  needed. Measured on a 390px phone: 76 KB at 3x pixel
+                  density, 45 KB at 2x, against 570 KB before -- the browser
+                  picks by CSS width times DPR, so a high-density screen
+                  still takes the 1536w file and that is correct.
+                  The JPEG is kept as the <img> fallback for anything that
+                  cannot read WebP; browsers that can never request it. */}
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet={`${B}/10_offer_red_with_copy-640.webp 640w, ${B}/10_offer_red_with_copy-1024.webp 1024w, ${B}/10_offer_red_with_copy-1536.webp 1536w`}
+                  sizes="(max-width: 1148px) calc(100vw - 48px), 1052px"
+                />
+                <img
+                  src={`${B}/10_offer_red_with_copy-fallback.jpg`}
+                  alt="Dry cleaning 5 for $50 plus HST — look sharp, spend less. Free pickup and delivery."
+                  loading="lazy"
+                  decoding="async"
+                  width={1536}
+                  height={864}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+              </picture>
             </motion.a>
           </AnimatedContent>
         </div>

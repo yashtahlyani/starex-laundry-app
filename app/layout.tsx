@@ -13,7 +13,12 @@ const PROD_URL = SITE_ORIGIN;
 export const metadata: Metadata = {
   metadataBase: new URL(PROD_URL),
   title: {
-    default: `${BUSINESS_NAME} — Laundry & Dry Cleaning Pickup & Delivery`,
+    // Owner's wording, 26 Nov 2026. Includes the brand itself, so it is set
+    // as `default` (which bypasses the `%s | Starex` template) rather than
+    // having " | Starex" appended twice. 57 characters, inside the ~60 Google
+    // shows before truncating. Only the homepage uses this -- every other
+    // page sets its own title.
+    default: "Dry Cleaning & Laundry in Brampton & Mississauga | Starex",
     template: `%s | ${BUSINESS_NAME}`,
   },
   // Leads with the combo rather than the $40 minimum: the minimum is a barrier,

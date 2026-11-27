@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUp } from "lucide-react";
 import Logo from "@/components/Logo";
-import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
+import { CONTACT, SOCIAL_LINKS, BUSINESS_ADDRESS } from "@/lib/site";
 
 const pages = [
   { label: "Services",     href: "/services" },
@@ -160,7 +160,17 @@ export default function Footer() {
               <span style={colHead}>Contact</span>
               <a href={`mailto:${CONTACT.email}`} style={linkStyle}>{CONTACT.email}</a>
               <a href={`tel:${CONTACT.phoneHref}`} style={linkStyle}>{CONTACT.phone}</a>
-              <p style={{ ...linkStyle, lineHeight: 1.65 }}>{CONTACT.cities[0]}<br />{CONTACT.cities[1]}</p>
+              {/* Street address, added 26 Nov 2026 at the owner's request so
+                  the site states the same address as the Google Business
+                  Profile. It replaces the two city names that used to sit
+                  here, which only repeated the Service Areas column to the
+                  left. Marked up with itemProp so the address in the footer
+                  and the address in the structured data are the same string
+                  from the same place. */}
+              <p style={{ ...linkStyle, lineHeight: 1.65 }} itemProp="address">
+                {BUSINESS_ADDRESS.street}<br />
+                {BUSINESS_ADDRESS.city}, {BUSINESS_ADDRESS.region} {BUSINESS_ADDRESS.postalCode}
+              </p>
               <div style={{ display: "flex", gap: "16px", marginTop: "24px" }}>
                 {[
                   { key: "ig", url: SOCIAL_LINKS.instagram, label: "Instagram", icon: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> },

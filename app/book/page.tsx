@@ -371,7 +371,7 @@ function BookPageInner() {
   }
 
   return (
-    <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80 }}>
+    <div>
 
       {/* Dated promotion — the delivery warning belongs here most of all,
           where someone is about to commit to a pickup. */}
@@ -393,7 +393,7 @@ function BookPageInner() {
         </div>
       </div>
 
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px" }}>
+      <section style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px 80px" }}>
         {isCombo && (
           <div style={{
             display: "flex", alignItems: "center", gap: 10, marginBottom: 24,
@@ -1042,8 +1042,37 @@ function BookPageInner() {
 
 export default function BookPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#FFFFFF" }} />}>
-      <BookPageInner />
-    </Suspense>
+    <div style={{ background: "#FFFFFF", minHeight: "100vh", paddingTop: 80 }}>
+
+      {/* The heading the owner asked for on 26 Nov 2026, and it has to live
+          out here rather than inside the booking flow below.
+
+          BookPageInner calls useSearchParams(), which makes Next render that
+          whole subtree on the client only -- the prerendered HTML for /book
+          was one empty white div, with no heading, no copy and nothing at all
+          for a crawler that does not run JavaScript. Googlebot renders JS on
+          a second pass and would have found it eventually; Bing, link
+          previews and the AI crawlers largely do not.
+
+          Anything static belongs on this side of the Suspense boundary. */}
+      <section style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px 28px" }}>
+        <h1 style={{ fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "clamp(1.5rem,3vw,2rem)", letterSpacing: "-0.025em", lineHeight: 1.15, color: "#161616", marginBottom: 10 }}>
+          Book laundry pickup in Brampton &amp; Mississauga
+        </h1>
+        {/* The threshold is read from the price list, not typed: a second
+            hand-written copy of a number is how this site has gone stale
+            before. Says "or more" rather than "over" (the owner's word),
+            because an order of exactly the minimum qualifies -- "over" would
+            tell customers something the booking flow does not do, and would
+            contradict the FAQ, which already says "or more". */}
+        <p style={{ color: "#6B6B6B", fontSize: "1rem", lineHeight: 1.65, margin: 0, fontFamily: "Kodchasan, sans-serif" }}>
+          Free pickup &amp; delivery across Brampton &amp; Mississauga on orders of ${MINIMUM_ORDER.standardCad} or more.
+        </p>
+      </section>
+
+      <Suspense fallback={<div style={{ minHeight: "60vh", background: "#FFFFFF" }} />}>
+        <BookPageInner />
+      </Suspense>
+    </div>
   );
 }

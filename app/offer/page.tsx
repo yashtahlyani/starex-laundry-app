@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { BUSINESS_AS_PROVIDER } from "@/lib/schema";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, ArrowRight, Sparkles, Shirt, Package, Zap, Home as HomeIcon } from "lucide-react";
 import { DRY_CLEAN_COMBO, HST_LABEL, itemKey, lookupCatalogItem } from "@/lib/pricing";
@@ -87,12 +88,11 @@ const OFFER_JSON_LD = {
     { "@type": "City", name: "Brampton" },
     { "@type": "City", name: "Mississauga" },
   ],
-  offeredBy: {
-    "@type": "LaundryService",
-    name: "Starex",
-    telephone: "+1-437-607-7251",
-    url: "https://starexlaundrydryclean.ca",
-  },
+  // Was a hand-typed copy of the business details with "@type":
+  // "LaundryService" -- not a schema.org type, so Google ignored it and this
+  // page named no offeredBy at all. Shared block instead: correct type, and
+  // one copy of the phone number rather than five.
+  offeredBy: BUSINESS_AS_PROVIDER,
 };
 
 const FAQ_JSON_LD = {

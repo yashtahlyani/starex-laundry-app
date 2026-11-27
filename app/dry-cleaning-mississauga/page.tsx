@@ -1,16 +1,15 @@
 import LocalSEOLanding from "@/components/LocalSEOLanding";
-import { SITE_ORIGIN } from "@/lib/site";
+import { BUSINESS_AS_PROVIDER } from "@/lib/schema";
 
 const SERVICE_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Service",
   serviceType: "Dry Cleaning",
-  provider: {
-    "@type": "LaundryService",
-    name: "Starex",
-    telephone: "+1-437-607-7251",
-    url: SITE_ORIGIN,
-  },
+  // Was a hand-typed copy of the business details with "@type":
+  // "LaundryService" -- not a schema.org type, so Google ignored it and this
+  // page named no provider at all. Shared block instead: correct type, and
+  // one copy of the phone number rather than five.
+  provider: BUSINESS_AS_PROVIDER,
   areaServed: { "@type": "City", name: "Mississauga", containedInPlace: { "@type": "State", name: "Ontario" } },
   description: "Professional dry cleaning pickup and delivery for suits, sarees, gowns, coats and household items in Mississauga, Ontario.",
 };
