@@ -12,6 +12,10 @@ import PromoBanner from "@/components/PromoBanner";
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
 
+/** Height of the fixed navbar at rest (it shrinks to 64px once scrolled).
+ *  Keep in step with components/Navbar.tsx. */
+const NAV_H = 72;
+
 /** Brand image folder, so the srcSet lists below stay readable. */
 const B = "/images/starex";
 
@@ -109,25 +113,39 @@ export default function Home() {
       {/* Dated promotion. Removes itself when the window closes — see
           lib/promo.ts. Above the hero because the delivery warning inside it
           changes whether someone should book today. */}
-      <PromoBanner />
+      {/* The navbar is position:fixed and nothing in the layout reserves its
+          height -- every page compensates for itself (the hero below used to
+          do it with paddingTop:80). These two strips sit above that, at the
+          very top of <main>, so they got no compensation at all:
 
-      {/* ══ HERO — flat white/cream editorial, red used as bold accent only ══ */}
-      <section style={{
-        minHeight: "100vh", display: "flex", alignItems: "center",
-        position: "relative", overflow: "hidden", paddingTop: "80px",
-        background: "#FFFFFF",
-      }}>
+            - the Black Friday notice started at y=0 under a 72px navbar, so
+              72 of its 134px were hidden on a phone and ALL of it on desktop,
+              where it is one line. The delivery warning nobody could read.
+            - the offer strip was position:absolute, so it reserved no height
+              and painted over the hero. At 390px it wraps to three lines and
+              covered 19px of the heading above the H1.
 
-        {/* Promo banner */}
+          One wrapper reserves the navbar once, and both strips are in normal
+          flow inside it, so they push the hero down instead of sitting on
+          top of it however far their text wraps. NAV_H must track the
+          navbar's unscrolled height in components/Navbar.tsx. */}
+      <div style={{ paddingTop: NAV_H }}>
+        <PromoBanner />
+        {/* Offer strip */}
         <AnimatePresence>
           {!promoDismissed && (
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ opacity: 0 }}
+              // The 1.2s delay is for the entrance -- the strip slides in after
+              // the hero has settled. Without its own transition the exit
+              // inherits that delay too, so dismissing it did nothing for over
+              // a second. That was survivable while the strip floated above
+              // the page; now that it is in flow and its removal moves the
+              // hero, a dead click is not.
+              exit={{ opacity: 0, transition: { delay: 0, duration: 0.2 } }}
               transition={{ delay: 1.2, duration: 0.4, ease }}
               style={{
-                position: "absolute", top: 72, left: 0, right: 0, zIndex: 10,
                 background: "var(--brand)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 padding: "10px 24px", gap: 16,
@@ -159,6 +177,18 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+
+      {/* ══ HERO — flat white/cream editorial, red used as bold accent only ══ */}
+      <section style={{
+        // Was 100vh with paddingTop:80 to clear the navbar. The wrapper above
+        // reserves that now, so the hero asks for the rest of the screen
+        // rather than a full one underneath it.
+        minHeight: `calc(100vh - ${NAV_H}px)`, display: "flex", alignItems: "center",
+        position: "relative", overflow: "hidden",
+        background: "#FFFFFF",
+      }}>
+
 
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "90px 24px 60px", position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }} className="hero-grid">
 
